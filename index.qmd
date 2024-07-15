@@ -1,0 +1,76 @@
+---
+title: "ETC5521: Diving Deeply into Data Exploration "
+---
+
+```{r}
+#| label: load_packages
+#| include: false
+#| message: false
+#| warning: false
+#| echo: false
+#| cache: false
+library(tidyverse)
+options(knitr.kable.NA = '')
+source(here::here("course_info.R"))
+week <- as.integer(1 + ((Sys.Date() - as_date(start_semester))/7))
+```
+
+## Lecturer/Chief Examiner
+
+* **Professor Di Cook**
+    - Email: [etc5521.clayton-x@monash.edu](mailto:etc5521.clayton-x@monash.edu) 
+    - Consultation: TBD
+
+## Tutors
+
+* Krisanat Anukarnsakulchularp
+    - Tutorials: TBD
+    - Consultation: TBD
+
+## Weekly schedule
+
+* Lecture: TBD
+* Tutorial: 1.5 hours
+* Weekly learning quizzes due TBD
+
+```{r}
+#| label: schedule2
+#| message: false
+#| warning: false
+#| echo: false
+#| output: asis
+schedule |>
+  transmute(
+    Show = !is.na(Week), #& (Week <= week | Week <= 1),
+    Topic = if_else(!Show, Topic, glue::glue("[{Topic}](./week{Week}/index.html)")),
+    Reference = if_else(is.na(Week), Reference, glue::glue("[{Reference}]({Reference_URL})")),
+    Assessments = if_else(is.na(Assignment), Assignment, glue::glue("[{Assignment}]({File})")),
+    Week = format(Date, "%d %b")
+  ) |>
+  select(-Show) |>
+  select(Week, everything()) |>
+  knitr::kable(format = "markdown")
+```
+
+## Assessments
+
+* [Weekly learning quizzes](https://learning.monash.edu/course/view.php?id=9453&section=20): 5%
+* Assignment 1: [Instructions](assignments/assign01.zip),  [Submit to moodle](https://learning.monash.edu/course/view.php?id=9453&section=20) (15%)
+* Assignment 2: [Instructions](assignments/assign02.zip),  [Submit to moodle](https://learning.monash.edu/course/view.php?id=9453&section=20) (20%)
+* Assignment 3: [Instructions](assignments/assign03.zip),  [Submit to moodle](https://learning.monash.edu/course/view.php?id=9453&section=20) (20%)
+* Assignment 4 part 1: [Instructions](assignments/assign04_1.zip),  [Submit to moodle](https://learning.monash.edu/course/view.php?id=9453&section=20) (20%)
+* Assignment 4 part 2: [Instructions](assignments/assign04_2.zip),  [Submit to moodle](https://learning.monash.edu/course/view.php?id=9453&section=20) (20%)
+
+## Software
+
+We will be using the latest versions of [R](https://cran.rstudio.com) and [RStudio](https://posit.co/download/rstudio-desktop/). 
+
+Here is the code to install (most of) the R packages we will be using in this unit.
+
+```r
+to come
+```
+
+
+If you are relatively new to R, working through the materials at [https://learnr.numbat.space](https://learnr.numbat.space) is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you. 
+
