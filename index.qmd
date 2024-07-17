@@ -29,7 +29,7 @@ week <- as.integer(1 + ((Sys.Date() - as_date(start_semester))/7))
 
 ## Weekly schedule
 
-* Lecture: Tues 10-12 on zoom (link in moodle)
+* Lecture: Tues 10-12 on zoom (link in [Moodle](https://learning.monash.edu/course/view.php?id=18864&section=6))
 * Tutorial: 1.5 hours
 * Weekly learning quizzes due each Wednesday 9am, from week 2
 
