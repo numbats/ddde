@@ -1,0 +1,36 @@
+---
+title: "Week 6: Bivariate dependencies and relationships, transformations to linearise"
+---
+
+```{r}
+week <- 6
+source(here::here("course_info.R"))
+```
+
+## Main reference
+
+```{r}
+#| output: asis
+schedule |>
+  filter(Week == week) |>
+  mutate(ref = glue::glue("[{Reference}]({Reference_URL})")) |>
+  pull(ref)
+```
+
+## What you will learn this week
+
+
+## Lecture slides
+
+
+## Tutorial instructions
+
+Instructions:
+
+
+## Assignments
+
+```{r}
+#| output: asis
+show_assignments(week)
+```

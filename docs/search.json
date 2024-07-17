@@ -1,5 +1,334 @@
 [
   {
+    "objectID": "week9/index.html",
+    "href": "week9/index.html",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "",
+    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
+  },
+  {
+    "objectID": "week9/index.html#main-reference",
+    "href": "week9/index.html#main-reference",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "",
+    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
+  },
+  {
+    "objectID": "week9/index.html#what-you-will-learn-this-week",
+    "href": "week9/index.html#what-you-will-learn-this-week",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week9/index.html#lecture-slides",
+    "href": "week9/index.html#lecture-slides",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week9/index.html#tutorial-instructions",
+    "href": "week9/index.html#tutorial-instructions",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
+  },
+  {
+    "objectID": "week9/index.html#assignments",
+    "href": "week9/index.html#assignments",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week9/index.html#assignments-1",
+    "href": "week9/index.html#assignments-1",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 3 is due on NULL* Assignment 4 Part 1 is due on NULL* Assignment 4 Part 2 is due on NULL"
+  },
+  {
+    "objectID": "week7/index.html",
+    "href": "week7/index.html",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "",
+    "text": "Wilke (2019) Ch 9, 10.2-4, 11.2"
+  },
+  {
+    "objectID": "week7/index.html#main-reference",
+    "href": "week7/index.html#main-reference",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "",
+    "text": "Wilke (2019) Ch 9, 10.2-4, 11.2"
+  },
+  {
+    "objectID": "week7/index.html#what-you-will-learn-this-week",
+    "href": "week7/index.html#what-you-will-learn-this-week",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week7/index.html#lecture-slides",
+    "href": "week7/index.html#lecture-slides",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week7/index.html#tutorial-instructions",
+    "href": "week7/index.html#tutorial-instructions",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
+  },
+  {
+    "objectID": "week7/index.html#assignments",
+    "href": "week7/index.html#assignments",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week7/index.html#assignments-1",
+    "href": "week7/index.html#assignments-1",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 3 is due on NULL"
+  },
+  {
+    "objectID": "week5/index.html",
+    "href": "week5/index.html",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "",
+    "text": "Wilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions"
+  },
+  {
+    "objectID": "week5/index.html#main-reference",
+    "href": "week5/index.html#main-reference",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "",
+    "text": "Wilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions"
+  },
+  {
+    "objectID": "week5/index.html#what-you-will-learn-this-week",
+    "href": "week5/index.html#what-you-will-learn-this-week",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week5/index.html#lecture-slides",
+    "href": "week5/index.html#lecture-slides",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week5/index.html#tutorial-instructions",
+    "href": "week5/index.html#tutorial-instructions",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
+  },
+  {
+    "objectID": "week5/index.html#assignments",
+    "href": "week5/index.html#assignments",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week5/index.html#assignments-1",
+    "href": "week5/index.html#assignments-1",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 2 is due on NULL"
+  },
+  {
+    "objectID": "week3/index.html",
+    "href": "week3/index.html",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "",
+    "text": "The initial examination of data"
+  },
+  {
+    "objectID": "week3/index.html#main-reference",
+    "href": "week3/index.html#main-reference",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "",
+    "text": "The initial examination of data"
+  },
+  {
+    "objectID": "week3/index.html#what-you-will-learn-this-week",
+    "href": "week3/index.html#what-you-will-learn-this-week",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week3/index.html#lecture-slides",
+    "href": "week3/index.html#lecture-slides",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week3/index.html#tutorial-instructions",
+    "href": "week3/index.html#tutorial-instructions",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
+  },
+  {
+    "objectID": "week3/index.html#assignments",
+    "href": "week3/index.html#assignments",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week3/index.html#assignments-1",
+    "href": "week3/index.html#assignments-1",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 1 is due on NULL"
+  },
+  {
+    "objectID": "week12/index.html#what-you-will-learn-this-week",
+    "href": "week12/index.html#what-you-will-learn-this-week",
+    "title": "Week 12: Extending beyond the data, what can and cannot be inferred more generally, given the data collection",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week12/index.html#lecture-slides",
+    "href": "week12/index.html#lecture-slides",
+    "title": "Week 12: Extending beyond the data, what can and cannot be inferred more generally, given the data collection",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week12/index.html#tutorial-instructions",
+    "href": "week12/index.html#tutorial-instructions",
+    "title": "Week 12: Extending beyond the data, what can and cannot be inferred more generally, given the data collection",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
+  },
+  {
+    "objectID": "week12/index.html#assignments",
+    "href": "week12/index.html#assignments",
+    "title": "Week 12: Extending beyond the data, what can and cannot be inferred more generally, given the data collection",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week12/index.html#assignments-1",
+    "href": "week12/index.html#assignments-1",
+    "title": "Week 12: Extending beyond the data, what can and cannot be inferred more generally, given the data collection",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 4 Part 2 is due on NULL"
+  },
+  {
+    "objectID": "week10/index.html",
+    "href": "week10/index.html",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "",
+    "text": "cubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data"
+  },
+  {
+    "objectID": "week10/index.html#main-reference",
+    "href": "week10/index.html#main-reference",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "",
+    "text": "cubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data"
+  },
+  {
+    "objectID": "week10/index.html#what-you-will-learn-this-week",
+    "href": "week10/index.html#what-you-will-learn-this-week",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week10/index.html#lecture-slides",
+    "href": "week10/index.html#lecture-slides",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week10/index.html#tutorial-instructions",
+    "href": "week10/index.html#tutorial-instructions",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
+  },
+  {
+    "objectID": "week10/index.html#assignments",
+    "href": "week10/index.html#assignments",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week10/index.html#assignments-1",
+    "href": "week10/index.html#assignments-1",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 4 Part 1 is due on NULL* Assignment 4 Part 2 is due on NULL"
+  },
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "ETC5521 Resources",
+    "section": "",
+    "text": "Books and articles\n\n\nSoftware"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: TBD"
+  },
+  {
+    "objectID": "index.html#lecturerchief-examiner",
+    "href": "index.html#lecturerchief-examiner",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: TBD"
+  },
+  {
+    "objectID": "index.html#tutors",
+    "href": "index.html#tutors",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Tutors",
+    "text": "Tutors\n\nKrisanat Anukarnsakulchularp\n\nTutorials: Wed 9:30-11:00am and 7:30-9:00pm CL_Anc-19.LTB_134\nConsultation: TBD"
+  },
+  {
+    "objectID": "index.html#weekly-schedule",
+    "href": "index.html#weekly-schedule",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Weekly schedule",
+    "text": "Weekly schedule\n\nLecture: Tues 10-12 on zoom (link in Moodle)\nTutorial: 1.5 hours\nWeekly learning quizzes due each Wednesday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n22 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n29 Jul\nLearning from history\nEDA Case Study: Bay area blues\nAssignment 0\n\n\n05 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\nAssignment 1\n\n\n12 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\n\n\n\n19 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\n\n\n\n26 Aug\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nAssignment 2\n\n\n02 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\n\n\n\n09 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\n\n\n\n16 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nAssignment 3\n\n\n23 Sep\nMid-semester break\n\n\n\n\n30 Sep\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\n\n\n\n07 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nAssignment 4 Part 1\n\n\n14 Oct\nExtending beyond the data, what can and cannot be inferred more generally, given the data collection\n\n\n\n\n28 Oct\n\n\nAssignment 4 Part 2"
+  },
+  {
+    "objectID": "index.html#assessments",
+    "href": "index.html#assessments",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Assessments",
+    "text": "Assessments\n\nWeekly learning quizzes: 5%\nAssignment 0: Instructions (0%)\nAssignment 1: Instructions (15%)\nAssignment 2: Instructions (20%)\nAssignment 3: Instructions (20%)\nAssignment 4 part 1: Instructions (20%)\nAssignment 4 part 2: Instructions (20%)"
+  },
+  {
+    "objectID": "index.html#software",
+    "href": "index.html#software",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Software",
+    "text": "Software\nWe will be using the latest versions of R and RStudio.\nHere is the code to install (most of) the R packages we will be using in this unit.\ninstall.packages(c(\"tidyr\", \"dplyr\", \"readr\", \"readxl\", \"readabs\", \"forcats\", \"tsibble\", \"cubble\", \"lubridate\", \"ggplot2\", \"GGally\", \"ggthemes\", \"sugrrants\", \"ggbeeswarm\", \"plotly\", \"gganimate\", \"tourr\", \"sugarbag\", \"tsibbletalk\", \"visdat\", \"inspectdf\", \"naniar\", \"validate\", \"vcd\", \"mvtnorm\", \"nullabor\", \"visage\", \"forecast\", \"cassowaryr\", \"brolgar\", \"palmerpenguins\", \"housingData\",  \"broom\", \"kableExtra\", \"lvplot\", \"colorspace\", \"patchwork\"), dependencies=TRUE)\nFrom GitHub, install\nremotes::install_github(\"casperhart/detourr\")\nIf you are relatively new to R, working through the materials at https://learnr.numbat.space is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you."
+  },
+  {
     "objectID": "week1/index.html",
     "href": "week1/index.html",
     "title": "Week 1: Overview. Why this course? What is EDA?",
@@ -49,52 +378,248 @@
     "text": "Assignments\n\nAssignment 0 is due on NULL* Assignment 1 is due on NULL"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "objectID": "week11/index.html",
+    "href": "week11/index.html",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
     "section": "",
-    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: TBD"
+    "text": "How to use a tour to check if your model suffers from multicollinearity"
   },
   {
-    "objectID": "index.html#lecturerchief-examiner",
-    "href": "index.html#lecturerchief-examiner",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "objectID": "week11/index.html#main-reference",
+    "href": "week11/index.html#main-reference",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
     "section": "",
-    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: TBD"
+    "text": "How to use a tour to check if your model suffers from multicollinearity"
   },
   {
-    "objectID": "index.html#tutors",
-    "href": "index.html#tutors",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Tutors",
-    "text": "Tutors\n\nKrisanat Anukarnsakulchularp\n\nTutorials: Wed 9:30-11:00am and 7:30-9:00pm CL_Anc-19.LTB_134\nConsultation: TBD"
+    "objectID": "week11/index.html#what-you-will-learn-this-week",
+    "href": "week11/index.html#what-you-will-learn-this-week",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
   },
   {
-    "objectID": "index.html#weekly-schedule",
-    "href": "index.html#weekly-schedule",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Weekly schedule",
-    "text": "Weekly schedule\n\nLecture: Tues 10-12 on zoom (link in Moodle)\nTutorial: 1.5 hours\nWeekly learning quizzes due each Wednesday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n22 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n29 Jul\nLearning from history\nEDA Case Study: Bay area blues\nAssignment 0\n\n\n05 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\nAssignment 1\n\n\n12 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\n\n\n\n19 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\n\n\n\n26 Aug\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nAssignment 2\n\n\n02 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\n\n\n\n09 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\n\n\n\n16 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nAssignment 3\n\n\n23 Sep\nMid-semester break\n\n\n\n\n30 Sep\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\n\n\n\n07 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nAssignment 4 Part 1\n\n\n14 Oct\nExtending beyond the data, what can and cannot be inferred more generally, given the data collection\n\n\n\n\n28 Oct\n\n\nAssignment 4 Part 2"
+    "objectID": "week11/index.html#lecture-slides",
+    "href": "week11/index.html#lecture-slides",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
   },
   {
-    "objectID": "index.html#assessments",
-    "href": "index.html#assessments",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Assessments",
-    "text": "Assessments\n\nWeekly learning quizzes: 5%\nAssignment 0: Instructions (0%)\nAssignment 1: Instructions (15%)\nAssignment 2: Instructions (20%)\nAssignment 3: Instructions (20%)\nAssignment 4 part 1: Instructions (20%)\nAssignment 4 part 2: Instructions (20%)"
+    "objectID": "week11/index.html#tutorial-instructions",
+    "href": "week11/index.html#tutorial-instructions",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
   },
   {
-    "objectID": "index.html#software",
-    "href": "index.html#software",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Software",
-    "text": "Software\nWe will be using the latest versions of R and RStudio.\nHere is the code to install (most of) the R packages we will be using in this unit.\ninstall.packages(c(\"tidyr\", \"dplyr\", \"readr\", \"readxl\", \"readabs\", \"forcats\", \"tsibble\", \"cubble\", \"lubridate\", \"ggplot2\", \"GGally\", \"ggthemes\", \"sugrrants\", \"ggbeeswarm\", \"plotly\", \"gganimate\", \"tourr\", \"sugarbag\", \"tsibbletalk\", \"visdat\", \"inspectdf\", \"naniar\", \"validate\", \"vcd\", \"mvtnorm\", \"nullabor\", \"visage\", \"forecast\", \"cassowaryr\", \"brolgar\", \"palmerpenguins\", \"housingData\",  \"broom\", \"kableExtra\", \"lvplot\", \"colorspace\", \"patchwork\"), dependencies=TRUE)\nFrom GitHub, install\nremotes::install_github(\"casperhart/detourr\")\nIf you are relatively new to R, working through the materials at https://learnr.numbat.space is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you."
+    "objectID": "week11/index.html#assignments",
+    "href": "week11/index.html#assignments",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "Assignments",
+    "text": "Assignments"
   },
   {
-    "objectID": "resources.html",
-    "href": "resources.html",
-    "title": "ETC5521 Resources",
+    "objectID": "week11/index.html#assignments-1",
+    "href": "week11/index.html#assignments-1",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 4 Part 1 is due on NULL* Assignment 4 Part 2 is due on NULL"
+  },
+  {
+    "objectID": "week2/index.html",
+    "href": "week2/index.html",
+    "title": "Week 2: Learning from history",
     "section": "",
-    "text": "Books and articles\n\n\nSoftware"
+    "text": "EDA Case Study: Bay area blues"
+  },
+  {
+    "objectID": "week2/index.html#main-reference",
+    "href": "week2/index.html#main-reference",
+    "title": "Week 2: Learning from history",
+    "section": "",
+    "text": "EDA Case Study: Bay area blues"
+  },
+  {
+    "objectID": "week2/index.html#what-you-will-learn-this-week",
+    "href": "week2/index.html#what-you-will-learn-this-week",
+    "title": "Week 2: Learning from history",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week2/index.html#lecture-slides",
+    "href": "week2/index.html#lecture-slides",
+    "title": "Week 2: Learning from history",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week2/index.html#tutorial-instructions",
+    "href": "week2/index.html#tutorial-instructions",
+    "title": "Week 2: Learning from history",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
+  },
+  {
+    "objectID": "week2/index.html#assignments",
+    "href": "week2/index.html#assignments",
+    "title": "Week 2: Learning from history",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week2/index.html#assignments-1",
+    "href": "week2/index.html#assignments-1",
+    "title": "Week 2: Learning from history",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 0 is due on NULL* Assignment 1 is due on NULL"
+  },
+  {
+    "objectID": "week4/index.html",
+    "href": "week4/index.html",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "",
+    "text": "Wickham et al. (2010) Graphical inference for Infovis"
+  },
+  {
+    "objectID": "week4/index.html#main-reference",
+    "href": "week4/index.html#main-reference",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "",
+    "text": "Wickham et al. (2010) Graphical inference for Infovis"
+  },
+  {
+    "objectID": "week4/index.html#what-you-will-learn-this-week",
+    "href": "week4/index.html#what-you-will-learn-this-week",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week4/index.html#lecture-slides",
+    "href": "week4/index.html#lecture-slides",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week4/index.html#tutorial-instructions",
+    "href": "week4/index.html#tutorial-instructions",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
+  },
+  {
+    "objectID": "week4/index.html#assignments",
+    "href": "week4/index.html#assignments",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week4/index.html#assignments-1",
+    "href": "week4/index.html#assignments-1",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 2 is due on NULL"
+  },
+  {
+    "objectID": "week6/index.html",
+    "href": "week6/index.html",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "",
+    "text": "Wilke (2019) Ch 12 Visualising associations"
+  },
+  {
+    "objectID": "week6/index.html#main-reference",
+    "href": "week6/index.html#main-reference",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "",
+    "text": "Wilke (2019) Ch 12 Visualising associations"
+  },
+  {
+    "objectID": "week6/index.html#what-you-will-learn-this-week",
+    "href": "week6/index.html#what-you-will-learn-this-week",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week6/index.html#lecture-slides",
+    "href": "week6/index.html#lecture-slides",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week6/index.html#tutorial-instructions",
+    "href": "week6/index.html#tutorial-instructions",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
+  },
+  {
+    "objectID": "week6/index.html#assignments",
+    "href": "week6/index.html#assignments",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week6/index.html#assignments-1",
+    "href": "week6/index.html#assignments-1",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 2 is due on NULL"
+  },
+  {
+    "objectID": "week8/index.html",
+    "href": "week8/index.html",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "",
+    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
+  },
+  {
+    "objectID": "week8/index.html#main-reference",
+    "href": "week8/index.html#main-reference",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "",
+    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
+  },
+  {
+    "objectID": "week8/index.html#what-you-will-learn-this-week",
+    "href": "week8/index.html#what-you-will-learn-this-week",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week8/index.html#lecture-slides",
+    "href": "week8/index.html#lecture-slides",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week8/index.html#tutorial-instructions",
+    "href": "week8/index.html#tutorial-instructions",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:"
+  },
+  {
+    "objectID": "week8/index.html#assignments",
+    "href": "week8/index.html#assignments",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week8/index.html#assignments-1",
+    "href": "week8/index.html#assignments-1",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 3 is due on NULL"
   }
 ]
