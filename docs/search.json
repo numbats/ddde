@@ -312,7 +312,7 @@
     "href": "index.html#weekly-schedule",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Weekly schedule",
-    "text": "Weekly schedule\n\nLecture: Tues 10-12 on zoom (link in Moodle)\nTutorial: 1.5 hours\nWeekly learning quizzes due each Wednesday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n22 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n29 Jul\nLearning from history\nEDA Case Study: Bay area blues\nAssignment 0\n\n\n05 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\nAssignment 1\n\n\n12 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\n\n\n\n19 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\n\n\n\n26 Aug\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nAssignment 2\n\n\n02 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\n\n\n\n09 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\n\n\n\n16 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nAssignment 3\n\n\n23 Sep\nMid-semester break\n\n\n\n\n30 Sep\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\n\n\n\n07 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nAssignment 4 Part 1\n\n\n14 Oct\nExtending beyond the data, what can and cannot be inferred more generally, given the data collection\n\n\n\n\n28 Oct\n\n\nAssignment 4 Part 2"
+    "text": "Weekly schedule\n\nLecture: Tues 10-12 on zoom (link in Moodle)\nTutorial: 1.5 hours\nWeekly learning quizzes due each Wednesday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n22 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n29 Jul\nLearning from history\nEDA Case Study: Bay area blues\n\n\n\n05 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\nAssignment 1\n\n\n12 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\n\n\n\n19 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\n\n\n\n26 Aug\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nAssignment 2\n\n\n02 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\n\n\n\n09 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\n\n\n\n16 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nAssignment 3\n\n\n23 Sep\nMid-semester break\n\n\n\n\n30 Sep\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\n\n\n\n07 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nAssignment 4 Part 1\n\n\n14 Oct\nExtending beyond the data, what can and cannot be inferred more generally, given the data collection\n\n\n\n\n28 Oct\n\n\nAssignment 4 Part 2"
   },
   {
     "objectID": "index.html#assessments",
@@ -375,7 +375,7 @@
     "href": "week1/index.html#assignments-1",
     "title": "Week 1: Overview. Why this course? What is EDA?",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 0 is due on NULL* Assignment 1 is due on NULL"
+    "text": "Assignments\n\nAssignment 1 is due on NULL"
   },
   {
     "objectID": "week11/index.html",
@@ -473,7 +473,7 @@
     "href": "week2/index.html#assignments-1",
     "title": "Week 2: Learning from history",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 0 is due on NULL* Assignment 1 is due on NULL"
+    "text": "Assignments\n\nAssignment 1 is due on NULL"
   },
   {
     "objectID": "week4/index.html",
