@@ -55,7 +55,6 @@ schedule |>
 ## Assessments
 
 * [Weekly learning quizzes](https://learning.monash.edu/course/view.php?id=9453&section=20): 5%
-* Assignment 0: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2587915) (0%)
 * Assignment 1: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2966868) (15%)
 * Assignment 2: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2587917) (20%)
 * Assignment 3: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2587917) (20%)

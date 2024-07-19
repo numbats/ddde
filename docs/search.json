@@ -46,7 +46,7 @@
     "href": "week9/index.html#assignments-1",
     "title": "Week 9: Exploring data having a space and time context Part I",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 3 is due on NULL* Assignment 4 Part 1 is due on NULL* Assignment 4 Part 2 is due on NULL"
+    "text": "Assignments\n\nAssignment 3 is due on Monday 16 September.\nAssignment 4 Part 1 is due on Monday 07 October.\nAssignment 4 Part 2 is due on Monday 28 October."
   },
   {
     "objectID": "week7/index.html",
@@ -95,7 +95,7 @@
     "href": "week7/index.html#assignments-1",
     "title": "Week 7: Making comparisons between groups and strata",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 3 is due on NULL"
+    "text": "Assignments\n\nAssignment 3 is due on Monday 16 September."
   },
   {
     "objectID": "week5/index.html",
@@ -144,7 +144,7 @@
     "href": "week5/index.html#assignments-1",
     "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 2 is due on NULL"
+    "text": "Assignments\n\nAssignment 2 is due on Monday 26 August."
   },
   {
     "objectID": "week3/index.html",
@@ -193,7 +193,7 @@
     "href": "week3/index.html#assignments-1",
     "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 1 is due on NULL"
+    "text": "Assignments\n\nAssignment 1 is due on Monday 05 August."
   },
   {
     "objectID": "week12/index.html#what-you-will-learn-this-week",
@@ -228,7 +228,7 @@
     "href": "week12/index.html#assignments-1",
     "title": "Week 12: Extending beyond the data, what can and cannot be inferred more generally, given the data collection",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 4 Part 2 is due on NULL"
+    "text": "Assignments\n\nAssignment 4 Part 2 is due on Monday 28 October."
   },
   {
     "objectID": "week10/index.html",
@@ -277,7 +277,7 @@
     "href": "week10/index.html#assignments-1",
     "title": "Week 10: Exploring data having a space and time context Part II",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 4 Part 1 is due on NULL* Assignment 4 Part 2 is due on NULL"
+    "text": "Assignments\n\nAssignment 4 Part 1 is due on Monday 07 October.\nAssignment 4 Part 2 is due on Monday 28 October."
   },
   {
     "objectID": "week1/index.html",
@@ -319,7 +319,7 @@
     "href": "week1/index.html#assignments",
     "title": "Week 1: Overview. Why this course? What is EDA?",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 1 is due on NULL"
+    "text": "Assignments\n\nAssignment 1 is due on Monday 05 August."
   },
   {
     "objectID": "index.html",
@@ -354,7 +354,7 @@
     "href": "index.html#assessments",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Assessments",
-    "text": "Assessments\n\nWeekly learning quizzes: 5%\nAssignment 0: Instructions (0%)\nAssignment 1: Instructions (15%)\nAssignment 2: Instructions (20%)\nAssignment 3: Instructions (20%)\nAssignment 4 part 1: Instructions (20%)\nAssignment 4 part 2: Instructions (20%)"
+    "text": "Assessments\n\nWeekly learning quizzes: 5%\nAssignment 1: Instructions (15%)\nAssignment 2: Instructions (20%)\nAssignment 3: Instructions (20%)\nAssignment 4 part 1: Instructions (20%)\nAssignment 4 part 2: Instructions (20%)"
   },
   {
     "objectID": "index.html#software",
@@ -529,7 +529,7 @@
     "href": "week11/index.html#assignments-1",
     "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 4 Part 1 is due on NULL* Assignment 4 Part 2 is due on NULL"
+    "text": "Assignments\n\nAssignment 4 Part 1 is due on Monday 07 October.\nAssignment 4 Part 2 is due on Monday 28 October."
   },
   {
     "objectID": "week2/index.html",
@@ -578,7 +578,7 @@
     "href": "week2/index.html#assignments-1",
     "title": "Week 2: Learning from history",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 1 is due on NULL"
+    "text": "Assignments\n\nAssignment 1 is due on Monday 05 August."
   },
   {
     "objectID": "week4/index.html",
@@ -627,7 +627,7 @@
     "href": "week4/index.html#assignments-1",
     "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 2 is due on NULL"
+    "text": "Assignments\n\nAssignment 2 is due on Monday 26 August."
   },
   {
     "objectID": "week6/index.html",
@@ -676,7 +676,7 @@
     "href": "week6/index.html#assignments-1",
     "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 2 is due on NULL"
+    "text": "Assignments\n\nAssignment 2 is due on Monday 26 August."
   },
   {
     "objectID": "week8/index.html",
@@ -725,6 +725,6 @@
     "href": "week8/index.html#assignments-1",
     "title": "Week 8: Going beyond two variables, exploring high dimensions",
     "section": "Assignments",
-    "text": "Assignments\n\nAssignment 3 is due on NULL"
+    "text": "Assignments\n\nAssignment 3 is due on Monday 16 September."
   }
 ]
