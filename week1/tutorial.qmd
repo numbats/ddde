@@ -1,0 +1,91 @@
+---
+title: "ETC5521 Tutorial 1"
+subtitle: "Introduction to exploratory data analysis"
+author: "Prof. Di Cook"
+date: "Jul 22, 2024"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: tutorial.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: tutorialsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+show-solution: true
+---
+
+## 🎯 Objectives
+
+This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you've got the right skills to get started, and to begin thinking about exploratory data analysis. 
+
+## 🔧 Preparation 
+
+- Complete the weekly quiz, before the deadline!
+- Have `git` installed on your laptop so that you can access the test classroom.
+- Have the latest versions of RStudio and R installed on your laptop. 
+- Install this list of R packages: 
+
+```{r}
+#| eval: false
+#| code-fold: false
+install.packages(c("fun", "dplyr", "here"))
+```
+
+- Create an RStudio Project for this unit, called `ETC5521`. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for `data`, one for `tutorial_XX`, ... Each week when you begin your tutorial, open the project. 
+
+## 📥 Exercises
+
+## 1. Ice breaker
+
+- Grab your name tag  
+- Follow the instructions of your tutor to get to know your classmates. 
+
+::: unilur-solution
+- Which R package is your favourite? `ggplot2` or `plotly`
+- Do you prefer to use `geom_boxplot` or `geom_quasirandom` to compare subsets of nuemrical variables?
+- Have you used the R package `purrr` before? Y or N
+- What does the package `profvis` do? Visualisation data or Profiling code?
+:::
+
+## 2. How good are your detective skills?
+
+Being good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills. 
+
+Play the game `alzheimer_test` from the `fun` package by running this code:
+
+```{r}
+#| eval: false
+#| code-fold: false
+library(fun)
+x = alzheimer_test()
+```
+
+You will be given 6 tasks to complete. Each one is to find a specific letter hidden among a $10\times 30$ grid of letters. When you are finished, answer these questions:
+
+1. Which task did you THINK was the most difficult?
+2. Which task does the DATA say was most difficult based, based on the time taken to answer, `tm1.1.j.` in your results data? 
+3. Save the dataset to an `.rda` file.
+
+::: unilur-solution
+```{r}
+#| message: false
+load(here::here("data/alzheimers.rda"))
+library(dplyr)
+x %>% 
+  select(char1.1.j., char2.1.j., tm1.1.j.) %>%
+  arrange(desc(tm1.1.j.))
+```
+:::
+
+## 3. Get started using GitHub Classroom
+
+1. In [Moodle](https://learning.monash.edu/mod/assign/view.php?id=2966868) go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.
+2. Clone the assignment repo to your computer.
+3. Open the `assign01.html` instructions.
+3. Make a start on loading the data into R.
+
+## 👌 Finishing up
+
+Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.

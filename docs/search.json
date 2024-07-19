@@ -280,11 +280,46 @@
     "text": "Assignments\n\nAssignment 4 Part 1 is due on NULL* Assignment 4 Part 2 is due on NULL"
   },
   {
-    "objectID": "resources.html",
-    "href": "resources.html",
-    "title": "ETC5521 Resources",
+    "objectID": "week1/index.html",
+    "href": "week1/index.html",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
     "section": "",
-    "text": "Books and articles\n\n\nSoftware"
+    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week1/index.html#main-reference",
+    "href": "week1/index.html#main-reference",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "",
+    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week1/index.html#what-you-will-learn-this-week",
+    "href": "week1/index.html#what-you-will-learn-this-week",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week"
+  },
+  {
+    "objectID": "week1/index.html#lecture-slides",
+    "href": "week1/index.html#lecture-slides",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Lecture slides",
+    "text": "Lecture slides"
+  },
+  {
+    "objectID": "week1/index.html#tutorial-instructions",
+    "href": "week1/index.html#tutorial-instructions",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week1/index.html#assignments",
+    "href": "week1/index.html#assignments",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 1 is due on NULL"
   },
   {
     "objectID": "index.html",
@@ -329,53 +364,123 @@
     "text": "Software\nWe will be using the latest versions of R and RStudio.\nHere is the code to install (most of) the R packages we will be using in this unit.\ninstall.packages(c(\"tidyr\", \"dplyr\", \"readr\", \"readxl\", \"readabs\", \"forcats\", \"tsibble\", \"cubble\", \"lubridate\", \"ggplot2\", \"GGally\", \"ggthemes\", \"sugrrants\", \"ggbeeswarm\", \"plotly\", \"gganimate\", \"tourr\", \"sugarbag\", \"tsibbletalk\", \"visdat\", \"inspectdf\", \"naniar\", \"validate\", \"vcd\", \"mvtnorm\", \"nullabor\", \"visage\", \"forecast\", \"cassowaryr\", \"brolgar\", \"palmerpenguins\", \"housingData\",  \"broom\", \"kableExtra\", \"lvplot\", \"colorspace\", \"patchwork\"), dependencies=TRUE)\nFrom GitHub, install\nremotes::install_github(\"casperhart/detourr\")\nIf you are relatively new to R, working through the materials at https://learnr.numbat.space is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you."
   },
   {
-    "objectID": "week1/index.html",
-    "href": "week1/index.html",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "ETC5521 Resources",
     "section": "",
-    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+    "text": "Books and articles\n\n\nSoftware"
   },
   {
-    "objectID": "week1/index.html#main-reference",
-    "href": "week1/index.html#main-reference",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "objectID": "week1/tutorialsol.html",
+    "href": "week1/tutorialsol.html",
+    "title": "ETC5521 Tutorial 1",
     "section": "",
-    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
   },
   {
-    "objectID": "week1/index.html#what-you-will-learn-this-week",
-    "href": "week1/index.html#what-you-will-learn-this-week",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "What you will learn this week",
-    "text": "What you will learn this week"
+    "objectID": "week1/tutorialsol.html#objectives",
+    "href": "week1/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
   },
   {
-    "objectID": "week1/index.html#lecture-slides",
-    "href": "week1/index.html#lecture-slides",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "Lecture slides",
-    "text": "Lecture slides"
+    "objectID": "week1/tutorialsol.html#preparation",
+    "href": "week1/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 1",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nComplete the weekly quiz, before the deadline!\nHave git installed on your laptop so that you can access the test classroom.\nHave the latest versions of RStudio and R installed on your laptop.\nInstall this list of R packages:\n\n\nCreate an RStudio Project for this unit, called ETC5521. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for data, one for tutorial_XX, … Each week when you begin your tutorial, open the project."
   },
   {
-    "objectID": "week1/index.html#tutorial-instructions",
-    "href": "week1/index.html#tutorial-instructions",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "Tutorial instructions",
-    "text": "Tutorial instructions\nInstructions:"
+    "objectID": "week1/tutorialsol.html#exercises",
+    "href": "week1/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 1",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises"
   },
   {
-    "objectID": "week1/index.html#assignments",
-    "href": "week1/index.html#assignments",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "Assignments",
-    "text": "Assignments"
+    "objectID": "week1/tutorialsol.html#ice-breaker",
+    "href": "week1/tutorialsol.html#ice-breaker",
+    "title": "ETC5521 Tutorial 1",
+    "section": "1. Ice breaker",
+    "text": "1. Ice breaker\n\nGrab your name tag\n\nFollow the instructions of your tutor to get to know your classmates.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nWhich R package is your favourite? ggplot2 or plotly\nDo you prefer to use geom_boxplot or geom_quasirandom to compare subsets of nuemrical variables?\nHave you used the R package purrr before? Y or N\nWhat does the package profvis do? Visualisation data or Profiling code?"
   },
   {
-    "objectID": "week1/index.html#assignments-1",
-    "href": "week1/index.html#assignments-1",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "Assignments",
-    "text": "Assignments\n\nAssignment 1 is due on NULL"
+    "objectID": "week1/tutorialsol.html#how-good-are-your-detective-skills",
+    "href": "week1/tutorialsol.html#how-good-are-your-detective-skills",
+    "title": "ETC5521 Tutorial 1",
+    "section": "2. How good are your detective skills?",
+    "text": "2. How good are your detective skills?\nBeing good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.\nPlay the game alzheimer_test from the fun package by running this code:\nYou will be given 6 tasks to complete. Each one is to find a specific letter hidden among a \\(10\\times 30\\) grid of letters. When you are finished, answer these questions:\n\nWhich task did you THINK was the most difficult?\nWhich task does the DATA say was most difficult based, based on the time taken to answer, tm1.1.j. in your results data?\nSave the dataset to an .rda file.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n           char1.1.j. char2.1.j.  tm1.1.j.\nans.user.2          M          N 30.839718\nans.user.3          I          T 19.695932\nans.user.5          D          O 17.189302\nans.user.1          O          C 16.534676\nans.user.4          F          E  4.424869\nans.user            9          6  3.812386"
+  },
+  {
+    "objectID": "week1/tutorialsol.html#get-started-using-github-classroom",
+    "href": "week1/tutorialsol.html#get-started-using-github-classroom",
+    "title": "ETC5521 Tutorial 1",
+    "section": "3. Get started using GitHub Classroom",
+    "text": "3. Get started using GitHub Classroom\n\nIn Moodle go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.\nClone the assignment repo to your computer.\nOpen the assign01.html instructions.\nMake a start on loading the data into R."
+  },
+  {
+    "objectID": "week1/tutorialsol.html#finishing-up",
+    "href": "week1/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 1",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week1/tutorial.html",
+    "href": "week1/tutorial.html",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
+  },
+  {
+    "objectID": "week1/tutorial.html#objectives",
+    "href": "week1/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
+  },
+  {
+    "objectID": "week1/tutorial.html#preparation",
+    "href": "week1/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 1",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nComplete the weekly quiz, before the deadline!\nHave git installed on your laptop so that you can access the test classroom.\nHave the latest versions of RStudio and R installed on your laptop.\nInstall this list of R packages:\n\n\nCreate an RStudio Project for this unit, called ETC5521. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for data, one for tutorial_XX, … Each week when you begin your tutorial, open the project."
+  },
+  {
+    "objectID": "week1/tutorial.html#exercises",
+    "href": "week1/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 1",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises"
+  },
+  {
+    "objectID": "week1/tutorial.html#ice-breaker",
+    "href": "week1/tutorial.html#ice-breaker",
+    "title": "ETC5521 Tutorial 1",
+    "section": "1. Ice breaker",
+    "text": "1. Ice breaker\n\nGrab your name tag\n\nFollow the instructions of your tutor to get to know your classmates.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nWhich R package is your favourite? ggplot2 or plotly\nDo you prefer to use geom_boxplot or geom_quasirandom to compare subsets of nuemrical variables?\nHave you used the R package purrr before? Y or N\nWhat does the package profvis do? Visualisation data or Profiling code?"
+  },
+  {
+    "objectID": "week1/tutorial.html#how-good-are-your-detective-skills",
+    "href": "week1/tutorial.html#how-good-are-your-detective-skills",
+    "title": "ETC5521 Tutorial 1",
+    "section": "2. How good are your detective skills?",
+    "text": "2. How good are your detective skills?\nBeing good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.\nPlay the game alzheimer_test from the fun package by running this code:\nYou will be given 6 tasks to complete. Each one is to find a specific letter hidden among a \\(10\\times 30\\) grid of letters. When you are finished, answer these questions:\n\nWhich task did you THINK was the most difficult?\nWhich task does the DATA say was most difficult based, based on the time taken to answer, tm1.1.j. in your results data?\nSave the dataset to an .rda file.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n           char1.1.j. char2.1.j.  tm1.1.j.\nans.user.2          M          N 30.839718\nans.user.3          I          T 19.695932\nans.user.5          D          O 17.189302\nans.user.1          O          C 16.534676\nans.user.4          F          E  4.424869\nans.user            9          6  3.812386"
+  },
+  {
+    "objectID": "week1/tutorial.html#get-started-using-github-classroom",
+    "href": "week1/tutorial.html#get-started-using-github-classroom",
+    "title": "ETC5521 Tutorial 1",
+    "section": "3. Get started using GitHub Classroom",
+    "text": "3. Get started using GitHub Classroom\n\nIn Moodle go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.\nClone the assignment repo to your computer.\nOpen the assign01.html instructions.\nMake a start on loading the data into R."
+  },
+  {
+    "objectID": "week1/tutorial.html#finishing-up",
+    "href": "week1/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 1",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
   },
   {
     "objectID": "week11/index.html",
