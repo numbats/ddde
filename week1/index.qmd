@@ -7,7 +7,7 @@ week <- 1
 source(here::here("course_info.R"))
 ```
 
-## Main reference
+## Reading
 
 ```{r}
 #| output: asis
