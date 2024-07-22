@@ -4,43 +4,18 @@ library(tidymodels)
 library(conflicted)
 library(colorspace)
 library(patchwork)
-library(MASS)
-library(rpart)
-library(randomForest)
 library(gridExtra)
 library(GGally)
 library(geozoo)
 library(mulgar)
 library(mvtnorm)
 library(palmerpenguins)
-library(rpart.plot)
-library(discrim)
 library(tourr)
-library(classifly)
 library(ggthemes)
-library(xgboost)
-library(uwot)
-library(Rtsne)
 library(plotly)
-library(keras)
 library(forcats)
 library(ggbeeswarm)
-library(DALEXtra)
-library(kernelshap)
-library(shapviz)
-library(lime)
-# devtools::install_github("dandls/counterfactuals")
-library(iml)
-library(counterfactuals)
-library(kernlab)
 library(kableExtra)
-library(fpc)
-library(ggdendro)
-library(mclust)
-library(kohonen)
-library(aweSOM)
-library(cxhull)
-library(vip)
 
 # Locations
 current_file <- knitr::current_input()
@@ -87,17 +62,4 @@ conflicts_prefer(dplyr::slice)
 conflicts_prefer(palmerpenguins::penguins)
 conflicts_prefer(tourr::flea)
 conflicts_prefer(viridis::viridis_pal)
-conflicts_prefer(latex2exp::TeX)
 conflicts_prefer(geozoo::simplex)
-
-p_tidy <- penguins |>
-  select(species, bill_length_mm:body_mass_g) |>
-  rename(bl=bill_length_mm,
-         bd=bill_depth_mm,
-         fl=flipper_length_mm,
-         bm=body_mass_g) |>
-  na.omit()
-
-p_std <- p_tidy |>
-  mutate_if(is.numeric, function(x) (x-mean(x))/sd(x)) 
-

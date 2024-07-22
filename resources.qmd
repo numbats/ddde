@@ -4,4 +4,10 @@ title: "ETC5521 Resources"
 
 # Books and articles
 
+# Resources
+
+- Cook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, [Introduction](http://ggobi.org/book/intro.pdf)
+- Donoho (2017) [50 Years of Data Science](https://www.tandfonline.com/doi/full/10.1080/10618600.2017.1384734)
+- Staniak and Biecek (2019) [The Landscape of R Packages for Automated Exploratory Data Analysis](https://arxiv.org/pdf/1904.02101.pdf)
+
 # Software

@@ -1,0 +1,492 @@
+---
+title: "ETC5521: Exploratory Data Analysis"
+subtitle: "Introduction"
+author: "Di Cook"
+email: "ETC5521.Clayton-x@monash.edu"
+date: "Week 1 - Session 2"
+length: "50 minutes"
+pdflink: "lecture-01B.pdf"
+titlebgimg: "images/bg-12.png"
+output:
+  xaringan::moon_reader:
+    css:
+      - ninjutsu 
+      - "assets/font-awesome-all.css"
+      - "assets/tachyons-addon.css"
+      - "assets/animate.css"
+      - "assets/fira-code.css"
+      - "assets/boxes.css"
+      - "assets/table.css"
+      - "assets/styles.css"
+      - "assets/monash-brand.css"
+      - "assets/monash-fonts.css"
+      - "assets/slide-types.css"
+      - "assets/di.css"
+    self_contained: false 
+    seal: false 
+    chakra: 'lib/remark-latest.min.js'
+    lib_dir: lib
+    mathjax: "lib/mathjax-local/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    nature:
+      highlightStyle: magula
+      highlightLanguage: r 
+      highlightLines: true
+      highlightSpans: false 
+      countIncrementalSlides: false
+      slideNumberFormat: '%current%/%total%'
+      navigation:
+        scroll: false 
+        touch: true
+        click: false
+      ratio: '16:9'
+---
+
+```{r, include = FALSE}
+current_file <- knitr::current_input()
+basename <- gsub(".Rmd$", "", current_file)
+```
+```{r, include = FALSE, eval = F}
+input <- fs::path_ext_set(current_file, "html")
+pagedown::chrome_print(input = input, format = "pdf", wait = 20)
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  fig.path = sprintf("images/%s/", basename),
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  fig.retina = 3,
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  cache = FALSE
+)
+```
+
+```{r titleslide, child="assets/titleslide.Rmd"}
+```
+
+
+---
+class: transition middle animated slideInLeft
+
+# A simple example to illustrate "exploratory data analysis" contrasted with a "confirmatory data analysis"
+
+---
+background-image: \url(https://images-na.ssl-images-amazon.com/images/I/51WO7SYkeQL._SX331_BO1,204,203,200_.jpg)
+background-size: 40%
+background-position: 10% 10%
+
+.pull-right[
+
+What are the factors that affect tipping behaviour?
+
+.font_small[
+In one restaurant, a food server recorded the following data on all customers they served during an interval of two and a half months in early 1990.
+
+Food servers’ tips in restaurants may be influenced by many factors, including the nature of the restaurant, size of the party, and table locations in the restaurant. Restaurant managers need to know which factors matter when they assign tables to food servers.
+]
+
+<br>
+
+```{r}
+library(tidyverse)
+tips <- read_csv("http://ggobi.org/book/data/tips.csv")
+```
+
+<img src="images/lecture-01b/tips.png" width="100%">
+
+]
+
+---
+# General strategy for EXPLORATORY DATA ANALYSIS
+
+Its a good idea to examine the data description, and the explanation of the variables. 
+
+- You need to know what type of variables are in the data in order to decide appropriate choice of plots, and calculations to make. 
+- Data description should have information about data collection methods, so that the extent of what we learn from the data might apply to new data. 
+
+--
+
+<br>
+What does that look like here?
+
+```{r}
+head(tips, 1)
+```
+--
+
+Look at the distribution of .monash-orange2[quantitative] variables tips, total bill.
+--
+
+<br>
+Examine the distributions across .monash-orange2[categorical] variables.
+--
+
+<br>
+Examine .monash-orange2[quantitative] variables relative to .monash-orange2[categorical] variables
+
+---
+
+.pull-left[
+.font_small[
+```{r tips_hist, echo=TRUE, fig.show='hide'}
+ggplot(tips, 
+    aes(x=tip)) + #<<
+  geom_histogram(
+    colour="white")  
+```
+]
+]
+.pull-right[
+```{r tips_hist2, ref.label="tips_hist", echo=FALSE}
+```
+
+]
+
+---
+background-image: \url(https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Potato-Chips.jpg/800px-Potato-Chips.jpg)
+background-size: cover
+class: middle
+
+## Because, one binwidth is never enough ...
+
+---
+
+.pull-left[
+.font_small[
+```{r tips_hist_fat, echo=TRUE, fig.show='hide'}
+ggplot(tips, 
+    aes(x=tip)) +
+  geom_histogram(
+    breaks=seq(0.5,10.5,1), #<< 
+    colour="white") + 
+  scale_x_continuous(
+    breaks=seq(0,11,1))
+```
+
+<br>
+<br>
+]
+
+.monash-orange2[Big fat bins.] Tips are skewed, which means most tips are relatively small.
+
+]
+.pull-right[
+```{r tips_hist_fat2, ref.label="tips_hist_fat", echo=FALSE}
+```
+
+]
+---
+
+.pull-left[
+.font_small[
+```{r tips_hist_skinny, echo=TRUE, fig.show='hide'}
+ggplot(tips, 
+    aes(x=tip)) + 
+  geom_histogram(
+    breaks=seq(0.5,10.5,0.1), #<<
+    colour="white") +
+  scale_x_continuous(
+    breaks=seq(0,11,1))
+```
+
+<br>
+<br>
+]
+
+.monash-orange2[Skinny bins.] Tips are multimodal, and occurring at the full dollar and 50c amounts.
+
+]
+.pull-right[
+```{r tips_hist_skinny2, ref.label="tips_hist_skinny", echo=FALSE}
+```
+
+]
+
+---
+class: middle
+
+## We could also look at total bill this way
+
+but I've already done this, and we don't learn anything more about the multiple peaks than waht is learned by plotting tips.
+
+---
+# Relationship between tip and total
+
+
+.pull-left[
+.font_small[
+```{r tips_tot, echo=TRUE, fig.show='hide'}
+p <- ggplot(tips, 
+    aes(x= totbill, y=tip)) + 
+  geom_point() + #<<
+  scale_y_continuous(
+    breaks=seq(0,11,1))
+p
+```
+
+<br>
+<br>
+]
+
+.monash-orange2[Why is total on the x axis?]
+<br>
+
+.monash-orange2[Should we add a guideline?]
+
+
+]
+.pull-right[
+```{r tips_tot_b, ref.label="tips_tot", echo=FALSE}
+```
+
+]
+
+---
+# Add a regression line
+
+
+.pull-left[
+.font_small[
+```{r tips_tot2, echo=TRUE, fig.show='hide'}
+p <- p + geom_abline(intercept=0, #<<
+              slope=0.2) + #<<
+  annotate("text", x=45, y=10, 
+           label="20% tip") 
+p
+```
+]
+
+
+<br>
+
+<br>
+
+Most tips less than 20%: Skin flints vs generous diners
+<br>
+
+A couple of big tips
+<br>
+
+Banding horizontally is the rounding seen previously
+
+]
+.pull-right[
+```{r tips_tot2b, ref.label="tips_tot2", echo=FALSE}
+```
+
+]
+---
+class: middle
+
+## We should examine bar charts and mosaic plots of the categorical variables next
+
+but I've already done that, and there's not too much of interest there.
+
+---
+
+.font_small[
+```{r tips_sexsmoke, echo=TRUE, fig.show='hide'}
+p + facet_grid(smoker~sex) #<<
+```
+]
+
+
+```{r tips_sexsmokeb, ref.label="tips_sexsmoke", echo=FALSE, fig.width=9, fig.height=6, out.width="60%"}
+```
+
+---
+# What do we learn?
+
+- The bigger bills tend to be paid by men (and females that smoke).
+--
+
+- Except for three diners, female non-smokers are very consistent tippers, probably around 15-18% though.
+--
+
+- The variability in the smokers is much higher than for the non-smokers.
+
+
+---
+class: transition middle animated slideInLeft
+
+## Isn't this interesting?
+
+---
+# Procedure of EDA
+
+- We gained a wealth of insight in a short time. 
+- Using nothing but graphical methods we investigated univariate, bivariate, and multivariate relationships. 
+- We found both global features and local detail. We saw that 
+    - tips were rounded; then we saw the obvious  
+    - correlation between the tip and the size of the bill, noting the scarcity of generous tippers; finally we 
+    - discovered differences in the tipping behavior of male and female smokers and non-smokers.
+
+<br><br>
+
+.monash-orange2[These are unexpected delights!] We would have missed these insights if we had focused solely on the primary question. 
+
+<!--
+# Procedure of EDA
+
+Notice that we used very simple plots to explore some pretty complex relationships involving as many as four variables. Each plot shows a subset obtained by partitioning the data according to two binary variables. The statistical term for partitioning based on variables is "conditioning." For example, the top left plot shows the dining parties that meet the condition that the bill payer was a male non-smoker: sex = male and smoking = False. In database terminology this plot would be called the result of "drill-down. The idea of conditioning is richer than drill-down because it involves a structured partitioning of all data as opposed to the extraction of a single partition.
+
+# Procedure of EDA
+
+Having generated the four plots, we arrange them in a two-by-two layout to reflect the two variables on which we conditioned. Although the axes in each plot are tip and bill, the axes of the overall figure are smoking (vertical) and sex (horizontal). The arrangement permits us to make several kinds of comparisons and to make observations about the partitions.
+-->
+
+---
+# Getting real
+
+.pull-left[
+The preceding explanations may have given a somewhat .monash-blue2[misleading impression of the process of data analysis]. 
+
+- The data had no problems; for example, there were no missing values and no recording errors. 
+- Every step was logical and necessary. 
+- Every question we asked had a meaningful answer. 
+- Every plot that was produced was useful and informative.
+]
+--
+
+.pull-right[
+In .monash-blue2[actual data analysis], nothing could be further from the truth. 
+
+- Real datasets are rarely perfect; 
+- Most choices are guided by intuition, knowledge, and judgment; 
+- Most steps lead to dead ends; 
+- Most plots end up in the wastebasket. 
+
+This may sound daunting, but even though data analysis is a highly improvisational activity, .monash-blue2[it can be given some structure] nonetheless.
+]
+
+---
+class: transition 
+## Tips example is an illustration only
+
+Although we have focused on the analysis of the tips it only serves the purpose of an example to illustrate the difference between confirmatory and exploratory analysis. 
+
+---
+background-image: \url(images/lecture-01B/EDA-IDA-MD.png)
+background-size: 90%
+background-position: 50% 50%
+
+---
+# Exploratory data analysis
+
+<center> Prof Di says: </center>
+<br>
+
+.speech-bubble[I like to think of EDA as making time to "play in the sand" to allow us to find the unexpected, and to some better understand our data. 
+
+We like to think of this as a little like traveling. We may have a purpose in visiting a new city, perhaps to attend a conference, but we need to take care of our basic necessities, such as finding eating places and gas stations. Some of our movements will be pre-determined, or guided by the advice of others, but some of the time we wander around by ourselves. We may find a cafe we particularly like or a cheaper gas station. This is all about getting to know the neighborhood.]
+
+<br><br>
+EDA has always depended heavily on graphics, even before the term data visualization was coined. A favorite quote from John Tukey’s rich legacy is that we need good pictures to .monash-orange2[*"force the unexpected upon us."*]
+
+
+---
+class: transition middle animated slideInLeft
+
+# What can go wrong?
+
+---
+# Is it data snooping?
+
+.pull-left[
+Because EDA is very graphical, it sometimes gives rise to a suspicion that .monash-blue2[patterns in the data are being detected and reported that are not really there.] (Stay tuned, we'll provide solutions later in the semester.) 
+
+So many different combinations may be examined, that something is bound to be interesting. 
+
+ `r emo::ji("exclamation")` It is a problem if structure seen in the plot drives hypothesis testing on same data.
+
+.monash-orange2[Sometimes this is called data snooping.]
+]
+--
+
+.pull-right[
+
+An abuse of exploration happens when data is modified, typically after examining it, to achieve a significant $p$-value. For example, .monash-blue2[observations might be dropped, or some data processing made. This is called p-hacking, and it is unethical.] 
+
+Or, many comparisons are made, but only the significant ones are reported.
+]
+
+---
+# In defense of EDA
+
+We snooped into the tips data, and from a few plots we learned an enormous amount of information about tipping: 
+
+- There is a scarcity of generous tippers, 
+- the variability in tips increases extraordinarily for smoking parties, and 
+- people tend to round their tips. 
+
+These are very different types of tipping behaviors than what we learned from the regression model. .monash-blue2[The regression model was not compromised by what we learned from graphics], and indeed, 
+--
+
+<br><br><br>
+.monash-orange2[we have a richer and more informative analysis. Making plots of the data is just smart.]
+
+
+---
+class: transition middle animated slideInLeft
+
+Words of wisdom 
+
+*False discovery is the lesser danger when compared to non-discovery. Non-discovery is the failure to identify meaningful structure, and it may result in false or incomplete modeling. In a healthy scientific enterprise, the fear of non-discovery should be at least as great as the fear of false discovery.*
+
+---
+# Why aren't there more courses on EDA?
+
+> Teaching data analysis is not easy, and the time allowed is always far from sufficient. But these difficulties have been enhanced by the view that "avoidance of cookbookery and growth of understanding come only by mathematical treatment, with emphasis upon proofs." The problem of cookbookery is not peculiar to data analysis. But the solution of concentrating upon mathematics and proof is.
+
+Tukey 1962 The Future of Data Analysis
+
+---
+# There really are many courses
+
+- Every introductory statistics course begins with exploratory data analysis, and teaches box plots. It is just a simple treatment, though.
+- A book by [Peng](https://bookdown.org/rdpeng/exdata/), and a [Coursera class by Peng, Leek and Caffo](https://www.coursera.org/learn/exploratory-data-analysis) with more than a 100,000 currently enrolled. 
+
+---
+# At Monash
+
+.pull-left[
+- ETC1010/5510 - Introduction to data analysis
+- ETF5922 - Data visualisation and analytics
+- FIT3152 - Data analytics
+- FIT5197 - Modelling for data analysis
+- FIT5149 - Applied data analysis
+- FIT5145 - Introduction to data science
+- FIT5147 - Data exploration and visualisation
+- STA2216 - Data analysis for science
+
+all have parts that would be considered exploratory data analysis.
+]
+--
+
+.pull-right[
+
+You've just completed ETC5510 Introduction to data analysis. Isn't this EDA?
+
+Yes! Think about this course (ETC5521) as advanced exploratory data analysis. We will go a bit deeper, with more structure, and historical background, and venture in with EDA attitude. 
+]
+
+---
+class: transition middle animated slideInLeft
+
+## Ready?
+
+---
+# Resources
+
+- Cook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, [Introduction](http://ggobi.org/book/intro.pdf)
+- Donoho (2017) [50 Years of Data Science](https://www.tandfonline.com/doi/full/10.1080/10618600.2017.1384734)
+- Staniak and Biecek (2019) [The Landscape of R Packages for Automated Exploratory Data Analysis](https://arxiv.org/pdf/1904.02101.pdf)
+
+---
+
+```{r endslide, child="assets/endslide.Rmd"}
+```

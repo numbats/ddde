@@ -19,8 +19,15 @@ schedule |>
 
 ## What you will learn this week
 
+- How exploring data is different from a confirmatory analysis
+- Get up and running with GitHub Classroom
 
 ## Lecture slides
+
+- [html](https://ddde.numbat.space/week1/slides.html)
+- [pdf](https://ddde.numbat.space/week1/slides.pdf)
+- [qmd](https://ddde.numbat.space/week1/slides.qmd)
+- [R](https://ddde.numbat.space/week1/slides.R)
 
 
 ## Tutorial instructions

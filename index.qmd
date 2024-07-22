@@ -19,13 +19,13 @@ week <- as.integer(1 + ((Sys.Date() - as_date(start_semester))/7))
 
 * **Professor Di Cook**
     - Email: [etc5521.clayton-x@monash.edu](mailto:etc5521.clayton-x@monash.edu) 
-    - Consultation: TBD
+    - Consultation: Thu 11:00-12:00, 352 Education Blg, and zoom
 
 ## Tutors
 
 * Krisanat Anukarnsakulchularp
     - Tutorials: Wed 9:30-11:00am and 7:30-9:00pm CL_Anc-19.LTB_134
-    - Consultation: TBD
+    - Consultation: Fri 2.30-4:00 pm, Menzies W9.20 
 
 ## Weekly schedule
 
@@ -54,7 +54,7 @@ schedule |>
 
 ## Assessments
 
-* [Weekly learning quizzes](https://learning.monash.edu/course/view.php?id=9453&section=20): 5%
+* [Weekly learning quizzes](https://learning.monash.edu/course/view.php?id=18864&section=8): 5%
 * Assignment 1: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2966868) (15%)
 * Assignment 2: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2587917) (20%)
 * Assignment 3: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2587917) (20%)

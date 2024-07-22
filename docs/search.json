@@ -280,67 +280,431 @@
     "text": "Assignments\n\nAssignment 4 Part 1 is due on Monday 07 October.\nAssignment 4 Part 2 is due on Monday 28 October."
   },
   {
-    "objectID": "week1/index.html",
-    "href": "week1/index.html",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "objectID": "week1/slides.html#about-this-unit",
+    "href": "week1/slides.html#about-this-unit",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "About this unit",
+    "text": "About this unit"
+  },
+  {
+    "objectID": "week1/slides.html#teaching-team-12",
+    "href": "week1/slides.html#teaching-team-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Teaching team 1/2",
+    "text": "Teaching team 1/2\n\n\n\nDi Cook  Distinguished Professor  Monash University \n\n🌐 https://dicook.org/\n✉️ ETC5521.Clayton-x@monash.edu\n🦣 @visnut@aus.social\n\n\nI have a PhD from Rutgers University, NJ, and a Bachelor of Science from University of New England\nI am a Fellow of the American Statistical Association, elected member of the the R Foundation and International Statistical Institute, Past-Editor of the Journal of Computational and Graphical Statistics, and the R Journal.\nMy research is in data visualisation, statistical graphics and computing, with application to sports, ecology and bioinformatics. I likes to develop new methodology and software.\nMy students always work on methods and software that is generally useful for the world. They have been responsible for bringing you the tidyverse suite, knitr, plotly, and many other R packages we regularly use."
+  },
+  {
+    "objectID": "week1/slides.html#teaching-team-22",
+    "href": "week1/slides.html#teaching-team-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Teaching team 2/2",
+    "text": "Teaching team 2/2\n\n\n\nKrisanat Anukarnsakulchularp  Master of Business Analytics  Monash University \n\n🌐 https://github.com/KrisanatA\n✉️ ETC5521.Clayton-x@monash.edu\n\n\nHe has a Bachelor of Actuarial Science, Monash University, 2018 - 2021\nand a Master of Business Analytics, Monash University | 2022 - 2023.\nHe has published the R package animbook\nand hopes to be a PhD student at Monash from 2025.\nThis is his second semester tutoring at Monash, and one of several units working on this semester."
+  },
+  {
+    "objectID": "week1/slides.html#got-a-question-or-a-comment",
+    "href": "week1/slides.html#got-a-question-or-a-comment",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Got a question, or a comment?",
+    "text": "Got a question, or a comment?\n\n✋ 🔡 You can ask directly by unmuting yourself, or typing in the chat, of the live lecture.\n\n💻 If watching the recording, please post in the discussion (ED) forum."
+  },
+  {
+    "objectID": "week1/slides.html#welcome",
+    "href": "week1/slides.html#welcome",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Welcome!",
+    "text": "Welcome!\n\n\nBefore modelling and predicting, data should first be explored to uncover the patterns and structures that exist. Exploratory data analysis involves both numerical and visual techniques designed to reveal interesting information that may be hidden in the data. However, an analyst must be cautious not to over-interpret apparent patterns, and to properly assess the results of a data exploration.\n\n\nlearn to use modern data exploration tools with many different types of contemporary data to uncover interesting structures, unusual relationships and anomalies.\nunderstand how to map out appropriate analyses for a given data set and description, define what we would expect to see in the data, and whether what we see is contrary to expectations.\nbe able to compute null samples in order to test apparent patterns, and to interpret the results using computational methods for statistical inference.\ncritically assess the strength and adequacy of data analysis."
+  },
+  {
+    "objectID": "week1/slides.html#unit-structure",
+    "href": "week1/slides.html#unit-structure",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "📅 Unit Structure",
+    "text": "📅 Unit Structure\n\n\n2 hour lecture 👩‍🏫 Tue 10.00am - noon, on zoom (see moodle for the link) Class is more fun if you can attend live!\n2 x 1.5 hour on-campus tutorial 🛠️ Wed 9:30-11:00 and Wed 7:30-9:00pm CL_Anc-19.LTB_134 Attendance is expected - this is the chance to practice what is explained in lecture under your tutor’s guidance."
+  },
+  {
+    "objectID": "week1/slides.html#resources",
+    "href": "week1/slides.html#resources",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "📚 Resources",
+    "text": "📚 Resources\n🏡 Course homepage: this is where you find the course materials  (lecture slides, tutorials and tutorial solutions) https://ddde.numbat.space/\n\n🈴 Moodle: this is where you find discussion forum, zoom links, and marks https://learning.monash.edu/course/view.php?id=18864\n\n🧰 GitHub classroom: this is where you will find assignments, but links to each will be available in moodle. https://classroom.github.com/classrooms/175896553-etc5521-2024-classroom-29a96a"
+  },
+  {
+    "objectID": "week1/slides.html#assessment-part-12",
+    "href": "week1/slides.html#assessment-part-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "💯 Assessment Part 1/2",
+    "text": "💯 Assessment Part 1/2\n\nWeekly quizzes (5%) There will be a weekly quiz starting week 2 provided through Moodle. These are a great chance to check your knowledge, and help you prepare for the tutorial and to keep up to date with the weekly course material. Your best 10 scores will be used for your final quiz total. \nAssignment 1 (15%), through GitHub classroom, Due: Aug 5, 11:55pm. This is an individual assessment. \nAssignment 2 (20%), through GitHub classroom, Due: Aug 26, 11:55pm. This is an individual assessment. \nAssignment 3 (20%): through GitHub classroom, Due: Sep 16, 11:55pm. This is an individual assessment. \nAssignment 4, parts 1 and 2 (20% each), through GitHub classroom, Due: Oct 7, 11:55pm and Oct 28, 11:55pm."
+  },
+  {
+    "objectID": "week1/slides.html#github-classroom",
+    "href": "week1/slides.html#github-classroom",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "GitHub Classroom",
+    "text": "GitHub Classroom\nWe are going to use GitHub Classroom (etc5521 2024: Diving Deeper into Data Exploration) to distribute assignment templates and keep track of your assignment progress.\n\nClone the first assignment by clicking on the link given in Moodle.\nOnce you have accepted it, you will get a cloned copy on your own GitHub account. It is a private repo, which means you and the teaching staff will be the only people with access.\nIf you need some help getting started, check this information.\nThe week 1 tutorial is the best place to get help with GitHub."
+  },
+  {
+    "objectID": "week1/slides.html#why-exploratory-data-analysis",
+    "href": "week1/slides.html#why-exploratory-data-analysis",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Why exploratory data analysis?",
+    "text": "Why exploratory data analysis?\n What’s special about exploring data, in contrast to confirmatory data analysis?\n\nLet’s look at some common definitions and quotes of “exploratory data analysis”."
+  },
+  {
+    "objectID": "week1/slides.html#section",
+    "href": "week1/slides.html#section",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
-    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+    "text": "In statistics, exploratory data analysis (EDA) is an approach to analyzing data sets to summarize their main characteristics, often with visual methods. A statistical model can be used or not, but primarily EDA is for seeing what the data can tell us beyond the formal modeling or hypothesis testing task.\n\n\n\nhttps://en.wikipedia.org/wiki/Exploratory_data_analysis"
   },
   {
-    "objectID": "week1/index.html#main-reference",
-    "href": "week1/index.html#main-reference",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "objectID": "week1/slides.html#section-1",
+    "href": "week1/slides.html#section-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
-    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+    "text": "EDA is not a formal process with a strict set of rules. More than anything, EDA is a state of mind. During the initial phases of EDA you should feel free to investigate every idea that occurs to you. Some of these ideas will pan out, and some will be dead ends.\n\n\n\nhttps://r4ds.had.co.nz/exploratory-data-analysis.html"
   },
   {
-    "objectID": "week1/index.html#what-you-will-learn-this-week",
-    "href": "week1/index.html#what-you-will-learn-this-week",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "What you will learn this week",
-    "text": "What you will learn this week"
+    "objectID": "week1/slides.html#section-2",
+    "href": "week1/slides.html#section-2",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Exploratory Data Analysis (EDA) is an approach/philosophy for data analysis that employs a variety of techniques (mostly graphical) to (1) maximize insight into a data set; (2) uncover underlying structure; (3) extract important variables; (4) detect outliers and anomalies; (5) test underlying assumptions; (6) develop parsimonious models; and (7) determine optimal factor settings.\n\n\n\nhttps://www.itl.nist.gov/div898/handbook/eda/section1/eda11.htm"
   },
   {
-    "objectID": "week1/index.html#lecture-slides",
-    "href": "week1/index.html#lecture-slides",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "Lecture slides",
-    "text": "Lecture slides"
+    "objectID": "week1/slides.html#section-3",
+    "href": "week1/slides.html#section-3",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "What is Exploratory Data Analysis (EDA)? (1) How to ensure you are ready to use machine learning algorithms in a project? (2) How to choose the most suitable algorithms for your data set? (3) How to define the feature variables that can potentially be used for machine learning?\n\n\n\nhttps://www.kaggle.com/pavansanagapati/a-simple-tutorial-on-exploratory-data-analysis"
   },
   {
-    "objectID": "week1/index.html#tutorial-instructions",
-    "href": "week1/index.html#tutorial-instructions",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "Tutorial instructions",
-    "text": "Tutorial instructions\nInstructions:\n\nhtml\nqmd"
+    "objectID": "week1/slides.html#section-4",
+    "href": "week1/slides.html#section-4",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "EDA is necessary for the next stage of data research. If there was an analogy to exploratory data analysis, it would be that of a painter examining their tools and available time, before deciding on what best to paint.\n\n\n\nhttps://seleritysas.com/blog/2020/05/08/exploratory-data-analysis-and-its-role-in-improving-business-operations/"
   },
   {
-    "objectID": "week1/index.html#assignments",
-    "href": "week1/index.html#assignments",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "Assignments",
-    "text": "Assignments\n\nAssignment 1 is due on Monday 05 August."
+    "objectID": "week1/slides.html#section-5",
+    "href": "week1/slides.html#section-5",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "These techniques are typically applied before formal modeling commences and can help inform the development of more complex statistical models. Exploratory techniques are also important for eliminating or sharpening potential hypotheses about the world that can be addressed by the data.\n\n\n\nhttps://www.coursera.org/learn/exploratory-data-analysis#syllabus"
+  },
+  {
+    "objectID": "week1/slides.html#section-6",
+    "href": "week1/slides.html#section-6",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "The purpose of doing the Exploratory Data Analysis or EDA is to find new information in data. The understanding of EDA that practitioners may not aware of, is the EDA uses a visually-examined dataset to understand and summarize the main characteristics of the dataset without having a prior hypothesis or relying upon statistical models.\n\n\n\nhttps://towardsdatascience.com/if-you-dont-find-anything-new-you-don-t-do-eda-right-d356f9995098"
+  },
+  {
+    "objectID": "week1/slides.html#none-of-these-capture-what-this-course-is-about",
+    "href": "week1/slides.html#none-of-these-capture-what-this-course-is-about",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "None of these capture what this course is about",
+    "text": "None of these capture what this course is about\n\n\n\n\nhttps://www.gocomics.com/calvinandhobbes/2015/08/26"
+  },
+  {
+    "objectID": "week1/slides.html#a-simple-example-to-illustrate-exploratory-data-analysis-contrasted-with-a-confirmatory-data-analysis",
+    "href": "week1/slides.html#a-simple-example-to-illustrate-exploratory-data-analysis-contrasted-with-a-confirmatory-data-analysis",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "A simple example to illustrate “exploratory data analysis” contrasted with a “confirmatory data analysis”",
+    "text": "A simple example to illustrate “exploratory data analysis” contrasted with a “confirmatory data analysis”"
+  },
+  {
+    "objectID": "week1/slides.html#what-are-the-factors-that-affect-tipping-behaviour",
+    "href": "week1/slides.html#what-are-the-factors-that-affect-tipping-behaviour",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What are the factors that affect tipping behaviour?",
+    "text": "What are the factors that affect tipping behaviour?\n\n\nIn one restaurant, a food server recorded the following data on all customers they served during an interval of two and a half months in early 1990.\nFood servers’ tips in restaurants may be influenced by many factors, including the nature of the restaurant, size of the party, and table locations in the restaurant. Restaurant managers need to know which factors matter when they assign tables to food servers.\n\n\n\nlibrary(tidyverse)\ntips &lt;- read_csv(\"http://ggobi.org/book/data/tips.csv\")"
+  },
+  {
+    "objectID": "week1/slides.html#what-is-tipping",
+    "href": "week1/slides.html#what-is-tipping",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What is tipping?",
+    "text": "What is tipping?\n\nWhen you’re dining at a full-service restaurant\n\nTip 20 percent of your full bill.\n\nWhen you grab a cup of coffee\n\nRound up or add a dollar if you’re a regular or ordered a complicated drink.\n\nWhen you have lunch at a food truck\n\nDrop a few dollars into the tip jar, but a little less than you would at a dine-in spot.\n\nWhen you use a gift card\n\nTip on the total value of the meal, not just what you paid out of pocket.\n\n\n\n\nThe basic rules of tipping that everyone should know about"
+  },
+  {
+    "objectID": "week1/slides.html#recommended-procedure-in-the-book",
+    "href": "week1/slides.html#recommended-procedure-in-the-book",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Recommended procedure in the book",
+    "text": "Recommended procedure in the book\n\nStep 1: Develop a model\n\nShould the response be tip alone and use the total bill as a predictor?\nShould you create a new variable tip rate and use this as the repsonse?\n\nStep 2: Fit the full model with sex, smoker, day, time and size as predictors\nStep 3: Refine model: Should some variables should be dropped?\nStep 4: Check distribution of residuals\nStep 5: Summarise the model, if X=something, what would be the expected tip"
+  },
+  {
+    "objectID": "week1/slides.html#step-1",
+    "href": "week1/slides.html#step-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Step 1",
+    "text": "Step 1\nCalculate tip % as tip/total bill \\(\\times\\) 100\n  \n\ntips &lt;- tips %&gt;%\n  mutate(tip_pct = tip/totbill * 100) \n\n\n\nNote: Creating new variables (sometimes called feature engineering), is a common step in any data analysis."
+  },
+  {
+    "objectID": "week1/slides.html#step-2-fit",
+    "href": "week1/slides.html#step-2-fit",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Step 2 Fit",
+    "text": "Step 2 Fit\nFit the full model with all variables\n \n\ntips_lm &lt;- tips %&gt;%\n  select(tip_pct, sex, smoker, day, time, size) %&gt;%\n  lm(tip_pct ~ ., data=.)"
+  },
+  {
+    "objectID": "week1/slides.html#step-2-model-summary",
+    "href": "week1/slides.html#step-2-model-summary",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Step 2 Model summary",
+    "text": "Step 2 Model summary\n\n\n\nlibrary(broom)\nlibrary(kableExtra)\ntidy(tips_lm) %&gt;% \n  kable(digits=2) %&gt;% \n  kable_styling() \n\n\nglance(tips_lm) %&gt;% \n  select(r.squared, statistic, \n         p.value) %&gt;% \n  kable(digits=3)\n\n\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n20.66\n2.49\n8.29\n0.00\n\n\nsexM\n-0.85\n0.83\n-1.02\n0.31\n\n\nsmokerYes\n0.36\n0.85\n0.43\n0.67\n\n\ndaySat\n-0.18\n1.83\n-0.10\n0.92\n\n\ndaySun\n1.67\n1.90\n0.88\n0.38\n\n\ndayThu\n-1.82\n2.32\n-0.78\n0.43\n\n\ntimeNight\n-2.34\n2.61\n-0.89\n0.37\n\n\nsize\n-0.96\n0.42\n-2.28\n0.02\n\n\n\n\n\n\n\n\n\n\n\n\n\nr.squared\nstatistic\np.value\n\n\n\n\n0.042\n1.5\n0.17\n\n\n\n\n\n🤔 Which variable(s) would be considered important for predicting tip %?"
+  },
+  {
+    "objectID": "week1/slides.html#step-3-refine-model",
+    "href": "week1/slides.html#step-3-refine-model",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Step 3: Refine model",
+    "text": "Step 3: Refine model\n\n\n\ntips_lm &lt;- tips %&gt;%\n  select(tip_pct, size) %&gt;% \n  lm(tip_pct ~ ., data=.) \ntidy(tips_lm) %&gt;% \n  kable(digits=2) %&gt;% \n  kable_styling() \n\n\nglance(tips_lm) %&gt;% \n  select(r.squared, statistic, p.value) %&gt;% \n  kable(digits=3)\n\n\n\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n18.44\n1.12\n16.5\n0.00\n\n\nsize\n-0.92\n0.41\n-2.2\n0.03\n\n\n\n\n\n\n\n\n\n\n\n\n\nr.squared\nstatistic\np.value\n\n\n\n\n0.02\n5\n0.026"
+  },
+  {
+    "objectID": "week1/slides.html#model-summary",
+    "href": "week1/slides.html#model-summary",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model summary",
+    "text": "Model summary\n \n\\[\\widehat{tip %} = 18.44 - 0.92 \\times size\\]\n\n \nAs the size of the dining party increases by one person the tip decreases by approximately 1%."
+  },
+  {
+    "objectID": "week1/slides.html#model-assessment",
+    "href": "week1/slides.html#model-assessment",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model assessment",
+    "text": "Model assessment\n   \\(R^2 = 0.02\\).\n\n  This dropped by half from the full model, even though no other variables contributed significantly to the model. It might be a good step to examine interaction terms.\nWhat does \\(R^2 = 0.02\\) mean?"
+  },
+  {
+    "objectID": "week1/slides.html#model-assessment-1",
+    "href": "week1/slides.html#model-assessment-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model assessment",
+    "text": "Model assessment\n\\(R^2 = 0.02\\) means that size explains just 2% of the variance in tip %. This is a very weak model.\n\nAnd \\(R^2 = 0.04\\) is also a very weak model.\nWhat do the \\(F\\) statistic and \\(p\\)-value mean?\nWhat do the \\(t\\) statistics and \\(p\\)-value associated with model coefficients mean?"
+  },
+  {
+    "objectID": "week1/slides.html#overall-model-significance",
+    "href": "week1/slides.html#overall-model-significance",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Overall model significance",
+    "text": "Overall model significance\nAssume that we have a random sample from a population. Assume that the model for the population is\n\\[ \\widehat{tip %} = \\beta_0 + \\beta_1 sexM + ... + \\beta_7 size \\] and we have observed\n\\[ \\widehat{tip %} = b_0 + b_1  sexM + ... + b_7 size \\] The \\(F\\) statistic refers to\n\\[ H_o: \\beta_1 = ... = \\beta_7 = 0 ~~ vs ~~ H_a: \\text{at least one is not 0}\\] The \\(p\\)-value is the probability that we observe the given \\(F\\) value or larger, computed assuming \\(H_o\\) is true."
+  },
+  {
+    "objectID": "week1/slides.html#term-significance",
+    "href": "week1/slides.html#term-significance",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Term significance",
+    "text": "Term significance\nAssume that we have a random sample from a population. Assume that the model for the population is\n\\[ \\widehat{tip %} = \\beta_0 + \\beta_1 sexM + ... + \\beta_7 size \\] and we have observed\n\\[ \\widehat{tip %} = b_0 + b_1  sexM + ... + b_7 size \\]\nThe \\(t\\) statistics in the coefficient summary refer to\n\\[ H_o: \\beta_k = 0 ~~ vs ~~ H_a: \\beta_k \\neq 0 \\] The \\(p\\)-value is the probability that we observe the given \\(t\\) value or more extreme, computed assuming \\(H_o\\) is true."
+  },
+  {
+    "objectID": "week1/slides.html#model-diagnostics-md",
+    "href": "week1/slides.html#model-diagnostics-md",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model diagnostics (MD)",
+    "text": "Model diagnostics (MD)\nNormally, the final model summary would be accompanied diagnostic plots\n\nobserved vs fitted values to check strength and appropriateness of the fit\nunivariate plot, and normal probability plot, of residuals to check for normality\nin the simple final model like this, the observed vs predictor, with model overlaid would be advised to assess the model relative to the variability around the model\nwhen the final model has more terms, using a partial dependence plot to check the relative relationship between the response and predictors would be recommended."
+  },
+  {
+    "objectID": "week1/slides.html#residual-plots",
+    "href": "week1/slides.html#residual-plots",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Residual plots",
+    "text": "Residual plots\n\n\n\ntips_aug &lt;- augment(tips_lm)\nggplot(tips_aug, \n    aes(x=.resid)) + \n  geom_histogram() +\n  xlab(\"residuals\")"
+  },
+  {
+    "objectID": "week1/slides.html#residual-normal-probability-plots",
+    "href": "week1/slides.html#residual-normal-probability-plots",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Residual normal probability plots",
+    "text": "Residual normal probability plots\n\n\n\nggplot(tips_aug, \n    aes(sample=.resid)) + \n  stat_qq() +\n  stat_qq_line() +\n  xlab(\"residuals\") +\n  theme(aspect.ratio=1)"
+  },
+  {
+    "objectID": "week1/slides.html#fitted-vs-observed",
+    "href": "week1/slides.html#fitted-vs-observed",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Fitted vs observed",
+    "text": "Fitted vs observed\n\n\n\nggplot(tips_aug, \n    aes(x=.fitted, y=tip_pct)) + \n  geom_point() +\n  geom_smooth(method=\"lm\", se=FALSE) +\n  xlab(\"observed\") +\n  ylab(\"fitted\")"
+  },
+  {
+    "objectID": "week1/slides.html#model-in-the-data-space",
+    "href": "week1/slides.html#model-in-the-data-space",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "“Model-in-the-data-space”",
+    "text": "“Model-in-the-data-space”\n\n\n\nggplot(tips_aug, \n    aes(x=size, y=tip_pct)) + \n  geom_point() +\n  geom_smooth(method=\"lm\", se=FALSE) +\n  ylab(\"tip %\")\n\n\nThe fitted model is overlaid on a plot of the data. This is called “model-in-the-data-space” (Wickham et al, 2015).\n\nAll the plots on the previous three slides: histogram of residuals, normal probability plot, fitted vs residuals are considered to be “data-in-the-model-space”. Stay tuned for more discussion on this later."
+  },
+  {
+    "objectID": "week1/slides.html#section-7",
+    "href": "week1/slides.html#section-7",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "The result of this work might leave us with\n\na model that could be used to impose a dining/tipping policy in restaurants (see here)\n\n\nbut it should also leave us with an unease that this policy is based on weak support."
+  },
+  {
+    "objectID": "week1/slides.html#summary",
+    "href": "week1/slides.html#summary",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Summary",
+    "text": "Summary\n\n\n\nPlots as we have just seen, associated with pursuit of an answer to a specific question may be best grouped into the category of “model diagnostics (MD)”.\n\nThere are additional categories of plots for data analysis that include initial data analysis (IDA), descriptive statistics. Stay tuned for more on these.\n\n\nA separate and big area for plots of data is for communication, where we already know what is in the data and we want to communicate the information as best possible.\n\nWhen exploring data, we are using data plots to discover things we didn’t already know."
+  },
+  {
+    "objectID": "week1/slides.html#what-did-this-analysis-miss",
+    "href": "week1/slides.html#what-did-this-analysis-miss",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What did this analysis miss?",
+    "text": "What did this analysis miss?"
+  },
+  {
+    "objectID": "week1/slides.html#general-strategy-for-exploring-data",
+    "href": "week1/slides.html#general-strategy-for-exploring-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "General strategy for EXPLORING DATA",
+    "text": "General strategy for EXPLORING DATA\n\n\nIts a good idea to examine the data description, the explanation of the variables, and how the data was collected.\n\nYou need to know what type of variables are in the data in order to decide appropriate choice of plots, and calculations to make.\nData description should have information about data collection methods, so that the extent of what we learn from the data might apply to new data.\n\n\n\nWhat does that look like here?\n\nglimpse(tips)\n\nRows: 244\nColumns: 9\n$ obs     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1…\n$ totbill &lt;dbl&gt; 17.0, 10.3, 21.0, 23.7, 24.6, 25…\n$ tip     &lt;dbl&gt; 1.0, 1.7, 3.5, 3.3, 3.6, 4.7, 2.…\n$ sex     &lt;chr&gt; \"F\", \"M\", \"M\", \"M\", \"F\", \"M\", \"M…\n$ smoker  &lt;chr&gt; \"No\", \"No\", \"No\", \"No\", \"No\", \"N…\n$ day     &lt;chr&gt; \"Sun\", \"Sun\", \"Sun\", \"Sun\", \"Sun…\n$ time    &lt;chr&gt; \"Night\", \"Night\", \"Night\", \"Nigh…\n$ size    &lt;dbl&gt; 2, 3, 3, 2, 4, 4, 2, 4, 2, 2, 2,…\n$ tip_pct &lt;dbl&gt; 5.9, 16.1, 16.7, 14.0, 14.7, 18.…\n\n\nLook at the distribution of quantitative variables tips, total bill.\n\n\nExamine the distributions across categorical variables.\nExamine quantitative variables relative to categorical variables"
+  },
+  {
+    "objectID": "week1/slides.html#distributions-of-tips",
+    "href": "week1/slides.html#distributions-of-tips",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Distributions of tips",
+    "text": "Distributions of tips\n\n\n\nggplot(tips, \n    aes(x=tip)) + \n  geom_histogram(\n    colour=\"white\")"
+  },
+  {
+    "objectID": "week1/slides.html#because-one-binwidth-is-never-enough",
+    "href": "week1/slides.html#because-one-binwidth-is-never-enough",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Because, one binwidth is never enough …",
+    "text": "Because, one binwidth is never enough …"
+  },
+  {
+    "objectID": "week1/slides.html#distributions-of-tips-1",
+    "href": "week1/slides.html#distributions-of-tips-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Distributions of tips",
+    "text": "Distributions of tips\n\n\n\nggplot(tips, \n    aes(x=tip)) +\n  geom_histogram(\n    breaks=seq(0.5,10.5,1), #&lt;&lt; \n    colour=\"white\") + \n  scale_x_continuous(\n    breaks=seq(0,11,1))\n\nBig fat bins. Tips are skewed, which means most tips are relatively small."
+  },
+  {
+    "objectID": "week1/slides.html#distributions-of-tips-2",
+    "href": "week1/slides.html#distributions-of-tips-2",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Distributions of tips",
+    "text": "Distributions of tips\n\n\n\nggplot(tips, \n    aes(x=tip)) + \n  geom_histogram(\n    breaks=seq(0.5,10.5,0.1), #&lt;&lt;\n    colour=\"white\") +\n  scale_x_continuous(\n    breaks=seq(0,11,1))\n\nSkinny bins. Tips are multimodal, and occurring at the full dollar and 50c amounts."
+  },
+  {
+    "objectID": "week1/slides.html#we-could-also-look-at-total-bill-this-way",
+    "href": "week1/slides.html#we-could-also-look-at-total-bill-this-way",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "We could also look at total bill this way",
+    "text": "We could also look at total bill this way\nbut I’ve already done this, and we don’t learn anything more about the multiple peaks than waht is learned by plotting tips."
+  },
+  {
+    "objectID": "week1/slides.html#relationship-between-tip-and-total",
+    "href": "week1/slides.html#relationship-between-tip-and-total",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Relationship between tip and total",
+    "text": "Relationship between tip and total\n\n\n\np &lt;- ggplot(tips, \n    aes(x= totbill, y=tip)) + \n  geom_point() + #&lt;&lt;\n  scale_y_continuous(\n    breaks=seq(0,11,1))\np\n\nWhy is total on the x axis? \nShould we add a guideline?"
+  },
+  {
+    "objectID": "week1/slides.html#add-a-guideline-indicating-common-practice",
+    "href": "week1/slides.html#add-a-guideline-indicating-common-practice",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Add a guideline indicating common practice",
+    "text": "Add a guideline indicating common practice\n\n\n\np &lt;- p + geom_abline(intercept=0, #&lt;&lt;\n              slope=0.2) + #&lt;&lt;\n  annotate(\"text\", x=45, y=10, \n           label=\"20% tip\") \np\n\n\n\n\nMost tips less than 20%: Skin flints vs generous diners\nA couple of big tips\nBanding horizontally is the rounding seen previously"
+  },
+  {
+    "objectID": "week1/slides.html#we-should-examine-bar-charts-and-mosaic-plots-of-the-categorical-variables-next",
+    "href": "week1/slides.html#we-should-examine-bar-charts-and-mosaic-plots-of-the-categorical-variables-next",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "We should examine bar charts and mosaic plots of the categorical variables next",
+    "text": "We should examine bar charts and mosaic plots of the categorical variables next\nbut I’ve already done that, and there’s not too much of interest there."
+  },
+  {
+    "objectID": "week1/slides.html#relative-to-categorical-variables",
+    "href": "week1/slides.html#relative-to-categorical-variables",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Relative to categorical variables",
+    "text": "Relative to categorical variables\n\n\n\np + facet_grid(smoker~sex) #&lt;&lt;\n\n\n\n\n\n\n\n\n\n\n\n\nThe bigger bills tend to be paid by men (and females that smoke).\nExcept for three diners, female non-smokers are very consistent tippers, probably around 15-18% though.\nThe variability in the smokers is much higher than for the non-smokers."
+  },
+  {
+    "objectID": "week1/slides.html#isnt-this-interesting",
+    "href": "week1/slides.html#isnt-this-interesting",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Isn’t this interesting?",
+    "text": "Isn’t this interesting?"
+  },
+  {
+    "objectID": "week1/slides.html#procedure-of-eda",
+    "href": "week1/slides.html#procedure-of-eda",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Procedure of EDA",
+    "text": "Procedure of EDA\n\nWe gained a wealth of insight in a short time.\nUsing nothing but graphical methods we investigated univariate, bivariate, and multivariate relationships.\nWe found both global features and local detail. We saw that\n\ntips were rounded; then we saw the obvious\n\ncorrelation between the tip and the size of the bill, noting the scarcity of generous tippers; finally we\ndiscovered differences in the tipping behavior of male and female smokers and non-smokers.\n\n\nThese are unexpected insights were missed from the analysis that focused solely on the primary question."
+  },
+  {
+    "objectID": "week1/slides.html#what-can-go-wrong",
+    "href": "week1/slides.html#what-can-go-wrong",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What can go wrong?",
+    "text": "What can go wrong?"
+  },
+  {
+    "objectID": "week1/slides.html#how-was-data-collected",
+    "href": "week1/slides.html#how-was-data-collected",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "How was data collected?",
+    "text": "How was data collected?\n\n\nIn one restaurant, a food server recorded the following data on all customers they served during an interval of two and a half months in early 1990.\n\nHow much can you infer about tipping more broadly?\n\n\nTip has a weak but significant relationship with total bill?\nTips have a skewed distribution? (More small tips and fewer large tips?)\nTips tend to be made in nice round numbers.\nPeople generally under-tip?\nSmokers are less reliable tippers."
+  },
+  {
+    "objectID": "week1/slides.html#ways-to-verify-support-or-refute-generalisations",
+    "href": "week1/slides.html#ways-to-verify-support-or-refute-generalisations",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Ways to verify, support or refute generalisations",
+    "text": "Ways to verify, support or refute generalisations\n\n\n\nexternal information\nother studies/samples\ngood choice of calculations and plots\nall the permutations and subsets of measured variables\ncomputational re-sampling methods (we’ll see these soon)\n\n\n\nPoor data collection methods affects every analysis, including statistical or computational modeling.\n\n\nFor this waiter and the restaurant manager, there is some useful information. Like what?\n\n\nService fee for smokers to ensure consistency?\nAssign waiter to variety of party sizes and composition.\nShifts on different days or time of day (not shown)."
+  },
+  {
+    "objectID": "week1/slides.html#words-of-wisdom",
+    "href": "week1/slides.html#words-of-wisdom",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Words of wisdom",
+    "text": "Words of wisdom\nFalse discovery is the lesser danger when compared to non-discovery. Non-discovery is the failure to identify meaningful structure, and it may result in false or incomplete modeling. In a healthy scientific enterprise, the fear of non-discovery should be at least as great as the fear of false discovery."
+  },
+  {
+    "objectID": "week1/slides.html#where-do-we-go-from-here",
+    "href": "week1/slides.html#where-do-we-go-from-here",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Where do we go from here?",
+    "text": "Where do we go from here?\n\nMethods for single, bivariate, multivariate\n\nnumerical variables\ncategorical variables\n\nMethods to accommodate temporal and spatial context\nHow to make effective comparisons\nUtilising computational methods to assess what you see is “real”"
+  },
+  {
+    "objectID": "week1/slides.html#resources-1",
+    "href": "week1/slides.html#resources-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Resources",
+    "text": "Resources\n\nCook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, Introduction\nDonoho (2017) 50 Years of Data Science\nStaniak and Biecek (2019) The Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n\nETC5521 Lecture 1 | ddde.numbat.space"
+  },
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "ETC5521 Resources",
+    "section": "",
+    "text": "Books and articles\n\n\nResources\n\nCook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, Introduction\nDonoho (2017) 50 Years of Data Science\nStaniak and Biecek (2019) The Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\nSoftware"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
-    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: TBD"
+    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: Thu 11:00-12:00, 352 Education Blg, and zoom"
   },
   {
     "objectID": "index.html#lecturerchief-examiner",
     "href": "index.html#lecturerchief-examiner",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
-    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: TBD"
+    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: Thu 11:00-12:00, 352 Education Blg, and zoom"
   },
   {
     "objectID": "index.html#tutors",
     "href": "index.html#tutors",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Tutors",
-    "text": "Tutors\n\nKrisanat Anukarnsakulchularp\n\nTutorials: Wed 9:30-11:00am and 7:30-9:00pm CL_Anc-19.LTB_134\nConsultation: TBD"
+    "text": "Tutors\n\nKrisanat Anukarnsakulchularp\n\nTutorials: Wed 9:30-11:00am and 7:30-9:00pm CL_Anc-19.LTB_134\nConsultation: Fri 2.30-4:00 pm, Menzies W9.20"
   },
   {
     "objectID": "index.html#weekly-schedule",
@@ -364,11 +728,46 @@
     "text": "Software\nWe will be using the latest versions of R and RStudio.\nHere is the code to install (most of) the R packages we will be using in this unit.\ninstall.packages(c(\"tidyr\", \"dplyr\", \"readr\", \"readxl\", \"readabs\", \"forcats\", \"tsibble\", \"cubble\", \"lubridate\", \"ggplot2\", \"GGally\", \"ggthemes\", \"sugrrants\", \"ggbeeswarm\", \"plotly\", \"gganimate\", \"tourr\", \"sugarbag\", \"tsibbletalk\", \"visdat\", \"inspectdf\", \"naniar\", \"validate\", \"vcd\", \"mvtnorm\", \"nullabor\", \"visage\", \"forecast\", \"cassowaryr\", \"brolgar\", \"palmerpenguins\", \"housingData\",  \"broom\", \"kableExtra\", \"lvplot\", \"colorspace\", \"patchwork\"), dependencies=TRUE)\nFrom GitHub, install\nremotes::install_github(\"casperhart/detourr\")\nIf you are relatively new to R, working through the materials at https://learnr.numbat.space is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you."
   },
   {
-    "objectID": "resources.html",
-    "href": "resources.html",
-    "title": "ETC5521 Resources",
+    "objectID": "week1/index.html",
+    "href": "week1/index.html",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
     "section": "",
-    "text": "Books and articles\n\n\nSoftware"
+    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week1/index.html#main-reference",
+    "href": "week1/index.html#main-reference",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "",
+    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week1/index.html#what-you-will-learn-this-week",
+    "href": "week1/index.html#what-you-will-learn-this-week",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nHow exploring data is different from a confirmatory analysis\nGet up and running with GitHub Classroom"
+  },
+  {
+    "objectID": "week1/index.html#lecture-slides",
+    "href": "week1/index.html#lecture-slides",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week1/index.html#tutorial-instructions",
+    "href": "week1/index.html#tutorial-instructions",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\nInstructions:\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week1/index.html#assignments",
+    "href": "week1/index.html#assignments",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Assignments",
+    "text": "Assignments\n\nAssignment 1 is due on Monday 05 August."
   },
   {
     "objectID": "week1/tutorialsol.html",
