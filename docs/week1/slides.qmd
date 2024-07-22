@@ -104,7 +104,7 @@ Monash University <br>
 :::: {.columns}
 ::: {.column}
 
-[Before modelling and predicting, data should first be explored to uncover the patterns and structures that exist. Exploratory data analysis involves both numerical and visual techniques designed to reveal interesting information that may be hidden in the data. However, an analyst must be cautious not to over-interpret apparent patterns, and to properly assess the results of a data exploration.]{.monash-blue}
+[Beyond modelling and prediction, data might have many more stories to tell. Exploring data to uncover patterns and structures, involves both numerical and visual techniques designed to reveal interesting information that may be unexpected. However, an analyst must be cautious not to over-interpret apparent patterns, and to use randomisation tools to assess whether the patterns are real or spurious.]{.monash-blue}
 
 ::: 
 ::: {.column style="font-size: 80%;"}
