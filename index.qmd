@@ -25,7 +25,7 @@ week <- as.integer(1 + ((Sys.Date() - as_date(start_semester))/7))
 
 * Krisanat Anukarnsakulchularp
     - Tutorials: Wed 9:30-11:00am and 7:30-9:00pm CL_Anc-19.LTB_134
-    - Consultation: Fri 2.30-4:00 pm, Menzies W9.20 
+    - Consultation: Mon 9.30-11:00 am, Menzies W9.20 
 
 ## Weekly schedule
 
