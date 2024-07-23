@@ -332,7 +332,7 @@ tips <- read_csv("http://ggobi.org/book/data/tips.csv")
 
 - *Step 1*: Develop a model
     - Should the response be `tip` alone and use the total bill as a predictor?
-    - Should you create a new variable `tip rate` and use this as the repsonse?
+    - Should you create a new variable `tip rate` and use this as the response?
 - *Step 2*: Fit the full model with sex, smoker, day, time and size as predictors
 - *Step 3*: Refine model: Should some variables should be dropped?
 - *Step 4*: Check distribution of residuals

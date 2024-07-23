@@ -431,7 +431,7 @@
     "href": "week1/slides.html#recommended-procedure-in-the-book",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Recommended procedure in the book",
-    "text": "Recommended procedure in the book\n\nStep 1: Develop a model\n\nShould the response be tip alone and use the total bill as a predictor?\nShould you create a new variable tip rate and use this as the repsonse?\n\nStep 2: Fit the full model with sex, smoker, day, time and size as predictors\nStep 3: Refine model: Should some variables should be dropped?\nStep 4: Check distribution of residuals\nStep 5: Summarise the model, if X=something, what would be the expected tip"
+    "text": "Recommended procedure in the book\n\nStep 1: Develop a model\n\nShould the response be tip alone and use the total bill as a predictor?\nShould you create a new variable tip rate and use this as the response?\n\nStep 2: Fit the full model with sex, smoker, day, time and size as predictors\nStep 3: Refine model: Should some variables should be dropped?\nStep 4: Check distribution of residuals\nStep 5: Summarise the model, if X=something, what would be the expected tip"
   },
   {
     "objectID": "week1/slides.html#step-1",
