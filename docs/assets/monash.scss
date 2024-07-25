@@ -299,3 +299,14 @@ div.info {
 .smallest {
   font-size: 50%;
 }
+
+.larger {
+  font-size: 2em;
+}
+
+.hscroll {
+  width: 100%;
+  height: 80%;
+  overflow-y: auto;
+  background-color: lightgrey;
+}

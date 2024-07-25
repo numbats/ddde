@@ -32,9 +32,6 @@ schedule |>
 
 ## Tutorial instructions
 
-Instructions:
-
-
 - [html](https://ddde.numbat.space/week1/tutorial.html)
 - [qmd](https://ddde.numbat.space/week1/tutorial.qmd)
 

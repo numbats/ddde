@@ -19,16 +19,24 @@ schedule |>
 
 ## What you will learn this week
 
+- The historical origins of EDA
+- Pencil and paper methods like stem-and-leaf plots
+- How to symmetrise and linearise your data
+- Where EDA is relevant today
 
 ## Lecture slides
+
+- [html](https://ddde.numbat.space/week2/slides.html)
+- [pdf](https://ddde.numbat.space/week2/slides.pdf)
+- [qmd](https://ddde.numbat.space/week2/slides.qmd)
+- [R](https://ddde.numbat.space/week2/slides.R)
 
 
 ## Tutorial instructions
 
-Instructions:
+- [html](https://ddde.numbat.space/week2/tutorial.html)
+- [qmd](https://ddde.numbat.space/week2/tutorial.qmd)
 
-
-## Assignments
 
 ```{r}
 #| output: asis

@@ -745,7 +745,7 @@ ggplot(tips,
 ggplot(tips, 
     aes(x=tip)) +
   geom_histogram(
-    breaks=seq(0.5,10.5,1), #<< 
+    breaks=seq(0.5,10.5,1),  
     colour="white") + 
   scale_x_continuous(
     breaks=seq(0,11,1))
@@ -769,7 +769,7 @@ ggplot(tips,
 ggplot(tips, 
     aes(x=tip)) + 
   geom_histogram(
-    breaks=seq(0.5,10.5,0.1), #<<
+    breaks=seq(0.5,10.5,0.1), 
     colour="white") +
   scale_x_continuous(
     breaks=seq(0,11,1))
@@ -797,7 +797,7 @@ but I've already done this, and we don't learn anything more about the multiple 
 ```{r tips_tot, echo=TRUE, fig.show='hide'}
 p <- ggplot(tips, 
     aes(x= totbill, y=tip)) + 
-  geom_point() + #<<
+  geom_point() + 
   scale_y_continuous(
     breaks=seq(0,11,1))
 p
@@ -824,8 +824,8 @@ Should we add a guideline?
 ::: {.column}
 
 ```{r tips_tot2, echo=TRUE, fig.show='hide'}
-p <- p + geom_abline(intercept=0, #<<
-              slope=0.2) + #<<
+p <- p + geom_abline(intercept=0, 
+              slope=0.2) + 
   annotate("text", x=45, y=10, 
            label="20% tip") 
 p
@@ -858,7 +858,7 @@ but I've already done that, and there's not too much of interest there.
 ::: {.column width="70%"}
 
 ```{r tips_sexsmoke, echo=TRUE, fig.show='hide'}
-p + facet_grid(smoker~sex) #<<
+p + facet_grid(smoker~sex) 
 ```
 
 ```{r tips_sexsmokeb, ref.label="tips_sexsmoke", echo=FALSE, fig.width=9, fig.height=6, out.width="100%"}

@@ -16,6 +16,7 @@ library(plotly)
 library(forcats)
 library(ggbeeswarm)
 library(kableExtra)
+library(fabricerin)
 
 # Locations
 current_file <- knitr::current_input()

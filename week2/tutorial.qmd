@@ -1,0 +1,280 @@
+---
+title: "ETC5521 Tutorial 2"
+subtitle: "Introduction to exploratory data analysis"
+author: "Prof. Di Cook"
+date: "Jul 29, 2024"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: tutorial.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: tutorialsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+---
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(conflicted)
+
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+```
+
+## 🎯  Objectives
+
+The purpose of this tutorial is to scope out the software reporting to do EDA in R. We want to understand the capabilities and the limitations.
+
+## 🔧 Preparation 
+
+The reading for this week is [The Landscape of R Packages for Automated Exploratory Data Analysis](https://journal.r-project.org/archive/2019/RJ-2019-033/RJ-2019-033.pdf). This is a lovely summary of software available that is considered to do exploratory data analysis (EDA). (Note: Dr Cook considers these to be mostly descriptive statistics packages, not exploratory data analysis in the true spirit of the term.) This reading will be the basis of the tutorial exercises today.
+
+- Complete the weekly quiz, before the deadline!
+- Install this list of R packages, in addition to what you installed in the previous weeks: 
+
+```{r}
+#| eval: false
+#| code-fold: false
+install.packages(c("arsenal", "autoEDA", "DataExplorer", "dataMaid", "dlookr", "ExPanDaR", "explore", "exploreR", "funModeling", "inspectdf", "RtutoR", "SmartEDA", "summarytools", "visdat", "xray", "cranlogs", "tidyverse", "nycflights13"))
+```
+
+- Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
+
+## 📥 Exercises
+
+The article lists a number of R packages that might be used for EDA: arsenal, autoEDA, DataExplorer, dataMaid, dlookr, ExPanDaR, explore, exploreR, funModeling, inspectdf, RtutoR, SmartEDA, summarytools, visdat, xray. 
+
+### 1. 
+
+What package had the highest number of CRAN downloads as of 12.07.2019? (Based on the paper.)
+
+::: unilur-solution
+`summarytools` with 84737 
+:::
+
+### 2. 
+
+Open up the shiny server for checking download rates at https://hadley.shinyapps.io/cran-downloads/. Which of these packages has the highest download rate over the period Jan 1, 2024-today? 
+
+::: unilur-solution
+```{r}
+library(cranlogs)
+eda_pkgs <- cran_downloads(packages=c("arsenal", "autoEDA", "DataExplorer", "dataMaid", "dlookr", "ExPanDaR", "explore", "exploreR", "funModeling", "inspectdf", "RtutoR", "SmartEDA", "summarytools", "visdat", "xray"), from="2024-01-01", to=lubridate::today())
+eda_pkgs |> 
+  group_by(package) |>
+  summarise(m=mean(count)) |>
+  arrange(desc(m))
+```
+
+`smartEDA` was on a roll early in the year, but has virtually disappeared. `summarytools` is going strong. Interestingly, `visdat`, high on the list, was developed by Nick Tierney in the years he was at Monash.
+:::
+
+### 3. 
+
+What is an interesting pattern to observe from the time series plot of all the downloads?
+
+::: unilur-solution
+The weekly seasonality! There is a regular up/down pattern, that if you zoom in closely - try plotting just a couple of weeks of data - you can see corresponds to week day vs weekend.
+:::
+
+### 4. 
+
+How many functions does Staniak and Biecek (2019) say `visdat` has for doing EDA? Explore what each of them does, by running the example code for each function. What do you think are the features that make `visdat` a really popular package? 
+
+::: unilur-solution
+7; Simple focus, useful functions that apply to a lot of problems. 
+
+It gives an overview of the variable types, and missing values. This is useful to start a data analysis so that you can start working out what methods might be applied to each, and also whether some variables may have too many missing values to be analysable.
+
+```{r}
+library(visdat)
+# function 1
+vis_dat(airquality)
+# function 2
+messy_vector <- c(TRUE,
+                 "TRUE",
+                 "T",
+                 "01/01/01",
+                 "01/01/2001",
+                 NA,
+                 NaN,
+                 "NA",
+                 "Na",
+                 "na",
+                 "10",
+                 10,
+                 "10.1",
+                 10.1,
+                 "abc",
+                 "$%TG")
+set.seed(1114)
+messy_df <- data.frame(var1 = messy_vector,
+                       var2 = sample(messy_vector),
+                       var3 = sample(messy_vector))
+vis_guess(messy_df)
+# function 3
+vis_miss(airquality)
+# function 4
+aq_diff <- airquality
+aq_diff[1:10, 1:2] <- NA
+vis_compare(airquality, aq_diff)
+# function 5
+dat_test <- tibble::tribble(
+            ~x, ~y,
+            -1,  "A",
+            0,  "B",
+            1,  "C",
+            NA, NA
+            )
+
+vis_expect(dat_test, ~.x == -1)
+# function 6
+vis_cor(airquality)
+```
+:::
+
+### 5. 
+
+The package `summarytools` appears to becoming more favourable relative to `visdat`. Take a look at this package and explain what tools it has that are not available in `visdat`. 
+
+::: unilur-solution
+
+```{r}
+#| echo: true
+library(summarytools)
+dfSummary(tobacco)
+```
+
+It has a lot more standard statistical summaries, and outputs the summary in a form that can be embedded nicely in a quarto report. 
+
+If you go to the package website https://github.com/dcomtois/summarytools it's not very promising. There is no package website only the GitHub. There have been no updates for 8 months.
+:::
+
+### 6. 
+
+Why do you think the package `smartEDA` has gone out of favour?
+
+::: unilur-solution
+The web site looks a little uncared for, missing images on the main GitHub page. It has a nice package pacge, but again pieces are missing. 
+
+```{r}
+library(SmartEDA)
+ExpData(data=mtcars,type=1)
+ExpData(data=mtcars,type=2)
+```
+
+It also has some standard summaries like `summarytools` which is possibly why it became attractive. And can be used to produce a detailed report on the data, although a report like the one in the next question took ages to complete. 
+
+I'm not sure why it's popularity has dropped. The documentation is not great, there's quite a few spelling errors. The functions are (sort of) in CamelCase which is not as attractive as snake_case.
+:::
+
+
+
+### 7. 
+
+The package `DataExplorer` has a high download rate and number of GitHub stars, and also a nice web site at https://boxuancui.github.io/DataExplorer/. The vignette "Introduction to DataExplorer" is a good place to start to learn what the package does. Generate an automatic report to see what it creates, and what the package suggests is important. Use the code below to create the data to use - it does the same thing as the code in the vignette but uses `dplyr` and piping more nicely. Then run the report. It's not very pretty to read, but there's a vast amount of very useful information about the data that can help in preparing for its analysis. It's completely overwhelming, though.
+
+a. What does specifying `y = "arr_delay"` do?
+b. Which variables have a lot of missing values?
+c. How many engines do planes typically have?
+d. What does the scale of the `arr_time`, `dep_time`, `sched_arr_time` and `sched_dep_time` indicate?
+e. Which carrier had the most flights?
+f. Which type of plane was most common? Why might conclusions about the type of plane be dangerous about to make?
+g. What do the QQ plots tell you?
+h. `arr_delay` is divided into 6 categories before making some plots. Why do you think the purpose of this is?
+i. With your neighbour in the tutorial come up with **one** thing that is a bit surprising to you about this data. Make sure you state what you expected to see, and why what you saw was then a surprise.
+
+```{r}
+#| eval: false
+#| code-fold: false
+# DataExplorer
+library(DataExplorer)
+library(nycflights13)
+library(tidyverse)
+
+# Create a big data set
+airlines_all <- flights |> 
+  full_join(airlines, by = "carrier") |>
+  full_join(planes, by = "tailnum", 
+            suffix = c("_flights", "_planes")) |>
+  full_join(airports, by = c("origin"="faa"), 
+            suffix = c("_carrier", "_origin")) |>
+  full_join(airports, by = c("dest"="faa"), 
+            suffix = c("_origin", "_dest"))
+
+# Run a report
+create_report(airlines_all, y = "arr_delay")
+```
+
+::: unilur-solution
+a. This is specifying that `arr_delay` is to be treated as a response variable. 
+b. The variable `speed` is mostly missing. Other variables `engine`, `seats`, `model`, `manufacturer`, `type` and `year_planes` have about 15% missing.
+c. Almost all planes have 2 engines. Some have 1, and it seems that some have 3 or 4. The histogram includes these categories which means there must be some planes with 4 engines, but the count is so small that the bar is invisible.
+d. These are hours and minutes as four digits, eg 1045 means 10:45am.
+e. UA, United Airlines
+f. BOEING. It could be dangerous because 15% of observations on this variable are missing. If these **all** belong to one of the other popular types of planes (ie EMBRAER) we may be over-stating the popularity of BOEING.
+g. QQ plots are for checking for normal distributions. We can see that none of the variables have normal distributions because noe of these feature points along the straight guide line.
+h. Sometimes breaking a numeric variable into pieces and plotting against another variable allows a rough assess associations in a simplified manner. It is often done to assess associations with categorical variables.
+i. Here is one example: We might expect that if the departure was delayed then the arrival would be delayed. In the scatterplot of `dep_delay` vs `arr_delay` we don't see this pattern! There is a subset of flights where there is a strong relationship, and another subset of observations where  `dep_delay` is slightly increased at the highest values of `arr_delay`, but for the most part it is flat. That even if there is no departure delay, there is a long arrival delay. This is curious! But there is something strange about this plot, too. It looks like `arr_delay` was treated as a categorical variable, given the regular markings on the horizontal axis.
+:::
+
+### 8. 
+
+Table 2 of the Landscape paper summarises the activities of two early phases of the CRISP-DM standard. What does CRISP-DM mean? The implication is that EDA is related to "data understanding" and "data preparation". Would you agree with this or disagree? Why? 
+
+::: unilur-solution
+Cross-Industry Standard Process for Data Mining; EDA techniques can be useful for some parts of these stages, for example finding outliers, or examining missing value patterns. Some of these steps are important for effective EDA, too, for example, you need to know what types of variables you have in order to decide what types of plots to make. 
+:::
+
+### 9. 
+
+Table 1 of the paper is summarising CRAN downloads and GitHub activity is hard to read. How are the rows sorted? What is the most important information communicated by the table? In what way(s) might revising this table make it easier to read and digest the most important information? 
+
+::: unilur-solution
+Most important information is the download rate because the purpose is to know which are the commonly used packages. Sort rows by downloads.
+:::
+
+## 👌 Finishing up
+
+Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.

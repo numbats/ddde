@@ -196,6 +196,300 @@
     "text": "Assignments\n\nAssignment 1 is due on Monday 05 August."
   },
   {
+    "objectID": "week2/slides.html#birth-of-eda",
+    "href": "week2/slides.html#birth-of-eda",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Birth of EDA",
+    "text": "Birth of EDA\n\nThe field of exploratory data analysis came of age when this book appeared in 1977.\n\nTukey held that too much emphasis in statistics was placed on statistical hypothesis testing (confirmatory data analysis); more emphasis needed to be placed on using data to suggest hypotheses to test."
+  },
+  {
+    "objectID": "week2/slides.html#john-w.-tukey",
+    "href": "week2/slides.html#john-w.-tukey",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "John W. Tukey",
+    "text": "John W. Tukey\n\n\n\n\n\n\n Image source: wikimedia.org\n\n\nBorn in 1915, in New Bedford, Massachusetts.\nMum was a private tutor who home-schooled John. Dad was a Latin teacher.\nBA and MSc in Chemistry, and PhD in Mathematics\nAwarded the National Medal of Science in 1973, by President Nixon\nBy some reports, his home-schooling was unorthodox and contributed to his thinking and working differently."
+  },
+  {
+    "objectID": "week2/slides.html#taking-a-glimpse-back-in-time",
+    "href": "week2/slides.html#taking-a-glimpse-back-in-time",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Taking a glimpse back in time",
+    "text": "Taking a glimpse back in time\nis possible with the American Statistical Association video lending library.\n We’re going to watch John Tukey talking about exploring high-dimensional data with an amazing new computer in 1973, four years before the EDA book.\n\nLook out for these things:\nTukey’s expertise is described as for trial and error learning and the computing equipment.\n\n\nFirst 4.25 minutes"
+  },
+  {
+    "objectID": "week2/slides.html#setting-the-frame-of-mind",
+    "href": "week2/slides.html#setting-the-frame-of-mind",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Setting the frame of mind",
+    "text": "Setting the frame of mind\nExcerpt from the introduction\n\nThis book is based on an important principle.\n It is important to understand what you CAN DO before you learn to measure how WELL you seem to have DONE it.\n Learning first what you can do will help you to work more easily and effectively.\n This book is about exploratory data analysis, about looking at data to see what it seems to say. It concentrates on simple arithmetic and easy-to-draw pictures. It regards whatever appearances we have recognized as partial descriptions, and tries to look beneath them for new insights. Its concern is with appearance, not with confirmation.\n Examples, NOT case histories\n The book does not exist to make the case that exploratory data analysis is useful. Rather it exists to expose its readers and users to a considerable variety of techniques for looking more effectively at one’s data. The examples are not intended to be complete case histories. Rather they should isolated techniques in action on real data. The emphasis is on general techniques, rather than specific problems. \nA basic problem about any body of data is to make it more easily and effectively handleable by minds – our minds, her mind, his mind. To this general end:\n\nanything that make a simpler description possible makes the description more easily handleable.\nanything that looks below the previously described surface makes the description more effective.\n\n\nSo we shall always be glad (a) to simplify description and (b) to describe one layer deeper. In particular,\n\nto be able to say that we looked one layer deeper, and found nothing, is a definite step forward – though not as far as to be able to say that we looked deeper and found thus-and-such.\nto be able to say that “if we change our point of view in the following way … things are simpler” is always a gain–though not quite so much as to be able to say “if we don’t bother to change out point of view (some other) things are equally simple.”\n\n …\n Consistent with this view, we believe, is a clear demand that pictures based on exploration of data should force their messages upon us. Pictures that emphasize what we already know–“security blankets” to reassure us–are frequently not worth the space they take. Pictures that have to be gone over with a reading glass to see the main point are wasteful of time and inadequate of effect. The greatest value of a picture is when it forces us to notice what we never expected to see.\n\n\nConfirmation\n\n\nThe principles and procedures of what we call confirmatory data analysis are both widely used and one of the great intellectual products of our century. In their simplest form, these principles and procedures look at a sample–and at what that sample has told us about the population from which it came–and assess the precision with which our inference from sample to population is made. We can no longer get along without confirmatory data analysis. But we need not start with it.\n\nThe best way to understand what CAN be done is not longer–if it ever was–to ask what things could, in the current state of our skill techniques, be confirmed (positively or negatively). Even more understanding is lost if we consider each thing we can do to data only in terms of some set of very restrictive assumptions under which that thing is best possible–assumptions we know we CANNOT check in practice.\n\nExploration AND confirmation\n\nOnce upon a time, statisticians only explored. Then they learned to confirm exactly–to confirm a few things exactly, each under very specific circumstances. As they emphasized exact confirmation, their techniques inevitably became less flexible. The connection of the most used techniques with past insights was weakened. Anything to which confirmatory procedure was not explicitly attached was decried as “mere descriptive statistics”, no matter how much we learned from it.\n\nToday, the flexibility of (approximate) confirmation by the jacknife makes it relatively easy to ask, for almost any clearly specified exploration, “How far is it confirmed?”\n\nToday, exploratory and confirmatory can–and should–proceed side by side. This book, of course, considers only exploratory techniques, leaving confirmatory techniques to other accounts.\n\n\n About the problems \n\n The teacher needs to be careful about assigning problems. Not too many, please. They are likely to take longer than you think. The number supplied is to accommodate diversity of interest, not to keep everybody busy.\n Besides the length of our problems, both teacher and student need to realise that many problems do not have a single “right answer”. There can be many ways to approach a body of data. Not all are equally good. For some bodies of data this may be clear, but for others we may not be able to tell from a single body of data which approach is preferred. Even several bodies of data about very similar situations may not be enough to show which approach should be preferred. Accordingly, it will often be quite reasonable for different analysts to reach somewhat different analyses.\n Yet more–to unlock the analysis of a body of day, to find the good way to approach it, may require a key, whose finding is a creative act. Not everyone can be expected to create the key to any one situation. And to continue to paraphrase Barnum, no one can be expected to create a key to each situation he or she meets.\n To learn about data analysis, it is right that each of us try many things that do not work–that we tackle more problems than we make expert analyses of. We often learn less from an expertly done analysis than from one where, by not trying something, we missed–at least until we were told about it–an opportunity to learn more. Each teacher needs to recognize this in grading and commenting on problems.\n\n\n Precision\n\nThe teacher who heeds these words and admits that there need be no one correct approach may, I regret to contemplate, still want whatever is done to be digit perfect. (Under such a requirement, the write should still be able to pass the course, but it is not clear whether she would get an “A”.) One does, from time to time, have to produce digit-perfect, carefully checked results, but forgiving techniques that are not too distributed by unusual data are also, usually, little disturbed by SMALL arithmetic errors. The techniques we discuss here have been chosen to be forgiving. It is hoped, then, that small arithmetic errors will take little off the problem’s grades, leaving severe penalties for larger errors, either of arithmetic or concept."
+  },
+  {
+    "objectID": "week2/slides.html#outline",
+    "href": "week2/slides.html#outline",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Outline",
+    "text": "Outline\n\n\n\nScratching down numbers\nSchematic summary\nEasy re-expression\nEffective comparison\nPlots of relationship\nStraightening out plots (using three points)\nSmoothing sequences\nParallel and wandering schematic plots\nDelineations of batches of points\nUsing two-way analyses\n\n\n\n\n\nMaking two-way analyses\nAdvanced fits\nThree way fits\nLooking in two or more ways at batched of points\nCounted fractions\nBetter smoothing\nCounts in bin after bin\nProduct-ratio plots\nShapes of distributions\nMathematical distributions"
+  },
+  {
+    "objectID": "week2/slides.html#looking-at-numbers-with-tukey",
+    "href": "week2/slides.html#looking-at-numbers-with-tukey",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Looking at numbers with Tukey",
+    "text": "Looking at numbers with Tukey"
+  },
+  {
+    "objectID": "week2/slides.html#scratching-down-numbers",
+    "href": "week2/slides.html#scratching-down-numbers",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Scratching down numbers",
+    "text": "Scratching down numbers\n\n\nPrices of Chevrolet in the local used car newspaper ads of 1968.\n\noptions(width=20)\nchevrolets &lt;- tibble(\n  prices = c(250, 150, 795, 895, 695, \n               1699, 1499, 1099, 1693, 1166,\n               688, 1333, 895, 1775, 895,\n               1895, 795))\n#chevrolets$prices\n\n\nStem-and-leaf plot: still seen in introductory statistics texts"
+  },
+  {
+    "objectID": "week2/slides.html#section-1",
+    "href": "week2/slides.html#section-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "First stem-and-leaf, first digit on stem, second digit on leaf\n\n\nOrder any leaves which need it, eg stem 6\n\n\n\n\nA benefit is that the numbers can be read off the plot, but the focus is still on the pattern. Also quantiles like the median, can be computed easily."
+  },
+  {
+    "objectID": "week2/slides.html#section-2",
+    "href": "week2/slides.html#section-2",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Shrink the stem\n\n\nShrink the stem more"
+  },
+  {
+    "objectID": "week2/slides.html#and-in-r",
+    "href": "week2/slides.html#and-in-r",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "And, in R …",
+    "text": "And, in R …\n\nchevrolets$prices\n\n [1]  250  150  795\n [4]  895  695 1699\n [7] 1499 1099 1693\n[10] 1166  688 1333\n[13]  895 1775  895\n[16] 1895  795\n\nstem(chevrolets$prices)\n\n\n  The decimal point is 3 digit(s) to the right of the |\n\n  0 | 23\n  0 | 7788999\n  1 | 123\n  1 | 57789"
+  },
+  {
+    "objectID": "week2/slides.html#remember-the-tips-data",
+    "href": "week2/slides.html#remember-the-tips-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "🔖 Remember the tips data",
+    "text": "🔖 Remember the tips data\n\n\n [1] 1.0 1.7 3.5 3.3 3.6 4.7 2.0 3.1 2.0 3.2 1.7 5.0 1.6 3.0 3.0 3.9 1.7 3.7 3.5\n[20] 3.4 4.1 2.8 2.2 7.6 3.2 2.3 2.0 2.0 4.3 3.0 1.4 2.5 3.0 2.5 3.3 3.6 2.0 3.1\n[39] 2.3 5.0 2.2 2.5 3.1 1.3 5.6 3.0 5.0 6.0 2.0 3.0\n\n\n\nstem(tips$tip, scale=0.5, width=120)\n\n\n  The decimal point is at the |\n\n   1 | 000001233334445555555555556666667777788889\n   2 | 000000000000000000000000000000000000000001122222223333555555555555556666677788899\n   3 | 00000000000000000000000011111112222222333344445555555555555666778889\n   4 | 0000000000001112233335777\n   5 | 00000000001122226799\n   6 | 05577\n   7 | 6\n   8 | \n   9 | 0\n  10 | 0"
+  },
+  {
+    "objectID": "week2/slides.html#refining-the-size",
+    "href": "week2/slides.html#refining-the-size",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Refining the size",
+    "text": "Refining the size\n\n\nFive digits per stem\n\n\n\nWhat is the number in parentheses? And why might this be useful?\n\n\n\nTwo digits per stem\n\n\n\n\n\nstem(tips$tip, scale=2)\n\n\n  The decimal point is 1 digit(s) to the left of the |\n\n   10 | 0000107\n   12 | 55526\n   14 | 44578000000000678\n   16 | 1346781356\n   18 | 032678\n   20 | 00000000000000000000000000000000011233598\n   22 | 0033440114\n   24 | 5700000000002456\n   26 | 01412455\n   28 | 382\n   30 | 00000000000000000000000267891245688\n   32 | 133557159\n   34 | 0188800000000015\n   36 | 0181566\n   38 | 2\n   40 | 0000000000006889\n   42 | 09004\n   44 | 0\n   46 | 713\n   48 | \n   50 | 000000000074567\n   52 | 0\n   54 | \n   56 | 05\n   58 | 52\n   60 | 0\n   62 | \n   64 | 00\n   66 | 03\n   68 | \n   70 | \n   72 | \n   74 | 8\n   76 | \n   78 | \n   80 | \n   82 | \n   84 | \n   86 | \n   88 | \n   90 | 0\n   92 | \n   94 | \n   96 | \n   98 | \n  100 | 0\n\n\n\n\nWhy no number in parentheses?\n\n\n\nmedian(tips$tip)\n\n[1] 2.9"
+  },
+  {
+    "objectID": "week2/slides.html#summary",
+    "href": "week2/slides.html#summary",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Summary",
+    "text": "Summary\n\nStem-and-leaf plots are similar information to the histogram.\nGenerally it is possible to also read off the numbers, and to then easily calculate median or Q1 or Q3.\nIt’s great for small data sets, when you only have pencil and paper.\nAlternatives are a histogram, (jittered) dotplot, density plot, box plot, violin plot, letter value plot."
+  },
+  {
+    "objectID": "week2/slides.html#a-different-style-of-number-scratching",
+    "href": "week2/slides.html#a-different-style-of-number-scratching",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "a different style of number scratching",
+    "text": "a different style of number scratching\nfor categorical variables\n\n\nWe know about\n\nbut its too easy to\n\nmake a mistake\n\nIs this easier?\n\n\nor harder"
+  },
+  {
+    "objectID": "week2/slides.html#count-this-data-using-the-squares-approach.",
+    "href": "week2/slides.html#count-this-data-using-the-squares-approach.",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Count this data using the squares approach.",
+    "text": "Count this data using the squares approach.\n\n\n\n\n [1] \"F\" \"M\" \"M\" \"M\" \"F\" \"M\"\n [7] \"M\" \"M\" \"M\" \"M\" \"M\" \"F\"\n[13] \"M\" \"M\" \"F\" \"M\" \"F\" \"M\"\n[19] \"F\" \"M\" \"M\" \"F\" \"F\" \"M\"\n[25] \"M\" \"M\" \"M\" \"M\" \"M\" \"F\"\n[31] \"M\" \"M\" \"F\" \"F\" \"M\" \"M\"\n[37] \"M\" \"F\" \"M\" \"M\" \"M\" \"M\"\n[43] \"M\" \"M\" \"M\" \"M\" \"M\" \"M\"\n[49] \"M\" \"M\" \"M\" \"F\" \"F\" \"M\"\n[55] \"M\" \"M\" \"M\" \"F\" \"M\" \"M\"\n[61] \"M\" \"M\" \"M\" \"M\" \"M\" \"M\"\n[67] \"F\" \"F\" \"M\" \"M\" \"M\" \"F\""
+  },
+  {
+    "objectID": "week2/slides.html#what-does-it-mean-to-feel-what-the-data-are-like",
+    "href": "week2/slides.html#what-does-it-mean-to-feel-what-the-data-are-like",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What does it mean to “feel what the data are like?”",
+    "text": "What does it mean to “feel what the data are like?”"
+  },
+  {
+    "objectID": "week2/slides.html#section-3",
+    "href": "week2/slides.html#section-3",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "This is a stem and leaf of the height of the highest peak in each of the 50 US states.\n\nThe states roughly fall into three groups.\n\nIt’s not really surprising, but we can imagine this grouping. Alaska is in a group of its own, with a much higher high peak. Then the Rocky Mountain states, California, Washington and Hawaii also have high peaks, and the rest of the states lump together."
+  },
+  {
+    "objectID": "week2/slides.html#section-4",
+    "href": "week2/slides.html#section-4",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Exploratory data analysis is detective work – in the purest sense – finding and revealing the clues."
+  },
+  {
+    "objectID": "week2/slides.html#section-5",
+    "href": "week2/slides.html#section-5",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "More summaries of numerical values"
+  },
+  {
+    "objectID": "week2/slides.html#hinges-and-5-number-summaries",
+    "href": "week2/slides.html#hinges-and-5-number-summaries",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Hinges and 5-number summaries",
+    "text": "Hinges and 5-number summaries\n\n\n\n\n [1] -3.2 -1.7 -0.4  0.1\n [5]  0.3  1.2  1.5  1.8\n [9]  2.4  3.0  4.3  6.4\n[13]  9.8\n\n\nYou know the median is the middle number. What’s a hinge?\nThere are 13 data values here, provided already sorted. We are going to write them into a Tukey named down-up-down-up pattern, evenly.\nMedian will be 7th, hinge will be 4th from each end."
+  },
+  {
+    "objectID": "week2/slides.html#hinges-and-5-number-summary",
+    "href": "week2/slides.html#hinges-and-5-number-summary",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Hinges and 5-number summary",
+    "text": "Hinges and 5-number summary\n\n\n\n\n\nHinges are almost always the same as Q1 and Q3"
+  },
+  {
+    "objectID": "week2/slides.html#box-and-whisker-display",
+    "href": "week2/slides.html#box-and-whisker-display",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "box-and-whisker display",
+    "text": "box-and-whisker display\n\n\n\n\nStarting with a 5-number summary"
+  },
+  {
+    "objectID": "week2/slides.html#box-and-whisker-display-1",
+    "href": "week2/slides.html#box-and-whisker-display-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "box-and-whisker display",
+    "text": "box-and-whisker display\n\n\nStarting with a 5-number summary"
+  },
+  {
+    "objectID": "week2/slides.html#identified-end-values",
+    "href": "week2/slides.html#identified-end-values",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Identified end values",
+    "text": "Identified end values\n\n\n\nWhy are some individual points singled out?\n\n\nRules for this one may be clearer?"
+  },
+  {
+    "objectID": "week2/slides.html#section-6",
+    "href": "week2/slides.html#section-6",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Isn’t this imposing a belief?"
+  },
+  {
+    "objectID": "week2/slides.html#section-7",
+    "href": "week2/slides.html#section-7",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "There is no excuse for failing to plot and look\nAnother Tukey wisdom drop"
+  },
+  {
+    "objectID": "week2/slides.html#fences-and-outside-values",
+    "href": "week2/slides.html#fences-and-outside-values",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Fences and outside values",
+    "text": "Fences and outside values\n\n\nH-spread: difference between the hinges (we would call this Inter-Quartile Range)\nstep: 1.5 times H-spread\ninner fences: 1 step outside the hinges\nouter fences: 2 steps outside the hinges\nthe value at each end closest to, but still inside the inner fence are “adjacent”\nvalues between an inner fence and its neighbouring outer fence are “outside”\nvalues beyond outer fences are “far out”\nthese rules produce a SCHEMATIC PLOT"
+  },
+  {
+    "objectID": "week2/slides.html#new-statistics-trimeans",
+    "href": "week2/slides.html#new-statistics-trimeans",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "New statistics: trimeans",
+    "text": "New statistics: trimeans\nThe number that comes closest to\n\\[\\frac{\\text{lower hinge} + 2\\times \\text{median} + \\text{upper hinge}}{4}\\] is the trimean.\n \nThink about trimmed means, where we might drop the highest and lowest 5% of observations."
+  },
+  {
+    "objectID": "week2/slides.html#letter-value-plots",
+    "href": "week2/slides.html#letter-value-plots",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Letter value plots",
+    "text": "Letter value plots\n\n\nWhy break the data into quarters? Why not eighths, sixteenths? k-number summaries?\nWhat does a 7-number summary look like?\n\nHow would you make an 11-number summary?\n\n\nlibrary(lvplot)\np &lt;- ggplot(mpg, \n            aes(class, hwy))\np + geom_lv(aes(fill=..LV..)) + \n  scale_fill_brewer() + \n  coord_flip() + \n  xlab(\"\")"
+  },
+  {
+    "objectID": "week2/slides.html#box-plots-are-ubiquitous-in-use-today.",
+    "href": "week2/slides.html#box-plots-are-ubiquitous-in-use-today.",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Box plots are ubiquitous in use today.",
+    "text": "Box plots are ubiquitous in use today.\n - 🐈🐩 Mostly used to compare distributions, multiple subsets of the data.\n\nPuts the emphasis on the middle 50% of observations, although variations can put emphasis on other aspects."
+  },
+  {
+    "objectID": "week2/slides.html#easy-re-expression",
+    "href": "week2/slides.html#easy-re-expression",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Easy re-expression",
+    "text": "Easy re-expression"
+  },
+  {
+    "objectID": "week2/slides.html#logs-square-roots-reciprocals",
+    "href": "week2/slides.html#logs-square-roots-reciprocals",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Logs, square roots, reciprocals",
+    "text": "Logs, square roots, reciprocals\n\n\nWhat you need to know about logs?\n\nhow to find good enough logs fast and easily\nthat equal differences in logs correspond to equal ratios of raw values.\n\n(This means that wherever you find people using products or ratios– even in such things as price indexes–using logs–thus converting producers to sums and ratios to differences–is likely to help.)\n\n\nThe most common transformations are logs, sqrt root, reciprocals, reciprocals of square roots\n\n-1, -1/2, +1/2, +1\n\nWhat happened to ZERO?\n\n\nIt turns out that the role of a zero power, is for the purposes of re-expression, neatly solved by the logarithm."
+  },
+  {
+    "objectID": "week2/slides.html#re-express-to-symmetrize-the-distribution",
+    "href": "week2/slides.html#re-express-to-symmetrize-the-distribution",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Re-express to symmetrize the distribution",
+    "text": "Re-express to symmetrize the distribution"
+  },
+  {
+    "objectID": "week2/slides.html#power-ladder",
+    "href": "week2/slides.html#power-ladder",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Power ladder",
+    "text": "Power ladder\n \n⬅️ fix RIGHT-skewed values  \n-2, -1, -1/2, 0 (log), 1/3, 1/2, 1, 2, 3, 4\n\nfix LEFT-skewed values ➡️"
+  },
+  {
+    "objectID": "week2/slides.html#section-8",
+    "href": "week2/slides.html#section-8",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "We now regard re-expression as a tool, something to let us do a better job of grasping. The grasping is done with the eye and the better job is through a more symmetric appearance.\nAnother Tukey wisdom drop"
+  },
+  {
+    "objectID": "week2/slides.html#linearising-bivariate-relationships",
+    "href": "week2/slides.html#linearising-bivariate-relationships",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Linearising bivariate relationships",
+    "text": "Linearising bivariate relationships\n  \n\nSurprising observation: The small fluctuations in later years.\nWhat might be possible reasons?"
+  },
+  {
+    "objectID": "week2/slides.html#linearising-bivariate-relationships-1",
+    "href": "week2/slides.html#linearising-bivariate-relationships-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Linearising bivariate relationships",
+    "text": "Linearising bivariate relationships\n  \n\nSee some fluctuations in the early years, too. Note that the log transformation couldn’t linearise."
+  },
+  {
+    "objectID": "week2/slides.html#section-9",
+    "href": "week2/slides.html#section-9",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Whatever the data, we can try to gain by straightening or by flattening.\nWhen we succeed in doing one or both, we almost always see more clearly what is going on."
+  },
+  {
+    "objectID": "week2/slides.html#rules-and-advice",
+    "href": "week2/slides.html#rules-and-advice",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Rules and advice",
+    "text": "Rules and advice\n\n\n\nGraphics are friendly.\nArithmetic often exists to make graphs possible.\nGraphs force us to notice the unexpected; nothing could be more important.\nDifferent graphs show us quite different aspects of the same data.\nThere is no more reason to expect one graph to “tell all” than to expect one number to do the same.\n“Plotting \\(y\\) against \\(x\\)” involves significant choices–how we express one or both variables can be crucial.\n\n\n\nThe first step in penetrating plotting is to straighten out the dependence or point scatter as much as reasonable.\nPlotting \\(y^2\\), \\(\\sqrt{y}\\), \\(log(y)\\), \\(-1/y\\) or the like instead of \\(y\\) is one plausible step to take in search of straightness.\nPlotting \\(x^2\\), \\(\\sqrt{x}\\), \\(log(x)\\), \\(-1/x\\) or the like instead of \\(x\\) is another.\nOnce the plot is straightened, we can usually gain much by flattening it, usually by plotting residuals.\nWhen plotting scatters, we may need to be careful about how we express \\(x\\) and \\(y\\) in order to avoid concealment by crowding."
+  },
+  {
+    "objectID": "week2/slides.html#section-10",
+    "href": "week2/slides.html#section-10",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "The book is a digest of 🌟 tricks and treats 🌟 of massaging numbers and drafting displays.\nMany of the tools have made it into today’s analyses in various ways. Many have not.\nNotice the word developments too: [froots, fences]{.monash-pink2. Tukey brought you the word “software”!\nThe temperament of the book is an inspiration for the mind-set for this unit. There is such delight in working with numbers!\n“We love data!”"
+  },
+  {
+    "objectID": "week2/slides.html#take-aways",
+    "href": "week2/slides.html#take-aways",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Take-aways",
+    "text": "Take-aways\n\nTukey’s approach was a reaction to many years of formalising data analysis using statistical hypothesis testing.\nMethodology development in statistical testing was a reaction to the ad-hoc nature of data analysis.\nComplex machine learning models like neural networks are in reaction to the inability of statistical models to capture highly non-linear relationships, and depend heavily on the data provided.\nExploring data today is in reaction to the need to explain complex models, to support organisations against legal challenges to decisions made from the model\nIt is much easier to accomplish computers.\n“Exploratory data analysis” as commonly used today term is unfortunately synonymous with “descriptive statistics”, but it is truly much more. Understanding its history from Tukey’s advocation helps you see it is the tooling to discover what you don’t know."
+  },
+  {
+    "objectID": "week2/slides.html#resources",
+    "href": "week2/slides.html#resources",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Resources",
+    "text": "Resources\n\nwikipedia\nJohn W. Tukey (1977) Exploratory data analysis\nData coding using tidyverse suite of R packages\nSketching canvases made using fabricerin\n\n\n\n\nETC5521 Lecture 2 | ddde.numbat.space"
+  },
+  {
     "objectID": "week12/index.html#what-you-will-learn-this-week",
     "href": "week12/index.html#what-you-will-learn-this-week",
     "title": "Week 12: Extending beyond the data, what can and cannot be inferred more generally, given the data collection",
@@ -578,14 +872,14 @@
     "href": "week1/slides.html#distributions-of-tips-1",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Distributions of tips",
-    "text": "Distributions of tips\n\n\n\nggplot(tips, \n    aes(x=tip)) +\n  geom_histogram(\n    breaks=seq(0.5,10.5,1), #&lt;&lt; \n    colour=\"white\") + \n  scale_x_continuous(\n    breaks=seq(0,11,1))\n\nBig fat bins. Tips are skewed, which means most tips are relatively small."
+    "text": "Distributions of tips\n\n\n\nggplot(tips, \n    aes(x=tip)) +\n  geom_histogram(\n    breaks=seq(0.5,10.5,1),  \n    colour=\"white\") + \n  scale_x_continuous(\n    breaks=seq(0,11,1))\n\nBig fat bins. Tips are skewed, which means most tips are relatively small."
   },
   {
     "objectID": "week1/slides.html#distributions-of-tips-2",
     "href": "week1/slides.html#distributions-of-tips-2",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Distributions of tips",
-    "text": "Distributions of tips\n\n\n\nggplot(tips, \n    aes(x=tip)) + \n  geom_histogram(\n    breaks=seq(0.5,10.5,0.1), #&lt;&lt;\n    colour=\"white\") +\n  scale_x_continuous(\n    breaks=seq(0,11,1))\n\nSkinny bins. Tips are multimodal, and occurring at the full dollar and 50c amounts."
+    "text": "Distributions of tips\n\n\n\nggplot(tips, \n    aes(x=tip)) + \n  geom_histogram(\n    breaks=seq(0.5,10.5,0.1), \n    colour=\"white\") +\n  scale_x_continuous(\n    breaks=seq(0,11,1))\n\nSkinny bins. Tips are multimodal, and occurring at the full dollar and 50c amounts."
   },
   {
     "objectID": "week1/slides.html#we-could-also-look-at-total-bill-this-way",
@@ -599,14 +893,14 @@
     "href": "week1/slides.html#relationship-between-tip-and-total",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Relationship between tip and total",
-    "text": "Relationship between tip and total\n\n\n\np &lt;- ggplot(tips, \n    aes(x= totbill, y=tip)) + \n  geom_point() + #&lt;&lt;\n  scale_y_continuous(\n    breaks=seq(0,11,1))\np\n\nWhy is total on the x axis? \nShould we add a guideline?"
+    "text": "Relationship between tip and total\n\n\n\np &lt;- ggplot(tips, \n    aes(x= totbill, y=tip)) + \n  geom_point() + \n  scale_y_continuous(\n    breaks=seq(0,11,1))\np\n\nWhy is total on the x axis? \nShould we add a guideline?"
   },
   {
     "objectID": "week1/slides.html#add-a-guideline-indicating-common-practice",
     "href": "week1/slides.html#add-a-guideline-indicating-common-practice",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Add a guideline indicating common practice",
-    "text": "Add a guideline indicating common practice\n\n\n\np &lt;- p + geom_abline(intercept=0, #&lt;&lt;\n              slope=0.2) + #&lt;&lt;\n  annotate(\"text\", x=45, y=10, \n           label=\"20% tip\") \np\n\n\n\n\nMost tips less than 20%: Skin flints vs generous diners\nA couple of big tips\nBanding horizontally is the rounding seen previously"
+    "text": "Add a guideline indicating common practice\n\n\n\np &lt;- p + geom_abline(intercept=0, \n              slope=0.2) + \n  annotate(\"text\", x=45, y=10, \n           label=\"20% tip\") \np\n\n\n\n\nMost tips less than 20%: Skin flints vs generous diners\nA couple of big tips\nBanding horizontally is the rounding seen previously"
   },
   {
     "objectID": "week1/slides.html#we-should-examine-bar-charts-and-mosaic-plots-of-the-categorical-variables-next",
@@ -620,7 +914,7 @@
     "href": "week1/slides.html#relative-to-categorical-variables",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Relative to categorical variables",
-    "text": "Relative to categorical variables\n\n\n\np + facet_grid(smoker~sex) #&lt;&lt;\n\n\n\n\n\n\n\n\n\n\n\n\nThe bigger bills tend to be paid by men (and females that smoke).\nExcept for three diners, female non-smokers are very consistent tippers, probably around 15-18% though.\nThe variability in the smokers is much higher than for the non-smokers."
+    "text": "Relative to categorical variables\n\n\n\np + facet_grid(smoker~sex) \n\n\n\n\n\n\n\n\n\n\n\n\nThe bigger bills tend to be paid by men (and females that smoke).\nExcept for three diners, female non-smokers are very consistent tippers, probably around 15-18% though.\nThe variability in the smokers is much higher than for the non-smokers."
   },
   {
     "objectID": "week1/slides.html#isnt-this-interesting",
@@ -760,7 +1054,7 @@
     "href": "week1/index.html#tutorial-instructions",
     "title": "Week 1: Overview. Why this course? What is EDA?",
     "section": "Tutorial instructions",
-    "text": "Tutorial instructions\nInstructions:\n\nhtml\nqmd"
+    "text": "Tutorial instructions\n\nhtml\nqmd"
   },
   {
     "objectID": "week1/index.html#assignments",
@@ -949,28 +1243,28 @@
     "href": "week2/index.html#what-you-will-learn-this-week",
     "title": "Week 2: Learning from history",
     "section": "What you will learn this week",
-    "text": "What you will learn this week"
+    "text": "What you will learn this week\n\nThe historical origins of EDA\nPencil and paper methods like stem-and-leaf plots\nHow to symmetrise and linearise your data\nWhere EDA is relevant today"
   },
   {
     "objectID": "week2/index.html#lecture-slides",
     "href": "week2/index.html#lecture-slides",
     "title": "Week 2: Learning from history",
     "section": "Lecture slides",
-    "text": "Lecture slides"
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
   },
   {
     "objectID": "week2/index.html#tutorial-instructions",
     "href": "week2/index.html#tutorial-instructions",
     "title": "Week 2: Learning from history",
     "section": "Tutorial instructions",
-    "text": "Tutorial instructions\nInstructions:"
+    "text": "Tutorial instructions\n\nhtml\nqmd"
   },
   {
     "objectID": "week2/index.html#assignments",
     "href": "week2/index.html#assignments",
     "title": "Week 2: Learning from history",
     "section": "Assignments",
-    "text": "Assignments"
+    "text": "Assignments\n\nAssignment 1 is due on Monday 05 August."
   },
   {
     "objectID": "week2/index.html#assignments-1",
@@ -978,6 +1272,76 @@
     "title": "Week 2: Learning from history",
     "section": "Assignments",
     "text": "Assignments\n\nAssignment 1 is due on Monday 05 August."
+  },
+  {
+    "objectID": "week2/tutorialsol.html",
+    "href": "week2/tutorialsol.html",
+    "title": "ETC5521 Tutorial 2",
+    "section": "",
+    "text": "The purpose of this tutorial is to scope out the software reporting to do EDA in R. We want to understand the capabilities and the limitations."
+  },
+  {
+    "objectID": "week2/tutorialsol.html#objectives",
+    "href": "week2/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 2",
+    "section": "",
+    "text": "The purpose of this tutorial is to scope out the software reporting to do EDA in R. We want to understand the capabilities and the limitations."
+  },
+  {
+    "objectID": "week2/tutorialsol.html#preparation",
+    "href": "week2/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 2",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is The Landscape of R Packages for Automated Exploratory Data Analysis. This is a lovely summary of software available that is considered to do exploratory data analysis (EDA). (Note: Dr Cook considers these to be mostly descriptive statistics packages, not exploratory data analysis in the true spirit of the term.) This reading will be the basis of the tutorial exercises today.\n\nComplete the weekly quiz, before the deadline!\nInstall this list of R packages, in addition to what you installed in the previous weeks:\n\n\ninstall.packages(c(\"arsenal\", \"autoEDA\", \"DataExplorer\", \"dataMaid\", \"dlookr\", \"ExPanDaR\", \"explore\", \"exploreR\", \"funModeling\", \"inspectdf\", \"RtutoR\", \"SmartEDA\", \"summarytools\", \"visdat\", \"xray\", \"cranlogs\", \"tidyverse\", \"nycflights13\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week2/tutorialsol.html#exercises",
+    "href": "week2/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 2",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nThe article lists a number of R packages that might be used for EDA: arsenal, autoEDA, DataExplorer, dataMaid, dlookr, ExPanDaR, explore, exploreR, funModeling, inspectdf, RtutoR, SmartEDA, summarytools, visdat, xray.\n\n1.\nWhat package had the highest number of CRAN downloads as of 12.07.2019? (Based on the paper.)\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nsummarytools with 84737\n\n\n\n\n\n\n2.\nOpen up the shiny server for checking download rates at https://hadley.shinyapps.io/cran-downloads/. Which of these packages has the highest download rate over the period Jan 1, 2024-today?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nlibrary(cranlogs)\neda_pkgs &lt;- cran_downloads(packages=c(\"arsenal\", \"autoEDA\", \"DataExplorer\", \"dataMaid\", \"dlookr\", \"ExPanDaR\", \"explore\", \"exploreR\", \"funModeling\", \"inspectdf\", \"RtutoR\", \"SmartEDA\", \"summarytools\", \"visdat\", \"xray\"), from=\"2024-01-01\", to=lubridate::today())\neda_pkgs |&gt; \n  group_by(package) |&gt;\n  summarise(m=mean(count)) |&gt;\n  arrange(desc(m))\n\n# A tibble: 15 × 2\n   package           m\n   &lt;chr&gt;         &lt;dbl&gt;\n 1 SmartEDA     618.  \n 2 summarytools 607.  \n 3 visdat       496.  \n 4 DataExplorer 371.  \n 5 arsenal      221.  \n 6 dlookr        98.3 \n 7 explore       55.5 \n 8 funModeling   45.1 \n 9 inspectdf     44.2 \n10 dataMaid      32.4 \n11 ExPanDaR      16.4 \n12 xray           9.59\n13 exploreR       7.14\n14 RtutoR         2.14\n15 autoEDA        0   \n\n\nsmartEDA was on a roll early in the year, but has virtually disappeared. summarytools is going strong. Interestingly, visdat, high on the list, was developed by Nick Tierney in the years he was at Monash.\n\n\n\n\n\n\n3.\nWhat is an interesting pattern to observe from the time series plot of all the downloads?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe weekly seasonality! There is a regular up/down pattern, that if you zoom in closely - try plotting just a couple of weeks of data - you can see corresponds to week day vs weekend.\n\n\n\n\n\n\n4.\nHow many functions does Staniak and Biecek (2019) say visdat has for doing EDA? Explore what each of them does, by running the example code for each function. What do you think are the features that make visdat a really popular package?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n7; Simple focus, useful functions that apply to a lot of problems.\nIt gives an overview of the variable types, and missing values. This is useful to start a data analysis so that you can start working out what methods might be applied to each, and also whether some variables may have too many missing values to be analysable.\n\nlibrary(visdat)\n# function 1\nvis_dat(airquality)\n\n\n\n\n\n\n\n# function 2\nmessy_vector &lt;- c(TRUE,\n                 \"TRUE\",\n                 \"T\",\n                 \"01/01/01\",\n                 \"01/01/2001\",\n                 NA,\n                 NaN,\n                 \"NA\",\n                 \"Na\",\n                 \"na\",\n                 \"10\",\n                 10,\n                 \"10.1\",\n                 10.1,\n                 \"abc\",\n                 \"$%TG\")\nset.seed(1114)\nmessy_df &lt;- data.frame(var1 = messy_vector,\n                       var2 = sample(messy_vector),\n                       var3 = sample(messy_vector))\nvis_guess(messy_df)\n\n\n\n\n\n\n\n# function 3\nvis_miss(airquality)\n\n\n\n\n\n\n\n# function 4\naq_diff &lt;- airquality\naq_diff[1:10, 1:2] &lt;- NA\nvis_compare(airquality, aq_diff)\n\n\n\n\n\n\n\n# function 5\ndat_test &lt;- tibble::tribble(\n            ~x, ~y,\n            -1,  \"A\",\n            0,  \"B\",\n            1,  \"C\",\n            NA, NA\n            )\n\nvis_expect(dat_test, ~.x == -1)\n\n\n\n\n\n\n\n# function 6\nvis_cor(airquality)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n5.\nThe package summarytools appears to becoming more favourable relative to visdat. Take a look at this package and explain what tools it has that are not available in visdat.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nlibrary(summarytools)\ndfSummary(tobacco)\n\nData Frame Summary  \ntobacco  \nDimensions: 1000 x 9  \nDuplicates: 2  \n\n-----------------------------------------------------------------------------------------------------------\nNo   Variable       Stats / Values         Freqs (% of Valid)    Graph                 Valid      Missing  \n---- -------------- ---------------------- --------------------- --------------------- ---------- ---------\n1    gender         1. F                   489 (50.0%)           IIIIIIIIII            978        22       \n     [factor]       2. M                   489 (50.0%)           IIIIIIIIII            (97.8%)    (2.2%)   \n\n2    age            Mean (sd) : 50 (18)    63 distinct values    .     .     . . . :   975        25       \n     [numeric]      min &lt; med &lt; max:                             : : : : : . : : : :   (97.5%)    (2.5%)   \n                    18 &lt; 50 &lt; 80                                 : : : : : : : : : :                       \n                    IQR (CV) : 32 (0.4)                          : : : : : : : : : :                       \n                                                                 : : : : : : : : : :                       \n\n3    age.gr         1. 18-34               258 (26.5%)           IIIII                 975        25       \n     [factor]       2. 35-50               241 (24.7%)           IIII                  (97.5%)    (2.5%)   \n                    3. 51-70               317 (32.5%)           IIIIII                                    \n                    4. 71 +                159 (16.3%)           III                                       \n\n4    BMI            Mean (sd) : 26 (4.5)   974 distinct values             :           974        26       \n     [numeric]      min &lt; med &lt; max:                                     : : :         (97.4%)    (2.6%)   \n                    8.8 &lt; 26 &lt; 39                                        : : :                             \n                    IQR (CV) : 5.7 (0.2)                               : : : : :                           \n                                                                     . : : : : : .                         \n\n5    smoker         1. Yes                 298 (29.8%)           IIIII                 1000       0        \n     [factor]       2. No                  702 (70.2%)           IIIIIIIIIIIIII        (100.0%)   (0.0%)   \n\n6    cigs.per.day   Mean (sd) : 6.8 (12)   37 distinct values    :                     965        35       \n     [numeric]      min &lt; med &lt; max:                             :                     (96.5%)    (3.5%)   \n                    0 &lt; 0 &lt; 40                                   :                                         \n                    IQR (CV) : 11 (1.8)                          :                                         \n                                                                 :   . . . . . .                           \n\n7    diseased       1. Yes                 224 (22.4%)           IIII                  1000       0        \n     [factor]       2. No                  776 (77.6%)           IIIIIIIIIIIIIII       (100.0%)   (0.0%)   \n\n8    disease        1. Hypertension        36 (16.2%)            III                   222        778      \n     [character]    2. Cancer              34 (15.3%)            III                   (22.2%)    (77.8%)  \n                    3. Cholesterol         21 ( 9.5%)            I                                         \n                    4. Heart               20 ( 9.0%)            I                                         \n                    5. Pulmonary           20 ( 9.0%)            I                                         \n                    6. Musculoskeletal     19 ( 8.6%)            I                                         \n                    7. Diabetes            14 ( 6.3%)            I                                         \n                    8. Hearing             14 ( 6.3%)            I                                         \n                    9. Digestive           12 ( 5.4%)            I                                         \n                    10. Hypotension        11 ( 5.0%)                                                      \n                    [ 3 others ]           21 ( 9.5%)            I                                         \n\n9    samp.wgts      Mean (sd) : 1 (0.1)    0.86!: 267 (26.7%)    IIIII                 1000       0        \n     [numeric]      min &lt; med &lt; max:       1.04!: 249 (24.9%)    IIII                  (100.0%)   (0.0%)   \n                    0.9 &lt; 1 &lt; 1.1          1.05!: 324 (32.4%)    IIIIII                                    \n                    IQR (CV) : 0.2 (0.1)   1.06!: 160 (16.0%)    III                                       \n                                           ! rounded                                                       \n-----------------------------------------------------------------------------------------------------------\n\n\nIt has a lot more standard statistical summaries, and outputs the summary in a form that can be embedded nicely in a quarto report.\nIf you go to the package website https://github.com/dcomtois/summarytools it’s not very promising. There is no package website only the GitHub. There have been no updates for 8 months.\n\n\n\n\n\n\n6.\nWhy do you think the package smartEDA has gone out of favour?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe web site looks a little uncared for, missing images on the main GitHub page. It has a nice package pacge, but again pieces are missing.\n\nlibrary(SmartEDA)\nExpData(data=mtcars,type=1)\n\n                                          Descriptions     Value\n1                                   Sample size (nrow)        32\n2                              No. of variables (ncol)        11\n3                    No. of numeric/interger variables        11\n4                              No. of factor variables         0\n5                                No. of text variables         0\n6                             No. of logical variables         0\n7                          No. of identifier variables         0\n8                                No. of date variables         0\n9             No. of zero variance variables (uniform)         0\n10               %. of variables having complete cases 100% (11)\n11   %. of variables having &gt;0% and &lt;50% missing cases    0% (0)\n12 %. of variables having &gt;=50% and &lt;90% missing cases    0% (0)\n13          %. of variables having &gt;=90% missing cases    0% (0)\n\nExpData(data=mtcars,type=2)\n\n   Index Variable_Name Variable_Type Sample_n Missing_Count Per_of_Missing\n1      1           mpg       numeric       32             0              0\n2      2           cyl       numeric       32             0              0\n3      3          disp       numeric       32             0              0\n4      4            hp       numeric       32             0              0\n5      5          drat       numeric       32             0              0\n6      6            wt       numeric       32             0              0\n7      7          qsec       numeric       32             0              0\n8      8            vs       numeric       32             0              0\n9      9            am       numeric       32             0              0\n10    10          gear       numeric       32             0              0\n11    11          carb       numeric       32             0              0\n   No_of_distinct_values\n1                     25\n2                      3\n3                     27\n4                     22\n5                     22\n6                     29\n7                     30\n8                      2\n9                      2\n10                     3\n11                     6\n\n\nIt also has some standard summaries like summarytools which is possibly why it became attractive. And can be used to produce a detailed report on the data, although a report like the one in the next question took ages to complete.\nI’m not sure why it’s popularity has dropped. The documentation is not great, there’s quite a few spelling errors. The functions are (sort of) in CamelCase which is not as attractive as snake_case.\n\n\n\n\n\n\n7.\nThe package DataExplorer has a high download rate and number of GitHub stars, and also a nice web site at https://boxuancui.github.io/DataExplorer/. The vignette “Introduction to DataExplorer” is a good place to start to learn what the package does. Generate an automatic report to see what it creates, and what the package suggests is important. Use the code below to create the data to use - it does the same thing as the code in the vignette but uses dplyr and piping more nicely. Then run the report. It’s not very pretty to read, but there’s a vast amount of very useful information about the data that can help in preparing for its analysis. It’s completely overwhelming, though.\n\nWhat does specifying y = \"arr_delay\" do?\nWhich variables have a lot of missing values?\nHow many engines do planes typically have?\nWhat does the scale of the arr_time, dep_time, sched_arr_time and sched_dep_time indicate?\nWhich carrier had the most flights?\nWhich type of plane was most common? Why might conclusions about the type of plane be dangerous about to make?\nWhat do the QQ plots tell you?\narr_delay is divided into 6 categories before making some plots. Why do you think the purpose of this is?\nWith your neighbour in the tutorial come up with one thing that is a bit surprising to you about this data. Make sure you state what you expected to see, and why what you saw was then a surprise.\n\n\n# DataExplorer\nlibrary(DataExplorer)\nlibrary(nycflights13)\nlibrary(tidyverse)\n\n# Create a big data set\nairlines_all &lt;- flights |&gt; \n  full_join(airlines, by = \"carrier\") |&gt;\n  full_join(planes, by = \"tailnum\", \n            suffix = c(\"_flights\", \"_planes\")) |&gt;\n  full_join(airports, by = c(\"origin\"=\"faa\"), \n            suffix = c(\"_carrier\", \"_origin\")) |&gt;\n  full_join(airports, by = c(\"dest\"=\"faa\"), \n            suffix = c(\"_origin\", \"_dest\"))\n\n# Run a report\ncreate_report(airlines_all, y = \"arr_delay\")\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nThis is specifying that arr_delay is to be treated as a response variable.\nThe variable speed is mostly missing. Other variables engine, seats, model, manufacturer, type and year_planes have about 15% missing.\nAlmost all planes have 2 engines. Some have 1, and it seems that some have 3 or 4. The histogram includes these categories which means there must be some planes with 4 engines, but the count is so small that the bar is invisible.\nThese are hours and minutes as four digits, eg 1045 means 10:45am.\nUA, United Airlines\nBOEING. It could be dangerous because 15% of observations on this variable are missing. If these all belong to one of the other popular types of planes (ie EMBRAER) we may be over-stating the popularity of BOEING.\nQQ plots are for checking for normal distributions. We can see that none of the variables have normal distributions because noe of these feature points along the straight guide line.\nSometimes breaking a numeric variable into pieces and plotting against another variable allows a rough assess associations in a simplified manner. It is often done to assess associations with categorical variables.\nHere is one example: We might expect that if the departure was delayed then the arrival would be delayed. In the scatterplot of dep_delay vs arr_delay we don’t see this pattern! There is a subset of flights where there is a strong relationship, and another subset of observations where dep_delay is slightly increased at the highest values of arr_delay, but for the most part it is flat. That even if there is no departure delay, there is a long arrival delay. This is curious! But there is something strange about this plot, too. It looks like arr_delay was treated as a categorical variable, given the regular markings on the horizontal axis.\n\n\n\n\n\n\n\n8.\nTable 2 of the Landscape paper summarises the activities of two early phases of the CRISP-DM standard. What does CRISP-DM mean? The implication is that EDA is related to “data understanding” and “data preparation”. Would you agree with this or disagree? Why?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nCross-Industry Standard Process for Data Mining; EDA techniques can be useful for some parts of these stages, for example finding outliers, or examining missing value patterns. Some of these steps are important for effective EDA, too, for example, you need to know what types of variables you have in order to decide what types of plots to make.\n\n\n\n\n\n\n9.\nTable 1 of the paper is summarising CRAN downloads and GitHub activity is hard to read. How are the rows sorted? What is the most important information communicated by the table? In what way(s) might revising this table make it easier to read and digest the most important information?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nMost important information is the download rate because the purpose is to know which are the commonly used packages. Sort rows by downloads."
+  },
+  {
+    "objectID": "week2/tutorialsol.html#finishing-up",
+    "href": "week2/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 2",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week2/tutorial.html",
+    "href": "week2/tutorial.html",
+    "title": "ETC5521 Tutorial 2",
+    "section": "",
+    "text": "The purpose of this tutorial is to scope out the software reporting to do EDA in R. We want to understand the capabilities and the limitations."
+  },
+  {
+    "objectID": "week2/tutorial.html#objectives",
+    "href": "week2/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 2",
+    "section": "",
+    "text": "The purpose of this tutorial is to scope out the software reporting to do EDA in R. We want to understand the capabilities and the limitations."
+  },
+  {
+    "objectID": "week2/tutorial.html#preparation",
+    "href": "week2/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 2",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is The Landscape of R Packages for Automated Exploratory Data Analysis. This is a lovely summary of software available that is considered to do exploratory data analysis (EDA). (Note: Dr Cook considers these to be mostly descriptive statistics packages, not exploratory data analysis in the true spirit of the term.) This reading will be the basis of the tutorial exercises today.\n\nComplete the weekly quiz, before the deadline!\nInstall this list of R packages, in addition to what you installed in the previous weeks:\n\n\ninstall.packages(c(\"arsenal\", \"autoEDA\", \"DataExplorer\", \"dataMaid\", \"dlookr\", \"ExPanDaR\", \"explore\", \"exploreR\", \"funModeling\", \"inspectdf\", \"RtutoR\", \"SmartEDA\", \"summarytools\", \"visdat\", \"xray\", \"cranlogs\", \"tidyverse\", \"nycflights13\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week2/tutorial.html#exercises",
+    "href": "week2/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 2",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nThe article lists a number of R packages that might be used for EDA: arsenal, autoEDA, DataExplorer, dataMaid, dlookr, ExPanDaR, explore, exploreR, funModeling, inspectdf, RtutoR, SmartEDA, summarytools, visdat, xray.\n\n1.\nWhat package had the highest number of CRAN downloads as of 12.07.2019? (Based on the paper.)\n\n\n2.\nOpen up the shiny server for checking download rates at https://hadley.shinyapps.io/cran-downloads/. Which of these packages has the highest download rate over the period Jan 1, 2024-today?\n\n\n3.\nWhat is an interesting pattern to observe from the time series plot of all the downloads?\n\n\n4.\nHow many functions does Staniak and Biecek (2019) say visdat has for doing EDA? Explore what each of them does, by running the example code for each function. What do you think are the features that make visdat a really popular package?\n\n\n5.\nThe package summarytools appears to becoming more favourable relative to visdat. Take a look at this package and explain what tools it has that are not available in visdat.\n\n\n6.\nWhy do you think the package smartEDA has gone out of favour?\n\n\n7.\nThe package DataExplorer has a high download rate and number of GitHub stars, and also a nice web site at https://boxuancui.github.io/DataExplorer/. The vignette “Introduction to DataExplorer” is a good place to start to learn what the package does. Generate an automatic report to see what it creates, and what the package suggests is important. Use the code below to create the data to use - it does the same thing as the code in the vignette but uses dplyr and piping more nicely. Then run the report. It’s not very pretty to read, but there’s a vast amount of very useful information about the data that can help in preparing for its analysis. It’s completely overwhelming, though.\n\nWhat does specifying y = \"arr_delay\" do?\nWhich variables have a lot of missing values?\nHow many engines do planes typically have?\nWhat does the scale of the arr_time, dep_time, sched_arr_time and sched_dep_time indicate?\nWhich carrier had the most flights?\nWhich type of plane was most common? Why might conclusions about the type of plane be dangerous about to make?\nWhat do the QQ plots tell you?\narr_delay is divided into 6 categories before making some plots. Why do you think the purpose of this is?\nWith your neighbour in the tutorial come up with one thing that is a bit surprising to you about this data. Make sure you state what you expected to see, and why what you saw was then a surprise.\n\n\n# DataExplorer\nlibrary(DataExplorer)\nlibrary(nycflights13)\nlibrary(tidyverse)\n\n# Create a big data set\nairlines_all &lt;- flights |&gt; \n  full_join(airlines, by = \"carrier\") |&gt;\n  full_join(planes, by = \"tailnum\", \n            suffix = c(\"_flights\", \"_planes\")) |&gt;\n  full_join(airports, by = c(\"origin\"=\"faa\"), \n            suffix = c(\"_carrier\", \"_origin\")) |&gt;\n  full_join(airports, by = c(\"dest\"=\"faa\"), \n            suffix = c(\"_origin\", \"_dest\"))\n\n# Run a report\ncreate_report(airlines_all, y = \"arr_delay\")\n\n\n\n8.\nTable 2 of the Landscape paper summarises the activities of two early phases of the CRISP-DM standard. What does CRISP-DM mean? The implication is that EDA is related to “data understanding” and “data preparation”. Would you agree with this or disagree? Why?\n\n\n9.\nTable 1 of the paper is summarising CRAN downloads and GitHub activity is hard to read. How are the rows sorted? What is the most important information communicated by the table? In what way(s) might revising this table make it easier to read and digest the most important information?"
+  },
+  {
+    "objectID": "week2/tutorial.html#finishing-up",
+    "href": "week2/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 2",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
   },
   {
     "objectID": "week4/index.html",
