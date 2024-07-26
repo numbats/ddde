@@ -254,7 +254,7 @@ c. Almost all planes have 2 engines. Some have 1, and it seems that some have 3 
 d. These are hours and minutes as four digits, eg 1045 means 10:45am.
 e. UA, United Airlines
 f. BOEING. It could be dangerous because 15% of observations on this variable are missing. If these **all** belong to one of the other popular types of planes (ie EMBRAER) we may be over-stating the popularity of BOEING.
-g. QQ plots are for checking for normal distributions. We can see that none of the variables have normal distributions because noe of these feature points along the straight guide line.
+g. QQ plots are for checking for normal distributions. We can see that none of the variables have normal distributions because none of these feature points along the straight guide line.
 h. Sometimes breaking a numeric variable into pieces and plotting against another variable allows a rough assess associations in a simplified manner. It is often done to assess associations with categorical variables.
 i. Here is one example: We might expect that if the departure was delayed then the arrival would be delayed. In the scatterplot of `dep_delay` vs `arr_delay` we don't see this pattern! There is a subset of flights where there is a strong relationship, and another subset of observations where  `dep_delay` is slightly increased at the highest values of `arr_delay`, but for the most part it is flat. That even if there is no departure delay, there is a long arrival delay. This is curious! But there is something strange about this plot, too. It looks like `arr_delay` was treated as a categorical variable, given the regular markings on the horizontal axis.
 :::
