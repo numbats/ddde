@@ -181,7 +181,6 @@ The package `summarytools` appears to becoming more favourable relative to `visd
 ::: unilur-solution
 
 ```{r}
-#| echo: true
 library(summarytools)
 dfSummary(tobacco)
 ```
@@ -193,7 +192,7 @@ If you go to the package website https://github.com/dcomtois/summarytools it's n
 
 ### 6. 
 
-Why do you think the package `smartEDA` has gone out of favour?
+Why do you think the package `SmartEDA` has gone out of favour?
 
 ::: unilur-solution
 The web site looks a little uncared for, missing images on the main GitHub page. It has a nice package pacge, but again pieces are missing. 
@@ -209,24 +208,12 @@ It also has some standard summaries like `summarytools` which is possibly why it
 I'm not sure why it's popularity has dropped. The documentation is not great, there's quite a few spelling errors. The functions are (sort of) in CamelCase which is not as attractive as snake_case.
 :::
 
-
-
 ### 7. 
 
-The package `DataExplorer` has a high download rate and number of GitHub stars, and also a nice web site at https://boxuancui.github.io/DataExplorer/. The vignette "Introduction to DataExplorer" is a good place to start to learn what the package does. Generate an automatic report to see what it creates, and what the package suggests is important. Use the code below to create the data to use - it does the same thing as the code in the vignette but uses `dplyr` and piping more nicely. Then run the report. It's not very pretty to read, but there's a vast amount of very useful information about the data that can help in preparing for its analysis. It's completely overwhelming, though.
+The `SmartEDA::ExpReport()` and `DataExplorer::create_report()` are functions that generates a long report when provided with a data set. Try this using the latter function, on the `nycflights13` data, using this code:
 
-a. What does specifying `y = "arr_delay"` do?
-b. Which variables have a lot of missing values?
-c. How many engines do planes typically have?
-d. What does the scale of the `arr_time`, `dep_time`, `sched_arr_time` and `sched_dep_time` indicate?
-e. Which carrier had the most flights?
-f. Which type of plane was most common? Why might conclusions about the type of plane be dangerous about to make?
-g. What do the QQ plots tell you?
-h. `arr_delay` is divided into 6 categories before making some plots. Why do you think the purpose of this is?
-i. With your neighbour in the tutorial come up with **one** thing that is a bit surprising to you about this data. Make sure you state what you expected to see, and why what you saw was then a surprise.
 
 ```{r}
-#| eval: false
 #| code-fold: false
 # DataExplorer
 library(DataExplorer)
@@ -242,21 +229,242 @@ airlines_all <- flights |>
             suffix = c("_carrier", "_origin")) |>
   full_join(airports, by = c("dest"="faa"), 
             suffix = c("_origin", "_dest"))
+```
 
-# Run a report
+```{r}
+#| eval: false
+#| code-fold: false
+#| # Run a report
 create_report(airlines_all, y = "arr_delay")
 ```
 
+The code instructs to use `arr_delay` as a "response variable". Give some reasons why this report is not very useful! 
+
 ::: unilur-solution
-a. This is specifying that `arr_delay` is to be treated as a response variable. 
-b. The variable `speed` is mostly missing. Other variables `engine`, `seats`, `model`, `manufacturer`, `type` and `year_planes` have about 15% missing.
-c. Almost all planes have 2 engines. Some have 1, and it seems that some have 3 or 4. The histogram includes these categories which means there must be some planes with 4 engines, but the count is so small that the bar is invisible.
-d. These are hours and minutes as four digits, eg 1045 means 10:45am.
-e. UA, United Airlines
-f. BOEING. It could be dangerous because 15% of observations on this variable are missing. If these **all** belong to one of the other popular types of planes (ie EMBRAER) we may be over-stating the popularity of BOEING.
-g. QQ plots are for checking for normal distributions. We can see that none of the variables have normal distributions because none of these feature points along the straight guide line.
-h. Sometimes breaking a numeric variable into pieces and plotting against another variable allows a rough assess associations in a simplified manner. It is often done to assess associations with categorical variables.
-i. Here is one example: We might expect that if the departure was delayed then the arrival would be delayed. In the scatterplot of `dep_delay` vs `arr_delay` we don't see this pattern! There is a subset of flights where there is a strong relationship, and another subset of observations where  `dep_delay` is slightly increased at the highest values of `arr_delay`, but for the most part it is flat. That even if there is no departure delay, there is a long arrival delay. This is curious! But there is something strange about this plot, too. It looks like `arr_delay` was treated as a categorical variable, given the regular markings on the horizontal axis.
+There is a lot of information, and many of the plots and tables are particularly unreadable.
+:::
+
+6. Have your Generative AI assistant suggest what to look at when it is given the variable summary, from:
+
+```{r}
+#| eval: false
+glimpse(airlines_all)
+```
+
+::: unilur-solution
+
+Here's what I got from Claude:
+
+```
+Based on the dataset you've provided, which appears to be about airline flights, I can suggest several plots and summaries that would be informative. Here are some recommendations:
+
+Time-based analysis:
+
+Line plot of average delays (dep_delay and arr_delay) by month and year
+Heatmap of delays by day of week and hour of day
+Box plots of air_time by month
+
+
+Carrier analysis:
+
+Bar plot of flight counts by carrier
+Box plots of delays by carrier
+Scatter plot of departure delay vs. arrival delay, colored by carrier
+
+
+Route analysis:
+
+Bar plot of most common routes (origin-dest pairs)
+Map visualization of routes with line thickness indicating frequency
+
+
+Distance analysis:
+
+Scatter plot of distance vs. air_time
+Histogram of flight distances
+
+
+Aircraft analysis:
+
+Bar plot of most common aircraft models
+Box plot of delays by aircraft manufacturer
+
+
+Airport analysis:
+
+Bar plot of busiest airports (by departure and arrival)
+Map of airports with point size indicating traffic volume
+
+
+Summaries:
+
+Table of average delays by carrier
+Summary statistics (mean, median, std dev) for air_time and distance
+Correlation matrix of numeric variables
+
+
+Time series:
+
+Time series decomposition of daily flight counts
+
+
+Categorical data:
+
+Stacked bar charts for engine types by manufacturer
+
+
+Performance metrics:
+
+Scatter plot of scheduled arrival time vs. actual arrival time
+```
+
+It's nicely organise by different types of analysis activities that might be done. Each of these require different ways to aggregate the data, to make summaries or plots by various categorical variables. But it doesn't suggest pre-processing that might be necessary, so I asked it to tell me what might be needed:
+
+```
+Before creating visualizations and summaries, some pre-processing steps would be beneficial for this dataset. Here are some recommendations:
+
+Handle missing values:
+
+Check for NA or null values, especially in columns like speed, air_time, and delay fields.
+Decide whether to impute missing values or remove rows with missing data, depending on the extent and nature of missingness.
+
+
+Date and time formatting:
+
+Combine year_flights, month, and day into a single date column.
+Ensure time_hour is properly formatted as a datetime object.
+
+
+Categorical data:
+
+Convert appropriate columns to factors (e.g., carrier, origin, dest, manufacturer).
+Check for and handle any inconsistent spellings or codings in categorical variables.
+
+
+Delay calculations:
+
+Create a total_delay column by summing dep_delay and arr_delay.
+Consider creating a binary column for whether a flight was delayed (e.g., over 15 minutes).
+
+
+Outlier detection:
+
+Check for and possibly handle extreme values in delay times, air_time, and distance.
+
+
+Feature engineering:
+
+Create a day_of_week column from the date.
+Calculate flight speed from distance and air_time.
+Create a season column based on month.
+
+
+Data type conversions:
+
+Ensure numeric columns are of the appropriate type (int or float).
+Convert time columns (dep_time, arr_time, etc.) to a more usable format if they're not already.
+
+
+Geocoding:
+
+Ensure lat and lon columns for both origin and destination are numeric and contain valid coordinates.
+
+
+Consistency checks:
+
+Verify that arr_time is always later than dep_time.
+Check that air_time is consistent with the difference between arr_time and dep_time.
+
+
+Merging data:
+
+If the planes and airports data are in separate datasets, merge them carefully with the main flights data.
+
+
+Creating subsets:
+
+Consider creating smaller datasets for specific analyses (e.g., by year, by carrier) to improve processing speed.
+```
+
+This is quite useful!
+:::
+
+
+### 7. 
+
+In a limited fashion, lets work through some areas suggested by Claude. 
+
+a. Use `visdat` to examine the variable types and missing values. You'll need to take a sample of the data because there are too many observations to reasonably plot. However, a sample should give reasonable insight on the reliability of most variables. What variables may not be useful because they have too many missing values?
+
+::: unilur-solution
+
+```{r}
+vis_dat(airlines_all[sample(1:nrow(airlines_all), 1000),])
+```
+
+`speed` is mostly missing. It definitely cannot be used. 
+
+`type`, `manufacturer`, `model`, `engine`, `year_planes`, `engines`, `seats` have a lot of missings, and so maybe unusable. It is possible that these missings are for some types of planes, and other types of planes have more complete records.
+
+:::
+
+For the rest of these questions, you decide how to process the data, make summaries or plots to provide answers. 
+
+b. Which carrier had the most flights?
+c. Is this the same for each month? Or day of the week?
+d. Are there more departure delays for flights in the morning hours, or evening hours?
+e. Find an error in the data, e.g. a flight that arrived before it left.
+f. With your neighbour in the tutorial come up with **one** thing that is a bit surprising to you that you can learn from this data. Make sure you state what you expected to see, and why what you saw was then a surprise. (It is possible that you can use the `DataExplorer` report to look at something you had not thought to examine, as motivation.)
+
+::: unilur-solution
+
+```{r}
+airlines_all |> count(carrier, sort=TRUE)
+airlines_all |> 
+  filter(carrier %in% c("UA", "B6", "EV", "DL")) |>
+  mutate(carrier = factor(carrier, levels = c("UA", "B6", "EV", "DL"))) |>
+  count(month, carrier) |>
+  mutate(month = factor(month, levels=1:12)) |>
+  pivot_wider(names_from = carrier, 
+              values_from = n, 
+              values_fill=0)
+
+airlines_all |> 
+  filter(carrier %in% c("UA", "B6", "EV", "DL")) |>
+  mutate(carrier = factor(carrier, levels = c("UA", "B6", "EV", "DL"))) |>
+  count(month, carrier) |>
+  ggplot(aes(x=month, y=n, colour=carrier)) + 
+    geom_line() +
+    scale_x_continuous("", breaks = 1:12)
+
+airlines_all |>
+  group_by(hour) |>
+  summarise(dep_delay = mean(dep_delay, na.rm = TRUE)) |>
+  ggplot(aes(x=hour, y=dep_delay)) +
+    geom_point() +
+    geom_smooth(se=F)
+
+airlines_all |>
+  ggplot() +
+    geom_abline(intercept=0, slope=1, colour="red") +
+    geom_point(aes(x=dep_delay, y=arr_delay)) +
+    theme(aspect.ratio=1)
+
+airlines_all |>
+  ggplot() +
+    geom_abline(intercept=0, slope=1, colour="red") +
+    geom_point(aes(x=dep_time, y=arr_time)) +
+    theme(aspect.ratio=1)
+
+airlines_all |> 
+  filter(origin == dest)
+```
+
+b. UA, United Airlines
+c. Ooh, September EV had more flights than UA!
+d. Definitely evening hours.
+e. There are some flights that leave substantially early, maybe not a mistake but worrying for a traveller.
+f. What did you find?
 :::
 
 ### 8. 
@@ -272,7 +480,7 @@ Cross-Industry Standard Process for Data Mining; EDA techniques can be useful fo
 Table 1 of the paper is summarising CRAN downloads and GitHub activity is hard to read. How are the rows sorted? What is the most important information communicated by the table? In what way(s) might revising this table make it easier to read and digest the most important information? 
 
 ::: unilur-solution
-Most important information is the download rate because the purpose is to know which are the commonly used packages. Sort rows by downloads.
+Most important information is the download rate because the purpose is to know which are the commonly used packages. Sorting rows by downloads makes the table easier to read.
 :::
 
 ## 👌 Finishing up
