@@ -340,7 +340,7 @@ stem(chevrolets$prices)
 ## 🔖 Remember the tips data
 
 ```{r echo=FALSE}
-options(width=80)
+options(width=80, digits=3)
 tips <- read_csv("http://ggobi.org/book/data/tips.csv")
 head(tips$tip, 50)
 ```
