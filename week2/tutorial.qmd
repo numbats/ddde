@@ -123,7 +123,7 @@ The weekly seasonality! There is a regular up/down pattern, that if you zoom in 
 How many functions does Staniak and Biecek (2019) say `visdat` has for doing EDA? Explore what each of them does, by running the example code for each function. What do you think are the features that make `visdat` a really popular package? 
 
 ::: unilur-solution
-7; Simple focus, useful functions that apply to a lot of problems. 
+6; Simple focus, useful functions that apply to a lot of problems. 
 
 It gives an overview of the variable types, and missing values. This is useful to start a data analysis so that you can start working out what methods might be applied to each, and also whether some variables may have too many missing values to be analysable.
 
@@ -390,7 +390,7 @@ This is quite useful!
 :::
 
 
-### 7. 
+### 8. 
 
 In a limited fashion, lets work through some areas suggested by Claude. 
 
@@ -467,7 +467,7 @@ e. There are some flights that leave substantially early, maybe not a mistake bu
 f. What did you find?
 :::
 
-### 8. 
+### 9. 
 
 Table 2 of the Landscape paper summarises the activities of two early phases of the CRISP-DM standard. What does CRISP-DM mean? The implication is that EDA is related to "data understanding" and "data preparation". Would you agree with this or disagree? Why? 
 
@@ -475,7 +475,7 @@ Table 2 of the Landscape paper summarises the activities of two early phases of 
 Cross-Industry Standard Process for Data Mining; EDA techniques can be useful for some parts of these stages, for example finding outliers, or examining missing value patterns. Some of these steps are important for effective EDA, too, for example, you need to know what types of variables you have in order to decide what types of plots to make. 
 :::
 
-### 9. 
+### 10. 
 
 Table 1 of the paper is summarising CRAN downloads and GitHub activity is hard to read. How are the rows sorted? What is the most important information communicated by the table? In what way(s) might revising this table make it easier to read and digest the most important information? 
 
