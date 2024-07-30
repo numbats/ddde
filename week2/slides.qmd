@@ -811,7 +811,7 @@ See some fluctuations in the early years, too. [Note that the log transformation
 
 [Many of the tools have made it into today's analyses in various ways. Many have not.]{.monash-white}
 
-[Notice the word developments too:]{.monash-white} [froots, fences]{.monash-pink2. [Tukey brought you the word]{.monash-white} ["software"]{.monash-pink2}[!]{.monash-white}
+[Notice the word developments too:]{.monash-white} [froots, fences.]{.monash-pink2} [Tukey brought you the word]{.monash-white} ["software"]{.monash-white}
 
 [The temperament of the book is an inspiration for the mind-set for this unit. There is such delight in working with numbers!]{.monash-white}
 
