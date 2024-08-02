@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
 width: 0.8em;
 margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
 }
+
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+}
+pre.numberSource { margin-left: 3em; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -4876,6 +4910,9 @@ color: #C8008F;
 <li>Complete the weekly quiz, before the deadline!</li>
 <li>Make sure you have this list of R packages installed:</li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;forcats&quot;</span>, <span class="st">&quot;patchwork&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <ul>
 <li>Note that the code and data for reproducing their analysis can be found <a href="https://github.com/hadley/sfhousing">here</a>.</li>
 <li>Open your RStudio Project for this unit, (the one you created in week 1, <code>ETC5521</code>). Create a <code>.qmd</code> document for this weeks activities.</li>
@@ -4885,6 +4922,12 @@ color: #C8008F;
 <h2 class="anchored" data-anchor-id="exercises">📥 Exercises</h2>
 <p>Point your web browser to the github site for the analysis, https://github.com/hadley/sfhousing. The main data file is <code>house-sales.csv</code>. Read this data into your R session. (🛑 ARE YOU USING A PROJECT FOR THIS UNIT? IF NOT, STOP and OPEN IT NOW.)</p>
 <p>You can read the data in directly from the web site using this code:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sales <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/hadley/sfhousing/master/house-sales.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <section id="whats-in-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="whats-in-the-data">1. What’s in the data?</h3>
 <ul>
@@ -4907,11 +4950,11 @@ color: #C8008F;
 <section id="time-series-plots" class="level3">
 <h3 class="anchored" data-anchor-id="time-series-plots">2. Time series plots</h3>
 <p>Reproduce the time series plots of weekly average price and volume of sales.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="tutorial_files/figure-html/timeplot-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<p><img src="tutorial_files/figure-html/timeplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
 </figure>
 </div>
 </div>

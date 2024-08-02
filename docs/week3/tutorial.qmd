@@ -16,6 +16,53 @@ format:
         show-solution: true
 ---
 
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(conflicted)
+
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+```
+
 ## 🎯 Objectives
 
 Constructing, planning and evaluating an exploratory data analysis are important skills. This tutorial is an exercise in reading and digesting a really good analysis. Your goal is to understand the analysis, reproduce it, and the choices the analysts made, and why these were would be considered high quality. 
@@ -67,6 +114,7 @@ sales <- read_csv("https://raw.githubusercontent.com/hadley/sfhousing/master/hou
     - a temporal variable and a numeric variable? 
 
 ::: unilur-solution
+
 - Yes
 -  
     - price, br, lsqft, bsqft
@@ -86,14 +134,17 @@ Reproduce the time series plots of weekly average price and volume of sales.
 
 ```{r}
 #| label: timeplot
-#| out.width: "90%"
+#| out-width: "90%"
+#| fig-width: 8
+#| fig-height: 6
 #| echo: false
 #| warning: false
 sales_weekly <- sales |>
   group_by(date) |>
   summarise(av_price = mean(price, na.rm=TRUE),
             volume = n())
-p1 <- ggplot(sales_weekly, aes(x=date, y=av_price)) +
+p1 <- ggplot(sales_weekly, aes(x=date,
+                               y=av_price)) +
   geom_line() +
   scale_y_continuous("Average price (millions)", 
               breaks = seq(500000, 800000, 50000), 
@@ -101,7 +152,8 @@ p1 <- ggplot(sales_weekly, aes(x=date, y=av_price)) +
                          "0.70", "0.75", "0.80")) +
   scale_x_date("", date_breaks = "1 years", 
                minor_breaks = NULL, 
-               date_labels = "%Y")
+               date_labels = "%Y") +
+  theme(aspect.ratio = 0.5)
 p2 <- ggplot(sales_weekly, aes(x=date, y=volume)) + geom_line() +
   scale_y_continuous("Number of sales", 
               breaks = seq(500,3000,500), 
@@ -109,39 +161,24 @@ p2 <- ggplot(sales_weekly, aes(x=date, y=volume)) + geom_line() +
                          "2,500", "3,000")) +
   scale_x_date("", date_breaks = "1 years", 
                minor_breaks = NULL, 
-               date_labels = "%Y")
-p1/p2
+               date_labels = "%Y") +
+  theme(aspect.ratio = 0.5)
+p1 + p2 + plot_layout(ncol=1)
 ```
 
 ::: unilur-solution
+
+Note, stacking time series plots helps compare the series relative to the time point.
+
 ```{r}
-#| label: timeplot-show
-#| out.width: "70%"
+#| label: timeplot
+#| out-width: "70%"
+#| fig-width: 8
+#| fig-height: 6
 #| echo: true
 #| eval: false
-sales_weekly <- sales |>
-  group_by(date) |>
-  summarise(av_price = mean(price, na.rm=TRUE),
-            volume = n())
-p1 <- ggplot(sales_weekly, aes(x=date, y=av_price)) +
-  geom_line() +
-  scale_y_continuous("Average price (millions)", 
-     breaks = seq(500000, 800000, 50000), 
-     labels = c("0.50", "0.55", "0.60", "0.65",
-                "0.70", "0.75", "0.80")) +
-  scale_x_date("", date_breaks = "1 years", 
-               minor_breaks = NULL, 
-               date_labels = "%Y")
-p2 <- ggplot(sales_weekly, aes(x=date, y=volume)) + geom_line() +
-  scale_y_continuous("Number of sales", 
-     breaks = seq(500,3000,500), 
-     labels = c("500", "1,000", "1,500", "2,000",
-                "2,500", "3,000")) +
-  scale_x_date("", date_breaks = "1 years", 
-               minor_breaks = NULL, 
-               date_labels = "%Y")
-p1/p2
 ```
+
 :::
 
 ### 3. Correlation between series
@@ -191,6 +228,7 @@ In the section "The Rich Get Richer and the Poor Get Poorer" there are some inte
 ::: unilur-solution
 
 The transformation makes changes relative to the initial average price at the start of the time period. All curves produced will start from the same point. This means that we only need to compare the end points of each line, saving us from calculating differences between lines relative to the difference at the beginning.
+
 :::
 
 ### 6. Anything surprising?
