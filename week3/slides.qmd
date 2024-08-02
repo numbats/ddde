@@ -1,0 +1,1306 @@
+---
+title: "ETC5521: Diving Deeply into Data Exploration"
+title-slide-attributes: 
+  data-background-image: "../images/bg.png"
+  data-background-size: 100%
+subtitle: "Initial data analysis and model diagnostics"
+author: "Professor Di Cook"
+email: "ETC5521.Clayton-x@monash.edu"
+length: "100 minutes"
+pdflink: "lecture.pdf"
+institute: "Department of Econometrics and Business Statistics"
+footer: "ETC5521 Lecture 3 | [ddde.numbat.space](ddde.numbat.space)"
+format:
+  revealjs:
+    multiplex: false
+    slide-number: c/t
+    slide-tone: false
+    theme: "../assets/monash.scss"
+    width: 1600
+    height: 900
+    margin: 0.05
+    embed-resources: true
+---
+
+```{r, include = FALSE}
+source("../setup.R")
+```
+
+## The role of initial data analysis {background-image="images/crowder_and_hand.jpg" background-size="20%" background-position="95% 85%"}
+
+::: {.column width=60%}
+<br><br>
+
+*The first thing to do with data is to [look at them]{.monash-blue2} .... usually means [tabulating]{.monash-blue2} and [plotting]{.monash-blue2} the data in many different ways to [see what’s going on]{.monash-blue2}. With the wide availability of computer packages and graphics nowadays there is no excuse for ducking the labour of this preliminary phase, and it may save some* [**red faces**]{.monash-red2} *later.*
+
+[[Crowder, M. J. & Hand, D. J.  (1990) "Analysis of Repeated Measures"](https://doi.org/10.1201/9781315137421)]{.smallest}
+
+:::
+
+## Initial Data Analysis and Confirmatory Analysis
+
+:::: {.columns}
+
+::: {.column width=50%}
+
+::: {.info}
+Prior to conducting a [confirmatory data analysis]{.monash-black2}, it is important to conduct an [_initial data analysis (IDA)_]{.monash-orange2}. 
+:::
+
+::: {.fragment}
+* [Confirmatory data analysis (CFA)]{.monash-blue2} is focused on statistical inference and includes procedures for:
+  * hypothesis testing, 
+  * predictive modelling,
+  * parameter estimation including uncertainty,
+  * model selection. 
+
+:::  
+:::
+
+::: {.column width=50%}
+
+::: {.fragment}
+
+* [IDA]{.monash-orange2} includes:
+  * describing the data and collection procedures
+  * scrutinise data for errors, outliers, missing observations
+  * check assumptions for confirmatory data analysis
+
+::: {style="font-size: 70%;"}  
+IDA is sometimes called [preliminary data analysis]{.monash-blue2}.
+:::
+
+::: 
+
+::: {.fragment}
+::: {.info}
+IDA is related to exploratory data analysis (EDA) in the sense that it is primarily conducted graphically, and there are few formal tests available. 
+:::
+:::
+
+:::
+::::
+
+## Taxonomies are useful but rarely perfect {.transition-slide .center style="text-align: center;"}
+
+## Objectives of IDA?
+
+::: {.info}
+The [**main objective for IDA**]{.monash-blue2} is to intercept any problems in the data that might adversely affect the confirmatory data analysis. 
+:::
+
+::: {.columns width=60%}
+* The role of **CFA** is to answer the intended question(s) that the data were collected for.
+
+::: {.fragment}
+
+* **_IDA is often unreported_** in the data analysis reports or scientific papers, for various reasons. It might not have been done, or it may have been conducted but there was no space in the paper to report on it. 
+:::
+
+
+:::
+
+
+## IDA in government statistics {background-image="images/vanderloo_and_dejong.gif" background-size="15%" background-position="95% 85%"}
+
+
+The purpose of [data cleaning]{.monash-blue2} is to bring data up to a level of quality such that it can reliably be used for the production of statistical models or statements.
+
+A [statistical value chain]{.monash-blue2} is constructed by defining a number of meaningful intermediate data products, for which a chosen set of quality attributes are well described. 
+
+:::: {.columns}
+::: {.column width=99%}
+<img src="images/stats-value-chain.png"> 
+:::
+::::
+
+[van der Loo & de Jonge (2018) Statistical Data Cleaning with Applications in R]{.smaller}
+
+
+
+## IDA in health and medical data {background-image="images/Huebner.Marianne_v2.jpg" background-size="15%" background-position="95% 5%"}
+
+<img src="images/huebner.png" width="70%">
+
+Huebner et al (2018)'s six steps of IDA: (1) Metadata setup, (2) [Data cleaning]{.monash-orange2}, (3) [Data screening]{.monash-orange2}, (4) [Initial  reporting]{.monash-orange2}, (5) Refining and updating the analysis plan, (6) Reporting IDA in documentation.
+
+## Heed these words
+
+:::: {.columns}
+::: {.column width=50%}
+
+::: {.info}
+IDA prepares an analyst for CFA. One needs to be careful about NOT compromising the inference. 
+:::
+
+How do you compromise inference?
+
+::: {.fragment style="font-size: 70%;"}
+1. Change your inference or questions based on what you find in IDA.
+2. Outlier removal or not. 
+3. Missing value imputation choices.
+4. Treatment of zeros. 
+5. Handling of variable type, categorical temporal.
+6. Lack of multivariate relationship checking, including subsets based on levels of categorical variables.
+7. Choosing variables and observations.
+:::
+
+:::
+::: {.column width=50%}
+
+::: {.fragment}
+How do you avoid these errors?
+
+- Document ALL the IDA, using a reproducible analysis script.
+- Pre-register your CFA plan, so that your CFA questions do not change.
+- Decisions made on outlier removal, variable selection, recoding, sampling, handling of zeros have known affects on results, and are justifiable.
+
+Insure yourself against accusations of [data snooping]{.monash-blue2}, data dredging, data fishing.
+:::
+
+:::
+
+::::
+## Data screening {.transition-slide .center style="text-align: center;"}
+
+
+
+## Data screening 
+
+:::: {.columns}
+
+::: {.column width=50%}
+
+::: {.info}
+It's important to check how the data are [understood by the computer]{.monash-blue2}.
+:::
+
+that is, checking for _data type_: 
+
+* Was the date read in as character?
+* Was a factor read in as numeric?
+:::    
+::: {.column width=50%}
+  
+::: {.fragment}    
+Also important for making inference is to know whether the [data supports making broader conclusions]{.monash-blue2}. How was the data collected? Is it clear what the [population of interest]{.monash-orange2} is, and that the data is a representative sample of this population?
+:::
+
+:::
+::::
+
+## Example: Checking the data type [(1/2)]{.smallest}
+
+:::: {.columns}
+::: {.column width=50%}
+`lecture3-example.xlsx`
+
+<center>
+<img src="images/lecture3-example.png" width = "500px">
+</center>
+
+:::
+::: {.column width=50%}
+
+```{r, echo = TRUE}
+library(readxl)
+library(here)
+df <- read_excel(here("data/lecture3-example.xlsx"))
+df
+```
+
+- What problems are there with the computer's interpretation of [data type]{.monash-orange2}?
+- What [context]{.monash-orange2} specific issues indicate incorrect computer interpretation?
+
+:::
+::::
+
+
+
+
+## Example: Checking the data type [(2/2)]{.smallest}
+
+:::: {.columns}
+::: {.column width=50%}
+
+```{r, echo = TRUE}
+library(lubridate)
+df <- read_excel(here("data/lecture3-example.xlsx"), 
+                 col_types = c("text", 
+                               "date", 
+                               "text",
+                               "numeric"))
+
+df |> 
+  mutate(id = as.factor(id),
+         date = ydm(date)) |>
+  mutate(
+         day = day(date),
+         month = month(date),
+         year = year(date)) 
+```
+
+:::
+::: {.column width=50%}
+
+* `id` is now a `factor` instead of `integer`
+* `day`, `month` and `year` are now extracted from the `date`
+* Is it okay now?
+
+::: {style="font-size: 70%;"}
+::: {.fragment}
+* In the United States, it's common to use the date format MM/DD/YYYY <a class="font_small black" href="https://twitter.com/statsgen/status/1257959369448161281">(gasps)</a>  while the rest of the world commonly uses DD/MM/YYYY or better still YYYY/MM/DD.
+:::
+
+
+::: {.fragment}
+
+* It's highly probable that the dates are 1st-5th March and not 3rd of Jan-May.
+
+:::
+
+::: {.fragment}
+
+* You can validate interpretation of temperature using [weather database](https://www.wunderground.com/history/monthly/us/ny/new-york-city/KLGA/date/2010-3).
+
+:::
+:::
+:::
+::::
+
+
+
+## Example: Specifying the data type with R
+
+:::: {.columns}
+::: {.column width=50%}
+
+* You can robustify your workflow by ensuring you have a check for the expected data type in your code.
+
+```{r, echo = TRUE}
+xlsx_df <- read_excel(here("data/lecture3-example.xlsx"),
+                 col_types = c("text", "date", "text", "numeric")) %>% 
+  mutate(id = as.factor(id), 
+         date = as.character(date),
+         date = as.Date(date, format = "%Y-%d-%m"))
+```
+:::
+::: {.column width=50%}
+
+* `read_csv` has a broader support for `col_types`
+
+
+```{r, echo = TRUE}
+csv_df <- read_csv(here::here("data/lecture3-example.csv"),
+                 col_types = cols(
+                      id = col_factor(),
+                      date = col_date(format = "%m/%d/%y"),
+                      loc = col_character(),
+                      temp = col_double()))
+```
+
+* The checks (or coercions) ensure that even if the data are updated, you can have some confidence that any data type error will be picked up before further analysis.
+
+:::
+::::
+
+
+
+
+
+## Example: Checking the data type with R 
+
+
+You can have a quick glimpse of the data type with:
+
+
+```{r, echo = TRUE}
+dplyr::glimpse(xlsx_df)
+dplyr::glimpse(csv_df)
+```
+
+
+
+## Example: Checking the data type visually
+
+:::: {.columns}
+::: {.column width=50%}
+
+You can also visualise the data type with:
+
+```{r, echo = TRUE}
+library(visdat)
+vis_dat(xlsx_df)
+```
+
+:::
+
+::: {.column width=50%}
+
+```{r, echo = TRUE}
+library(inspectdf)
+inspect_types(xlsx_df) %>% 
+  show_plot()
+```
+:::
+::::
+
+## Data cleaning {.transition-slide .center style="text-align: center;"}
+
+## Data cleaning [(1/2)]{.smallest}
+
+Data quality checks should be one of the first steps in the data analysis to **_assess any problems with the data_**.
+
+These include using [common or domain knowledge]{.monash-blue2} to check if the recorded data have sensible values. 
+
+::: {.fragment}
+
+* Are positive values, e.g. height and weight, recorded as positive values with a plausible range?
+
+:::
+
+::: {.fragment}
+
+* If the data are counts, do the recorded values contain non-integer values?
+
+:::
+
+::: {.fragment}
+
+* For compositional data, do the values add up to 100% (or 1)? If not, is that a measurement error or due to rounding? Or is another variable missing?
+:::
+
+::: {.fragment}
+
+* Does the data contain only positives, ie disease occurrences, or warranty claims? If so, what would the no report group look like? 
+
+:::
+
+
+## Data cleaning [(2/2)]{.smallest}
+
+In addition, numerical or graphical summaries may reveal that there is unwanted structure in the data, for example,
+
+::: {.fragment}
+
+* Does the treatment group have different demographic characteristics to the control group? 
+
+:::
+
+::: {.fragment}
+
+* Are the distributions similar between the or training and test sets?
+
+:::
+
+::: {.fragment}
+
+* Does the distribution of the data imply violations of assumptions for the CFA, such as
+    - non-normality, 
+    - discrete rather real-valued, or
+    - different variance in different domains?
+:::
+
+::: {.fragment}
+
+[Data scrutinizing]{.monash-blue2} is a process that you get better at with practice and have familiarity with the domain area. 
+    
+:::
+
+
+
+## Example: Checking the data quality
+
+:::: {.columns}
+::: {.column width=50%}
+
+```{r}
+#| echo: false
+df2 <- read_csv(here("data/lecture3-example2.csv"),
+    col_types = cols(id = col_factor(),
+                     date = col_date(format = "%m/%d/%y"),
+                     loc = col_character(),
+                     temp = col_double()))
+df2
+```
+
+:::
+::: {.column width=50%}
+
+* Numerical or graphical summaries or even just eye-balling the data helps to uncover some data quality issues.
+* Any issues here?
+
+::: {.fragment}
+<br><br>
+
+* There's a missing value in `loc`.
+* Temperature is in Farenheit for New York but Celsius in Melbourne (you can validate this again using external sources).
+
+:::
+
+:::
+::::
+
+
+
+## Case study: World development indicators [Part 1/3]{.smallest}
+
+:::: {.columns}
+::: {.column width=70%}
+```{r fig.width=8, fig.height=6, out.width="80%"}
+raw_dat <- read_csv(here::here("data/world-development-indicators.csv"), na = "..",
+  n_max = 11935)
+
+country_code_df <- raw_dat %>%
+  distinct(`Country Name`, `Country Code`) %>%
+  rename_all(janitor::make_clean_names) %>%
+  left_join(
+    countrycode::codelist %>% select(iso3c, region, continent),
+    by = c("country_code" = "iso3c")
+  ) %>%
+  arrange(continent, region) %>%
+  mutate(country_code = fct_infreq(country_code))
+# series_code_df <- raw_dat %>%
+#   distinct(`Series Name`, `Series Code`) %>%
+#   rename_all(janitor::make_clean_names) %>%
+#   mutate(series_code = janitor::make_clean_names)
+wdi <- raw_dat %>%
+  gather(key = "Year", value = "value", `1969 [YR1969]`:last_col()) %>%
+  rename_all(janitor::make_clean_names) %>%
+  separate(year, into = c("year", "year_string"), sep = " ") %>%
+  mutate(year = as.integer(year)) %>%
+  select(-contains("name"), -year_string) %>%
+  spread(key = series_code, value = value) %>%
+  mutate(
+    country_code = factor(country_code, levels = country_code_df$country_code)
+  ) %>%
+  rename_all(janitor::make_clean_names)
+
+wdi2017 <- wdi %>% filter(year == 2017)
+
+library(visdat)
+vis_dat(wdi2017)
+```
+
+:::
+::: {.column width=30%}
+
+<br><br>
+- What are the data types?
+- How are missings distributed?
+- Which variables have insufficient values to analyse further?
+
+
+[World Development Indicators (WDI), sourced from the [World Bank Group (2019)](https://databank.worldbank.org/source/world-development-indicators/)]{.smallest}
+:::
+::::
+
+## Case study: World development indicators [Part 2/3]{.smallest}
+
+
+:::: {.columns}
+::: {.column width=50%}
+```{r fig.width=8, fig.height=8, out.width="80%"}
+library(naniar)
+ggplot(wdi2017, 
+       aes(x=en_pop_dnst, y=sp_urb_grow)) + 
+  geom_miss_point(size=4, alpha=0.6) + 
+  scale_color_discrete_qualitative() +
+  theme(aspect.ratio=1)
+```
+:::
+::: {.column width=50%}
+<br>
+<br>
+
+`en_pop_dnst` = Population density (people per sq. km of land area)
+
+`sp_urb_grow` = Urban population growth (annual %)
+
+<br><br>
+
+- How are missings distributed?
+- Is there a relationship between population density and urban growth?
+
+is there a better way to plot this to see relationship?
+:::
+::::
+
+## Case study: World development indicators [Part 3/3]{.smallest}
+
+:::: {.columns}
+::: {.column width=50%}
+```{r fig.width=8, fig.height=8, out.width="80%"}
+library(naniar)
+ggplot(wdi2017, 
+       aes(x=en_pop_dnst, y=sp_urb_grow)) + 
+  geom_miss_point(size=4, alpha=0.6) + 
+  scale_color_discrete_qualitative() +
+  scale_x_log10() +
+  theme(aspect.ratio=1)
+```
+:::
+::: {.column width=50%}
+
+<br>
+<br>
+
+`en_pop_dnst` = Population density (people per sq. km of land area)
+
+`sp_urb_grow` = Urban population growth (annual %)
+
+<br><br>
+- Is there a relationship between population density and urban growth?
+:::
+::::
+
+## Case study: Employment Data in Australia [Part 1/3]{.smallest}
+
+Below is the data from ABS that shows the total number of people employed in a given month from February 1976 to December 2019 using the original time series.
+
+<br>
+
+```{r, cache = T, fig.height = 3.7, fig.width = 7}
+library(readabs)
+# lfs_1 <- read_abs("6202.0", tables = 1)  %>% 
+#  separate_series()
+employed <- read_abs(series_id = "A84423085A") %>% 
+  mutate(month = lubridate::month(date),
+         year = factor(lubridate::year(date))) %>% 
+  filter(year != "2020") %>% 
+  select(date, month, year, value) 
+# Employed total ;  Persons ; original
+# read_abs(series_id = "A84423043C") # seasonally adjusted
+# A84423127L # trend
+#glimpse(employed)
+```
+
+
+```{r, echo = TRUE}
+glimpse(employed)
+```
+
+[Australian Bureau of Statistics, 2020, Labour force, Australia, Table 01. Labour force status by Sex, Australia - Trend, Seasonally adjusted and Original, viewed `r Sys.Date()`](https://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/6202.0Jul%202020?OpenDocument)]{.smallest}
+
+
+
+## Case study:  Employment Data in Australia [Part 2/3]{.smallest}
+
+Do you notice anything?
+
+```{r, fig.height = 6, fig.width = 12}
+employed  %>% 
+  ggplot(aes(month, value, color = year)) + 
+  geom_line() + 
+  ylab("employed ('000)") +
+  scale_x_continuous("month", breaks=seq(1, 12, 1)) +
+  ggtitle("1978 Feb - 2019 Dec") + 
+  scale_color_discrete_qualitative() 
+```
+
+
+--
+
+Why do you think the number of people employed is going up each year?
+
+???
+
+* Australian population is **25.39 million** in 2019
+* 1.5% annual increase in population
+* Vic population is 6.681 million (Sep 2020) - 26%
+* NSW population is 8.166 (Sep 2020) - 32%
+
+
+
+
+## Case study:  Employment Data in Australia [Part 3/3]{.smallest}
+
+.grid[.item[
+```{r, fig.height = 7.5, fig.width = 6}
+df3 <- employed  %>% 
+  dplyr::filter(as.numeric(as.character(year)) > 2008) %>% 
+  mutate(month = factor(month)) 
+ggplot(df3, aes(month, value, group = year)) + 
+  geom_line() + 
+  ylab("employed ('000)") +
+  geom_text(data = filter(df3, month==12) %>% 
+              mutate(month = ifelse(year %in% c(2011, 2013), 14, month)), 
+            aes(label = year), hjust = -0.4, size = 5) +
+  ggtitle("2009 Jan - 2019 Dec") +
+  coord_cartesian(clip = 'off') + 
+  theme(plot.margin = unit(c(1,4,1,1), "lines")) 
+  
+```
+
+]
+.item[
+
+{{content}}
+
+]
+]
+
+--
+
+
+* There's a suspicious change in August numbers from 2014.
+
+```{r}
+df3 %>% 
+  filter(month %in% 8:9) %>% 
+  pivot_wider(year, names_from = month) %>% 
+  mutate(diff = `9` - `8`) %>% 
+  ggplot(aes(year, diff)) + 
+  geom_point() + 
+  geom_line(group = 1) +
+  guides(x = guide_axis(n.dodge = 2)) + 
+  labs(y = "Difference (Sep - Aug)")
+```
+
+* A potential explanation for this is that there was a _change in the survey from 2014_. 
+
+
+Also see https://robjhyndman.com/hyndsight/abs-seasonal-adjustment-2/
+
+
+
+## Data collection is appropriate {.transition-slide .center style="text-align: center;"}
+
+
+
+## Example: Experimental layout and data [Part 1/2]{.smallest}
+
+```{r, eval = FALSE}
+# to generate data that looks like it's non-randomised
+rothamsted.brussels %>% 
+  arrange(trt) %>% 
+  mutate(row = rep(1:6, each = 8),
+         col = rep(1:8, times = 6)) %>% 
+  write_csv("data/lecture3-example3.csv")
+```
+
+
+`lecture3-example3.csv`
+
+```{r, echo = TRUE}
+df3 <- read_csv(here::here("data/lecture3-example3.csv"),
+                col_types = cols(
+                  row = col_factor(),
+                  col = col_factor(),
+                  yield = col_double(),
+                  trt = col_factor(),
+                  block = col_factor()))
+```
+
+```{r, echo = TRUE, render = knitr::normal_print}
+skimr::skim(df3)
+```
+
+
+
+
+
+## Example: Experimental layout and data [Part 2/2]{.smallest}
+
+
+.grid[
+.item[
+```{r}
+ggplot(df3, aes(col, row, fill = trt)) + 
+  geom_tile(color = "black", size = 1) + 
+  coord_equal() +
+  scale_fill_discrete_qualitative()
+
+ggplot(df3, aes(col, row, fill = yield)) + 
+  geom_tile(color = "black", size = 1) + 
+  coord_equal() +
+  scale_fill_continuous_sequential(palette = "Greens 3")
+```
+
+]
+.item[
+
+
+
+* The experiment tests the effects of 9 fertilizer treatments on the yield of brussel sprouts on a field laid out in a rectangular array of 6 rows and 8 columns.  
+
+```{r, fig.width = 8, fig.height = 3}
+df3 %>% 
+  mutate(trt = fct_reorder(trt, yield)) %>% 
+  ggplot(aes(trt, yield)) + 
+  geom_point(size = 4, alpha = 1 / 2) + 
+  guides(x = guide_axis(n.dodge = 2))
+```
+
+* High sulphur and high manure seems to be the best for the yield of brussel sprouts.
+* Any issues here?
+
+]
+]
+
+## Summary of checks for design experiments
+
+- Check if experimental layout given in the data and the description match 
+- In particular, have a check with a plot to see if treatments are <em>randomised</em>. 
+
+## Imputing missing values {.transition-slide .center style="text-align: center;"}
+
+## Example 1: olympic medals 
+
+What's missing
+
+## Example 2: TAO
+
+
+## Validators {.transition-slide .center style="text-align: center;"}
+
+
+## Case study:  Dutch supermarket revenue and cost [Part 1/3]{.smallest}
+
+* Data contains the revenue and cost (in Euros) for 60 supermarkets 
+* Data has been anonymised and distorted
+
+```{r}
+data("SBS2000", package = "validate")
+dplyr::glimpse(SBS2000)
+```
+
+
+
+## Case study: Dutch supermarket revenue and cost [Part 2/3]{.smallest}
+
+* Checking for completeness of records
+
+```{r, echo = TRUE}
+library(validate)
+rules <- validator(
+          is_complete(id),
+          is_complete(id, turnover),
+          is_complete(id, turnover, profit))
+out <- confront(SBS2000, rules)
+summary(out)
+```
+
+
+
+## Case study:  Dutch supermarket revenue and cost [Part 3/3]{.smallest}
+
+* Sanity check derived variables
+
+```{r, echo = TRUE}
+library(validate)
+rules <- validator(
+    total.rev - profit == total.costs,
+    turnover + other.rev == total.rev,
+    profit <= 0.6 * total.rev
+)
+out <- confront(SBS2000, rules)
+summary(out)
+```
+
+
+
+
+## Take away messages
+
+- Check your data:
+    - by validating the variable types</li>
+    - with independent or external sources</li>
+    - by checking the data quality</li>
+- Check if the data collection method has been consistent
+- Check if experimental layout given in the data and the description match
+- Consider if or how data were derived</li>
+
+
+## Hypothesis Testing and Predictive Modeling [Part 3/3]{.smallest}
+
+- Hypothesis testing: usually make assumptions about the distribution of the data, and are formed relative to a parameter.
+- Predictive modeling: form of the relationship, distribution of the errors. 
+
+## Hypothesis testing in R [REVIEW]{.smallest} [Part 1/3]{.smallest}
+
+- State the hypothesis (pair), e.g. $H_o: \mu_1 = \mu_2$ vs $H_a: \mu_1 < \mu_2$. 
+- Test statistic depends on _assumption_ about the distribution, e.g. 
+    - $t$-test will assume that distributions are _normal_, or small departures from if we have a large sample. 
+    - two-sample might assume both groups have the _same variance_ 
+- Steps to complete: 
+    - Compute the test statistic
+    - Measure it against a standard distribution
+    - If it is extreme, $p$-value is small, decision is to reject $H_o$
+    - $p$-value is the probability of observing a value as large as this, or large, assuming $H_o$ is true.
+
+
+## Example: Checking variance and distribution assumption [Part 1/2]{.smallest}
+
+:::: {.columns}
+
+::: {.column width=50%}
+
+```{r sleep, echo = TRUE, fig.width=4, out.width="80%"}
+data(sleep)
+ggplot(sleep, aes(x=group, y=extra)) + 
+  geom_boxplot() +
+  geom_point(colour="orange")
+```
+:::
+
+::: {.column width=50%}
+```{r echo = TRUE, fig.height=4, fig.width=6, out.width="90%"}
+ggplot(sleep, aes(x=extra)) + 
+  geom_density(fill="orange", colour="orange", alpha=0.6) + 
+  geom_rug(outside = TRUE, colour="orange") +
+  coord_cartesian(clip = "off") +
+  facet_wrap(~group)
+```
+
+[Cushny, A. R. and Peebles, A. R. (1905) The action of optical isomers: II hyoscines. The Journal of Physiology 32, 501–510.]{.smallest}
+:::
+::::
+
+## Example: Hypothesis test [Part 2/2]{.smallest}
+
+:::: {.columns}
+
+::: {.column width=50%}
+
+```{r echo = TRUE}
+tt <- with(sleep,
+     t.test(extra[group == 1],
+            extra[group == 2], 
+            paired = TRUE))
+```
+
+```{r echo = TRUE}
+tt$estimate
+```
+
+```{r echo = TRUE}
+tt$null.value
+```
+:::
+::: {.column width=50%}
+
+```{r echo = TRUE, results='asis'}
+tt$statistic
+```
+
+```{r echo = TRUE, results='asis'}
+tt$p.value
+```
+
+```{r echo = TRUE, results='asis'}
+tt$conf.int
+```
+
+[Cushny, A. R. and Peebles, A. R. (1905) The action of optical isomers: II hyoscines. The Journal of Physiology 32, 501–510.]{.smallest}
+
+:::
+::::
+
+## Example:  Checking distribution assumption 
+
+:::: {.columns}
+
+::: {.column width=50%}
+```{r echo=TRUE}
+InsectSprays %>% 
+  ggplot(aes(x=fct_reorder(spray, count), 
+             y=count)) + 
+  geom_jitter(width=0.1, height=0, colour="orange", size=3, alpha=0.8) +
+  xlab("") 
+```
+
+Can you see any violations of normality? Or equal variance?]
+:::
+
+::: {.column width=50%}
+
+```{r echo=TRUE}
+fm1 <- aov(count ~ spray, data = InsectSprays)
+summary(fm1)
+```
+
+Write down the hypothesis being tested. What would the decision be?
+
+
+:::
+::::
+
+
+## Linear models in R [REVIEW Part 1/3]{.smallest}
+
+
+```{r, echo = TRUE}
+library(tidyverse)
+library(broom)
+glimpse(cars)
+```
+
+
+::: {.fragment}
+
+```{r plot-cars, echo = TRUE, fig.height = 3.5}
+ggplot(cars, aes(speed, dist)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE)
+```
+:::
+
+
+## Linear models in R [REVIEW Part 2/3]{.smallest}
+
+* We can fit linear models in R with the `lm` function:
+```r
+lm(dist ~ speed, data = cars)
+```
+is the same as
+```r
+lm(dist ~ 1 + speed, data = cars)
+```
+
+::: {.fragment}
+
+* The above model is mathematically written as 
+$$y_i = \beta_0 + \beta_1 x_i + e_i$$
+where <ul>
+<li>\\(y_i\\) and \\(x_i\\) are the  stopping distance (in ft) and speed (in mph), respectively, of the \\(i\\)-th car;</li> <li>\\(\beta_0\\) and \\(\beta_1\\) are intercept and slope, respectively; and</li>
+<li>\\(e_i\\) is the random error; usually assuming \\(e_i \sim NID(0, \sigma^2)\\). </li>
+</ul>
+
+:::
+
+
+## Linear models in R [REVIEW Part 3/3]{.smallest}
+
+:::: {.columns}
+::: {.column width=20%}
+```{r plot-cars, fig.align="left", fig.height = 2, fig.width=3}
+```
+
+:::
+::: {.column width=80%}
+```{r, echo = TRUE}
+fit <- lm(dist ~ 1 + speed, data = cars)
+tidy(fit)
+glance(fit)
+```
+
+::: {.fragment}
+* *Assuming* this model is appropriate, [the stopping distance increases by about `r scales::comma(coef(fit)[2], 1)` ft for increase in speed by 1 mph]{.monash-blue2}.
+:::
+
+:::
+::::
+
+## Model form [Part 1/2]{.smallest}
+
+:::: {.columns}
+::: {.column width=60%}
+* Say, we are interested in characterising the price of the diamond in terms of its carat.
+```{r plot-diamonds, fig.height = 5, fig.width = 6}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point(alpha = 1/5) + 
+  ggtitle("Diamonds") #+ 
+  #geom_smooth(method = "lm", se = FALSE) + 
+  #ylim(0, max(diamonds$price))
+```
+* Looking at this plot, would you fit a linear model with formula
+
+<center>
+`price ~ 1 + carat`?
+</center>
+
+:::
+::::
+
+
+
+## Model form [Part 1/2]{.smallest}
+
+:::: {.columns}
+::: {.column width=60%}
+* Say, we are interested in characterising the price of the diamond in terms of its carat.
+```{r plot-diamonds-lm, fig.height = 5, fig.width = 6}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point(alpha = 1/5) + 
+  ggtitle("Diamonds") + 
+  geom_smooth(method = "lm", se = FALSE, size = 2) + 
+  ylim(0, max(diamonds$price))
+```
+* Looking at this plot, would you fit a linear model with formula
+
+<center>
+`price ~ 1 + carat`?
+</center>
+
+:::
+::::
+
+
+
+## Model form [Part 2/2]{.smallest}
+
+:::: {.columns}
+::: {.column width=50%}
+```{r plot-diamonds-lm2, fig.height = 5, fig.width = 6}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point(alpha = 1/5) + 
+  ggtitle("Diamonds") + 
+  geom_smooth(method = lm) +
+  geom_smooth(method = lm, 
+              formula = y ~ poly(x, 2),
+              colour = "orange") +
+  ylim(0, max(diamonds$price))
+```
+:::
+::: {.column width=50%}
+* What about
+<center>
+<code style="color: orange">price ~ poly(carat, 2)</code>?
+</center>
+which is the same as fitting:
+
+$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + e_i.$$
+
+::: {.fragment}
+* Should the assumption for error distribution be modified if so?
+:::
+
+::: {.fragment}
+
+* Should we make some transformation before modelling?
+:::
+
+::: {.fragment}
+
+* Are there other candidate models?
+
+:::
+:::
+::::
+
+
+## Model form [Part 2/2]{.smallest}
+
+* Notice that there was _**no formal statistical inference**_ when trying to determine an appropriate model form.
+
+::: {.fragment}
+* The goal of the main analysis is to characterise the price of a diamond by its carat. This may involve:
+   * formal inference for model selection;
+   * justification of the selected "final" model; and
+   * fitting the final model.
+:::
+
+::: {.fragment}
+
+* There may be in fact many, many models considered but discarded at the IDA stage. 
+:::
+
+
+* These discarded models are hardly ever reported. Consequently, majority of reported statistics give a distorted view and it's important to remind yourself what might _**not**_ be reported.
+
+
+
+
+## Model selection
+
+
+::: {.column width=70%}
+All models are _approximate_ and _tentative_; approximate in the sense that no model is exactly true and tentative in that they may be modified in the light of further data
+
+&mdash;Chatfield (1985) 
+
+
+::: {.fragment}
+
+
+
+All models are wrong but some are useful
+
+&mdash;George Box
+
+:::
+:::
+
+## Model diagnostics {.transition-slide .center style="text-align: center;"}
+
+
+## Residuals [1/2]{.smallest}
+
+:::: {.columns}
+::: {.column width=70%}
+```{r plot-diamonds-resid, fig.height = 8, fig.width = 10, out.width="80%"}
+library(broom)
+d_fit1 <- lm(price ~ carat, data=diamonds)
+d_fit2 <- lm(price ~ poly(carat, 2), data=diamonds)
+d_fit3 <- lm(price ~ poly(carat, 3), data=diamonds)
+d_fit4 <- lm(price ~ poly(carat, 4), data=diamonds)
+
+d_res1 <- augment(d_fit1, diamonds)
+d_res2 <- augment(d_fit2, diamonds)
+d_res3 <- augment(d_fit3, diamonds)
+d_res4 <- augment(d_fit4, diamonds)
+ 
+r1 <- ggplot(d_res1, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res1[sample(1:nrow(d_res1), 5000),], method = "loess", colour="orange", se=F) +
+  scale_y_continuous(".resid", breaks=seq(-20000, 10000, 10000), labels=seq(-20, 10, 10)) +
+  ggtitle("Linear")  
+r2 <- ggplot(d_res2, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res2[sample(1:nrow(d_res2), 5000),], method = "loess", colour="orange", se=F) +
+  scale_y_continuous(".resid", breaks=seq(-20000, 10000, 10000), labels=seq(-20, 10, 10)) +
+  ggtitle("Quadratic") 
+r3 <- ggplot(d_res3, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res3[sample(1:nrow(d_res3), 5000),], method = "loess", colour="orange", se=F) +
+  scale_y_continuous(".resid", breaks=seq(-10000, 30000, 10000), labels=seq(-10, 30, 10)) +
+  ggtitle("Cubic") 
+r4 <- ggplot(d_res4, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res4[sample(1:nrow(d_res4), 5000),], method = "loess", colour="orange", se=F) +
+  scale_y_continuous(".resid", breaks=seq(-10000, 10000, 10000), labels=seq(-10, 10, 10)) +
+  ggtitle("Quartic") 
+
+r1 + r2 + r3 + r4 + plot_layout(ncol=2)
+```
+:::
+::: {.columns width=30%}
+<br>
+
+Residual = Observed - Fitted
+
+<br><br>
+Residual plot: Plot the residual against explanatory variable (or Fitted value)
+
+[Best]{.monash-orange2} residual plot has not [obvious pattern]{.monash-orange2}.
+:::
+::::
+
+
+## Alternative approach: linearise relationship
+
+:::: {.columns}
+::: {.column width=50%}
+```{r plot-diamonds-lm3, fig.height = 5, fig.width = 6}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point(alpha = 1/5) + 
+  ggtitle("Diamonds") + 
+  geom_smooth(method = lm) +
+  scale_x_sqrt() +
+  scale_y_sqrt() + ggtitle("Transform both x, y by sq root")
+```
+:::
+::: {.column width=50%}
+```{r plot-diamonds-lm4, fig.height = 5, fig.width = 6}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point(alpha = 1/5) + 
+  ggtitle("Diamonds") + 
+  geom_smooth(method = lm) +
+  scale_x_log10() +
+  scale_y_log10() + ggtitle("Transform both x, y by log10")
+```
+:::
+::::
+
+The [log transformation of both variables]{.monash-orange2} linearises the relationship, so that a simple linear model can be used, and also corrects the heteroskedasticity. 
+
+
+## Residuals [2/2]{.smallest}
+
+:::: {.columns}
+::: {.column width=70%}
+```{r plot-diamonds-resid2, fig.height = 8, fig.width = 10, out.width="80%"}
+library(broom)
+diamonds <- diamonds %>%
+  mutate(sqprice = sqrt(price),
+         sqcarat = sqrt(carat),
+         lprice = log10(price),
+         lcarat = log10(carat))
+d_fit5 <- lm(sqprice ~ sqcarat, data=diamonds)
+d_fit6 <- lm(lprice ~ lcarat, data=diamonds)
+
+d_res5 <- augment(d_fit5, diamonds)
+d_res6 <- augment(d_fit6, diamonds)
+
+r5 <- ggplot(d_res5, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res5[sample(1:nrow(d_res5), 5000),], method = "loess", colour="orange", se=F) +
+  ggtitle("Square root")  
+r6 <- ggplot(d_res6, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res6[sample(1:nrow(d_res6), 5000),], method = "loess", colour="orange", se=F) +
+  ggtitle("Log10") 
+r7 <- ggplot(d_res5, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res5[sample(1:nrow(d_res5), 5000),], method = "loess", colour="orange", se=F) +
+  xlim(c(0, 3)) +
+  ggtitle("Square root")  
+r8 <- ggplot(d_res6, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res6[sample(1:nrow(d_res6), 5000),], method = "loess", colour="orange", se=F) +
+  xlim(c(0, 3)) +
+  ggtitle("Log10") 
+
+r5 + r6 + r7 + r8 + plot_layout(ncol=2)
+```
+:::
+::: {.column width=30%}
+<br>
+
+Which has the best residual plot? 
+
+:::
+::::
+
+## {.center style="text-align: center;"}
+
+
+"Teaching of Statistics should provide a more balanced blend of IDA and inference" [Chatfield (1985)]{.smallest}
+
+
+::: {.fragment}
+
+Yet there is still very little emphasis of it in teaching and also at times in practice.
+
+:::
+
+::: {.fragment}
+
+<br>
+
+So don't forget to do IDA!
+
+:::
+
+## Take away messages
+
+:::: {.columns}
+::: {.column width=90%}
+
+- Initial data analysis</i></b> (IDA) is a model-focused exploration to support a confirmatory analysis with:
+    -  data description and collection
+    -  data quality checking, and
+    -  checking assumptions
+    -  model fit</i></b> without any formal statistical inference.
+- IDA may never see the limelight BUT it forms the foundation that the main analysis is built upon. Do it well!
+:::
+::::
+
+## Further reading
+
+- Huebner et al (2018) [A Contemporary Conceptual Framework for Initial Data Analysis](https://muse.jhu.edu/article/793379/pdf)
+- Huebner et al (2020) [Hidden analyses](https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-020-00942-y)
+- Chatfield (1985) The Initial Examination of Data. *Journal of the Royal Statistical Society. Series A (General)* **148** <Br>
+- Cox & Snell (1981) Applied Statistics. *London: Chapman and Hall.*
+- van der Loo and de Jonge (2018). Statistical Data Cleaning with Applications in R. John Wiley and Sons Ltd.
+- Hyndman (2014) [Explaining the ABS unemployment fluctuations](https://robjhyndman.com/hyndsight/abs-seasonal-adjustment-2/)
+

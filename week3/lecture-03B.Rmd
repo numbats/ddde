@@ -1,0 +1,600 @@
+---
+title: "ETC5521: Exploratory Data Analysis"
+subtitle: "Initial data analysis and model diagnostics"
+author: "Di Cook"
+email: "ETC5521.Clayton-x@monash.edu"
+date: "Week 3 - Session 2"
+length: "50 minutes"
+titlebgimg: "images/bg-12.png"
+output:
+  xaringan::moon_reader:
+    css:
+      - ninjutsu 
+      - "assets/font-awesome-all.css"
+      - "assets/tachyons-addon.css"
+      - "assets/animate.css"
+      - "assets/fira-code.css"
+      - "assets/boxes.css"
+      - "assets/table.css"
+      - "assets/styles.css"
+      - "assets/monash-brand.css"
+      - "assets/monash-fonts.css"
+      - "assets/slide-types.css"
+    self_contained: false 
+    seal: false 
+    chakra: 'lib/remark-latest.min.js'
+    lib_dir: lib
+    mathjax: "lib/mathjax-local/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    nature:
+      highlightStyle: magula
+      highlightLanguage: r 
+      highlightLines: true
+      highlightSpans: false 
+      countIncrementalSlides: false
+      slideNumberFormat: '%current%/%total%'
+      navigation:
+        scroll: false 
+        touch: true
+        click: false
+      ratio: '16:9'
+---
+
+```{r, include = FALSE}
+current_file <- knitr::current_input()
+basename <- gsub(".Rmd$", "", current_file)
+```
+```{r, include = FALSE}
+library(tidyverse)
+library(colorspace)
+library(patchwork)
+options(width = 200)
+knitr::opts_chunk$set(
+  fig.path = sprintf("images/%s/", basename),
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  fig.retina = 3,
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  cache = FALSE,
+  cache.path = "cache/"
+)
+theme_set(ggthemes::theme_gdocs(base_size = 18) +
+            theme(plot.background = element_blank(), 
+                  axis.line.y = element_line(color = "black", linetype = "solid"),
+                  plot.title.position = "plot"
+                  ) )
+```
+
+
+```{r titleslide, child="assets/titleslide.Rmd"}
+```
+
+---
+# .circle.bg-black.white[2] Hypothesis Testing and Predictive Modeling.f4[Part 3/3]
+
+.w-60[
+- Hypothesis testing: usually make assumptions about the distribution of the data, and are formed relative to a parameter.
+- Predictive modeling: form of the relationship, distribution of the errors. 
+]
+
+---
+
+# Hypothesis testing in R .f4[REVIEW] .f5[Part 1/3]
+
+.w-90[
+- State the hypothesis (pair), e.g. $H_o: \mu_1 = \mu_2$ vs $H_a: \mu_1 < \mu_2$. 
+- Test statistic depends on _assumption_ about the distribution, e.g. 
+    - $t$-test will assume that distributions are _normal_, or small departures from if we have a large sample. 
+    - two-sample might assume both groups have the _same variance_ 
+- Steps to complete: 
+    - Compute the test statistic
+    - Measure it against a standard distribution
+    - If it is extreme, $p$-value is small, decision is to reject $H_o$
+    - $p$-value is the probability of observing a value as large as this, or large, assuming $H_o$ is true.
+]
+
+---
+# .blue[Example] .circle.bg-blue.white[1] Checking variance and distribution assumption .f4[Part 1/2]
+
+.pull-left[
+.f4[
+```{r sleep, echo = TRUE, fig.width=4, out.width="80%"}
+data(sleep)
+ggplot(sleep, aes(x=group, y=extra)) + 
+  geom_boxplot() +
+  geom_point(colour="orange")
+```
+]
+]
+.pull-right[
+```{r echo = TRUE, fig.height=4, fig.width=6, out.width="90%"}
+ggplot(sleep, aes(x=extra)) + 
+  geom_density(fill="orange", colour="orange", alpha=0.6) + 
+  geom_rug(outside = TRUE, colour="orange") +
+  coord_cartesian(clip = "off") +
+  facet_wrap(~group)
+```
+]
+.footnote[Cushny, A. R. and Peebles, A. R. (1905) The action of optical isomers: II hyoscines. The Journal of Physiology 32, 501–510.]
+
+---
+# .blue[Example] .circle.bg-blue.white[1] Hypothesis test .f4[Part 2/2]
+
+.pull-left[
+```{r echo = TRUE}
+tt <- with(sleep,
+     t.test(extra[group == 1],
+            extra[group == 2], 
+            paired = TRUE))
+```
+
+```{r echo = TRUE}
+tt$estimate
+```
+
+```{r echo = TRUE}
+tt$null.value
+```
+]
+
+.pull-right[
+```{r echo = TRUE, results='asis'}
+tt$statistic
+```
+
+```{r echo = TRUE, results='asis'}
+tt$p.value
+```
+
+```{r echo = TRUE, results='asis'}
+tt$conf.int
+```
+]
+.footnote[Cushny, A. R. and Peebles, A. R. (1905) The action of optical isomers: II hyoscines. The Journal of Physiology 32, 501–510.]
+
+---
+# .blue[Example] .circle.bg-blue.white[2] Checking distribution assumption 
+
+.pull-left[
+```{r echo=TRUE}
+InsectSprays %>% 
+  ggplot(aes(x=fct_reorder(spray, count), 
+             y=count)) + 
+  geom_jitter(width=0.1, height=0, colour="orange", size=3, alpha=0.8) +
+  xlab("") 
+```
+
+.f4[Can you see any violations of normality? Or equal variance?]
+
+]
+
+.pull-right[
+
+```{r echo=TRUE}
+fm1 <- aov(count ~ spray, data = InsectSprays)
+summary(fm1)
+```
+
+.f4[Write down the hypothesis being tested. What would the decision be?]
+]
+
+---
+
+
+# Linear models in R .f4[REVIEW] .f5[Part 1/3]
+
+.f4[
+```{r, echo = TRUE}
+library(tidyverse)
+library(broom)
+glimpse(cars)
+```
+]
+--
+
+.f4[
+```{r plot-cars, echo = TRUE, fig.height = 3.5}
+ggplot(cars, aes(speed, dist)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE)
+```
+]
+
+
+---
+
+# Linear models in R .f4[REVIEW] .f5[Part 2/3]
+
+* We can fit linear models in R with the `lm` function:
+```r
+lm(dist ~ speed, data = cars)
+```
+is the same as
+```r
+lm(dist ~ 1 + speed, data = cars)
+```
+
+--
+
+* The above model is mathematically written as 
+$$y_i = \beta_0 + \beta_1 x_i + e_i$$
+where <ul>
+<li>\\(y_i\\) and \\(x_i\\) are the  stopping distance (in ft) and speed (in mph), respectively, of the \\(i\\)-th car;</li> <li>\\(\beta_0\\) and \\(\beta_1\\) are intercept and slope, respectively; and</li>
+<li>\\(e_i\\) is the random error; usually assuming \\(e_i \sim NID(0, \sigma^2)\\). </li>
+</ul>
+
+
+---
+
+# Linear models in R .f4[REVIEW] .f5[Part 3/3]
+
+.flex[
+.w-20[
+```{r plot-cars, fig.align="left", fig.height = 2, fig.width=3}
+```
+
+]
+.w-80[
+```{r, echo = TRUE}
+fit <- lm(dist ~ 1 + speed, data = cars)
+tidy(fit)
+glance(fit)
+```
+]
+
+]
+
+
+
+
+--
+
+.w-80[
+* *Assuming* this model is appropriate, .monash-blue[the stopping distance increases by about `r scales::comma(coef(fit)[2], 1)` ft for increase in speed by 1 mph.]
+]
+
+
+---
+
+count: false
+
+# .circle.bg-black.white[2] Model form .f4[Part 1/2]
+
+.w-60[
+* Say, we are interested in characterising the price of the diamond in terms of its carat.
+```{r plot-diamonds, fig.height = 5, fig.width = 6}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point(alpha = 1/5) + 
+  ggtitle("Diamonds") #+ 
+  #geom_smooth(method = "lm", se = FALSE) + 
+  #ylim(0, max(diamonds$price))
+```
+* Looking at this plot, would you fit a linear model with formula
+
+.center[
+`price ~ 1 + carat`?
+]
+
+]
+
+---
+
+# .circle.bg-black.white[2] Model form .f4[Part 1/2]
+
+.w-60[
+* Say, we are interested in characterising the price of the diamond in terms of its carat.
+```{r plot-diamonds-lm, fig.height = 5, fig.width = 6}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point(alpha = 1/5) + 
+  ggtitle("Diamonds") + 
+  geom_smooth(method = "lm", se = FALSE, size = 2) + 
+  ylim(0, max(diamonds$price))
+```
+* Looking at this plot, would you fit a linear model with formula
+
+.center[
+`price ~ 1 + carat`?
+]
+
+]
+
+---
+
+# .circle.bg-black.white[2] Model form .f4[Part 2/2]
+
+.flex[
+.w-50[
+```{r plot-diamonds-lm2, fig.height = 5, fig.width = 6}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point(alpha = 1/5) + 
+  ggtitle("Diamonds") + 
+  geom_smooth(method = lm) +
+  geom_smooth(method = lm, 
+              formula = y ~ poly(x, 2),
+              colour = "orange") +
+  ylim(0, max(diamonds$price))
+```
+]
+.w-50[
+* What about
+<center>
+<code style="color: orange">price ~ poly(carat, 2)</code>?
+</center>
+which is the same as fitting:
+
+$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + e_i.$$
+
+{{content}}
+]
+]
+
+
+--
+
+* Should the assumption for error distribution be modified if so?
+{{content}}
+--
+
+
+* Should we make some transformation before modelling?
+{{content}}
+--
+
+
+
+* Are there other candidate models?
+
+
+---
+
+# .circle.bg-black.white[2] Model form .f4[Part 2/2]
+
+* Notice that there was _**no formal statistical inference**_ when trying to determine an appropriate model form.
+--
+
+
+* The goal of the main analysis is to characterise the price of a diamond by its carat. This may involve:
+   * formal inference for model selection;
+   * justification of the selected "final" model; and
+   * fitting the final model.
+--
+
+
+* There may be in fact many, many models considered but discarded at the IDA stage. 
+--
+
+
+* These discarded models are hardly ever reported. Consequently, majority of reported statistics give a distorted view and it's important to remind yourself what might _**not**_ be reported.
+
+
+---
+
+# Model selection
+
+
+.blockquote.w-70[
+All models are _approximate_ and _tentative_; approximate in the sense that no model is exactly true and tentative in that they may be modified in the light of further data
+
+.pull-right[&mdash;Chatfield (1985)] 
+
+]
+
+<br><br>
+
+--
+
+.blockquote[
+All models are wrong but some are useful
+
+.pull-right[&mdash;George Box]
+
+]
+
+---
+class: transition
+
+# Model diagnostics
+
+---
+# Residuals .f4[1/2]
+
+.flex[
+.w-70[
+```{r plot-diamonds-resid, fig.height = 8, fig.width = 10, out.width="80%"}
+library(broom)
+d_fit1 <- lm(price ~ carat, data=diamonds)
+d_fit2 <- lm(price ~ poly(carat, 2), data=diamonds)
+d_fit3 <- lm(price ~ poly(carat, 3), data=diamonds)
+d_fit4 <- lm(price ~ poly(carat, 4), data=diamonds)
+
+d_res1 <- augment(d_fit1, diamonds)
+d_res2 <- augment(d_fit2, diamonds)
+d_res3 <- augment(d_fit3, diamonds)
+d_res4 <- augment(d_fit4, diamonds)
+ 
+r1 <- ggplot(d_res1, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res1[sample(1:nrow(d_res1), 5000),], method = "loess", colour="orange", se=F) +
+  scale_y_continuous(".resid", breaks=seq(-20000, 10000, 10000), labels=seq(-20, 10, 10)) +
+  ggtitle("Linear")  
+r2 <- ggplot(d_res2, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res2[sample(1:nrow(d_res2), 5000),], method = "loess", colour="orange", se=F) +
+  scale_y_continuous(".resid", breaks=seq(-20000, 10000, 10000), labels=seq(-20, 10, 10)) +
+  ggtitle("Quadratic") 
+r3 <- ggplot(d_res3, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res3[sample(1:nrow(d_res3), 5000),], method = "loess", colour="orange", se=F) +
+  scale_y_continuous(".resid", breaks=seq(-10000, 30000, 10000), labels=seq(-10, 30, 10)) +
+  ggtitle("Cubic") 
+r4 <- ggplot(d_res4, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res4[sample(1:nrow(d_res4), 5000),], method = "loess", colour="orange", se=F) +
+  scale_y_continuous(".resid", breaks=seq(-10000, 10000, 10000), labels=seq(-10, 10, 10)) +
+  ggtitle("Quartic") 
+
+r1 + r2 + r3 + r4 + plot_layout(ncol=2)
+```
+]
+.w-30[
+<br>
+
+Residual = Observed - Fitted
+
+<br><br>
+Residual plot: Plot the residual against explanatory variable (or Fitted value)
+
+.monash-orange2[Best] residual plot has not .monash-orange2[obvious pattern].
+]
+]
+
+---
+# Alternative approach: linearise relationship
+
+.flex[
+.w-50[
+```{r plot-diamonds-lm3, fig.height = 5, fig.width = 6}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point(alpha = 1/5) + 
+  ggtitle("Diamonds") + 
+  geom_smooth(method = lm) +
+  scale_x_sqrt() +
+  scale_y_sqrt() + ggtitle("Transform both x, y by sq root")
+```
+]
+.w-50[
+```{r plot-diamonds-lm4, fig.height = 5, fig.width = 6}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point(alpha = 1/5) + 
+  ggtitle("Diamonds") + 
+  geom_smooth(method = lm) +
+  scale_x_log10() +
+  scale_y_log10() + ggtitle("Transform both x, y by log10")
+```
+]]
+
+The .monash-orange2[log transformation of both variables] linearises the relationship, so that a simple linear model can be used, and also corrects the heteroskedasticity. 
+
+---
+# Residuals .f4[2/2]
+
+.flex[
+.w-70[
+```{r plot-diamonds-resid2, fig.height = 8, fig.width = 10, out.width="80%"}
+library(broom)
+diamonds <- diamonds %>%
+  mutate(sqprice = sqrt(price),
+         sqcarat = sqrt(carat),
+         lprice = log10(price),
+         lcarat = log10(carat))
+d_fit5 <- lm(sqprice ~ sqcarat, data=diamonds)
+d_fit6 <- lm(lprice ~ lcarat, data=diamonds)
+
+d_res5 <- augment(d_fit5, diamonds)
+d_res6 <- augment(d_fit6, diamonds)
+
+r5 <- ggplot(d_res5, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res5[sample(1:nrow(d_res5), 5000),], method = "loess", colour="orange", se=F) +
+  ggtitle("Square root")  
+r6 <- ggplot(d_res6, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res6[sample(1:nrow(d_res6), 5000),], method = "loess", colour="orange", se=F) +
+  ggtitle("Log10") 
+r7 <- ggplot(d_res5, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res5[sample(1:nrow(d_res5), 5000),], method = "loess", colour="orange", se=F) +
+  xlim(c(0, 3)) +
+  ggtitle("Square root")  
+r8 <- ggplot(d_res6, aes(carat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 1/5) +
+  geom_smooth(data=d_res6[sample(1:nrow(d_res6), 5000),], method = "loess", colour="orange", se=F) +
+  xlim(c(0, 3)) +
+  ggtitle("Log10") 
+
+r5 + r6 + r7 + r8 + plot_layout(ncol=2)
+```
+]
+.w-30[
+<br>
+
+Which has the best residual plot? 
+
+]
+]
+
+
+---
+
+class: middle center
+
+.blockquote[
+"Teaching of Statistics should provide a more balanced blend of IDA and inference"
+
+.pull-right[Chatfield (1985)]
+]
+
+
+--
+
+<br><br>
+
+Yet there is still very little emphasis of it in teaching and also at times in practice.
+
+--
+
+<br>
+
+So don't forget to do IDA!
+
+---
+
+# Take away messages
+
+.flex[
+.w-90.f2[
+
+
+
+<ul class="fa-ul">
+{{content}}
+</ul>
+
+
+]
+]
+
+--
+
+  <li><span class="fa-li"><i class="fas fa-paper-plane"></i></span><b><i>Initial data analysis</i></b> (IDA) is a model-focused exploration to support a confirmatory analysis with:
+  <ul>
+  <li><b><i> data description and collection</i></b> </li>
+  <li><b><i> data quality checking, and</i></b></li>
+  <li><b><i> checking assumptions</i></b> </li>
+  <li><b><i> model fit</i></b> without any formal statistical inference.</li>
+  </ul>
+</li>
+
+{{content}}
+
+--
+
+<li><span class="fa-li"><i class="fas fa-paper-plane"></i></span>IDA may never see the limelight BUT it forms the foundation that the main analysis is built upon. Do it well!</li>
+
+
+---
+
+```{r endslide, child="assets/endslide.Rmd"}
+```
+
+<br><br>Lecture materials originally developed by Dr Emi Tanaka

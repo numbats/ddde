@@ -4,10 +4,12 @@ title: "ETC5521 Resources"
 
 # Books and articles
 
-# Resources
-
 - Cook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, [Introduction](http://ggobi.org/book/intro.pdf)
 - Donoho (2017) [50 Years of Data Science](https://www.tandfonline.com/doi/full/10.1080/10618600.2017.1384734)
 - Staniak and Biecek (2019) [The Landscape of R Packages for Automated Exploratory Data Analysis](https://arxiv.org/pdf/1904.02101.pdf)
-
-# Software
+- Huebner et al (2018) [A Contemporary Conceptual Framework for Initial Data Analysis](https://muse.jhu.edu/article/793379/pdf)
+- Huebner et al (2020) [Hidden analyses](https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-020-00942-y)
+- Chatfield (1985) The Initial Examination of Data. *Journal of the Royal Statistical Society. Series A (General)* **148** <Br>
+- Cox & Snell (1981) Applied Statistics. *London: Chapman and Hall.*
+- van der Loo and de Jonge (2018). Statistical Data Cleaning with Applications in R. John Wiley and Sons Ltd.
+- Hyndman (2014) [Explaining the ABS unemployment fluctuations](https://robjhyndman.com/hyndsight/abs-seasonal-adjustment-2/)

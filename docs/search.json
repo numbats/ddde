@@ -977,7 +977,7 @@
     "href": "resources.html",
     "title": "ETC5521 Resources",
     "section": "",
-    "text": "Books and articles\n\n\nResources\n\nCook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, Introduction\nDonoho (2017) 50 Years of Data Science\nStaniak and Biecek (2019) The Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\nSoftware"
+    "text": "Books and articles\n\nCook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, Introduction\nDonoho (2017) 50 Years of Data Science\nStaniak and Biecek (2019) The Landscape of R Packages for Automated Exploratory Data Analysis\nHuebner et al (2018) A Contemporary Conceptual Framework for Initial Data Analysis\nHuebner et al (2020) Hidden analyses\nChatfield (1985) The Initial Examination of Data. Journal of the Royal Statistical Society. Series A (General) 148 \nCox & Snell (1981) Applied Statistics. London: Chapman and Hall.\nvan der Loo and de Jonge (2018). Statistical Data Cleaning with Applications in R. John Wiley and Sons Ltd.\nHyndman (2014) Explaining the ABS unemployment fluctuations"
   },
   {
     "objectID": "index.html",
@@ -1482,5 +1482,726 @@
     "title": "Week 8: Going beyond two variables, exploring high dimensions",
     "section": "Assignments",
     "text": "Assignments\n\nAssignment 3 is due on Monday 16 September."
+  },
+  {
+    "objectID": "week3/slides.html#initial-data-analysis-and-confirmatory-analysis",
+    "href": "week3/slides.html#initial-data-analysis-and-confirmatory-analysis",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Initial Data Analysis and Confirmatory Analysis",
+    "text": "Initial Data Analysis and Confirmatory Analysis\n\n\n\nPrior to conducting a confirmatory data analysis, it is important to conduct an initial data analysis (IDA).\n\n\n\nConfirmatory data analysis (CFA) is focused on statistical inference and includes procedures for:\n\nhypothesis testing,\npredictive modelling,\nparameter estimation including uncertainty,\nmodel selection.\n\n\n\n\n\n\nIDA includes:\n\ndescribing the data and collection procedures\nscrutinise data for errors, outliers, missing observations\ncheck assumptions for confirmatory data analysis\n\n\n\nIDA is sometimes called preliminary data analysis.\n\n\n\n\nIDA is related to exploratory data analysis (EDA) in the sense that it is primarily conducted graphically, and there are few formal tests available."
+  },
+  {
+    "objectID": "week3/slides.html#taxonomies-are-useful-but-rarely-perfect",
+    "href": "week3/slides.html#taxonomies-are-useful-but-rarely-perfect",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Taxonomies are useful but rarely perfect",
+    "text": "Taxonomies are useful but rarely perfect"
+  },
+  {
+    "objectID": "week3/slides.html#what-is-ida",
+    "href": "week3/slides.html#what-is-ida",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What is IDA?",
+    "text": "What is IDA?\n\nThe main objective for IDA is to intercept any problems in the data that might adversely affect the confirmatory data analysis.\n\n\n\nIDA differs from the main (confirmatory) analysis (i.e. usually fitting the model, conducting significance tests, making inferences or predictions).\n\n\nIDA is often unreported in the data analysis reports or scientific papers, for various reasons. It might not have been done, or it may have been conducted but there was no space in the paper to report on it.\n\n\n\nThe role of the main (confirmatory) analysis is to answer the intended question(s) that the data were collected for."
+  },
+  {
+    "objectID": "week3/slides.html#where-ida-fits",
+    "href": "week3/slides.html#where-ida-fits",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Where IDA fits",
+    "text": "Where IDA fits\n\n\n\nHuebner et al (2018)’s six steps of IDA: (1) Metadata setup, (2) Data cleaning, (3) Data screening, (4) Initial reporting, (5) Refining and updating the analysis plan, (6) Reporting IDA in documentation.\nHealth and medical research perspective"
+  },
+  {
+    "objectID": "week3/slides.html#where-ida-fits-1",
+    "href": "week3/slides.html#where-ida-fits-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Where IDA fits",
+    "text": "Where IDA fits\n\n\n\nHuebner et al (2018)’s six steps of IDA: (1) Metadata setup, (2) Data cleaning, (3) Data screening, (4) Initial reporting, (5) Refining and updating the analysis plan, (6) Reporting IDA in documentation.\nHealth and medical research perspective"
+  },
+  {
+    "objectID": "week3/slides.html#next-well-see-some-illustrative-examples-and-cases.",
+    "href": "week3/slides.html#next-well-see-some-illustrative-examples-and-cases.",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Next we’ll see some illustrative examples and cases.",
+    "text": "Next we’ll see some illustrative examples and cases.\n\nNote: that there are a variety of ways to do IDA & EDA and different procedures might produce the same decision or conclusion. You don’t need to prescribe to what we show you, but following the principles described is important."
+  },
+  {
+    "objectID": "week3/slides.html#data-screening-part-13",
+    "href": "week3/slides.html#data-screening-part-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data screening Part 1/3",
+    "text": "Data screening Part 1/3\n\nAside from checking the data structure or data quality, it’s important to check how the data are understood by the computer, i.e. checking for data type is also important. E.g.,\n\nWas the date read in as character?\nWas a factor read in as numeric?\n\nAlso important for making inference is to know whether the data supports making broader conclusions. How was the data collected? Is it clear what the population of interest is, and that the data is a representative sample?"
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-part-12",
+    "href": "week3/slides.html#example-checking-the-data-type-part-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type Part 1/2",
+    "text": "Example: Checking the data type Part 1/2\n\n\nlecture3-example.xlsx\n\n\n\n\n\nlibrary(readxl)\nlibrary(here)\ndf &lt;- read_excel(here(\"data/lecture3-example.xlsx\"))\ndf\n\n# A tibble: 5 × 4\n     id date                loc       temp\n  &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;    &lt;dbl&gt;\n1     1 2010-01-03 00:00:00 New York  42  \n2     2 2010-02-03 00:00:00 New York  41.4\n3     3 2010-03-03 00:00:00 New York  38.5\n4     4 2010-04-03 00:00:00 New York  41.1\n5     5 2010-05-03 00:00:00 New York  39.8\n\n\nAny issues here?"
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-part-22",
+    "href": "week3/slides.html#example-checking-the-data-type-part-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type Part 2/2",
+    "text": "Example: Checking the data type Part 2/2\n\n\n\nlibrary(lubridate)\ndf &lt;- read_excel(here(\"data/lecture3-example.xlsx\"), \n                 col_types = c(\"text\", \n                               \"date\", \n                               \"text\",\n                               \"numeric\"))\n\ndf |&gt; \n  mutate(id = as.factor(id),\n         date = ydm(date)) |&gt;\n  mutate(\n         day = day(date),\n         month = month(date),\n         year = year(date)) \n\n# A tibble: 5 × 7\n  id    date       loc       temp   day month  year\n  &lt;fct&gt; &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 1     2010-03-01 New York  42       1     3  2010\n2 2     2010-03-02 New York  41.4     2     3  2010\n3 3     2010-03-03 New York  38.5     3     3  2010\n4 4     2010-03-04 New York  41.1     4     3  2010\n5 5     2010-03-05 New York  39.8     5     3  2010\n\n\n\n\nid is now a factor instead of integer\nday, month and year are now extracted from the date\nIs it okay now?\n\n\n\n\nIn the United States, it’s common to use the date format MM/DD/YYYY (gasps) while the rest of the world commonly uses DD/MM/YYYY or better still YYYY/MM/DD.\n\n\n\n\nIt’s highly probable that the dates are 1st-5th March and not 3rd of Jan-May.\n\n\n\n\nYou can validate interpretation of temperature using weather database."
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-with-r-part-13",
+    "href": "week3/slides.html#example-checking-the-data-type-with-r-part-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type with R Part 1/3",
+    "text": "Example: Checking the data type with R Part 1/3\n\nYou can robustify your workflow by ensuring you have a check for the expected data type in your code.\n\n::: {style = “font-size: 80%;”}\n\nxlsx_df &lt;- read_excel(here(\"data/lecture3-example.xlsx\"),\n                 col_types = c(\"text\", \"date\", \"text\", \"numeric\")) %&gt;% \n  mutate(id = as.factor(id), \n         date = as.character(date),\n         date = as.Date(date, format = \"%Y-%d-%m\"))\n\n:::\n\nread_csv has a broader support for col_types\n\n::: {style = “font-size: 80%;”}\n\ncsv_df &lt;- read_csv(here::here(\"data/lecture3-example.csv\"),\n                 col_types = cols(\n                      id = col_factor(),\n                      date = col_date(format = \"%m/%d/%y\"),\n                      loc = col_character(),\n                      temp = col_double()))\n\n:::\n\nThe checks (or coercions) ensure that even if the data are updated, you can have some confidence that any data type error will be picked up before further analysis."
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-with-r-part-23",
+    "href": "week3/slides.html#example-checking-the-data-type-with-r-part-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type with R Part 2/3",
+    "text": "Example: Checking the data type with R Part 2/3\nYou can have a quick glimpse of the data type with:\n::: {style = “font-size: 80%;”}\n\ndplyr::glimpse(xlsx_df)\n\nRows: 5\nColumns: 4\n$ id   &lt;fct&gt; 1, 2, 3, 4, 5\n$ date &lt;date&gt; 2010-03-01, 2010-03-02, 2010-03-03, 2010-03-0…\n$ loc  &lt;chr&gt; \"New York\", \"New York\", \"New York\", \"New Yor…\n$ temp &lt;dbl&gt; 42, 41, 38, 41, 40\n\ndplyr::glimpse(csv_df)\n\nRows: 5\nColumns: 4\n$ id   &lt;fct&gt; 1, 2, 3, 4, 5\n$ date &lt;date&gt; 2010-03-01, 2010-03-02, 2010-03-03, 2010-03-0…\n$ loc  &lt;chr&gt; \"New York\", \"New York\", \"New York\", \"New Yor…\n$ temp &lt;dbl&gt; 42, 41, 38, 41, 40\n\n\n:::"
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-with-r-part-33",
+    "href": "week3/slides.html#example-checking-the-data-type-with-r-part-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type with R Part 3/3",
+    "text": "Example: Checking the data type with R Part 3/3\n\n\nYou can also visualise the data type with:\n\nlibrary(visdat)\nvis_dat(xlsx_df)\n\n\n\n\n\n\n\n\n\n\nlibrary(inspectdf)\ninspect_types(xlsx_df) %&gt;% \n  show_plot()"
+  },
+  {
+    "objectID": "week3/slides.html#data-cleaning-part-23",
+    "href": "week3/slides.html#data-cleaning-part-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data cleaning Part 2/3",
+    "text": "Data cleaning Part 2/3\n\n\nData quality checks should be one of the first steps in the data analysis to assess any problems with the data.\n\n\n\nThis is sometimes referred to as data sniffing or data scrutinizing.\n\n\n\n\nThese include using common or domain knowledge to check if the recorded data have sensible values.\n\n\n\nE.g. * Are positive values, e.g. height and weight, recorded as positive values with a plausible range?\n\n\n\nIf the data are counts, do the recorded values contain non-integer values?\n\n\n\n\nFor compositional data, do the values add up to 100% (or 1)? If not is that a measurement error or due to rounding? Or is another variable missing?\n\n\n\n\nDoes the data contain only positives, ie disease occurrences, or warranty claims? If so, what would the no report group look like?"
+  },
+  {
+    "objectID": "week3/slides.html#data-cleaning-part-23-1",
+    "href": "week3/slides.html#data-cleaning-part-23-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data Cleaning Part 2/3",
+    "text": "Data Cleaning Part 2/3\n\n\nIn addition, numerical or graphical summaries may reveal that there is unwanted structure in the data. E.g.,\n\nDoes the treatment group have different demographic characteristics to the control group?\nDoes the distribution of the data imply violations of assumptions for the main analysis?\n\n\n\n\nData scrutinizing is a process that you get better at with practice and have familiarity with the domain area."
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-quality",
+    "href": "week3/slides.html#example-checking-the-data-quality",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data quality",
+    "text": "Example: Checking the data quality\n\n\n\n\n# A tibble: 9 × 4\n  id    date       loc        temp\n  &lt;fct&gt; &lt;date&gt;     &lt;chr&gt;     &lt;dbl&gt;\n1 1     2010-03-01 New York   42  \n2 2     2010-03-02 New York   41.4\n3 3     2010-03-03 New York   38.5\n4 4     2010-03-04 New York   41.1\n5 5     2010-03-05 New York   39.8\n6 6     2020-03-01 Melbourne  30.6\n7 7     2020-03-02 Melbourne  17.9\n8 8     2020-03-03 Melbourne  18.6\n9 9     2020-03-04 &lt;NA&gt;       21.3\n\n\n\n\nNumerical or graphical summaries or even just eye-balling the data helps to uncover some data quality issues.\nAny issues here?\n\n\n\n\nThere’s a missing value in loc.\nTemperature is in Farenheit for New York but Celsius in Melbourne (you can validate this again using external sources)."
+  },
+  {
+    "objectID": "week3/slides.html#case-study-world-development-indicators-part-13",
+    "href": "week3/slides.html#case-study-world-development-indicators-part-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: World development indicators Part 1/3",
+    "text": "Case study: World development indicators Part 1/3\n\n\n\nraw_dat &lt;- read_csv(here::here(\"data/world-development-indicators.csv\"), na = \"..\",\n  n_max = 11935)\n\ncountry_code_df &lt;- raw_dat %&gt;%\n  distinct(`Country Name`, `Country Code`) %&gt;%\n  rename_all(janitor::make_clean_names) %&gt;%\n  left_join(\n    countrycode::codelist %&gt;% select(iso3c, region, continent),\n    by = c(\"country_code\" = \"iso3c\")\n  ) %&gt;%\n  arrange(continent, region) %&gt;%\n  mutate(country_code = fct_infreq(country_code))\n# series_code_df &lt;- raw_dat %&gt;%\n#   distinct(`Series Name`, `Series Code`) %&gt;%\n#   rename_all(janitor::make_clean_names) %&gt;%\n#   mutate(series_code = janitor::make_clean_names)\nwdi &lt;- raw_dat %&gt;%\n  gather(key = \"Year\", value = \"value\", `1969 [YR1969]`:last_col()) %&gt;%\n  rename_all(janitor::make_clean_names) %&gt;%\n  separate(year, into = c(\"year\", \"year_string\"), sep = \" \") %&gt;%\n  mutate(year = as.integer(year)) %&gt;%\n  select(-contains(\"name\"), -year_string) %&gt;%\n  spread(key = series_code, value = value) %&gt;%\n  mutate(\n    country_code = factor(country_code, levels = country_code_df$country_code)\n  ) %&gt;%\n  rename_all(janitor::make_clean_names)\n\nwdi2017 &lt;- wdi %&gt;% filter(year == 2017)\n\nlibrary(visdat)\nvis_dat(wdi2017)\n\n\n\n\n\n\n\n\n\n - What are the data types? - How are missings distributed? - Which variables have insufficient values to analyse further?\nWorld Development Indicators (WDI), sourced from the World Bank Group (2019)"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-world-development-indicators-part-23",
+    "href": "week3/slides.html#case-study-world-development-indicators-part-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: World development indicators Part 2/3",
+    "text": "Case study: World development indicators Part 2/3\n\n\n\nlibrary(naniar)\nggplot(wdi2017, \n       aes(x=en_pop_dnst, y=sp_urb_grow)) + \n  geom_miss_point(size=4, alpha=0.6) + \n  scale_color_discrete_qualitative() +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\n \nen_pop_dnst = Population density (people per sq. km of land area)\nsp_urb_grow = Urban population growth (annual %)\n\n\nHow are missings distributed?\nIs there a relationship between population density and urban growth?\n\nis there a better way to plot this to see relationship?"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-world-development-indicators-part-33",
+    "href": "week3/slides.html#case-study-world-development-indicators-part-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: World development indicators Part 3/3",
+    "text": "Case study: World development indicators Part 3/3\n\n\n\nlibrary(naniar)\nggplot(wdi2017, \n       aes(x=en_pop_dnst, y=sp_urb_grow)) + \n  geom_miss_point(size=4, alpha=0.6) + \n  scale_color_discrete_qualitative() +\n  scale_x_log10() +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\n \nen_pop_dnst = Population density (people per sq. km of land area)\nsp_urb_grow = Urban population growth (annual %)\n - Is there a relationship between population density and urban growth?"
+  },
+  {
+    "objectID": "week3/slides.html#sanity-check-your-data",
+    "href": "week3/slides.html#sanity-check-your-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Sanity check your data",
+    "text": "Sanity check your data"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-employment-data-in-australia-part-13",
+    "href": "week3/slides.html#case-study-employment-data-in-australia-part-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Employment Data in Australia Part 1/3",
+    "text": "Case study: Employment Data in Australia Part 1/3\nBelow is the data from ABS that shows the total number of people employed in a given month from February 1976 to December 2019 using the original time series.\n\n\nlibrary(readabs)\n# lfs_1 &lt;- read_abs(\"6202.0\", tables = 1)  %&gt;% \n#  separate_series()\nemployed &lt;- read_abs(series_id = \"A84423085A\") %&gt;% \n  mutate(month = lubridate::month(date),\n         year = factor(lubridate::year(date))) %&gt;% \n  filter(year != \"2020\") %&gt;% \n  select(date, month, year, value) \n# Employed total ;  Persons ; original\n# read_abs(series_id = \"A84423043C\") # seasonally adjusted\n# A84423127L # trend\n#glimpse(employed)\n\n\nglimpse(employed)\n\nRows: 545\nColumns: 4\n$ date  &lt;date&gt; 1978-02-01, 1978-03-01, 1978-04-01, 1978-05…\n$ month &lt;dbl&gt; 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3,…\n$ year  &lt;fct&gt; 1978, 1978, 1978, 1978, 1978, 1978, 1978, 19…\n$ value &lt;dbl&gt; 5986, 6041, 6054, 6038, 6031, 6036, 6005, 60…\n\n\nAustralian Bureau of Statistics, 2020, Labour force, Australia, Table 01. Labour force status by Sex, Australia - Trend, Seasonally adjusted and Original, viewed 2024-08-02]{.smallest}"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-employment-data-in-australia-part-23",
+    "href": "week3/slides.html#case-study-employment-data-in-australia-part-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Employment Data in Australia Part 2/3",
+    "text": "Case study: Employment Data in Australia Part 2/3\nDo you notice anything?\n\nemployed  %&gt;% \n  ggplot(aes(month, value, color = year)) + \n  geom_line() + \n  ylab(\"employed ('000)\") +\n  scale_x_continuous(\"month\", breaks=seq(1, 12, 1)) +\n  ggtitle(\"1978 Feb - 2019 Dec\") + \n  scale_color_discrete_qualitative() \n\n\n–\nWhy do you think the number of people employed is going up each year?\n???\n\nAustralian population is 25.39 million in 2019\n1.5% annual increase in population\nVic population is 6.681 million (Sep 2020) - 26%\nNSW population is 8.166 (Sep 2020) - 32%"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-employment-data-in-australia-part-33",
+    "href": "week3/slides.html#case-study-employment-data-in-australia-part-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Employment Data in Australia Part 3/3",
+    "text": "Case study: Employment Data in Australia Part 3/3\n.grid[.item[\n\ndf3 &lt;- employed  %&gt;% \n  dplyr::filter(as.numeric(as.character(year)) &gt; 2008) %&gt;% \n  mutate(month = factor(month)) \nggplot(df3, aes(month, value, group = year)) + \n  geom_line() + \n  ylab(\"employed ('000)\") +\n  geom_text(data = filter(df3, month==12) %&gt;% \n              mutate(month = ifelse(year %in% c(2011, 2013), 14, month)), \n            aes(label = year), hjust = -0.4, size = 5) +\n  ggtitle(\"2009 Jan - 2019 Dec\") +\n  coord_cartesian(clip = 'off') + \n  theme(plot.margin = unit(c(1,4,1,1), \"lines\")) \n\n\n\n\n\n\n\n\n] .item[\n{{content}}\n] ]\n–\n\nThere’s a suspicious change in August numbers from 2014.\n\n\ndf3 %&gt;% \n  filter(month %in% 8:9) %&gt;% \n  pivot_wider(year, names_from = month) %&gt;% \n  mutate(diff = `9` - `8`) %&gt;% \n  ggplot(aes(year, diff)) + \n  geom_point() + \n  geom_line(group = 1) +\n  guides(x = guide_axis(n.dodge = 2)) + \n  labs(y = \"Difference (Sep - Aug)\")\n\n\n\n\n\n\n\n\n\nA potential explanation for this is that there was a change in the survey from 2014.\n\nAlso see https://robjhyndman.com/hyndsight/abs-seasonal-adjustment-2/"
+  },
+  {
+    "objectID": "week3/slides.html#check-if-the-data-collection-method-has-been-consistent",
+    "href": "week3/slides.html#check-if-the-data-collection-method-has-been-consistent",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Check if the data collection method has been consistent",
+    "text": "Check if the data collection method has been consistent"
+  },
+  {
+    "objectID": "week3/slides.html#example-experimental-layout-and-data-part-12",
+    "href": "week3/slides.html#example-experimental-layout-and-data-part-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Experimental layout and data Part 1/2",
+    "text": "Example: Experimental layout and data Part 1/2\n\n# to generate data that looks like it's non-randomised\nrothamsted.brussels %&gt;% \n  arrange(trt) %&gt;% \n  mutate(row = rep(1:6, each = 8),\n         col = rep(1:8, times = 6)) %&gt;% \n  write_csv(\"data/lecture3-example3.csv\")\n\nlecture3-example3.csv\n\ndf3 &lt;- read_csv(here::here(\"data/lecture3-example3.csv\"),\n                col_types = cols(\n                  row = col_factor(),\n                  col = col_factor(),\n                  yield = col_double(),\n                  trt = col_factor(),\n                  block = col_factor()))\n\n\nskimr::skim(df3)\n\n── Data Summary ────────────────────────\n                           Values\nName                       df3   \nNumber of rows             48    \nNumber of columns          5     \n_______________________          \nColumn type frequency:           \n  factor                   4     \n  numeric                  1     \n________________________         \nGroup variables            None  \n\n── Variable type: factor ───────────────────────────────────\n  skim_variable n_missing complete_rate ordered n_unique\n1 row                   0             1 FALSE          6\n2 col                   0             1 FALSE          8\n3 trt                   0             1 FALSE          9\n4 block                 0             1 FALSE          4\n  top_counts                     \n1 1: 8, 2: 8, 3: 8, 4: 8         \n2 1: 6, 2: 6, 3: 6, 4: 6         \n3 non: 16, hi : 4, hi : 4, hi : 4\n4 B3: 12, B1: 12, B2: 12, B4: 12 \n\n── Variable type: numeric ──────────────────────────────────\n  skim_variable n_missing complete_rate mean   sd  p0 p25\n1 yield                 0             1 246. 16.0 204 237\n  p50  p75 p100 hist \n1 248 257.  273 ▂▂▇▇▅"
+  },
+  {
+    "objectID": "week3/slides.html#example-experimental-layout-and-data-part-22",
+    "href": "week3/slides.html#example-experimental-layout-and-data-part-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Experimental layout and data Part 2/2",
+    "text": "Example: Experimental layout and data Part 2/2\n.grid[ .item[\n\nggplot(df3, aes(col, row, fill = trt)) + \n  geom_tile(color = \"black\", size = 1) + \n  coord_equal() +\n  scale_fill_discrete_qualitative()\n\n\n\n\n\n\n\nggplot(df3, aes(col, row, fill = yield)) + \n  geom_tile(color = \"black\", size = 1) + \n  coord_equal() +\n  scale_fill_continuous_sequential(palette = \"Greens 3\")\n\n\n\n\n\n\n\n\n] .item[\n\nThe experiment tests the effects of 9 fertilizer treatments on the yield of brussel sprouts on a field laid out in a rectangular array of 6 rows and 8 columns.\n\n\ndf3 %&gt;% \n  mutate(trt = fct_reorder(trt, yield)) %&gt;% \n  ggplot(aes(trt, yield)) + \n  geom_point(size = 4, alpha = 1 / 2) + \n  guides(x = guide_axis(n.dodge = 2))\n\n\n\n\n\n\n\n\n\nHigh sulphur and high manure seems to be the best for the yield of brussel sprouts.\nAny issues here?\n\n] ]"
+  },
+  {
+    "objectID": "week3/slides.html#take-away-messages",
+    "href": "week3/slides.html#take-away-messages",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Take away messages",
+    "text": "Take away messages\n\nCheck your data:\n\nby validating the variable types\n\nwith independent or external sources\n\nby checking the data quality\n\n\nCheck if the data collection method has been consistent\nCheck if experimental layout given in the data and the description match\nConsider if or how data were derived"
+  },
+  {
+    "objectID": "week3/slides.html#validators",
+    "href": "week3/slides.html#validators",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Validators",
+    "text": "Validators"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-part-13",
+    "href": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-part-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Dutch supermarket revenue and cost Part 1/3",
+    "text": "Case study: Dutch supermarket revenue and cost Part 1/3\n\nData contains the revenue and cost (in Euros) for 60 supermarkets\nData has been anonymised and distorted\n\n\ndata(\"SBS2000\", package = \"validate\")\ndplyr::glimpse(SBS2000)\n\nRows: 60\nColumns: 11\n$ id          &lt;fct&gt; RET01, RET02, RET03, RET04, RET05, RET…\n$ size        &lt;fct&gt; sc0, sc3, sc3, sc3, sc3, sc0, sc3, sc1…\n$ incl.prob   &lt;dbl&gt; 0.02, 0.14, 0.14, 0.14, 0.14, 0.02, 0.…\n$ staff       &lt;int&gt; 75, 9, NA, NA, NA, 1, 5, 3, 6, 5, 5, 5…\n$ turnover    &lt;int&gt; NA, 1607, 6886, 3861, NA, 25, NA, 404,…\n$ other.rev   &lt;int&gt; NA, NA, -33, 13, 37, NA, NA, 13, NA, N…\n$ total.rev   &lt;int&gt; 1130, 1607, 6919, 3874, 5602, 25, 1335…\n$ staff.costs &lt;int&gt; NA, 131, 324, 290, 314, NA, 135, NA, 1…\n$ total.costs &lt;int&gt; 18915, 1544, 6493, 3600, 5530, 22, 136…\n$ profit      &lt;int&gt; 20045, 63, 426, 274, 72, 3, 1, 75, 110…\n$ vat         &lt;int&gt; NA, NA, NA, NA, NA, NA, 1346, NA, NA, …"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-part-23",
+    "href": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-part-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Dutch supermarket revenue and cost Part 2/3",
+    "text": "Case study: Dutch supermarket revenue and cost Part 2/3\n\nChecking for completeness of records\n\n\nlibrary(validate)\nrules &lt;- validator(\n          is_complete(id),\n          is_complete(id, turnover),\n          is_complete(id, turnover, profit))\nout &lt;- confront(SBS2000, rules)\nsummary(out)\n\n  name items passes fails nNA error warning\n1   V1    60     60     0   0 FALSE   FALSE\n2   V2    60     56     4   0 FALSE   FALSE\n3   V3    60     52     8   0 FALSE   FALSE\n                         expression\n1                   is_complete(id)\n2         is_complete(id, turnover)\n3 is_complete(id, turnover, profit)"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-part-33",
+    "href": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-part-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Dutch supermarket revenue and cost Part 3/3",
+    "text": "Case study: Dutch supermarket revenue and cost Part 3/3\n\nSanity check derived variables\n\n\nlibrary(validate)\nrules &lt;- validator(\n    total.rev - profit == total.costs,\n    turnover + other.rev == total.rev,\n    profit &lt;= 0.6 * total.rev\n)\nout &lt;- confront(SBS2000, rules)\nsummary(out)\n\n  name items passes fails nNA error warning\n1   V1    60     39    14   7 FALSE   FALSE\n2   V2    60     19     4  37 FALSE   FALSE\n3   V3    60     49     6   5 FALSE   FALSE\n                                      expression\n1 abs(total.rev - profit - total.costs) &lt;= 1e-08\n2 abs(turnover + other.rev - total.rev) &lt;= 1e-08\n3              profit - 0.6 * total.rev &lt;= 1e-08"
+  },
+  {
+    "objectID": "week3/slides.html#take-away-messages-1",
+    "href": "week3/slides.html#take-away-messages-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Take away messages",
+    "text": "Take away messages\n\n\n\nInitial data analysis (IDA) is a model-focused exploration to support a confirmatory analysis with:\n\ndata description and collection\ndata quality checking, and\nchecking assumptions\nmodel fit without any formal statistical inference.\n\nIDA may never see the limelight BUT it forms the foundation that the main analysis is built upon. Do it well!"
+  },
+  {
+    "objectID": "week3/slides.html#why",
+    "href": "week3/slides.html#why",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Why?",
+    "text": "Why?\n ::: {.column width=80%}\n“The first thing to do with data is to look at them…. usually means tabulating and plotting the data in many different ways to ‘see what’s going on’. With the wide availability of computer packages and graphics nowadays there is no excuse for ducking the labour of this preliminary phase, and it may save some red faces later.]\nCrowder, M. J. & Hand, D. J. (1990) “Analysis of Repeated Measures” https://doi.org/10.1201/9781315137421\n:::"
+  },
+  {
+    "objectID": "week3/slides.html#hypothesis-testing-and-predictive-modeling-part-33",
+    "href": "week3/slides.html#hypothesis-testing-and-predictive-modeling-part-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Hypothesis Testing and Predictive Modeling Part 3/3",
+    "text": "Hypothesis Testing and Predictive Modeling Part 3/3\n\nHypothesis testing: usually make assumptions about the distribution of the data, and are formed relative to a parameter.\nPredictive modeling: form of the relationship, distribution of the errors."
+  },
+  {
+    "objectID": "week3/slides.html#hypothesis-testing-in-r-review-part-13",
+    "href": "week3/slides.html#hypothesis-testing-in-r-review-part-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Hypothesis testing in R REVIEW Part 1/3",
+    "text": "Hypothesis testing in R REVIEW Part 1/3\n\nState the hypothesis (pair), e.g. \\(H_o: \\mu_1 = \\mu_2\\) vs \\(H_a: \\mu_1 &lt; \\mu_2\\).\nTest statistic depends on assumption about the distribution, e.g. \n\n\\(t\\)-test will assume that distributions are normal, or small departures from if we have a large sample.\ntwo-sample might assume both groups have the same variance\n\nSteps to complete:\n\nCompute the test statistic\nMeasure it against a standard distribution\nIf it is extreme, \\(p\\)-value is small, decision is to reject \\(H_o\\)\n\\(p\\)-value is the probability of observing a value as large as this, or large, assuming \\(H_o\\) is true."
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-variance-and-distribution-assumption-part-12",
+    "href": "week3/slides.html#example-checking-variance-and-distribution-assumption-part-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking variance and distribution assumption Part 1/2",
+    "text": "Example: Checking variance and distribution assumption Part 1/2\n\n\n\ndata(sleep)\nggplot(sleep, aes(x=group, y=extra)) + \n  geom_boxplot() +\n  geom_point(colour=\"orange\")\n\n\n\n\n\n\n\n\n\n\nggplot(sleep, aes(x=extra)) + \n  geom_density(fill=\"orange\", colour=\"orange\", alpha=0.6) + \n  geom_rug(outside = TRUE, colour=\"orange\") +\n  coord_cartesian(clip = \"off\") +\n  facet_wrap(~group)\n\n\n\n\n\n\n\n\nCushny, A. R. and Peebles, A. R. (1905) The action of optical isomers: II hyoscines. The Journal of Physiology 32, 501–510."
+  },
+  {
+    "objectID": "week3/slides.html#example-hypothesis-test-part-22",
+    "href": "week3/slides.html#example-hypothesis-test-part-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Hypothesis test Part 2/2",
+    "text": "Example: Hypothesis test Part 2/2\n\n\n\ntt &lt;- with(sleep,\n     t.test(extra[group == 1],\n            extra[group == 2], \n            paired = TRUE))\n\n\ntt$estimate\n\nmean difference \n           -1.6 \n\n\n\ntt$null.value\n\nmean difference \n              0 \n\n\n\n\ntt$statistic\nt -4.1\n\n\ntt$p.value\n[1] 0.0028\n\n\ntt$conf.int\n[1] -2.5 -0.7 attr(,“conf.level”) [1] 0.95\n\nCushny, A. R. and Peebles, A. R. (1905) The action of optical isomers: II hyoscines. The Journal of Physiology 32, 501–510."
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-distribution-assumption",
+    "href": "week3/slides.html#example-checking-distribution-assumption",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking distribution assumption",
+    "text": "Example: Checking distribution assumption\n\n\n\nInsectSprays %&gt;% \n  ggplot(aes(x=fct_reorder(spray, count), \n             y=count)) + \n  geom_jitter(width=0.1, height=0, colour=\"orange\", size=3, alpha=0.8) +\n  xlab(\"\") \n\n\n\n\n\n\n\n\nCan you see any violations of normality? Or equal variance?]\n\n\nfm1 &lt;- aov(count ~ spray, data = InsectSprays)\nsummary(fm1)\n\n            Df Sum Sq Mean Sq F value Pr(&gt;F)    \nspray        5   2669     534    34.7 &lt;2e-16 ***\nResiduals   66   1015      15                   \n---\nSignif. codes:  \n0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\nWrite down the hypothesis being tested. What would the decision be?"
+  },
+  {
+    "objectID": "week3/slides.html#linear-models-in-r-review-part-13",
+    "href": "week3/slides.html#linear-models-in-r-review-part-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Linear models in R REVIEW Part 1/3",
+    "text": "Linear models in R REVIEW Part 1/3\n\nlibrary(tidyverse)\nlibrary(broom)\nglimpse(cars)\n\nRows: 50\nColumns: 2\n$ speed &lt;dbl&gt; 4, 4, 7, 7, 8, 9, 10, 10, 10, 11, 11, 12, 12…\n$ dist  &lt;dbl&gt; 2, 10, 4, 22, 16, 10, 18, 26, 34, 17, 28, 14…\n\n\n\n\nggplot(cars, aes(speed, dist)) + \n  geom_point() + \n  geom_smooth(method = \"lm\", se = FALSE)"
+  },
+  {
+    "objectID": "week3/slides.html#linear-models-in-r-review-part-23",
+    "href": "week3/slides.html#linear-models-in-r-review-part-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Linear models in R REVIEW Part 2/3",
+    "text": "Linear models in R REVIEW Part 2/3\n\nWe can fit linear models in R with the lm function:\n\nlm(dist ~ speed, data = cars)\nis the same as\nlm(dist ~ 1 + speed, data = cars)\n\n\nThe above model is mathematically written as \\[y_i = \\beta_0 + \\beta_1 x_i + e_i\\] where\n\n\n\\(y_i\\) and \\(x_i\\) are the stopping distance (in ft) and speed (in mph), respectively, of the \\(i\\)-th car;\n\n\n\\(_0\\) and \\(_1\\) are intercept and slope, respectively; and\n\n\n\\(e_i\\) is the random error; usually assuming \\(e_i NID(0, ^2)\\)."
+  },
+  {
+    "objectID": "week3/slides.html#linear-models-in-r-review-part-33",
+    "href": "week3/slides.html#linear-models-in-r-review-part-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Linear models in R REVIEW Part 3/3",
+    "text": "Linear models in R REVIEW Part 3/3\n\n\n\nggplot(cars, aes(speed, dist)) + \n  geom_point() + \n  geom_smooth(method = \"lm\", se = FALSE)\n\n\n\n\n\n\n\n\n\n\nfit &lt;- lm(dist ~ 1 + speed, data = cars)\ntidy(fit)\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic  p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)   -17.6      6.76      -2.60 1.23e- 2\n2 speed           3.93     0.416      9.46 1.49e-12\n\nglance(fit)\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic  p.value    df\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;\n1     0.651         0.644  15.4      89.6 1.49e-12     1\n# ℹ 6 more variables: logLik &lt;dbl&gt;, AIC &lt;dbl&gt;, BIC &lt;dbl&gt;,\n#   deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;\n\n\n\n\nAssuming this model is appropriate, the stopping distance increases by about 4 ft for increase in speed by 1 mph."
+  },
+  {
+    "objectID": "week3/slides.html#model-form-part-12",
+    "href": "week3/slides.html#model-form-part-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model form Part 1/2",
+    "text": "Model form Part 1/2\n\n\n\nSay, we are interested in characterising the price of the diamond in terms of its carat.\n\n\nggplot(diamonds, aes(carat, price)) + \n  geom_point(alpha = 1/5) + \n  ggtitle(\"Diamonds\") #+ \n\n\n\n\n\n\n\n  #geom_smooth(method = \"lm\", se = FALSE) + \n  #ylim(0, max(diamonds$price))\n\n\nLooking at this plot, would you fit a linear model with formula\n\n\nprice ~ 1 + carat?"
+  },
+  {
+    "objectID": "week3/slides.html#model-form-part-12-1",
+    "href": "week3/slides.html#model-form-part-12-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model form Part 1/2",
+    "text": "Model form Part 1/2\n\n\n\nSay, we are interested in characterising the price of the diamond in terms of its carat.\n\n\nggplot(diamonds, aes(carat, price)) + \n  geom_point(alpha = 1/5) + \n  ggtitle(\"Diamonds\") + \n  geom_smooth(method = \"lm\", se = FALSE, size = 2) + \n  ylim(0, max(diamonds$price))\n\n\n\n\n\n\n\n\n\nLooking at this plot, would you fit a linear model with formula\n\n\nprice ~ 1 + carat?"
+  },
+  {
+    "objectID": "week3/slides.html#model-form-part-22",
+    "href": "week3/slides.html#model-form-part-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model form Part 2/2",
+    "text": "Model form Part 2/2\n\n\n\nggplot(diamonds, aes(carat, price)) + \n  geom_point(alpha = 1/5) + \n  ggtitle(\"Diamonds\") + \n  geom_smooth(method = lm) +\n  geom_smooth(method = lm, \n              formula = y ~ poly(x, 2),\n              colour = \"orange\") +\n  ylim(0, max(diamonds$price))\n\n\n\n\n\n\n\n\n\n\nWhat about\n\nprice ~ poly(carat, 2)?\n\nwhich is the same as fitting:\n\n\\[y_i = \\beta_0 + \\beta_1 x_i + \\beta_2 x_i^2 + e_i.\\]\n\n\nShould the assumption for error distribution be modified if so?\n\n\n\n\nShould we make some transformation before modelling?\n\n\n\n\nAre there other candidate models?"
+  },
+  {
+    "objectID": "week3/slides.html#model-form-part-22-1",
+    "href": "week3/slides.html#model-form-part-22-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model form Part 2/2",
+    "text": "Model form Part 2/2\n\nNotice that there was no formal statistical inference when trying to determine an appropriate model form.\n\n\n\nThe goal of the main analysis is to characterise the price of a diamond by its carat. This may involve:\n\nformal inference for model selection;\njustification of the selected “final” model; and\nfitting the final model.\n\n\n\n\n\nThere may be in fact many, many models considered but discarded at the IDA stage.\n\n\n\nThese discarded models are hardly ever reported. Consequently, majority of reported statistics give a distorted view and it’s important to remind yourself what might not be reported."
+  },
+  {
+    "objectID": "week3/slides.html#model-selection",
+    "href": "week3/slides.html#model-selection",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model selection",
+    "text": "Model selection\n\nAll models are approximate and tentative; approximate in the sense that no model is exactly true and tentative in that they may be modified in the light of further data\n—Chatfield (1985)\n\nAll models are wrong but some are useful\n—George Box"
+  },
+  {
+    "objectID": "week3/slides.html#model-diagnostics",
+    "href": "week3/slides.html#model-diagnostics",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model diagnostics",
+    "text": "Model diagnostics"
+  },
+  {
+    "objectID": "week3/slides.html#residuals-12",
+    "href": "week3/slides.html#residuals-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Residuals 1/2",
+    "text": "Residuals 1/2\n\n\n\nlibrary(broom)\nd_fit1 &lt;- lm(price ~ carat, data=diamonds)\nd_fit2 &lt;- lm(price ~ poly(carat, 2), data=diamonds)\nd_fit3 &lt;- lm(price ~ poly(carat, 3), data=diamonds)\nd_fit4 &lt;- lm(price ~ poly(carat, 4), data=diamonds)\n\nd_res1 &lt;- augment(d_fit1, diamonds)\nd_res2 &lt;- augment(d_fit2, diamonds)\nd_res3 &lt;- augment(d_fit3, diamonds)\nd_res4 &lt;- augment(d_fit4, diamonds)\n \nr1 &lt;- ggplot(d_res1, aes(carat, .resid)) + \n  geom_hline(yintercept=0, colour=\"grey70\") +\n  geom_point(alpha = 1/5) +\n  geom_smooth(data=d_res1[sample(1:nrow(d_res1), 5000),], method = \"loess\", colour=\"orange\", se=F) +\n  scale_y_continuous(\".resid\", breaks=seq(-20000, 10000, 10000), labels=seq(-20, 10, 10)) +\n  ggtitle(\"Linear\")  \nr2 &lt;- ggplot(d_res2, aes(carat, .resid)) + \n  geom_hline(yintercept=0, colour=\"grey70\") +\n  geom_point(alpha = 1/5) +\n  geom_smooth(data=d_res2[sample(1:nrow(d_res2), 5000),], method = \"loess\", colour=\"orange\", se=F) +\n  scale_y_continuous(\".resid\", breaks=seq(-20000, 10000, 10000), labels=seq(-20, 10, 10)) +\n  ggtitle(\"Quadratic\") \nr3 &lt;- ggplot(d_res3, aes(carat, .resid)) + \n  geom_hline(yintercept=0, colour=\"grey70\") +\n  geom_point(alpha = 1/5) +\n  geom_smooth(data=d_res3[sample(1:nrow(d_res3), 5000),], method = \"loess\", colour=\"orange\", se=F) +\n  scale_y_continuous(\".resid\", breaks=seq(-10000, 30000, 10000), labels=seq(-10, 30, 10)) +\n  ggtitle(\"Cubic\") \nr4 &lt;- ggplot(d_res4, aes(carat, .resid)) + \n  geom_hline(yintercept=0, colour=\"grey70\") +\n  geom_point(alpha = 1/5) +\n  geom_smooth(data=d_res4[sample(1:nrow(d_res4), 5000),], method = \"loess\", colour=\"orange\", se=F) +\n  scale_y_continuous(\".resid\", breaks=seq(-10000, 10000, 10000), labels=seq(-10, 10, 10)) +\n  ggtitle(\"Quartic\") \n\nr1 + r2 + r3 + r4 + plot_layout(ncol=2)\n\n\n\n\n\n\n\n\n\nResidual = Observed - Fitted Residual plot: Plot the residual against explanatory variable (or Fitted value)Best residual plot has not obvious pattern."
+  },
+  {
+    "objectID": "week3/slides.html#alternative-approach-linearise-relationship",
+    "href": "week3/slides.html#alternative-approach-linearise-relationship",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Alternative approach: linearise relationship",
+    "text": "Alternative approach: linearise relationship\n\n\n\nggplot(diamonds, aes(carat, price)) + \n  geom_point(alpha = 1/5) + \n  ggtitle(\"Diamonds\") + \n  geom_smooth(method = lm) +\n  scale_x_sqrt() +\n  scale_y_sqrt() + ggtitle(\"Transform both x, y by sq root\")\n\n\n\n\n\n\n\n\n\n\nggplot(diamonds, aes(carat, price)) + \n  geom_point(alpha = 1/5) + \n  ggtitle(\"Diamonds\") + \n  geom_smooth(method = lm) +\n  scale_x_log10() +\n  scale_y_log10() + ggtitle(\"Transform both x, y by log10\")\n\n\n\n\n\n\n\n\n\n\nThe log transformation of both variables linearises the relationship, so that a simple linear model can be used, and also corrects the heteroskedasticity."
+  },
+  {
+    "objectID": "week3/slides.html#residuals-22",
+    "href": "week3/slides.html#residuals-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Residuals 2/2",
+    "text": "Residuals 2/2\n\n\n\nlibrary(broom)\ndiamonds &lt;- diamonds %&gt;%\n  mutate(sqprice = sqrt(price),\n         sqcarat = sqrt(carat),\n         lprice = log10(price),\n         lcarat = log10(carat))\nd_fit5 &lt;- lm(sqprice ~ sqcarat, data=diamonds)\nd_fit6 &lt;- lm(lprice ~ lcarat, data=diamonds)\n\nd_res5 &lt;- augment(d_fit5, diamonds)\nd_res6 &lt;- augment(d_fit6, diamonds)\n\nr5 &lt;- ggplot(d_res5, aes(carat, .resid)) + \n  geom_hline(yintercept=0, colour=\"grey70\") +\n  geom_point(alpha = 1/5) +\n  geom_smooth(data=d_res5[sample(1:nrow(d_res5), 5000),], method = \"loess\", colour=\"orange\", se=F) +\n  ggtitle(\"Square root\")  \nr6 &lt;- ggplot(d_res6, aes(carat, .resid)) + \n  geom_hline(yintercept=0, colour=\"grey70\") +\n  geom_point(alpha = 1/5) +\n  geom_smooth(data=d_res6[sample(1:nrow(d_res6), 5000),], method = \"loess\", colour=\"orange\", se=F) +\n  ggtitle(\"Log10\") \nr7 &lt;- ggplot(d_res5, aes(carat, .resid)) + \n  geom_hline(yintercept=0, colour=\"grey70\") +\n  geom_point(alpha = 1/5) +\n  geom_smooth(data=d_res5[sample(1:nrow(d_res5), 5000),], method = \"loess\", colour=\"orange\", se=F) +\n  xlim(c(0, 3)) +\n  ggtitle(\"Square root\")  \nr8 &lt;- ggplot(d_res6, aes(carat, .resid)) + \n  geom_hline(yintercept=0, colour=\"grey70\") +\n  geom_point(alpha = 1/5) +\n  geom_smooth(data=d_res6[sample(1:nrow(d_res6), 5000),], method = \"loess\", colour=\"orange\", se=F) +\n  xlim(c(0, 3)) +\n  ggtitle(\"Log10\") \n\nr5 + r6 + r7 + r8 + plot_layout(ncol=2)\n\n\n\n\n\n\n\n\n\n\nWhich has the best residual plot?"
+  },
+  {
+    "objectID": "week3/slides.html#section-1",
+    "href": "week3/slides.html#section-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "“Teaching of Statistics should provide a more balanced blend of IDA and inference” Chatfield (1985)\n\nYet there is still very little emphasis of it in teaching and also at times in practice.\n\n\n\nSo don’t forget to do IDA!"
+  },
+  {
+    "objectID": "week3/slides.html#take-away-messages-2",
+    "href": "week3/slides.html#take-away-messages-2",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Take away messages",
+    "text": "Take away messages\n\n\n\nInitial data analysis (IDA) is a model-focused exploration to support a confirmatory analysis with:\n\ndata description and collection\ndata quality checking, and\nchecking assumptions\nmodel fit without any formal statistical inference.\n\nIDA may never see the limelight BUT it forms the foundation that the main analysis is built upon. Do it well!"
+  },
+  {
+    "objectID": "week3/slides.html#further-reading",
+    "href": "week3/slides.html#further-reading",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Further reading",
+    "text": "Further reading\n\nHuebner et al (2018) A Contemporary Conceptual Framework for Initial Data Analysis\nHuebner et al (2020) Hidden analyses\nChatfield (1985) The Initial Examination of Data. Journal of the Royal Statistical Society. Series A (General) 148 \nCox & Snell (1981) Applied Statistics. London: Chapman and Hall.\nvan der Loo and de Jonge (2018). Statistical Data Cleaning with Applications in R. John Wiley and Sons Ltd.\nHyndman (2014) Explaining the ABS unemployment fluctuations\n\n\n\n\nETC5521 Lecture 3 | ddde.numbat.space"
+  },
+  {
+    "objectID": "week3/slides.html#section",
+    "href": "week3/slides.html#section",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "“Teaching of Statistics should provide a more balanced blend of IDA and inference” Chatfield (1985)\n\nYet there is still very little emphasis of it in teaching and also at times in practice.\n\n\n\nSo don’t forget to do IDA!"
+  },
+  {
+    "objectID": "week3/slides.html#initial-data-analysis",
+    "href": "week3/slides.html#initial-data-analysis",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Initial data analysis",
+    "text": "Initial data analysis\n\n\nThe first thing to do with data is to look at them…. usually means tabulating and plotting the data in many different ways to see what’s going on. With the wide availability of computer packages and graphics nowadays there is no excuse for ducking the labour of this preliminary phase, and it may save some red faces later.\nCrowder, M. J. & Hand, D. J. (1990) “Analysis of Repeated Measures”"
+  },
+  {
+    "objectID": "week3/slides.html#the-role-of-initial-data-analysis",
+    "href": "week3/slides.html#the-role-of-initial-data-analysis",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "The role of initial data analysis",
+    "text": "The role of initial data analysis\n\n\nThe first thing to do with data is to look at them …. usually means tabulating and plotting the data in many different ways to see what’s going on. With the wide availability of computer packages and graphics nowadays there is no excuse for ducking the labour of this preliminary phase, and it may save some red faces later.\nCrowder, M. J. & Hand, D. J. (1990) “Analysis of Repeated Measures”"
+  },
+  {
+    "objectID": "week3/slides.html#objectives-of-ida",
+    "href": "week3/slides.html#objectives-of-ida",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Objectives of IDA?",
+    "text": "Objectives of IDA?\n\nThe main objective for IDA is to intercept any problems in the data that might adversely affect the confirmatory data analysis.\n\n\n\nThe role of CFA is to answer the intended question(s) that the data were collected for.\n\n\nIDA is often unreported in the data analysis reports or scientific papers, for various reasons. It might not have been done, or it may have been conducted but there was no space in the paper to report on it."
+  },
+  {
+    "objectID": "week3/slides.html#ida-from-a-government-statistics-perspective-.background-imagehttpsonlinelibrary.wiley.comcmsasset2246afb8-1eb9-4de2-a051-2cdd2ff4d1fd9781118897126.cover.gif-background-size20-background-position95-85",
+    "href": "week3/slides.html#ida-from-a-government-statistics-perspective-.background-imagehttpsonlinelibrary.wiley.comcmsasset2246afb8-1eb9-4de2-a051-2cdd2ff4d1fd9781118897126.cover.gif-background-size20-background-position95-85",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "IDA from a government statistics perspective {.background-image=“https://onlinelibrary.wiley.com/cms/asset/2246afb8-1eb9-4de2-a051-2cdd2ff4d1fd/9781118897126.cover.gif” background-size=“20%” background-position=“95% 85%”}",
+    "text": "IDA from a government statistics perspective {.background-image=“https://onlinelibrary.wiley.com/cms/asset/2246afb8-1eb9-4de2-a051-2cdd2ff4d1fd/9781118897126.cover.gif” background-size=“20%” background-position=“95% 85%”}\nThe purpose of data cleaning is to bring data up to a level of quality such that it can reliably be used for the production of statistical models or statements.\nA statistical value chain is constructed by defining a number of meaningful intermediate data products, for which a chosen set of quality attributes are well described. van der Loo & de Jonge (2018)\n\n\n\nData scientists in Statistics Netherlands"
+  },
+  {
+    "objectID": "week3/slides.html#ida-in-government-statistics",
+    "href": "week3/slides.html#ida-in-government-statistics",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "IDA in government statistics",
+    "text": "IDA in government statistics\nThe purpose of data cleaning is to bring data up to a level of quality such that it can reliably be used for the production of statistical models or statements.\nA statistical value chain is constructed by defining a number of meaningful intermediate data products, for which a chosen set of quality attributes are well described.\n\n\n\n\n\nvan der Loo & de Jonge (2018) Statistical Data Cleaning with Applications in R"
+  },
+  {
+    "objectID": "week3/slides.html#ida-in-health-data",
+    "href": "week3/slides.html#ida-in-health-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "IDA in health data",
+    "text": "IDA in health data\n\nHuebner et al (2018)’s six steps of IDA: (1) Metadata setup, (2) Data cleaning, (3) Data screening, (4) Initial reporting, (5) Refining and updating the analysis plan, (6) Reporting IDA in documentation.\nHealth and medical research perspective"
+  },
+  {
+    "objectID": "week3/slides.html#ida-in-health-and-medical-data",
+    "href": "week3/slides.html#ida-in-health-and-medical-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "IDA in health and medical data",
+    "text": "IDA in health and medical data\n\nHuebner et al (2018)’s six steps of IDA: (1) Metadata setup, (2) Data cleaning, (3) Data screening, (4) Initial reporting, (5) Refining and updating the analysis plan, (6) Reporting IDA in documentation."
+  },
+  {
+    "objectID": "week3/slides.html#cautions",
+    "href": "week3/slides.html#cautions",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Cautions",
+    "text": "Cautions"
+  },
+  {
+    "objectID": "week3/slides.html#heed-these-words",
+    "href": "week3/slides.html#heed-these-words",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Heed these words",
+    "text": "Heed these words\n\n\n\nIDA prepares an analyst for CFA. One needs to be careful about NOT compromising the inference.\n\nHow do you compromise inference?\n\n\nChange your inference or questions based on what you find in IDA.\nOutlier removal or not.\nMissing value imputation choices.\nTreatment of zeros.\nHandling of variable type, categorical temporal.\nLack of multivariate relationship checking, including subsets based on levels of categorical variables.\nChoosing variables and observations.\n\n\n\n\nHow do you avoid these errors?\n\nDocument ALL the IDA, using a reproducible analysis script.\nPre-register your CFA plan, so that your CFA questions do not change.\nDecisions made on outlier removal, variable selection, recoding, sampling, handling of zeros have known affects on results, and are justifiable.\n\nInsure yourself against accusations of data snooping, data dredging, data fishing."
+  },
+  {
+    "objectID": "week3/slides.html#data-screening",
+    "href": "week3/slides.html#data-screening",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data screening",
+    "text": "Data screening"
+  },
+  {
+    "objectID": "week3/slides.html#data-cleaning",
+    "href": "week3/slides.html#data-cleaning",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data cleaning",
+    "text": "Data cleaning"
+  },
+  {
+    "objectID": "week3/slides.html#data-screening-1",
+    "href": "week3/slides.html#data-screening-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data screening",
+    "text": "Data screening\n\n\n\nIt’s important to check how the data are understood by the computer.\n\nthat is, checking for data type:\n\nWas the date read in as character?\nWas a factor read in as numeric?\n\n\n\nAlso important for making inference is to know whether the data supports making broader conclusions. How was the data collected? Is it clear what the population of interest is, and that the data is a representative sample of this population?"
+  },
+  {
+    "objectID": "week3/slides.html#data-cleaning-1",
+    "href": "week3/slides.html#data-cleaning-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data cleaning",
+    "text": "Data cleaning\nData quality checks should be one of the first steps in the data analysis to assess any problems with the data.\nThese include using common or domain knowledge to check if the recorded data have sensible values.\n\n\nAre positive values, e.g. height and weight, recorded as positive values with a plausible range?\n\n\n\n\nIf the data are counts, do the recorded values contain non-integer values?\n\n\n\n\nFor compositional data, do the values add up to 100% (or 1)? If not, is that a measurement error or due to rounding? Or is another variable missing?\n\n\n\n\nDoes the data contain only positives, ie disease occurrences, or warranty claims? If so, what would the no report group look like?"
+  },
+  {
+    "objectID": "week3/slides.html#data-cleaning-2",
+    "href": "week3/slides.html#data-cleaning-2",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data cleaning",
+    "text": "Data cleaning\n\n\nIn addition, numerical or graphical summaries may reveal that there is unwanted structure in the data. E.g.,\n\nDoes the treatment group have different demographic characteristics to the control group?\nDoes the distribution of the data imply violations of assumptions for the main analysis?\n\n\n\n\nData scrutinizing is a process that you get better at with practice and have familiarity with the domain area."
+  },
+  {
+    "objectID": "week3/slides.html#data-collection-is-appropriate",
+    "href": "week3/slides.html#data-collection-is-appropriate",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data collection is appropriate",
+    "text": "Data collection is appropriate"
+  },
+  {
+    "objectID": "week3/slides.html#summary-of-checks-for-design-experiments",
+    "href": "week3/slides.html#summary-of-checks-for-design-experiments",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Summary of checks for design experiments",
+    "text": "Summary of checks for design experiments\n\nCheck if experimental layout given in the data and the description match\nIn particular, have a check with a plot to see if treatments are randomised."
+  },
+  {
+    "objectID": "week3/slides.html#imputing-missing-values",
+    "href": "week3/slides.html#imputing-missing-values",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Imputing missing values",
+    "text": "Imputing missing values"
+  },
+  {
+    "objectID": "week3/slides.html#example-1-olympic-medals",
+    "href": "week3/slides.html#example-1-olympic-medals",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example 1: olympic medals",
+    "text": "Example 1: olympic medals\nWhat’s missing"
+  },
+  {
+    "objectID": "week3/slides.html#example-2-tao",
+    "href": "week3/slides.html#example-2-tao",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example 2: TAO",
+    "text": "Example 2: TAO"
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-12",
+    "href": "week3/slides.html#example-checking-the-data-type-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type (1/2)",
+    "text": "Example: Checking the data type (1/2)\n\n\nlecture3-example.xlsx\n\n\n\n\n\nlibrary(readxl)\nlibrary(here)\ndf &lt;- read_excel(here(\"data/lecture3-example.xlsx\"))\ndf\n\n# A tibble: 5 × 4\n     id date                loc       temp\n  &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;    &lt;dbl&gt;\n1     1 2010-01-03 00:00:00 New York  42  \n2     2 2010-02-03 00:00:00 New York  41.4\n3     3 2010-03-03 00:00:00 New York  38.5\n4     4 2010-04-03 00:00:00 New York  41.1\n5     5 2010-05-03 00:00:00 New York  39.8\n\n\n\nWhat problems are there with the computer’s interpretation of data type?\nWhat context specific issues indicate incorrect computer interpretation?"
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-22",
+    "href": "week3/slides.html#example-checking-the-data-type-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type (2/2)",
+    "text": "Example: Checking the data type (2/2)\n\n\n\nlibrary(lubridate)\ndf &lt;- read_excel(here(\"data/lecture3-example.xlsx\"), \n                 col_types = c(\"text\", \n                               \"date\", \n                               \"text\",\n                               \"numeric\"))\n\ndf |&gt; \n  mutate(id = as.factor(id),\n         date = ydm(date)) |&gt;\n  mutate(\n         day = day(date),\n         month = month(date),\n         year = year(date)) \n\n# A tibble: 5 × 7\n  id    date       loc       temp   day month  year\n  &lt;fct&gt; &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 1     2010-03-01 New York  42       1     3  2010\n2 2     2010-03-02 New York  41.4     2     3  2010\n3 3     2010-03-03 New York  38.5     3     3  2010\n4 4     2010-03-04 New York  41.1     4     3  2010\n5 5     2010-03-05 New York  39.8     5     3  2010\n\n\n\n\nid is now a factor instead of integer\nday, month and year are now extracted from the date\nIs it okay now?\n\n\n\n\nIn the United States, it’s common to use the date format MM/DD/YYYY (gasps) while the rest of the world commonly uses DD/MM/YYYY or better still YYYY/MM/DD.\n\n\n\n\nIt’s highly probable that the dates are 1st-5th March and not 3rd of Jan-May.\n\n\n\n\nYou can validate interpretation of temperature using weather database."
+  },
+  {
+    "objectID": "week3/slides.html#example-specifying-the-data-type-with-r",
+    "href": "week3/slides.html#example-specifying-the-data-type-with-r",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Specifying the data type with R",
+    "text": "Example: Specifying the data type with R\n\n\n\nYou can robustify your workflow by ensuring you have a check for the expected data type in your code.\n\n\nxlsx_df &lt;- read_excel(here(\"data/lecture3-example.xlsx\"),\n                 col_types = c(\"text\", \"date\", \"text\", \"numeric\")) %&gt;% \n  mutate(id = as.factor(id), \n         date = as.character(date),\n         date = as.Date(date, format = \"%Y-%d-%m\"))\n\n\n\nread_csv has a broader support for col_types\n\n\ncsv_df &lt;- read_csv(here::here(\"data/lecture3-example.csv\"),\n                 col_types = cols(\n                      id = col_factor(),\n                      date = col_date(format = \"%m/%d/%y\"),\n                      loc = col_character(),\n                      temp = col_double()))\n\n\nThe checks (or coercions) ensure that even if the data are updated, you can have some confidence that any data type error will be picked up before further analysis."
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-with-r",
+    "href": "week3/slides.html#example-checking-the-data-type-with-r",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type with R",
+    "text": "Example: Checking the data type with R\nYou can have a quick glimpse of the data type with:\n\ndplyr::glimpse(xlsx_df)\n\nRows: 5\nColumns: 4\n$ id   &lt;fct&gt; 1, 2, 3, 4, 5\n$ date &lt;date&gt; 2010-03-01, 2010-03-02, 2010-03-03, 2010-03-0…\n$ loc  &lt;chr&gt; \"New York\", \"New York\", \"New York\", \"New Yor…\n$ temp &lt;dbl&gt; 42, 41, 38, 41, 40\n\ndplyr::glimpse(csv_df)\n\nRows: 5\nColumns: 4\n$ id   &lt;fct&gt; 1, 2, 3, 4, 5\n$ date &lt;date&gt; 2010-03-01, 2010-03-02, 2010-03-03, 2010-03-0…\n$ loc  &lt;chr&gt; \"New York\", \"New York\", \"New York\", \"New Yor…\n$ temp &lt;dbl&gt; 42, 41, 38, 41, 40"
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-visually",
+    "href": "week3/slides.html#example-checking-the-data-type-visually",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type visually",
+    "text": "Example: Checking the data type visually\n\n\nYou can also visualise the data type with:\n\nlibrary(visdat)\nvis_dat(xlsx_df)\n\n\n\n\n\n\n\n\n\n\nlibrary(inspectdf)\ninspect_types(xlsx_df) %&gt;% \n  show_plot()"
+  },
+  {
+    "objectID": "week3/slides.html#data-cleaning-12",
+    "href": "week3/slides.html#data-cleaning-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data cleaning (1/2)",
+    "text": "Data cleaning (1/2)\nData quality checks should be one of the first steps in the data analysis to assess any problems with the data.\nThese include using common or domain knowledge to check if the recorded data have sensible values.\n\n\nAre positive values, e.g. height and weight, recorded as positive values with a plausible range?\n\n\n\n\nIf the data are counts, do the recorded values contain non-integer values?\n\n\n\n\nFor compositional data, do the values add up to 100% (or 1)? If not, is that a measurement error or due to rounding? Or is another variable missing?\n\n\n\n\nDoes the data contain only positives, ie disease occurrences, or warranty claims? If so, what would the no report group look like?"
+  },
+  {
+    "objectID": "week3/slides.html#data-cleaning-22",
+    "href": "week3/slides.html#data-cleaning-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data cleaning (2/2)",
+    "text": "Data cleaning (2/2)\nIn addition, numerical or graphical summaries may reveal that there is unwanted structure in the data, for example,\n\n\nDoes the treatment group have different demographic characteristics to the control group?\n\n\n\n\nAre the distributions similar between the or training and test sets?\n\n\n\n\nDoes the distribution of the data imply violations of assumptions for the CFA, such as\n\nnon-normality,\ndiscrete rather real-valued, or\ndifferent variance in different domains?\n\n\n\n\nData scrutinizing is a process that you get better at with practice and have familiarity with the domain area."
+  },
+  {
+    "objectID": "week3/tutorial.html",
+    "href": "week3/tutorial.html",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Constructing, planning and evaluating an exploratory data analysis are important skills. This tutorial is an exercise in reading and digesting a really good analysis. Your goal is to understand the analysis, reproduce it, and the choices the analysts made, and why these were would be considered high quality."
+  },
+  {
+    "objectID": "week3/tutorial.html#objectives",
+    "href": "week3/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Constructing, planning and evaluating an exploratory data analysis are important skills. This tutorial is an exercise in reading and digesting a really good analysis. Your goal is to understand the analysis, reproduce it, and the choices the analysts made, and why these were would be considered high quality."
+  },
+  {
+    "objectID": "week3/tutorial.html#preparation",
+    "href": "week3/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 3",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is EDA Case Study: Bay area blues. It is authored by Hadley Wickham, Deborah F. Swayne, and David Poole. It appeared in the book “Beautiful Data” edited by Jeff Hammerbacher and Toby Segaran. Not all the chapters in the book are good examples of data analysis, though.\n\nComplete the weekly quiz, before the deadline!\nMake sure you have this list of R packages installed:\n\n\nNote that the code and data for reproducing their analysis can be found here.\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week3/tutorial.html#exercises",
+    "href": "week3/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 3",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nPoint your web browser to the github site for the analysis, https://github.com/hadley/sfhousing. The main data file is house-sales.csv. Read this data into your R session. (🛑 ARE YOU USING A PROJECT FOR THIS UNIT? IF NOT, STOP and OPEN IT NOW.)\nYou can read the data in directly from the web site using this code:\n\n1. What’s in the data?\n\nIs the data in tidy form?\nOf the variables in the data, which are\n\nnumeric?\ncategorical?\ntemporal?\n\nWhat would be an appropriate plot to make to examine the\n\nnumeric variables?\ncategorical variables?\na categorical and numeric variable?\na temporal variable and a numeric variable?\n\n\n\n\n2. Time series plots\nReproduce the time series plots of weekly average price and volume of sales.\n\n\n\n\n\n\n\n\n\n\n\n3. Correlation between series\nIt looks like volume goes down as price goes up. There is a better plot to make to examine this. What is it? Make the plot. After making the plot, report what you learn about the apparent correlation.\n\n\n4. Geographic differences\nThink about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn.\n\n\n5. The Rich Get Richer and the Poor Get Poorer\nIn the section “The Rich Get Richer and the Poor Get Poorer” there are some interesting transformations of the data, and unusual types of plots. Explain why looking at proportional change in value refines the view of price movement in different higher vs lower priced properties.\n\n\n6. Anything surprising?\nWere there any findings that surprised the authors? Or would surprise you?\n\n\n7. Additional resources\nSome of the findings were compared against information gathered from external sources. Can you point to an example of this, and how the other information was used to support or question the finding?"
+  },
+  {
+    "objectID": "week3/tutorial.html#whats-in-the-data",
+    "href": "week3/tutorial.html#whats-in-the-data",
+    "title": "ETC5521 Tutorial 3",
+    "section": "1. What’s in the data?",
+    "text": "1. What’s in the data?\n\nIs the data in tidy form?\nOf the variables in the data, which are\n\nnumeric?\ncategorical?\ntemporal?\n\nWhat would be an appropriate plot to make to examine the\n\nnumeric variables?\ncategorical variables?\na categorical and numeric variable?\na temporal variable and a numeric variable?\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nYes\n\nprice, br, lsqft, bsqft\ncounty, city, zip, street\nyear, date, datesold\n\n\nscatterplots\nbar charts, pie charts, mosaic\nfacet by the categorical variable. could be boxplots, or density plots, or facetted scatterplots to look at multiple numeric variables\n\ntime series plot, connect lines to indicate time, maybe need to aggregate over time to get one value per time point"
+  },
+  {
+    "objectID": "week3/tutorial.html#time-series-plots",
+    "href": "week3/tutorial.html#time-series-plots",
+    "title": "ETC5521 Tutorial 3",
+    "section": "2. Time series plots",
+    "text": "2. Time series plots\nReproduce the time series plots of weekly average price and volume of sales.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nsales_weekly &lt;- sales %&gt;%\n  group_by(date) %&gt;%\n  summarise(av_price = mean(price, na.rm=TRUE),\n            volume = n())\np1 &lt;- ggplot(sales_weekly, aes(x=date, y=av_price)) +\n  geom_line() +\n  scale_y_continuous(\"Average price (millions)\", \n              breaks = seq(500000, 800000, 50000), \n              labels = c(\"0.50\", \"0.55\", \"0.60\", \"0.65\",\n                         \"0.70\", \"0.75\", \"0.80\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\")\np2 &lt;- ggplot(sales_weekly, aes(x=date, y=volume)) + geom_line() +\n  scale_y_continuous(\"Number of sales\", \n              breaks = seq(500,3000,500), \n              labels = c(\"500\", \"1,000\", \"1,500\", \"2,000\",\n                         \"2,500\", \"3,000\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\")\np1/p2"
+  },
+  {
+    "objectID": "week3/tutorial.html#correlation-between-series",
+    "href": "week3/tutorial.html#correlation-between-series",
+    "title": "ETC5521 Tutorial 3",
+    "section": "3: Correlation between series",
+    "text": "3: Correlation between series\nIt looks like volume goes down as price goes up. There is a better plot to make to examine this. What is it? Make the plot. After making the plot, report what you learn about the apparent correlation.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAny correlation is very weak, and negative."
+  },
+  {
+    "objectID": "week3/tutorial.html#exercise-4-geographic-differences",
+    "href": "week3/tutorial.html#exercise-4-geographic-differences",
+    "title": "ETC5521 Tutorial 3",
+    "section": "Exercise 4: Geographic differences",
+    "text": "Exercise 4: Geographic differences\nThink about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMarin County has the highest prices on average, and San Joaquin the lowest. The lowest priced house was sold in Sonoma County. The highest priced properties and lowest priced are pretty similar from one county to another - that is, the variability within county is large."
+  },
+  {
+    "objectID": "week3/tutorial.html#exercise-5-the-rich-get-richer-and-the-poor-get-poorer",
+    "href": "week3/tutorial.html#exercise-5-the-rich-get-richer-and-the-poor-get-poorer",
+    "title": "ETC5521 Tutorial 3",
+    "section": "Exercise 5: The Rich Get Richer and the Poor Get Poorer",
+    "text": "Exercise 5: The Rich Get Richer and the Poor Get Poorer\nIn the section “The Rich Get Richer and the Poor Get Poorer” there are some interesting transformations of the data, and unusual types of plots. Explain why looking at proportional change in value refines the view of price movement in different higher vs lower priced properties.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe transformation makes changes relative to the initial average price at the start of the time period. All curves produced will start from the same point. This means that we only need to compare the end points of each line, saving us from calculating differences between lines relative to the difference at the beginning."
+  },
+  {
+    "objectID": "week3/tutorial.html#exercise-6-anything-surprising",
+    "href": "week3/tutorial.html#exercise-6-anything-surprising",
+    "title": "ETC5521 Tutorial 3",
+    "section": "Exercise 6: Anything surprising?",
+    "text": "Exercise 6: Anything surprising?\nWere there any findings that surprised the authors? Or would surprise you?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nI found it interesting that Mountain View had no decline in housing prices. This city has the headquarters of many of the world’s largest technology companies are in the city, including Google, Mozilla Foundation, Symantec, and Intuit."
+  },
+  {
+    "objectID": "week3/tutorial.html#exercise-7-additional-resources",
+    "href": "week3/tutorial.html#exercise-7-additional-resources",
+    "title": "ETC5521 Tutorial 3",
+    "section": "Exercise 7: Additional resources",
+    "text": "Exercise 7: Additional resources\nSome of the findings were compared against information gathered from external sources. Can you point to an example of this, and how the other information was used to support or question the finding?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nAll of this is consistent with what we have learned about subprime mortgages since the housing bust hit the headlines.\nSubprime mortgages were offered on little collateral which meant they were quite risky, and they tended to be on the lower end of the housing market. This information was in all the news headlines at the time, and the analysis that these authors have done was checked against the common reporting at the time. The data was consistent with these reports."
+  },
+  {
+    "objectID": "week3/tutorial.html#finishing-up",
+    "href": "week3/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 3",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week3/tutorialsol.html",
+    "href": "week3/tutorialsol.html",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Constructing, planning and evaluating an exploratory data analysis are important skills. This tutorial is an exercise in reading and digesting a really good analysis. Your goal is to understand the analysis, reproduce it, and the choices the analysts made, and why these were would be considered high quality."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#objectives",
+    "href": "week3/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Constructing, planning and evaluating an exploratory data analysis are important skills. This tutorial is an exercise in reading and digesting a really good analysis. Your goal is to understand the analysis, reproduce it, and the choices the analysts made, and why these were would be considered high quality."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#preparation",
+    "href": "week3/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 3",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is EDA Case Study: Bay area blues. It is authored by Hadley Wickham, Deborah F. Swayne, and David Poole. It appeared in the book “Beautiful Data” edited by Jeff Hammerbacher and Toby Segaran. Not all the chapters in the book are good examples of data analysis, though.\n\nComplete the weekly quiz, before the deadline!\nMake sure you have this list of R packages installed:\n\n\nNote that the code and data for reproducing their analysis can be found here.\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#exercises",
+    "href": "week3/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 3",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nPoint your web browser to the github site for the analysis, https://github.com/hadley/sfhousing. The main data file is house-sales.csv. Read this data into your R session. (🛑 ARE YOU USING A PROJECT FOR THIS UNIT? IF NOT, STOP and OPEN IT NOW.)\nYou can read the data in directly from the web site using this code:\n\n1. What’s in the data?\n\nIs the data in tidy form?\nOf the variables in the data, which are\n\nnumeric?\ncategorical?\ntemporal?\n\nWhat would be an appropriate plot to make to examine the\n\nnumeric variables?\ncategorical variables?\na categorical and numeric variable?\na temporal variable and a numeric variable?\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nYes\n\nprice, br, lsqft, bsqft\ncounty, city, zip, street\nyear, date, datesold\n\n\nscatterplots\nbar charts, pie charts, mosaic\nfacet by the categorical variable. could be boxplots, or density plots, or facetted scatterplots to look at multiple numeric variables\n\ntime series plot, connect lines to indicate time, maybe need to aggregate over time to get one value per time point\n\n\n\n\n\n\n\n\n2. Time series plots\nReproduce the time series plots of weekly average price and volume of sales.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nsales_weekly &lt;- sales |&gt;\n  group_by(date) |&gt;\n  summarise(av_price = mean(price, na.rm=TRUE),\n            volume = n())\np1 &lt;- ggplot(sales_weekly, aes(x=date, y=av_price)) +\n  geom_line() +\n  scale_y_continuous(\"Average price (millions)\", \n     breaks = seq(500000, 800000, 50000), \n     labels = c(\"0.50\", \"0.55\", \"0.60\", \"0.65\",\n                \"0.70\", \"0.75\", \"0.80\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\")\np2 &lt;- ggplot(sales_weekly, aes(x=date, y=volume)) + geom_line() +\n  scale_y_continuous(\"Number of sales\", \n     breaks = seq(500,3000,500), \n     labels = c(\"500\", \"1,000\", \"1,500\", \"2,000\",\n                \"2,500\", \"3,000\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\")\np1/p2\n\n\n\n\n\n\n\n3. Correlation between series\nIt looks like volume goes down as price goes up. There is a better plot to make to examine this. What is it? Make the plot. After making the plot, report what you learn about the apparent correlation.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAny correlation is very weak, and negative.\n\n\n\n\n\n\n4. Geographic differences\nThink about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMarin County has the highest prices on average, and San Joaquin the lowest. The lowest priced house was sold in Sonoma County. The highest priced properties and lowest priced are pretty similar from one county to another - that is, the variability within county is large.\n\n\n\n\n\n\n5. The Rich Get Richer and the Poor Get Poorer\nIn the section “The Rich Get Richer and the Poor Get Poorer” there are some interesting transformations of the data, and unusual types of plots. Explain why looking at proportional change in value refines the view of price movement in different higher vs lower priced properties.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe transformation makes changes relative to the initial average price at the start of the time period. All curves produced will start from the same point. This means that we only need to compare the end points of each line, saving us from calculating differences between lines relative to the difference at the beginning.\n\n\n\n\n\n\n6. Anything surprising?\nWere there any findings that surprised the authors? Or would surprise you?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nI found it interesting that Mountain View had no decline in housing prices. This city has the headquarters of many of the world’s largest technology companies are in the city, including Google, Mozilla Foundation, Symantec, and Intuit.\n\n\n\n\n\n\n7. Additional resources\nSome of the findings were compared against information gathered from external sources. Can you point to an example of this, and how the other information was used to support or question the finding?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nAll of this is consistent with what we have learned about subprime mortgages since the housing bust hit the headlines.\nSubprime mortgages were offered on little collateral which meant they were quite risky, and they tended to be on the lower end of the housing market. This information was in all the news headlines at the time, and the analysis that these authors have done was checked against the common reporting at the time. The data was consistent with these reports."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#whats-in-the-data",
+    "href": "week3/tutorialsol.html#whats-in-the-data",
+    "title": "ETC5521 Tutorial 3",
+    "section": "1. What’s in the data?",
+    "text": "1. What’s in the data?\n\nIs the data in tidy form?\nOf the variables in the data, which are\n\nnumeric?\ncategorical?\ntemporal?\n\nWhat would be an appropriate plot to make to examine the\n\nnumeric variables?\ncategorical variables?\na categorical and numeric variable?\na temporal variable and a numeric variable?\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nYes\n\nprice, br, lsqft, bsqft\ncounty, city, zip, street\nyear, date, datesold\n\n\nscatterplots\nbar charts, pie charts, mosaic\nfacet by the categorical variable. could be boxplots, or density plots, or facetted scatterplots to look at multiple numeric variables\n\ntime series plot, connect lines to indicate time, maybe need to aggregate over time to get one value per time point"
+  },
+  {
+    "objectID": "week3/tutorialsol.html#time-series-plots",
+    "href": "week3/tutorialsol.html#time-series-plots",
+    "title": "ETC5521 Tutorial 3",
+    "section": "2. Time series plots",
+    "text": "2. Time series plots\nReproduce the time series plots of weekly average price and volume of sales.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nsales_weekly &lt;- sales %&gt;%\n  group_by(date) %&gt;%\n  summarise(av_price = mean(price, na.rm=TRUE),\n            volume = n())\np1 &lt;- ggplot(sales_weekly, aes(x=date, y=av_price)) +\n  geom_line() +\n  scale_y_continuous(\"Average price (millions)\", \n              breaks = seq(500000, 800000, 50000), \n              labels = c(\"0.50\", \"0.55\", \"0.60\", \"0.65\",\n                         \"0.70\", \"0.75\", \"0.80\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\")\np2 &lt;- ggplot(sales_weekly, aes(x=date, y=volume)) + geom_line() +\n  scale_y_continuous(\"Number of sales\", \n              breaks = seq(500,3000,500), \n              labels = c(\"500\", \"1,000\", \"1,500\", \"2,000\",\n                         \"2,500\", \"3,000\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\")\np1/p2"
+  },
+  {
+    "objectID": "week3/tutorialsol.html#correlation-between-series",
+    "href": "week3/tutorialsol.html#correlation-between-series",
+    "title": "ETC5521 Tutorial 3",
+    "section": "3: Correlation between series",
+    "text": "3: Correlation between series\nIt looks like volume goes down as price goes up. There is a better plot to make to examine this. What is it? Make the plot. After making the plot, report what you learn about the apparent correlation.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAny correlation is very weak, and negative."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#exercise-4-geographic-differences",
+    "href": "week3/tutorialsol.html#exercise-4-geographic-differences",
+    "title": "ETC5521 Tutorial 3",
+    "section": "Exercise 4: Geographic differences",
+    "text": "Exercise 4: Geographic differences\nThink about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMarin County has the highest prices on average, and San Joaquin the lowest. The lowest priced house was sold in Sonoma County. The highest priced properties and lowest priced are pretty similar from one county to another - that is, the variability within county is large."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#exercise-5-the-rich-get-richer-and-the-poor-get-poorer",
+    "href": "week3/tutorialsol.html#exercise-5-the-rich-get-richer-and-the-poor-get-poorer",
+    "title": "ETC5521 Tutorial 3",
+    "section": "Exercise 5: The Rich Get Richer and the Poor Get Poorer",
+    "text": "Exercise 5: The Rich Get Richer and the Poor Get Poorer\nIn the section “The Rich Get Richer and the Poor Get Poorer” there are some interesting transformations of the data, and unusual types of plots. Explain why looking at proportional change in value refines the view of price movement in different higher vs lower priced properties.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe transformation makes changes relative to the initial average price at the start of the time period. All curves produced will start from the same point. This means that we only need to compare the end points of each line, saving us from calculating differences between lines relative to the difference at the beginning."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#exercise-6-anything-surprising",
+    "href": "week3/tutorialsol.html#exercise-6-anything-surprising",
+    "title": "ETC5521 Tutorial 3",
+    "section": "Exercise 6: Anything surprising?",
+    "text": "Exercise 6: Anything surprising?\nWere there any findings that surprised the authors? Or would surprise you?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nI found it interesting that Mountain View had no decline in housing prices. This city has the headquarters of many of the world’s largest technology companies are in the city, including Google, Mozilla Foundation, Symantec, and Intuit."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#exercise-7-additional-resources",
+    "href": "week3/tutorialsol.html#exercise-7-additional-resources",
+    "title": "ETC5521 Tutorial 3",
+    "section": "Exercise 7: Additional resources",
+    "text": "Exercise 7: Additional resources\nSome of the findings were compared against information gathered from external sources. Can you point to an example of this, and how the other information was used to support or question the finding?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nAll of this is consistent with what we have learned about subprime mortgages since the housing bust hit the headlines.\nSubprime mortgages were offered on little collateral which meant they were quite risky, and they tended to be on the lower end of the housing market. This information was in all the news headlines at the time, and the analysis that these authors have done was checked against the common reporting at the time. The data was consistent with these reports."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#finishing-up",
+    "href": "week3/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 3",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
   }
 ]
