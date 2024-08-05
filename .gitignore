@@ -46,3 +46,6 @@ po/*~
 rsconnect/
 
 /.quarto/
+
+# Junk files
+.DS_Store
