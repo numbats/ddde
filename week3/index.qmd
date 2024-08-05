@@ -19,14 +19,25 @@ schedule |>
 
 ## What you will learn this week
 
+- Role of IDA
+- Techniques for
+    - data screening
+    - data cleaning
+    - imputation
+    - validation
+- Checking assumptions for hypothesis testing and fitting linear models
 
 ## Lecture slides
 
+- [html](https://ddde.numbat.space/week3/slides.html)
+- [pdf](https://ddde.numbat.space/week3/slides.pdf)
+- [qmd](https://ddde.numbat.space/week3/slides.qmd)
+- [R](https://ddde.numbat.space/week3/slides.R)
 
 ## Tutorial instructions
 
-Instructions:
-
+- [html](https://ddde.numbat.space/week3/tutorial.html)
+- [qmd](https://ddde.numbat.space/week3/tutorial.qmd)
 
 ## Assignments
 
