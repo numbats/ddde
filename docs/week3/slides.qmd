@@ -48,7 +48,7 @@ Prior to conducting a [confirmatory data analysis]{.monash-black2}, it is import
 :::
 
 ::: {.fragment}
-* [Confirmatory data analysis (CFA)]{.monash-blue2} is focused on statistical inference and includes procedures for:
+* [Confirmatory data analysis (CDA)]{.monash-blue2} is focused on statistical inference and includes procedures for:
   * hypothesis testing, 
   * predictive modelling,
   * parameter estimation including uncertainty,
@@ -90,7 +90,7 @@ The [**main objective for IDA**]{.monash-blue2} is to intercept any problems in 
 :::
 
 ::: {.columns width=60%}
-* The role of **CFA** is to answer the intended question(s) that the data were collected for.
+* The role of **CDA** is to answer the intended question(s) that the data were collected for.
 
 ::: {.fragment}
 
@@ -130,7 +130,7 @@ Huebner et al (2018)'s six steps of IDA: (1) Metadata setup, (2) [Data cleaning]
 ::: {.column width=50%}
 
 ::: {.info}
-IDA prepares an analyst for CFA. One needs to be careful about NOT compromising the inference. 
+IDA prepares an analyst for CDA. One needs to be careful about NOT compromising the inference. 
 :::
 
 How do you compromise inference?
@@ -152,7 +152,7 @@ How do you compromise inference?
 How do you avoid these errors?
 
 - Document ALL the IDA, using a reproducible analysis script.
-- Pre-register your CFA plan, so that your CFA questions do not change.
+- Pre-register your CDA plan, so that your CDA questions do not change.
 - Decisions made on outlier removal, variable selection, recoding, sampling, handling of zeros have known affects on results, and are justifiable.
 
 Insure yourself against accusations of [data snooping]{.monash-blue2}, data dredging, data fishing.
@@ -379,7 +379,7 @@ In addition, numerical or graphical summaries may reveal that there is unwanted 
 
 ::: {.fragment}
 
-* Does the distribution of the data imply violations of assumptions for the CFA, such as
+* Does the distribution of the data imply violations of assumptions for the CDA, such as
     - non-normality, 
     - discrete rather real-valued, or
     - different variance in different domains?
@@ -1420,12 +1420,12 @@ Discarded models are hardly ever reported. Consequently, majority of reported st
 
 ::: {.column width=50%}
 
-- IDA is a model-focused exploration to support a CFA with:
+- IDA is a model-focused exploration to support a CDA with:
     -  data description and collection
     -  data quality checking, and
     -  checking assumptions
     -  model fit without any formal statistical inference.
-- IDA is part of EDA, even when no CFA is planned.    
+- IDA is part of EDA, even when no CDA is planned.    
 - IDA may never see the limelight BUT it [forms the foundation that the main analysis]{.monash-blue2} is built upon. [Document it! Do it well!]{.monash-orange2}
 
 :::
