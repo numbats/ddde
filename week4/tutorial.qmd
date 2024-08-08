@@ -1,0 +1,281 @@
+---
+title: "ETC5521 Tutorial 4"
+subtitle: "Initial data analysis"
+author: "Prof. Di Cook"
+date: "Aug 12, 2024"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: tutorial.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: tutorialsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+---
+
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(palmerpenguins)
+library(ggbeeswarm)
+library(nullabor)
+library(broom)
+library(conflicted)
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+```
+
+## 🎯 Objectives
+
+Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns. 
+
+## 🔧 Preparation 
+
+The reading for this week is [The initial examination of data](https://www.jstor.org/stable/28c1953a-8130-3c31-bd91-3ca6ce1d96d8?seq=7). It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis. 
+- Complete the weekly quiz, before the deadline!
+- Make sure you have this list of R packages installed: 
+
+- Complete the weekly quiz, before the deadline!
+- Make sure you have this list of R packages installed: 
+
+```{r}
+#| eval: false
+#| code-fold: false
+install.packages(c("tidyverse", "palmerpenguins", "ggbeeswarm", "broom", "nullabor"))
+```
+
+- Note that the code and data for reproducing their analysis can be found [here](https://github.com/hadley/sfhousing). 
+- Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
+
+
+## 📥 Exercises
+
+### Exercise 1: IDA on `penguins` data
+
+a. Take a `glimpse` of the `penguins` data. What types are variables are present in the data?
+
+```{r}
+#| echo: true
+library(palmerpenguins)
+```
+
+b. How was this data collected? You will need to read the documentation for the `palmerpenguins` package.
+
+c. Using the `visdat` package make an overview plot to examine types of variables and for missing values. 
+
+d. Check the distributions of each species on each of the size variables, using a jittered dotplot, using the `geom_quasirandom()` function in the `ggbeeswarm` package. There seems to be some bimodality in some species on some variables eg `bill_length_mm`. Why do you think this might be? Check your thinking by making a suitable plot.
+
+e. Is there any indication of outliers from the jittered dotplots of different variables?
+
+f. Make a scatterplot of `body_mass_g` vs `flipper_length_mm` for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?
+
+g. How well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the $R^2$, $\sigma$, and make a residual plot of residuals vs `flipper_length_mm`. From the residual plot, are there any concerns about the model fit?
+
+::: unilur-solution
+
+a.
+```{r}
+#| message: false
+library(tidyverse)
+glimpse(penguins)
+```
+b. Details are at https://allisonhorst.github.io/palmerpenguins/articles/intro.html, and you learn "These data were collected from 2007 - 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program, part of the US Long Term Ecological Research Network. The data were imported directly from the Environmental Data Initiative (EDI) Data Portal." It is necessary to also read the original data collection article https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081 to obtain details of the sampling. Breeding pairs of penguins were included based on sampling of nests where pairs of adults were present, were chosen and marked, before onset of egg-laying.
+
+c. There are three factor variables - species, island, sex - and three integer variables - flipper_length_mm, body_mass_g and year - and two numeric variables - bill_length_mm and bill_depth_mm.
+
+It is interesting that flipper_length_mm and body_mass_g are reported without decimal places, and thus are integers, whereas bill_length_mm and bill_depth_mm are reported with one decimal place, and thus are doubles. Both are numeric variables, though.
+
+Four variables have missing values: sex, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g. There are more missings on sex. The other missings occur together, the penguins are missing on all five variables.
+
+```{r}
+library(visdat)
+vis_dat(penguins)
+```
+
+d. Particularly on `bill_length_mm` multimodality can be seen in the Chinstrap and Gentoo penguins. This corresponds to differences in the two species. Differences can be seen in the sexes for all of the variables and species, but it is only big enough in `bill_length_mm` to be noticeable as bimodality.
+
+```{r}
+library(ggbeeswarm)
+ggplot(penguins, aes(x=species, 
+                     y=bill_length_mm)) +
+  geom_quasirandom() 
+ggplot(penguins, aes(x=species, 
+                     y=bill_length_mm, 
+                     colour=sex)) +
+  geom_quasirandom() +
+  scale_color_brewer("", palette="Dark2")
+
+```
+
+e. Outliers can be seen on `bill_length_mm` for Chinstrap and Gentoo. Interestingly, there is one female penguins with a really big bill, bigger than all the males even.
+
+Also on `flipper_length_mm` there is one female penguins with a much smaller value than others.
+
+f. The striping corresponds to rounded values of flipper length, that have been reported to the nearest mm. It appears that it is done across all measuring as it is present for both sexes, for all species, for each island and each year. Otherwise there is nothing much to report as unusual. 
+
+```{r}
+penguins %>%
+  na.omit() %>%
+  ggplot(aes(x=flipper_length_mm,
+             y=body_mass_g)) +
+  geom_point() +
+  theme(aspect.ratio=1)
+
+penguins %>%
+  na.omit() %>%
+  ggplot(aes(x=flipper_length_mm,
+             y=body_mass_g)) +
+  geom_point() +
+  facet_wrap(~island, ncol=3, scales = "free") +
+  theme(aspect.ratio=1)
+
+penguins %>%
+  na.omit() %>%
+  ggplot(aes(x=flipper_length_mm,
+             y=body_mass_g)) +
+  geom_point() +
+  facet_wrap(~sex, ncol=2, scales = "free") +
+  theme(aspect.ratio=1)
+
+penguins %>%
+  na.omit() %>%
+  ggplot(aes(x=flipper_length_mm,
+             y=body_mass_g)) +
+  geom_point() +
+  facet_wrap(~species, ncol=3, scales = "free") +
+  theme(aspect.ratio=1)
+
+penguins %>%
+  na.omit() %>%
+  ggplot(aes(x=flipper_length_mm,
+             y=body_mass_g)) +
+  geom_point() +
+  facet_wrap(~year, ncol=3, scales = "free") +
+  theme(aspect.ratio=1)
+```
+
+g. The model fit statistics suggest it is a reasonably good model, with flipper length explaining about 76% of body mass. From the estimated standard deviation of the error, $\sigma=393$, we could say that the estimated body mass is likely accurate to within 800g. (Assuming normal distribution and 95% of observations within two $\sigma$.)
+
+The residual suggests no major problems. There is a little heteroskedasticity. Perhaps if you look carefully, though, it might indicate that different models should have been fitted for the smaller penguins and the bigger penguins, perhaps models separately for sex and species would be advised.
+
+```{r}
+library(broom)
+penguins_nona <- penguins %>%
+  na.omit()
+penguins_fit <- lm(body_mass_g~flipper_length_mm, data=penguins_nona)
+tidy(penguins_fit)
+glance(penguins_fit)
+penguins_m <- augment(penguins_fit)
+ggplot(penguins_m, aes(x=flipper_length_mm, y=.resid)) +
+  geom_hline(yintercept=1, colour="grey70") +
+  geom_point() +
+  theme(aspect.ratio=1)
+```
+
+
+:::
+
+
+### Exercise 2: Can we believe what we see?
+
+This question uses material from this week's lecture, from a few hours ago.
+
+a. In the previous question we made subjective statements about the residual plot to determine if the model was a good fit or not. We'll use randomisation to check any observations we made from the residual plot. The code below makes a lineup of the true plot against plots made with rotation residuals (nulls/good). When you run the code you will get a line `decrypt("....")`, which you can copy and paste back in to the console window to get the location of the true plot (in case you forgot which it is). Does the true plot look like the null plots? If not, describe how it differs.
+
+```{r resid-check}
+#| eval: false
+library(nullabor)
+ggplot(lineup(null_lm(body_mass_g~flipper_length_mm, method="rotate"),
+              penguins_m),
+       aes(x=flipper_length_mm, y=.resid)) +
+  geom_point() +
+  facet_wrap(~.sample, ncol=5) +
+  theme_void() +
+  theme(axis.text = element_blank(), 
+        panel.border = element_rect(fill=NA, colour="black"))
+```
+
+b. Pick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them 
+
+ - to pick the plot that is most different.
+ - explain why they picked that plot.
+ 
+Using your `decrypt()` code locate the true plot. Is the true plot different from the nulls?
+
+Did you or your friend choose the data plot? Was it identifiable from the lineup or indistinguishable from the null plots?
+
+::: unilur-solution
+a. The true plot looks a little different from the nulls. It has more of a V shape, which might suggest that the model fits poorly, that the smaller penguins have a different relationship than the larger penguins. It is evidence to support fitting separate models to the sexes and species.
+
+b. Something like the following
+
+```{r lineup-ex}
+library(nullabor)
+penguins_f_adelie <- penguins_nona %>%
+  filter(species == "Adelie",
+         sex == "female")
+penguins_f_adelie_bl_bd_fit <- 
+  lm(bill_depth_mm ~ bill_length_mm,
+     data=penguins_f_adelie)
+penguins_f_adelie_bl_bd_m <-
+  augment(penguins_f_adelie_bl_bd_fit)
+ggplot(lineup(null_lm(bill_depth_mm ~ 
+                        bill_length_mm,
+                      method="rotate"),
+              penguins_f_adelie_bl_bd_m),
+       aes(x=bill_length_mm, y=.resid)) +
+  geom_point() +
+  facet_wrap(~.sample, ncol=5) +
+  theme_void() +
+  theme(axis.text = element_blank(), 
+        panel.border = element_rect(fill=NA, colour="black"))
+```
+
+I would not be able to distinguish which is the true plot in this lineup.
+
+:::
+
+## 👌 Finishing up
+
+Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.
