@@ -1,0 +1,1283 @@
+---
+title: "ETC5521: Diving Deeply into Data Exploration"
+title-slide-attributes: 
+  data-background-image: "../images/bg.png"
+  data-background-size: 100%
+subtitle: "Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly"
+author: "Professor Di Cook"
+email: "ETC5521.Clayton-x@monash.edu"
+length: "100 minutes"
+pdflink: "lecture.pdf"
+institute: "Department of Econometrics and Business Statistics"
+footer: "ETC5521 Lecture 4 | [ddde.numbat.space](ddde.numbat.space)"
+format:
+  revealjs:
+    multiplex: false
+    slide-number: c/t
+    slide-tone: false
+    theme: "../assets/monash.scss"
+    width: 1600
+    height: 900
+    margin: 0.05
+    embed-resources: true
+---
+
+```{r, include = FALSE, echo=FALSE}
+source("../setup.R")
+```
+
+
+## What this class is about
+
+<center>
+
+{{< video "https://www.youtube.com/embed/rEHKm3Z1zUE" width="800" height="600" >}}
+
+</center>
+
+## Revisiting hypothesis testing {.transition-slide .center style="text-align: center;"}
+
+
+
+
+```{r coin}
+#| echo: false
+head <- '<img src="images/Australian_20c_H.png" height = "50px" style="vertical-align:middle;">'
+tail <- '<img src="images/Australian_20c_T.png" height = "50px" style="vertical-align:middle;">'
+```
+
+## (Frequentist) hypothesis testing framework
+
+::: {style="font-size: 80%;"}
+* Suppose $X$ is the number of heads out of $n$ independent tosses.
+* Let $p$ be the probability of getting a `r head` for this coin.
+
+**Hypotheses** 
+
+$H_0: p = 0.5$ vs. $H_a: p > 0.5$. Note $p_0=0.5$. <br> *Alternative* $H_a$ *is saying we believe that the coin is biased to heads.* <br> 
+
+[NOTE: Alternative needs to be decided before seeing data.]{.monash-orange2} 
+
+::: {.fragment}
+
+**Assumptions**  Each toss is independent with equal chance of getting a head.
+
+:::
+
+::: {.fragment}
+
+**Test statistic**  
+
+$X \sim B(n, p)$. Recall $E(X\mid H_0) = np_0$.<br> We observe $n, x, \widehat{p}$. Test statistic is $\widehat{p} - p_0$.
+
+:::
+
+::: {.fragment}
+
+**P-value** <br> [(or critical value or confidence interval)]{.smaller} 
+$P(X ~ \geq ~ x\mid H_0)$ 
+
+:::
+
+::: {.fragment}
+
+**Conclusion** Reject null hypothesis when the $p$-value is less than<br> some significance level $\alpha$. Usually $\alpha = 0.05$.
+:::
+:::
+
+## Testing coin bias [(1/4)]{.smallest}
+
+* Suppose I have a coin that I'm going to flip `r tail` `r head` 
+* If the coin is unbiased, what is the probability it will show heads?
+
+::: {.fragment}
+
+* *Yup, the probability should be 0.5.* 
+* So how would I test if a coin is biased or unbiased?
+* We'll collect some data. 
+:::
+
+## Testing coin bias [(2/4)]{.smallest}
+
+* **Experiment 1**: I flipped the coin 10 times and this is the result:
+
+<center>
+```{r coin-bias, results='asis'}
+set.seed(924)
+samp10 <- sample(rep(c(head, tail), c(7, 3)))
+cat(paste0(samp10, collapse = ""))
+```
+</center>
+
+* The result is 7 head and 3 tails. So 70% are heads. 
+* Do you believe the coin is biased based on this data?
+
+## Testing coin bias [(3/4)]{.smallest}
+
+* **Experiment 2**: Suppose now I flip the coin 100 times and this is the outcome:
+
+```{r coin-bias100, results='asis'}
+samp100 <- sample(rep(c(head, tail), c(70, 30)))
+cat(paste0(samp100, collapse = ""))
+```
+
+* We observe 70 heads and 30 tails. So again 70% are heads.
+* Based on this data, do you think the coin is biased?
+
+## Testing coin bias [(4/4)]{.smallest}
+
+### Calculate it
+
+:::: {.columns}
+::: {.column width=45%}
+
+**Experiment 1 (n=10)**
+
+- We observed $x=7$, or $\widehat{p} = 0.7$.
+
+- Assuming $H_0$ is true, we expect $np=10\times 0.5=5$.
+
+- Calculate the $P(X \geq 7)$
+
+<br>
+<br>
+
+::: {.fragment}
+```{r echo=TRUE}
+sum(dbinom(7:10, 10, 0.5))
+```
+:::
+
+:::
+
+::: {.column width=50%}
+
+
+**Experiment 2 (n=100)**
+
+- We observed $x=70$, or $\widehat{p} = 0.7$.
+
+- Assuming $H_0$ is true, we expect $np=100\times 0.5=50$.
+
+- Calculate the $P(X \geq 70)$
+
+<br>
+<br>
+
+::: {.fragment}
+
+```{r echo=TRUE}
+sum(dbinom(70:100, 100, 0.5))
+```
+:::
+
+:::
+::::
+
+## Why is the null hypothesis always specific?
+
+You need to be able to calculate the probability of something happening, if the null was true. 
+
+## Judicial system
+
+:::: {.columns}
+::: {.column width=50%}
+
+<br>
+
+![](images/omni/judicial-court.png){width=100%}
+
+:::
+
+::: {.column width=45%}
+
+::: {.fragment}
+
+
+<center>
+![](images/omni/statistical-court.png){width=70%}
+</center>
+
+**Evidence** by [test statistic]{.monash-blue2}<br>
+**Judgement** by [$p$-value]{.monash-blue2}, critical value or confidence interval
+
+:::
+
+::: {.fragment}
+
+
+[Does the test statistic have to be *numerical*?]{.monash-orange2}
+
+:::
+
+:::
+::::
+
+
+## Visual inference {.transition-slide .center style="text-align: center;"}
+
+
+
+## Visual inference
+
+:::: {.columns}
+::: {.column width=50%}
+
+
+* Hypothesis testing in a visual inference framework is where:
+   * the [_test statistic is a plot_]{.monash-blue2} and 
+   * judgement is by human visual perception.
+
+::: {.fragment}
+[Why is the plot a test statistic?]{.monash-orange2} We'll see why soon. 
+:::
+
+:::
+::: {.column width=50%}
+
+
+::: {.fragment}
+
+
+* *You, we, me* actually do visual inference many times but generally in an *informal* fashion.
+* The problem with doing this is we are making an inference on whether the plot has any patterns based on *a single data plot*.
+* The single data plot needs to be examined in the context of *what might this look like if different samples were shown.*
+
+:::
+
+:::
+::::
+
+## Reasons to use visual inference
+
+- Data plots tend to be over-interpreted. 
+- Reading data plots requires calibration.
+
+
+## Visual inference more formally
+
+:::: {.columns}
+::: {.column width=60%}
+
+1. State your null and alternate hypotheses.
+2. Define a <b>visual test statistic</b>, $V(.)$, i.e. a function of a sample to a plot.
+3. Define a method to generate <b>null data</b>, $\boldsymbol{y}_0$. 
+4. $V(\boldsymbol{y})$ maps the actual data, $\boldsymbol{y}$, to the plot. We call this the <b class="monash-blue">data plot</b>.
+5. $V(\boldsymbol{y}_0)$ maps a null data to a plot of the same form. We call this the <b class="monash-blue">null plot</b>. We repeat this $m - 1$ times to generate $m-1$ null plots. 
+6. A <b class="monash-blue">lineup</b> displays these $m$ plots in a random order. 
+7. Ask $n$ human viewers to select a plot in the lineup that looks different to others without any context given.
+:::
+::::
+
+## Visual inference more formally
+
+:::: {.columns}
+::: {.column width=60%}
+
+1. State your null and alternate hypotheses.
+2. Define a **visual test statistic**, $V(.)$, i.e. a function of a sample to a plot.
+3. Define a method to generate **null data**, $\boldsymbol{y}_0$. 
+4. $V(\boldsymbol{y})$ maps the actual data, $\boldsymbol{y}$, to the plot. We call this the [**data plot**]{.monash-blue2}.
+5. $V(\boldsymbol{y}_0)$ maps a null data to a plot of the same form. We call this the [**null plot**]{.monash-blue2}. We repeat this $m - 1$ times to generate $m-1$ null plots. 
+6. A [**lineup**]{.monash-blue2} displays these $m$ plots in a random order. 
+7. Ask $n$ human viewers to select a plot in the lineup that looks different to others without any context given.
+
+:::
+::: {.column width=40%}
+
+
+::: {.info}
+Suppose $x$ out of $n$ people detected the data plot from a lineup, then
+
+* the [**visual inference p-value**]{.monash-blue2} is given as $$P(X \geq x)$$ where $X \sim B(n, 1/m)$, and 
+* the [**power of a lineup**]{.monash-blue2} is estimated as $x/n$.
+
+:::
+
+:::
+::::
+
+## Two residual plots examples seen last week {.transition-slide .center style="text-align: center;"}
+
+## Lineup: Which plot has a pattern that is different from other plots?
+
+:::: {.columns}
+::: {.column width=60%}
+
+```{r}
+#| label: cars-lineup
+#| echo: false
+#| out-width: 90%
+#| fig-width: 9
+#| fig-height: 7
+library(nullabor)
+cars_fit <- lm(dist ~ speed, data = cars)
+cars_lm <- augment(cars_fit)
+set.seed(1051)
+ggplot(lineup(null_lm(dist ~ speed, method="rotate"), cars_lm), aes(x=speed, y=.resid)) +
+  geom_point() +
+  facet_wrap(~.sample, ncol=5) +
+  theme(axis.text=element_blank(),
+        axis.title=element_blank())
+```
+
+:::
+
+::: {.column width=40%}
+
+
+::: {.fragment}
+
+Residuals from `dist~speed` using `datasets::cars` (week 3). 
+
+```{r}
+#| eval: false
+#| echo: true
+lm(dist ~ speed, data = cars)
+```
+
+::: {style="font-size: 80%;"}
+
+* This is a lineup of the residual plot
+* Which plot (if any) looks different from the others?
+* Why do you think it looks different? 
+
+:::
+
+:::
+
+::: {.fragment style="font-size: 80%;"}
+
+```
+> decrypt("clZx bKhK oL 3OHohoOL 0B")
+[1] "True data in position  11"
+```
+<br>
+<text style="color: #D93F00;"> How do we calculate statistical significance from this?</text>
+
+:::
+:::
+::::
+
+## Visual inference $p$-value (or "see"-value)
+
+:::: {.columns}
+::: {.column width=50%}
+
+* So $x$ out of $n$ people chose the data plot.
+* So the visual inference $p$-value is $P(X \geq x)$ where $X \sim B(n, 1/10)$.
+* In R, this is 
+```r
+1 - pbinom(x - 1, n, 1/20) 
+# OR 
+nullabor::pvisual(x, n, 20)
+```
+* The calculation is made with the assumption that the chance of a single observer randomly chooses the true plot is 1/20. 
+
+:::
+
+::: {.column width=50%}
+
+Suppose $x=2$ out of $n=16$ people chose plot 11 (previous slide). 
+
+The probability that this happens by random guessing (p-value) is 
+
+```{r}
+#| echo: true
+1 - pbinom(2 - 1, 16, 1/20)
+nullabor::pvisual(2, 16, 20)
+```
+:::
+::::
+
+
+## Lineup: Which plot has a pattern that is different from other plots?
+
+:::: {.columns}
+::: {.column width=60%}
+
+```{r}
+#| label: diamonds-lineup
+#| echo: false
+#| out-width: 80%
+#| fig-width: 9
+#| fig-height: 7
+library(broom)
+diamonds <- diamonds %>%
+  mutate(lprice = log10(price),
+         lcarat = log10(carat))
+d_fit <- lm(lprice ~ lcarat, data=diamonds)
+d_res <- augment(d_fit, diamonds)
+
+set.seed(923)
+l <- lineup(null_lm(lprice ~ lcarat,
+                      method="rotate"), d_res)
+ggplot(l, aes(lcarat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 0.01) +
+  geom_smooth(data=l, method = "lm", colour="orange", se=F) +
+  facet_wrap(~.sample, ncol=5) +
+  theme_bw() +
+  theme(axis.text=element_blank(),
+        axis.title=element_blank())
+
+```
+
+:::
+
+::: {.column width=40%}
+
+::: {.fragment}
+
+Residuals from log-transformed `price~carat` `ggplot2::diamonds` (week 3). 
+
+```{r}
+#| eval: false
+#| echo: true
+d_fit <- lm(lprice ~ lcarat, data=diamonds)
+```
+
+::: {style="font-size: 80%;"}
+
+* This is a lineup of the residual plot for the model where both carat and price are log-transformed
+* Which plot (if any) looks different from the others? 
+* Why do you think it looks different? 
+
+:::
+:::
+
+::: {.fragment}
+
+```
+> decrypt("clZx bKhK oL 3OHohoOL 0Q")
+[1] "True data in position  15"
+```
+:::
+
+:::
+
+::::
+
+## Visual inference $p$-value (or "see"-value)
+
+:::: {.columns}
+::: {.column width=50%}
+
+Suppose $x=8$ out of $n=12$ people chose plot 15 (previous slide). 
+
+The probability that this happens by random guessing (p-value) is 
+
+```{r}
+#| echo: true
+1 - pbinom(8 - 1, 12, 1/20)
+nullabor::pvisual(8, 12, 20)
+```
+
+:::
+::: {.column width=50%}
+
+
+[This is basically impossible to happen by chance.]{.monash-orange2}
+
+<br>
+Next, how the residuals are different from "good" residuals has to be determined by the follow-up question: how did you decide your chosen plot was different?
+
+<br>
+Plot 15 has a different variance pattern, it's not the regular up-down pattern seen in the other plots. This suggests that there is some [heteroskedasticity]{.monash-orange2} in the data that is not captured by the error distribution in the model.
+
+:::
+::::
+
+
+## New residual plot examples {.transition-slide .center style="text-align: center;"}
+
+
+## Residual plot (1/3) 
+
+:::: {.columns}
+::: {.column width=30%}
+
+<br><br>
+Is there a problem with the model?
+
+:::
+
+::: {.column width=70%}
+
+```{r}
+#| echo: false
+#| out-width: 60%
+#| fig-width: 3
+#| fig-height: 3
+library(visage)
+vi_lineup <- readRDS("/Users/cookd/students_PhD/Patrick/lineup_residual_diagnostics/data/vi_lineup.rds")
+i <- 915
+l <- vi_lineup[[i]]
+VI_MODEL$plot(filter(l$data, k==1), 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light())
+```
+
+:::
+::::
+
+## Residual plot (2/3) 
+
+:::: {.columns}
+::: {.column width=30%}
+
+<br><br>
+Is there a problem with the model?
+:::
+
+::: {.column width=70%}
+
+```{r}
+#| echo: false
+#| out-width: 60%
+#| fig-width: 3
+#| fig-height: 3
+VI_MODEL$plot(filter(l$data, k==5), 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light())
+
+```
+:::
+::::
+
+## Residual plot (3/3) 
+
+:::: {.columns}
+::: {.column width=30%}
+
+<br><br>
+Is there a problem with the model?
+
+:::
+::: {.column width=70%}
+
+```{r}
+#| echo: false
+#| out-width: 60%
+#| fig-width: 3
+#| fig-height: 3
+VI_MODEL$plot(filter(l$data, k==14), 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light())
+```
+
+:::
+::::
+
+## Residual plots need context 
+
+<br>
+You are asked to decide IF THERE IS NO PATTERN. [This is hard!]{.monash-orange2}
+<br>
+<br>
+
+Residual plots are better when viewed in the [context of good residual plots]{.monash-blue2}, where we know the assumptions of the model are satisfied.
+
+## Which is the worst residual plot? 
+
+:::: {.columns}
+::: {.column width=70%}
+
+```{r}
+#| echo: false
+#| out-width: 80%
+#| fig-width: 7
+#| fig-height: 6
+VI_MODEL$plot_lineup(l$data, 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light(),
+                     remove_axis = TRUE)
+```
+:::
+
+::: {.column width=30%}
+19 of these plots are good residual (null) plots.  
+:::
+
+::::
+
+##
+
+:::: {.columns}
+::: {.column width=30%}
+
+<br><br>
+All of the residual plots shown slides 22-24 were NULL plots.
+
+:::
+::: {.column width=70%}
+
+```{r}
+#| echo: false
+#| out-width: 80%
+#| fig-width: 7
+#| fig-height: 6
+VI_MODEL$plot_lineup(l$data, 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light(),
+                     remove_axis = TRUE) +
+  geom_rect(data=filter(l$data, k %in% c(1, 5, 14)), 
+            aes(xmin=min(l$data$.fitted), 
+                xmax=max(l$data$.fitted), 
+                ymin=min(l$data$.resid), 
+                ymax=max(l$data$.resid)), 
+            colour="black", alpha=0.5, fill=NA, linewidth=0.2) 
+```
+:::
+::::
+
+##
+
+:::: {.columns}
+::: {.column width=30%}
+
+<br><br>
+The actual residual plot is
+:::
+
+::: {.column width=70%}
+
+
+```{r}
+#| echo: false
+#| out-width: 80%
+#| fig-width: 7
+#| fig-height: 6
+VI_MODEL$plot_lineup(l$data, 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light(),
+                     remove_axis = TRUE) +
+  geom_rect(data=filter(l$data, k==2), 
+            aes(xmin=min(l$data$.fitted), 
+                xmax=max(l$data$.fitted), 
+                ymin=min(l$data$.resid), 
+                ymax=max(l$data$.resid)), 
+            colour="yellow", alpha=0.5, fill=NA, linewidth=1)
+```
+:::
+::::
+
+## It's not only for residual plots {.transition-slide .center style="text-align: center;"}
+
+## Sports analytics: basketball
+
+:::: {.columns}
+::: {.column width=30%}
+
+<br><br>
+Which plot is most different?
+:::
+
+::: {.column width=70%}
+
+
+```{r}
+#| echo: false
+#| out-width: 80%
+#| fig-width: 7
+#| fig-height: 6
+threept <- subset(lal, type == "3pt" & !is.na(x) & !is.na(y))
+threept <- threept[c(".id", "period", "time", "team", "etype", "player", "points", "result", "x", "y")]
+threept <- transform(threept, 
+  x = x + runif(length(x), -0.5, 0.5),
+  y = y + runif(length(y), -0.5, 0.5))
+threept <- transform(threept, 
+  r = sqrt((x - 25) ^ 2 + y ^ 2),
+  angle = atan2(y, x - 25))
+
+# Focus in on shots in the typical range
+threept_sub <- threept %>% 
+  filter(between(r, 20, 39)) %>%
+  mutate(angle = angle * 180 / pi) %>%
+  select(angle, r)
+
+ggplot(lineup(null_lm(r ~ poly(angle, 2)), 
+              true=threept_sub, n = 20, pos = 2), 
+       aes(x=angle, y=r)) + 
+  geom_point(alpha=0.3) + 
+  scale_x_continuous("Angle (degrees)", 
+  breaks = c(0, 45, 90, 135, 180), limits = c(0, 180)) +
+  facet_wrap(~ .sample, ncol = 5) +
+  theme_bw() +
+  theme(axis.text=element_blank(),
+        axis.title=element_blank())
+
+```
+:::
+::::
+
+## Time series: cross-currency rates
+
+:::: {.columns}
+::: {.column width=30%}
+
+<br><br>
+Which plot is most different?
+:::
+
+::: {.column width=70%}
+
+
+```{r}
+#| label: lineup-aud
+#| echo: false
+#| out-width: 80%
+#| fig-width: 7
+#| fig-height: 6
+library(forecast)
+
+l <- lineup(null_ts("rate", auto.arima), aud, pos=10)
+ggplot(l, aes(x=date, y=rate)) + geom_line() +
+  facet_wrap(~.sample, scales="free_y") +
+  theme(axis.text = element_blank()) +
+  xlab("") + ylab("")
+
+```
+
+:::
+::::
+
+## Association: cars
+
+
+:::: {.columns}
+::: {.column width=30%}
+
+<br><br>
+Which plot is most different?
+:::
+
+::: {.column width=70%}
+
+```{r}
+#| label: lineup-cars
+#| echo: false
+#| out-width: 80%
+#| fig-width: 7
+#| fig-height: 6
+ggplot(lineup(null_permute('mpg'), mtcars), aes(mpg, wt)) +
+  geom_point() +
+  facet_wrap(~ .sample, ncol=5) +
+  theme(axis.text = element_blank()) +
+  xlab("") + ylab("")
+```
+
+:::
+::::
+
+## Spatial analysis: cancer incidence
+
+:::: {.columns}
+::: {.column width=30%}
+
+<br><br>
+Which plot is most different?
+
+<br><br><br><br>
+[From [Steff Kobakian's Master's thesis](https://github.com/srkobakian/experiment)]{.smallest}
+
+:::
+
+::: {.column width=70%}
+
+![](images/aus_three_9_hex.png){width=900}
+
+:::
+::::
+
+
+## Reading any plot is easier in the context of null plots {.transition-slide .center style="text-align: center;"}
+
+## Why is a data plot a statistic? {.transition-slide .center style="text-align: center;"}
+
+
+## Why is a data plot a statistic? [(1/2)]{.smallest}
+
+- The concept of tidy data matches elementary statistics
+- Tabular form puts [variables in columns]{.monash-blue2} and observations in rows
+
+$$X = \left[ \begin{array}{rrrr}
+           X_1 & X_2 & ... & X_p 
+           \end{array} \right] \\
+  = \left[ \begin{array}{rrrr}
+           X_{11} & X_{12} & ... & X_{1p} \\
+           X_{21} & X_{22} & ... & X_{2p} \\
+           \vdots & \vdots & \ddots& \vdots \\
+           X_{n1} & X_{n2} & ... & X_{np}
+           \end{array} \right]$$
+
+- Variables can have distributions, e.g. $X_1 \sim N(0,1), ~~X_2 \sim \text{Exp}(1) ...$
+
+
+## Why is a data plot a statistic? [(2/2)]{.smallest}
+
+::: {style="font-size: 80%;"}
+- [A statistic is a function on the values of items in a sample]{.monash-blue2}, e.g. for $n$ iid random variates $\bar{X}_1=\sum_{i=1}^n X_{i1}$, $s_1^2=\frac{1}{n-1}\sum_{i=1}^n(X_{i1}-\bar{X}_1)^2$
+- We study the behaviour of the statistic over all possible samples of size $n$. 
+- The [grammar of graphics is the mapping of (random) variables to graphical elements]{.monash-blue2}, making plots of data into statistics
+:::
+
+:::: {.columns}
+
+::: {.column width=33%}
+
+::: {.fragment}
+
+**Example 1:**
+
+::: {style="font-size: 120%;"}
+
+```
+ggplot(threept_sub, 
+       aes(x=angle, y=r)) + 
+  geom_point(alpha=0.3)
+```
+:::
+
+::: {style="font-size: 80%;"}
+
+<br>
+
+`angle` is mapped to the x axis
+
+`r` is mapped to the y axis
+
+:::
+:::
+
+
+:::
+
+::: {.column width=33%}
+
+::: {.fragment}
+
+**Example 2:**
+
+::: {style="font-size: 120%;"}
+
+```
+ggplot(penguins, 
+      aes(x=bl, 
+          y=fl, 
+          colour=species)) +
+  geom_point()
+```
+:::
+
+::: {style="font-size: 80%;"}
+
+<br>
+
+`bl` is mapped to the x axis
+
+`fl` is mapped to the y axis
+
+`species` is mapped to colour
+
+:::
+:::
+:::
+
+::: {.column width=33%}
+
+::: {.fragment}
+
+**Example 3:**
+
+::: {style="font-size: 120%;"}
+
+```
+ggplot(aud, aes(x=date, y=rate)) + 
+  geom_line() 
+```
+:::
+
+::: {style="font-size: 80%;"}
+
+<br>
+
+`date` is mapped to the x axis
+
+`rate` is mapped to the y axis
+
+displayed as a line `geom` 
+
+:::
+:::
+
+:::
+::::
+
+## Determining the null hypothesis {.transition-slide .center style="text-align: center;"}
+
+
+## What is the null hypothesis? [(1/2)]{.smallest}
+
+To determine the null hypothesis, you need to think about [what pattern would NOT be interesting]{.monash-blue2}. 
+
+:::: {.columns}
+::: {.column width=50%}
+
+A
+```
+ggplot(data) + 
+  geom_point(aes(x=x1, y=x2))
+```
+
+<br>
+
+
+B
+```
+ggplot(data) + 
+  geom_point(aes(x=x1, 
+    y=x2, colour=cl))
+```
+
+:::
+::: {.column width=50%}
+
+C
+```
+ggplot(data) + 
+  geom_histogram(aes(x=x1))
+```
+
+<br>
+
+D
+```
+ggplot(data) + 
+  geom_boxplot(aes(x=cl, y=x1))
+```
+:::
+::::
+
+<br><br>
+
+::: {style="font-size: 80%;"}
+
+🤔 Which of these plot definitions would most match to a null hypothesis stating *there is no difference in the distribution between the groups?*
+
+:::
+
+
+## What is the null hypothesis? [(2/2)]{.smallest}
+
+<br><br>
+
+
+:::: {.columns}
+::: {.column width=50%}
+
+
+A
+
+$H_o:$ no association between `x1` and `x2`
+
+<br>
+<br>
+
+
+B
+
+$H_o:$ no difference in association of between `x1` and `x2` between levels of `cl`
+
+:::
+::: {.column width=50%}
+
+
+C
+
+$H_o:$ the distribution of `x1` is XXX
+
+<br>
+<br>
+
+
+D
+
+$H_o:$ no difference in the distribution of `x1` between levels of `cl`
+:::
+::::
+
+## How do you generate null samples {.transition-slide .center style="text-align: center;"}
+
+
+## Primary null-generating mechanisms
+
+<br>
+
+Null samples can be generated using two basic approaches:
+
+- [Permutation]{.monash-blue2}: randomizing the order of one of the variables breaks association, but keeps marginal distributions the same.
+- [Simulation]{.monash-blue2}: from a given distribution, or model. Assumption is that the data comes from that model. 
+
+applied to subsets, or conditioning on other variables. Simulation may require computing summary statistics from the data to use as parameter estimates.
+
+## Association: cars
+
+:::: {.columns}
+::: {.column width=70%}
+```{r}
+#| label: lineup-cars
+#| echo: false
+#| out-width: 80%
+#| fig-width: 7
+#| fig-height: 6
+```
+:::
+::: {.column width=30%}
+
+<br><br>
+
+Null plots generated by [permuting]{.monash-blue2} `x` variable.
+
+:::
+::::
+
+<!--
+## New example: Temperatures of stars [(1/2)]{.smallest}
+
+* The data consists of the surface temperature in Kelvin degrees of 96 stars.
+* We want to check if the surface temperature has an exponential distribution. 
+* We use histogram with 30 bins as our visual test statistic.
+* For the null data, we will generate from an exponential distribution.
+
+```{r star-null, message = TRUE}
+line_df <- lineup(null_dist("temp", "exp", 
+    list(rate = 1 / mean(dslabs::stars$temp))),
+  true = dslabs::stars,
+  n = 10
+)
+```
+* Note: the rate in an exponential distribution can be estimated from the inverse of the sample mean.
+
+## New example: Temperatures of stars [(2/2)]{.smallest}
+
+:::: {.columns}
+::: {.column width=50%}
+
+::: {.panel-tabset}
+
+## Plot
+
+```{r stars-lineup, echo = FALSE, fig.width = 14}
+ggplot(line_df, aes(temp)) +
+  geom_histogram(color = "white") +
+  facet_wrap(~.sample, nrow = 2) +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank()
+  )
+```
+
+## R
+```{r stars-lineup, eval = FALSE}
+```
+
+:::
+:::
+::::
+-->
+
+## Time series: cross-currency rates
+
+:::: {.columns}
+::: {.column width=70%}
+
+```{r}
+#| label: lineup-aud
+#| echo: false
+#| out-width: 80%
+#| fig-width: 7
+#| fig-height: 6
+```
+
+:::
+::: {.column width=30%}
+
+<br><br>
+Nulls generated by [simulating]{.monash-blue2} from an ARIMA model.
+
+:::
+::::
+
+
+## Beyond $p$-value to power {.transition-slide .center style="text-align: center;"}
+
+
+## What is power?
+
+:::: {.columns}
+::: {.column width=70%}
+
+* A statistic is said to be [more powerful]{.monash-blue2} than another statistic if it has a higher probability of correctly rejecting the null hypothesis when the alternative hypothesis is true.
+* The effectiveness of two plots designs for the same data can be compared by computing power from a lineup. 
+* The power of a lineup is calculated as $x/n$ where $x$ is the number of people who detected the data plot out of $n$ people.
+
+:::
+::::
+
+## Which of these plots is more effective for assessing difference between groups?
+
+:::: {.columns}
+::: {.column width=50%}
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: 80%
+library(palmerpenguins)
+set.seed(400)
+ggplot(lineup(null_permute("species"), penguins, n=10),
+       aes(x=species, y=bill_length_mm, colour=species)) +
+  geom_point(alpha=0.4) +
+  facet_wrap(~.sample, ncol=5) +
+  colorspace::scale_color_discrete_divergingx(palette="Temps") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+```
+
+
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: 80%
+ggplot(lineup(null_permute("species"), penguins, n=10),
+       aes(x=species, y=bill_length_mm, fill=species), colour="white") +
+  geom_boxplot() +
+  facet_wrap(~.sample, ncol=5) +
+  colorspace::scale_fill_discrete_divergingx(palette="Temps") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+```
+
+:::
+
+::: {.column width=50%}
+
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: 80%
+ggplot(lineup(null_permute("species"), penguins, n=10),
+       aes(x=species, y=bill_length_mm, fill=species), colour="white") +
+  geom_violin() +
+  facet_wrap(~.sample, ncol=5) +
+  colorspace::scale_fill_discrete_divergingx(palette="Temps") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+```
+
+
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: 80%
+ggplot(lineup(null_permute("species"), penguins, n=10),
+       aes(x=species, y=bill_length_mm, colour=species)) +
+  ggbeeswarm::geom_quasirandom(alpha=0.8) +
+  facet_wrap(~.sample, ncol=5) +
+  colorspace::scale_color_discrete_divergingx(palette="Temps") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+```
+:::
+::::
+
+## Computing the power
+
+Note: Different people evaluated each lineup. 
+
+Plot type | $x$ | $n$ | Power
+--- | --- | --- | --- 
+`geom_point` | $x_1=4$ | $n_1=23$ | $x_1 / n_1=0.174$
+`geom_boxplot` | $x_2=5$ | $n_2=25$ | $x_2 / n_2=0.185$
+`geom_violin` | $x_3=6$ | $n_3=29$ | $x_3 / n_3=0.206$
+`ggbeeswarm::geom_quasirandom` | $x_4=8$ | $n_4=24$ | $x_4 / n_4=0.333$
+
+<br>
+
+::: {.fragment}
+
+
+* The plot type with a higher power is preferable 
+* You can use this framework to find the optimal plot design
+
+:::
+
+## Using the nullabor 📦 {.transition-slide .center style="text-align: center;"}
+
+##
+
+:::: {.columns}
+::: {.column width=50%}
+
+<img src="images/nullabor_hex.png" style="width: 20%" />
+
+When you run the example yourself, you get a `decrypt` code line, that you run after deciding on a plot to print the location of the data plot amongst the nulls. 
+
+- plot is a scatterplot, null hypothesis is [*there is no association between the two variables mapped to the x, y axes*]{.monash-blue2}
+- null generating mechanism: [permutation]{.monash-blue2}
+
+:::
+::: {.column width=50%}
+
+```{r lineup 1, fig.height=8, fig.width=8, out.width="70%"}
+set.seed(20190709)
+ggplot(lineup(null_permute('mpg'), mtcars), 
+  aes(x=mpg, y=wt)) +
+  geom_point() +
+  facet_wrap(~ .sample) +
+  theme(axis.text=element_blank(),
+        axis.title=element_blank())
+```
+:::
+::::
+
+## Some considerations in visual inference
+
+* In practice you don't want to bias the judgement of the human viewers so for a proper visual inference:   
+   * you should _not_ show the data plot before the lineup
+   * you should _not_ give the context of the data 
+   * you should remove labels and other identifying information from plots
+* These methods can be used whenever formal inference is not possible/available, for EDA or IDA or diagnosing models.
+* The data collection is vital for good inference: bad data leads to bad inference.
+* Determining how to generate null samples can be complicated. We'll see more examples throughout the next few weeks.
+
+## Resources 
+
+- Buja, Andreas, Dianne Cook, Heike Hofmann, Michael Lawrence, Eun-Kyung Lee, Deborah F. Swayne, and Hadley Wickham. 2009. “Statistical Inference for Exploratory Data Analysis and Model Diagnostics.” Philosophical Transactions. Series A, Mathematical, Physical, and Engineering Sciences 367 (1906): 4361–83.
+- Wickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2010. “Graphical Inference for Infovis.” IEEE Transactions on Visualization and Computer Graphics 16 (6): 973–79.
+- Hofmann, H., L. Follett, M. Majumder, and D. Cook. 2012. “Graphical Tests for Power Comparison of Competing Designs.” IEEE Transactions on Visualization and Computer Graphics 18 (12): 2441–48.
+- Majumder, M., Heiki Hofmann, and Dianne Cook. 2013. “Validation of Visual Statistical Inference, Applied to Linear Models.” Journal of the American Statistical Association 108 (503): 942–56.

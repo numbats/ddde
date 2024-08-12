@@ -1,0 +1,818 @@
+---
+title: "ETC5521: Exploratory Data Analysis"
+subtitle: "Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly"
+author: "Di Cook"
+email: "ETC5521.Clayton-x@monash.edu"
+date: "Week 4 - Session 1"
+length: "50 minutes"
+titlebgimg: "images/bg-01.png"
+output:
+  xaringan::moon_reader:
+    css:
+      - ninjutsu 
+      - "assets/font-awesome-all.css"
+      - "assets/tachyons-addon.css"
+      - "assets/animate.css"
+      - "assets/fira-code.css"
+      - "assets/boxes.css"
+      - "assets/table.css"
+      - "assets/styles.css"
+      - "assets/monash-brand.css"
+      - "assets/monash-fonts.css"
+      - "assets/slide-types.css"
+      - "assets/panelset-modified.css"
+      - "assets/scroll.css"
+      - "assets/datatables.css"
+    self_contained: false 
+    seal: false 
+    chakra: 'lib/remark-latest.min.js'
+    lib_dir: lib
+    includes:
+      in_header: "assets/head.html"
+    mathjax: "lib/mathjax-local/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    nature:
+      highlightStyle: magula
+      highlightLanguage: r 
+      highlightLines: true
+      highlightSpans: false 
+      countIncrementalSlides: false
+      slideNumberFormat: '%current%/%total%'
+      navigation:
+        scroll: false 
+        touch: true
+        click: false
+      ratio: '16:9'
+---
+
+```{r, include = FALSE}
+current_file <- knitr::current_input()
+basename <- gsub(".Rmd$", "", current_file)
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(colorspace)
+library(patchwork)
+library(broom)
+options(width = 200)
+knitr::opts_chunk$set(
+  fig.path = "images/week4A/",
+  fig.width = 6,
+  fig.height = 6,
+  fig.align = "center",
+  dev.args = list(bg = 'transparent'),
+  #out.width = "100%",
+  fig.retina = 3,
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  cache = FALSE,
+  cache.path = "cache/week04/"
+)
+theme_set(theme_bw(base_size = 14) +
+            theme(plot.background = element_rect(fill = 'transparent', colour = NA), axis.line.y = element_line(color = "black", linetype = "solid"),
+                  plot.title.position = "plot",
+                  plot.title = element_text(size = 24),
+                  panel.background  = element_rect(fill = 'transparent', colour = NA),
+                  legend.background = element_rect(fill = 'transparent', colour = NA),
+                  legend.key        = element_rect(fill = 'transparent', colour = NA)
+                  ) )
+```
+
+```{r titleslide, child="assets/titleslide.Rmd"}
+```
+
+```{css, echo = FALSE}
+table {
+  margin: auto;
+  border-top: 0.16em solid #111111;
+  border-bottom: 0.16em solid #111111;
+}
+table thead th {
+  border-bottom: 0.1em solid #111111;
+  text-align: left;
+}
+tr, th {
+  padding-left: 15px;
+  padding-right: 15px
+}
+```
+
+---
+
+class: transition middle
+
+# Revisiting <br> .yellow[hypothesis testing]
+
+
+---
+
+```{r coin}
+head <- '<img src="images/Australian_20c_H.png" height = "50px" style="vertical-align:middle;">'
+tail <- '<img src="images/Australian_20c_T.png" height = "50px" style="vertical-align:middle;">'
+```
+
+# (Frequentist) hypothesis testing framework
+
+* Suppose $X$ is the number of heads out of $n$ independent tosses.
+* Let $p$ be the probability of getting a `r head` for this coin.
+
+
+|     |     |
+|-----|-----|
+|**Hypotheses**  | $H_0: p = 0.5$ vs. $H_a: p > 0.5$. Note $p_0=0.5$. <br> Alternative $H_a$ is saying we believe that the coin is biased to heads. <br> .monash-orange2[Alternative needs to be decided before seeing data.] |
+--
+
+|**Assumptions**  | Each toss is independent with equal chance of getting a head.   |
+--
+
+|**Test statistic** | $X \sim B(n, p)$. Recall $E(X\mid H_0) = np_0$.<br> We observe $n, x, \widehat{p}$. Test statistic is $\widehat{p} - p_0$.|
+--
+
+|**P-value** <br>.font_small[(or critical value or confidence interval)] | $P(X ~ \geq ~ x\mid H_0)$ |
+--
+
+|**<i class="fas fa-gavel"></i> Conclusion** | Reject null hypothesis when the $p$-value is less than<br> some significance level $\alpha$. Usually $\alpha = 0.05$.|
+
+
+---
+
+# Testing coin bias .font_small[Part 1/2]
+
+* Suppose I have a coin that I'm going to flip `r tail` `r head` 
+--
+
+* If the coin is unbiased, what is the probability it will show heads?
+--
+
+* Yup, the probability should be 0.5. 
+--
+
+* So how would I test if a coin is biased or unbiased?
+--
+
+* We'll collect some data. 
+--
+
+* **Experiment 1**: I flipped the coin 10 times and this is the result:
+
+<center>
+```{r coin-bias, results='asis'}
+set.seed(924)
+samp10 <- sample(rep(c(head, tail), c(7, 3)))
+cat(paste0(samp10, collapse = ""))
+```
+</center>
+--
+
+* The result is 7 head and 3 tails. So 70% are heads. 
+--
+
+* Do you believe the coin is biased based on this data?
+
+
+
+---
+
+# Testing coin bias .font_small[Part 2/2]
+
+* **Experiment 2**: Suppose now I flip the coin 100 times and this is the outcome:
+
+```{r coin-bias100, results='asis'}
+samp100 <- sample(rep(c(head, tail), c(70, 30)))
+cat(paste0(samp100, collapse = ""))
+```
+--
+
+* We observe 70 heads and 30 tails. So again 70% are heads. 
+--
+
+* Based on this data, do you think the coin is biased?
+
+
+
+---
+# Calculate it
+
+.flex[
+.item.w-45[
+
+## Experiment 1 (n=10)
+
+- We observed $x=7$, or $\widehat{p} = 0.7$.
+
+- Assuming $H_0$ is true, we expect $np=10\times 0.5=5$.
+
+- Calculate the $P(X \geq 7)$
+
+<br>
+<br>
+
+```{r echo=TRUE}
+sum(dbinom(7:10, 10, 0.5))
+```
+
+
+]
+
+.item.w-50[
+
+## Experiment 1 (n=100)
+
+- We observed $x=70$, or $\widehat{p} = 0.7$.
+
+- Assuming $H_0$ is true, we expect $np=100\times 0.5=50$.
+
+- Calculate the $P(X \geq 70)$
+
+<br>
+<br>
+
+```{r echo=TRUE}
+sum(dbinom(70:100, 100, 0.5))
+```
+
+
+]
+
+]
+---
+
+# Judicial system
+
+.grid[
+.item[
+<br>
+<center>
+<img src="images/omni/judicial-court.png">
+</center>
+]
+
+.item.bg-gray80.pl3[
+<br>
+{{content}}
+]
+
+]
+
+--
+
+<center>
+<img src="images/omni/statistical-court.png">
+</center>
+<ul>
+<li><i class="fas fa-search"></i> Evidence by test statistic</li>
+<li><i class="fas fa-gavel"></i> Judgement by p-value, critical value or confidence interval</li>
+</ul>
+{{content}}
+
+--
+
+<span class="red">Does the test statistic have to be a <i>numerical summary statistic</i>?</span>
+
+
+
+---
+
+class: transition middle
+
+# Visual inference
+
+---
+
+# Visual inference
+
+.grid[
+.item[
+
+* Hypothesis testing in visual inference framework is where:
+   * <i class="fas fa-search"></i>  the .monash-blue[_test statistic is a plot_] and 
+   * <i class="fas fa-gavel"></i> judgement is by human visual perception.
+{{content}}
+
+]
+.item.bg-gray80.pa3[
+
+
+]
+]
+--
+
+* You (and many other people) actually do visual inference many times but generally in an informal fashion.
+{{content}}
+--
+
+* Here, we are making an inference on whether the residual plot has any patterns based on a single data plot.
+
+---
+
+class: transition middle
+
+.font_large[
+
+<i class="fas fa-chart-bar"></i> Data plots tend to be over-interpreted
+
+<br>
+
+<i class="fas fa-chart-bar"></i> Reading data plots require calibration
+
+
+]
+
+---
+
+# Visual inference more formally
+
+.flex[
+.w-60[
+1. State your null and alternate hypotheses.
+{{content}}
+]]
+--
+2. Define a <b>visual test statistic</b>, $V(.)$, i.e. a function of a sample to a plot.
+{{content}}
+--
+3. Define a method to generate <b>null data</b>, $\boldsymbol{y}_0$. 
+{{content}}
+--
+4. $V(\boldsymbol{y})$ maps the actual data, $\boldsymbol{y}$, to the plot. We call this the <b class="monash-blue">data plot</b>.
+{{content}}
+--
+5. $V(\boldsymbol{y}_0)$ maps a null data to a plot of the same form. We call this the <b class="monash-blue">null plot</b>. We repeat this $m - 1$ times to generate $m-1$ null plots. 
+{{content}}
+--
+6. A <b class="monash-blue">lineup</b> displays these $m$ plots in a random order. 
+{{content}}
+--
+7. Ask $n$ human viewers to select a plot in the lineup that looks different to others without any context given.
+
+---
+
+count: false
+
+# Visual inference more formally
+
+.flex[
+.w-60[
+1. State your null and alternate hypotheses.
+2. Define a **visual test statistic**, $V(.)$, i.e. a function of a sample to a plot.
+3. Define a method to generate **null data**, $\boldsymbol{y}_0$. 
+4. $V(\boldsymbol{y})$ maps the actual data, $\boldsymbol{y}$, to the plot. We call this the .monash-blue[**data plot**].
+5. $V(\boldsymbol{y}_0)$ maps a null data to a plot of the same form. We call this the .monash-blue[**null plot**]. We repeat this $m - 1$ times to generate $m-1$ null plots. 
+6. A .monash-blue[**lineup**] displays these $m$ plots in a random order. 
+7. Ask $n$ human viewers to select a plot in the lineup that looks different to others without any context given.
+
+]
+.w-40.pl3[
+
+.info-box[
+Suppose $x$ out of $n$ people detected the data plot from a lineup, then
+* the .monash-blue[**visual inference p-value**] is given as $$P(X \geq x)$$ where $X \sim B(n, 1/m)$, and 
+* the .monash-blue[**power of a lineup**] is estimated as $x/n$.
+]
+
+]]
+
+---
+
+# .monash-blue[Lineup] .circle.monash-bg-blue.white[1] In which plot has a pattern that is different from other plots?
+
+.flex[
+.item.w-70[
+```{r cars-lineup, out.width="80%", fig.width=9, fig.height=7}
+library(nullabor)
+cars_fit <- lm(dist ~ speed, data = cars)
+cars_lm <- augment(cars_fit)
+set.seed(1051)
+ggplot(lineup(null_lm(dist ~ speed, method="rotate"), cars_lm), aes(x=speed, y=.resid)) +
+  geom_point() +
+  facet_wrap(~.sample, ncol=5) +
+  theme(axis.text=element_blank(),
+        axis.title=element_blank())
+```
+
+]
+
+.item.w-30.f5[
+{{content}}
+]
+
+]
+
+--
+
+<br><br>
+Recall the linear model for cars shown in week 3. 
+
+```{r}
+#| eval: false
+#| echo: true
+lm(dist ~ speed, data = cars)
+```
+<br>
+* This is a lineup of the residual plot
+* <text style="color: #D93F00;"> Which plot (if any) looks different from the others? </text>
+* <text style="color: #D93F00;"> Why do you think it looks different? </text>
+* Note: there is no correct answer here. 
+{{content}}
+
+
+--
+
+<br><br>
+
+```
+> decrypt("clZx bKhK oL 3OHohoOL 0B")
+[1] "True data in position  11"
+```
+<br>
+<text style="color: #D93F00;"> How do we calculate statistical significance from this?</text>
+
+---
+
+# Visual inference p-value (or "see"-value)
+
+.flex[
+.item.w-45[
+* So $x$ out of $n$ people chose the data plot.
+* So the visual inference $p$-value is $P(X \geq x)$ where $X \sim B(n, 1/10)$.
+* In R, this is 
+```r
+1 - pbinom(x - 1, n, 1/20) 
+# OR 
+nullabor::pvisual(x, n, 20)
+```
+* The calculation is made with the assumption that the chance of a single observer randomly chooses the true plot is 1/20. 
+]
+
+.item.w-10[
+.white[space]
+]
+
+.item.w-45[
+Suppose $x=2$ out of $n=16$ people chose plot 11 (previous slide). 
+
+The probability that this happens by random guessing (p-value) is 
+
+```{r}
+#| echo: true
+1 - pbinom(2 - 1, 16, 1/20)
+nullabor::pvisual(2, 16, 20)
+```
+]
+]
+
+---
+
+# .monash-blue[Lineup] .circle.monash-bg-blue.white[2] In which plot has a pattern that is different from other plots?
+
+.flex[
+.item.w-70[
+```{r diamonds-lineup, out.width="80%", fig.width=9, fig.height=7}
+library(broom)
+diamonds <- diamonds %>%
+  mutate(lprice = log10(price),
+         lcarat = log10(carat))
+d_fit <- lm(lprice ~ lcarat, data=diamonds)
+d_res <- augment(d_fit, diamonds)
+
+set.seed(923)
+l <- lineup(null_lm(lprice ~ lcarat,
+                      method="rotate"), d_res)
+ggplot(l, aes(lcarat, .resid)) + 
+  geom_hline(yintercept=0, colour="grey70") +
+  geom_point(alpha = 0.01) +
+  geom_smooth(data=l, method = "lm", colour="orange", se=F) +
+  facet_wrap(~.sample, ncol=5) +
+  theme_bw() +
+  theme(axis.text=element_blank(),
+        axis.title=element_blank())
+
+```
+
+]
+
+.item.w-30.f5[
+{{content}}
+]
+
+]
+
+--
+
+<br><br>
+Recall the linear model for diamonds shown in week 3. 
+
+```{r}
+#| eval: false
+#| echo: true
+d_fit <- lm(lprice ~ lcarat, data=diamonds)
+```
+<br>
+* This is a lineup of the residual plot for the model where both carat and price are log-transformed
+* <text style="color: #D93F00;"> Which plot (if any) looks different from the others? </text>
+* <text style="color: #D93F00;"> Why do you think it looks different? </text>
+* Note: there is no correct answer here. 
+{{content}}
+
+
+--
+
+<br><br>
+
+```
+> decrypt("clZx bKhK oL 3OHohoOL 0Q")
+[1] "True data in position  15"
+```
+
+---
+
+# Visual inference p-value (or "see"-value)
+
+.flex[
+.item.w-45[
+Suppose $x=8$ out of $n=12$ people chose plot 15 (previous slide). 
+
+The probability that this happens by random guessing (p-value) is 
+
+```{r}
+#| echo: true
+1 - pbinom(8 - 1, 12, 1/20)
+nullabor::pvisual(8, 12, 20)
+```
+]
+
+.item.w-10[
+.white[space]
+]
+
+.item.w-45[
+
+.monash-orange2[This is basically impossible to happen by chance.]
+
+<br>
+Next, how the residuals are different from "good" residuals has to be determined by the follow-up question: how did you decide your chosen plot was different?
+
+<br>
+Plot 15 has a different variance pattern, it's not the regular up-down pattern seen in the other plots. This suggests that there is some .monash-orange2[heteroskedasticity] in the data that is not captured by the error distribution in the model.
+
+]
+]
+
+
+---
+class: transition
+
+# Why?
+
+---
+# Residual plot (1/3) 
+
+.flex[
+.item.w-30[
+<br><br>
+Is there a problem with the model?
+]
+
+.item.w-70[
+```{r out.width="60%", fig.width=3, fig.height=3}
+library(visage)
+vi_lineup <- readRDS("/Users/cookd/students_PhD/Patrick/lineup_residual_diagnostics/data/vi_lineup.rds")
+i <- 915
+l <- vi_lineup[[i]]
+VI_MODEL$plot(filter(l$data, k==1), 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light())
+```
+]
+]
+
+---
+# Residual plot (2/3) 
+
+.flex[
+.item.w-30[
+<br><br>
+Is there a problem with the model?
+]
+
+.item.w-70[
+```{r out.width="60%", fig.width=3, fig.height=3}
+VI_MODEL$plot(filter(l$data, k==5), 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light())
+
+```
+]
+]
+
+---
+# Residual plot (3/3) 
+
+.flex[
+.item.w-30[
+<br><br>
+Is there a problem with the model?
+]
+
+.item.w-70[
+```{r out.width="60%", fig.width=3, fig.height=3}
+VI_MODEL$plot(filter(l$data, k==14), 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light())
+```
+]
+]
+
+---
+class: transition
+
+# Residual plots need context 
+
+It's really hard to decide that there is NO PATTERN!
+
+<br>
+<center>
+Residual plots are better when viewed in the context of good residual plots, where we know the assumptions of the model are satisfied.
+</center>
+
+---
+
+.flex[
+.item.w-30[
+<br><br>
+Which is the worst residual plot? 
+]
+
+.item.w-70[
+```{r fig.height=6, fig.width=7, out.width="80%", fig.align="center"}
+
+VI_MODEL$plot_lineup(l$data, 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light(),
+                     remove_axis = TRUE)
+```
+]
+]
+
+---
+
+.flex[
+.item.w-30[
+<br><br>
+All of the previous residual plots shown were NULL plots
+]
+
+.item.w-70[
+
+
+```{r fig.height=6, fig.width=7, out.width="80%", fig.align="center"}
+VI_MODEL$plot_lineup(l$data, 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light(),
+                     remove_axis = TRUE) +
+  geom_rect(data=filter(l$data, k %in% c(1, 5, 14)), 
+            aes(xmin=min(l$data$.fitted), 
+                xmax=max(l$data$.fitted), 
+                ymin=min(l$data$.resid), 
+                ymax=max(l$data$.resid)), 
+            colour="black", alpha=0.5, fill=NA, linewidth=0.2) 
+```
+]
+]
+
+---
+
+.flex[
+.item.w-30[
+<br><br>
+The actual residual plot is
+]
+
+.item.w-70[
+
+```{r fig.height=6, fig.width=7, out.width="80%", fig.align="center"}
+VI_MODEL$plot_lineup(l$data, 
+                     remove_grid_line = TRUE, 
+                     theme = theme_light(),
+                     remove_axis = TRUE) +
+  geom_rect(data=filter(l$data, k==2), 
+            aes(xmin=min(l$data$.fitted), 
+                xmax=max(l$data$.fitted), 
+                ymin=min(l$data$.resid), 
+                ymax=max(l$data$.resid)), 
+            colour="yellow", alpha=0.5, fill=NA, linewidth=1)
+```
+]
+]
+
+---
+class: transition
+
+# It's not only for residual plots
+
+---
+
+.flex[
+.item.w-30[
+<br><br>
+Which plot is most different?
+]
+
+.item.w-70[
+
+```{r fig.height=6, fig.width=7, out.width="80%", fig.align="center"}
+threept <- subset(lal, type == "3pt" & !is.na(x) & !is.na(y))
+threept <- threept[c(".id", "period", "time", "team", "etype", "player", "points", "result", "x", "y")]
+threept <- transform(threept, 
+  x = x + runif(length(x), -0.5, 0.5),
+  y = y + runif(length(y), -0.5, 0.5))
+threept <- transform(threept, 
+  r = sqrt((x - 25) ^ 2 + y ^ 2),
+  angle = atan2(y, x - 25))
+
+# Focus in on shots in the typical range
+threept_sub <- threept %>% 
+  filter(between(r, 20, 39)) %>%
+  mutate(angle = angle * 180 / pi) %>%
+  select(angle, r)
+
+ggplot(lineup(null_lm(r ~ poly(angle, 2)), 
+              true=threept_sub, n = 20, pos = 2), 
+       aes(x=angle, y=r)) + 
+  geom_point(alpha=0.3) + 
+  scale_x_continuous("Angle (degrees)", 
+  breaks = c(0, 45, 90, 135, 180), limits = c(0, 180)) +
+  facet_wrap(~ .sample, ncol = 5) +
+  theme_bw() +
+  theme(axis.text=element_blank(),
+        axis.title=element_blank())
+
+```
+
+]
+]
+
+---
+.flex[
+.item.w-30[
+<br><br>
+Which plot is most different?
+]
+
+.item.w-70[
+
+```{r fig.height=6, fig.width=7, out.width="80%", fig.align="center"}
+library(forecast)
+
+l <- lineup(null_ts("rate", auto.arima), aud, pos=10)
+ggplot(l, aes(x=date, y=rate)) + geom_line() +
+  facet_wrap(~.sample, scales="free_y") +
+  theme(axis.text = element_blank()) +
+  xlab("") + ylab("")
+
+```
+
+]
+]
+
+---
+.flex[
+.item.w-30[
+<br><br>
+Which plot is most different?
+]
+
+.item.w-70[
+```{r fig.height=6, fig.width=7, out.width="80%", fig.align="center"}
+ggplot(lineup(null_permute('mpg'), mtcars), aes(mpg, wt)) +
+  geom_point() +
+  facet_wrap(~ .sample, ncol=5)
+```
+
+]
+]  
+
+---
+class: transition
+
+# Reading any plot can benefit from the context of null plots
+
+---
+
+# Resources and Acknowledgement
+
+.font18[
+- Buja, Andreas, Dianne Cook, Heike Hofmann, Michael Lawrence, Eun-Kyung Lee, Deborah F. Swayne, and Hadley Wickham. 2009. “Statistical Inference for Exploratory Data Analysis and Model Diagnostics.” Philosophical Transactions. Series A, Mathematical, Physical, and Engineering Sciences 367 (1906): 4361–83.
+- Wickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2010. “Graphical Inference for Infovis.” IEEE Transactions on Visualization and Computer Graphics 16 (6): 973–79.
+- Hofmann, H., L. Follett, M. Majumder, and D. Cook. 2012. “Graphical Tests for Power Comparison of Competing Designs.” IEEE Transactions on Visualization and Computer Graphics 18 (12): 2441–48.
+- Majumder, M., Heiki Hofmann, and Dianne Cook. 2013. “Validation of Visual Statistical Inference, Applied to Linear Models.” Journal of the American Statistical Association 108 (503): 942–56.
+- Data coding using [`tidyverse` suite of R packages](https://www.tidyverse.org) 
+- Slides originally written by Emi Tanaka and constructed with [`xaringan`](https://github.com/yihui/xaringan), [remark.js](https://remarkjs.com), [`knitr`](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
+
+]
+
+---
+
+```{r endslide, child="assets/endslide.Rmd"}
+```

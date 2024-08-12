@@ -1,0 +1,608 @@
+---
+title: "ETC5521: Exploratory Data Analysis"
+subtitle: "Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly"
+author: "Di Cook"
+email: "ETC5521.Clayton-x@monash.edu"
+date: "Week 4 - Session 2"
+length: "50 minutes"
+titlebgimg: "images/bg-01.png"
+output:
+  xaringan::moon_reader:
+    css:
+      - ninjutsu 
+      - "assets/font-awesome-all.css"
+      - "assets/tachyons-addon.css"
+      - "assets/animate.css"
+      - "assets/fira-code.css"
+      - "assets/boxes.css"
+      - "assets/table.css"
+      - "assets/styles.css"
+      - "assets/monash-brand.css"
+      - "assets/monash-fonts.css"
+      - "assets/slide-types.css"
+      - "assets/panelset-modified.css"
+      - "assets/scroll.css"
+      - "assets/datatables.css"
+    self_contained: false 
+    seal: false 
+    chakra: 'lib/remark-latest.min.js'
+    lib_dir: lib
+    includes:
+      in_header: "assets/head.html"
+    mathjax: "lib/mathjax-local/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    nature:
+      highlightStyle: magula
+      highlightLanguage: r 
+      highlightLines: true
+      highlightSpans: false 
+      countIncrementalSlides: false
+      slideNumberFormat: '%current%/%total%'
+      navigation:
+        scroll: false 
+        touch: true
+        click: false
+      ratio: '16:9'
+---
+
+```{r, include = FALSE}
+current_file <- knitr::current_input()
+basename <- gsub(".Rmd$", "", current_file)
+```
+```{r, include = FALSE}
+library(tidyverse)
+library(colorspace)
+library(patchwork)
+library(broom)
+library(nullabor)
+options(width = 200)
+knitr::opts_chunk$set(
+  fig.path = "images/week4B/",
+  fig.width = 6,
+  fig.height = 6,
+  fig.align = "center",
+  dev.args = list(bg = "transparent"),
+  # out.width = "100%",
+  fig.retina = 3,
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  cache = TRUE,
+  cache.path = "cache/week11/"
+)
+theme_set(ggthemes::theme_gdocs(base_size = 18) +
+  theme(
+    plot.background = element_rect(fill = "transparent", colour = NA), axis.line.y = element_line(color = "black", linetype = "solid"),
+    plot.title.position = "plot",
+    plot.title = element_text(size = 24),
+    panel.background = element_rect(fill = "transparent", colour = NA),
+    legend.background = element_rect(fill = "transparent", colour = NA),
+    legend.key = element_rect(fill = "transparent", colour = NA)
+  ))
+```
+
+```{r titleslide, child="assets/titleslide.Rmd"}
+```
+
+```{css, echo = FALSE}
+.gray80 {
+  color: #505050!important;
+  font-weight: 300;
+}
+.bg-gray80 {
+  background-color: #DCDCDC!important;
+}
+.font18 {
+  font-size: 18pt;
+}
+```
+
+---
+# These slides cover
+
+- Why is a data plot a statistic?
+- Determining the null hypothesis
+- Generating null samples
+- Computing the power 
+
+---
+
+<br><br><br>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/rEHKm3Z1zUE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</center>
+
+---
+# Why is a data plot a statistic?
+
+- The concept of tidy data matches elementary statistics
+- Tabular form puts variables in columns and observations in rows
+- Not all tabular data is in this form
+- This is the point of tidy data
+
+$$X = \left[ \begin{array}{rrrr}
+           X_1 & X_2 & ... & X_p 
+           \end{array} \right] \\
+  = \left[ \begin{array}{rrrr}
+           X_{11} & X_{12} & ... & X_{1p} \\
+           X_{21} & X_{22} & ... & X_{2p} \\
+           \vdots & \vdots & \ddots& \vdots \\
+           X_{n1} & X_{n2} & ... & X_{np}
+           \end{array} \right]$$
+
+- We might even make assumptions about the distribution of each variable, e.g. $X_1 \sim N(0,1), ~~X_2 \sim \text{Exp}(1) ...$
+
+---
+# Why is a data plot a statistic?
+
+- A statistic is a function on the values of items in a sample, e.g. for $n$ iid random variates $\bar{X}_1=\sum_{i=1}^n X_{i1}$, $s_1^2=\frac{1}{n-1}\sum_{i=1}^n(X_{i1}-\bar{X}_1)^2$
+- We study the behaviour of the statistic over all possible samples of size $n$. 
+- The grammar of graphics is the mapping of (random) variables to graphical elements, making plots of data into statistics
+
+.flex[
+.item.w-45[
+```
+ggplot(threept_sub, 
+       aes(x=angle, y=r)) + 
+  geom_point(alpha=0.3)
+```
+
+<br>
+
+```
+ggplot(penguins, 
+      aes(x=bill_length_mm, 
+          y=flipper_length_mm, 
+          colour=species)) +
+  geom_point()
+```
+]
+.item.w-45[
+`angle` is mapped to the x axis
+
+`r` is mapped to the y axis
+
+<br><br>
+
+`bill_length_mm` is mapped to the x axis
+
+`flipper_length_mm` is mapped to the y axis
+
+`species` is mapped to colour
+
+]
+]
+
+---
+# What is inference?
+
+.f5[
+Inferring that what we see in the data at hand holds more broadly in life, society and the world.
+]
+
+.flex[
+.item.w-50[
+Here's an example tweeted by David Robinson,
+commenting on an analysis in [Tick Tock blog, by Graham Tierney](https://ticktocksaythehandsoftheclock.wordpress.com/2018/01/11/capitals-and-good-governance/)
+
+<img src="images/drob_twitter.png" style="width: 400px">
+
+]
+.item.w-50[
+.blockquote[Below is a simple scatterplot of the two variables of interest. A slight negative slope is observed, but it does not look very large. There are a lot of states whose capitals are less than 5% of the total population. The two outliers are Hawaii (government rank 33 and capital population 25%) and Arizona (government rank 26 and capital population 23%). Without those two the downward trend (an improvement in ranking) would be much stronger.
+
+... I'm not convinced ...]
+
+]
+]
+
+---
+# To do *statistical* inference
+
+You need a:
+
+- null hypothesis, and alternative
+- statistic computed on the data
+- reference distribution on which to measure the statistic: if its extreme on this scale you would reject the null
+
+--
+
+# Inference with *data plots*
+
+You need a:
+
+- plot description, as provided by the grammar (which is a statistic) 
+- plot description prescribing the null hypothesis .monash-blue2[(not the data plot itself)]
+- null generating mechanism, e.g. permutation, simulation from a distribution or model
+- human visual system, to examine array of plots and decide if any are different from the others
+
+---
+# Some examples
+
+Here are several plot descriptions. What would be the null hypothesis in each?
+
+.flex[
+.item.w-45[
+
+A
+```
+ggplot(data) + 
+  geom_point(aes(x=x1, y=x2))
+```
+
+<br>
+
+
+B
+```
+ggplot(data) + 
+  geom_point(aes(x=x1, 
+    y=x2, colour=cl))
+```
+]
+.item.w-10[
+.white[space]
+]
+.item.w-45[
+C
+```
+ggplot(data) + 
+  geom_histogram(aes(x=x1))
+```
+
+<br>
+
+D
+```
+ggplot(data) + 
+  geom_boxplot(aes(x=cl, y=x1))
+```
+]
+]
+
+<br>
+<br>
+
+.monash-orange2[Which plot definition would most match to a null hypothesis stating **there is no difference in the distribution between the groups?**]
+
+
+---
+# Some examples
+
+Here are several plot descriptions. What would be the null hypothesis in each?
+
+.flex[
+.item.w-45[
+
+A
+
+$H_o:$ no association between `x1` and `x2`
+
+<br>
+<br>
+
+
+B
+
+$H_o:$ no difference between levels of `cl`
+
+]
+.item.w-10[
+.white[space]
+]
+.item.w-45[
+
+C
+
+$H_o:$ the distribution of `x1` is XXX
+
+<br>
+<br>
+
+
+D
+
+$H_o:$ no difference in the distribution of `x1` between levels of `cl`
+]
+]
+
+---
+
+class: transition 
+
+# Visual inference with the nullabor 📦
+
+
+---
+
+.flex[
+.item.w-45[
+<img src="images/nullabor_hex.png" style="width: 20%" />
+
+Example from the nullabor package. The data plot is embedded randomly in a field of null plots, this is a **lineup**. Can you see which one is different?
+
+When you run the example yourself, you get a `decrypt` code line, that you run after deciding on a plot to print the location of the data plot amongst the nulls. 
+
+- plot is a scatterplot, null hypothesis is .monash-orange2[*there is no association between the two variables mapped to the x, y axes*]
+- null generating mechanism: .monash-orange2[permutation]
+
+]
+.item.w-10[
+.white[space]
+]
+.item.w-50.f5[
+```{r lineup 1, fig.height=8, fig.width=8, out.width="70%"}
+# Make a lineup of the mtcars data, 20 plots, one is the data, 
+# and the others are null plots. Which one is different?
+set.seed(20190709)
+ggplot(lineup(null_permute('mpg'), mtcars), aes(mpg, wt)) +
+  geom_point() +
+  facet_wrap(~ .sample) +
+  theme(axis.text=element_blank(),
+        axis.title=element_blank())
+```
+]]
+
+---
+.flex[
+.item.w-45[
+# Lineup
+
+Embed the data plot in a field of null plots
+
+```{r embed the data plot in a field of null plots, eval=FALSE}
+library(nullabor)
+pos <- sample(1:20, 1)
+df_null <- lineup(
+  null_permute('v1'), 
+  df, pos=pos)
+ggplot(df_null, 
+       aes(x=v2, 
+           y=v1, 
+           fill=v2)) + 
+  geom_boxplot() +
+  facet_wrap(~.sample, 
+             ncol=5) + 
+  coord_flip()
+```
+
+
+.monash-orange2[Ask]: Which plot is the most different?
+]
+.item.w-10[
+.white[space]
+]
+.item.w-45[
+# Null-generating mechanisms
+
+- Permutation: randomizing the order of one of the variables breaks association, but keeps marginal distributions the same
+- Simulation: from a given distribution, or model. Assumption is that the data comes from that model 
+
+# Evaluation
+
+- Compute $p$-value
+- Power $=$ signal strength
+]
+]
+---
+
+# .orange[Case study] .circle.white.bg-orange[1] Temperatures of stars .font_small[Part 1/2]
+
+* The data consists of the surface temperature in Kelvin degrees of 96 stars.
+--
+
+* We want to check if the surface temperature has an exponential distribution. 
+--
+
+* We use histogram with 30 bins as our visual test statistic.
+--
+
+* For the null data, we will generate from an exponential distribution.
+
+```{r star-null, message = TRUE}
+line_df <- lineup(null_dist("temp", "exp", 
+    list(rate = 1 / mean(dslabs::stars$temp))),
+  true = dslabs::stars,
+  n = 10
+)
+```
+* Note: the rate in an exponential distribution can be estimated from the inverse of the sample mean.
+
+---
+
+# .orange[Case study] .circle.white.bg-orange[4] Temperatures of stars .font_small[Part 2/2]
+
+.grid[
+.item[
+.panelset[
+.panel[.panel-name[📊]
+```{r stars-lineup, echo = FALSE, fig.width = 14}
+ggplot(line_df, aes(temp)) +
+  geom_histogram(color = "white") +
+  facet_wrap(~.sample, nrow = 2) +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank()
+  )
+```
+]
+.panel[.panel-name[R]
+```{r stars-lineup, eval = FALSE}
+```
+]]
+]]
+
+
+---
+
+# .orange[Case study] .circle.white.bg-orange[2] Foreign exchange rate .font_small[Part 1/2]
+
+* The data contains the daily exchange rate of 1 AUD to 1 USD between 9th Jan 2018 to 21st Feb 2018.
+* Does the rate follow an ARIMA model?
+
+
+.f5[
+```{r ts-data, message = TRUE}
+data(aud, package = "nullabor")
+line_df <- lineup(null_ts("rate", forecast::auto.arima), true = aud, n = 10)
+```
+
+```{r ts-plot, eval = FALSE}
+ggplot(line_df, aes(date, rate)) +
+  geom_line() +
+  facet_wrap(~.sample, scales = "free_y", nrow = 2) +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+```
+]
+
+---
+
+# .orange[Case study] .circle.white.bg-orange[5] Foreign exchange rate .font_small[Part 2/2]
+
+.grid[
+.item[
+```{r ts-plot, echo = FALSE, fig.width = 14}
+```
+]]
+
+---
+
+# Power of a lineup
+
+.w-70[
+* The power of a lineup is calculated as $x/n$ where $x$ is the number of people who detected the data plot out of $n$ people.
+* This is useful if you want to decide which plot design is better.
+* Show the same lineup made using different plots to observers .f4[(different sets of observers, the same person cannot see the same data more than once, else they may be biased)].
+
+<br>
+
+{{content}}
+]
+
+.footnote.f4[
+Hofmann, H., L. Follett, M. Majumder, and D. Cook. 2012. “Graphical Tests for Power Comparison of Competing Designs.” IEEE Transactions on Visualization and Computer Graphics 18 (12): 2441–48.
+]
+
+
+---
+
+```{r echo=FALSE, fig.width=8, fig.height=4, fig.align="center", out.width="100%"}
+library(palmerpenguins)
+set.seed(400)
+ggplot(lineup(null_permute("species"), penguins, n=10),
+       aes(x=species, y=bill_length_mm, colour=species)) +
+  geom_point(alpha=0.4) +
+  facet_wrap(~.sample, ncol=5) +
+  colorspace::scale_color_discrete_divergingx(palette="Temps") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+```
+
+---
+
+```{r echo=FALSE, fig.width=8, fig.height=4, fig.align="center", out.width="100%"}
+ggplot(lineup(null_permute("species"), penguins, n=10),
+       aes(x=species, y=bill_length_mm, fill=species), colour="white") +
+  geom_boxplot() +
+  facet_wrap(~.sample, ncol=5) +
+  colorspace::scale_fill_discrete_divergingx(palette="Temps") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+```
+
+---
+
+```{r echo=FALSE, fig.width=8, fig.height=4, fig.align="center", out.width="100%"}
+ggplot(lineup(null_permute("species"), penguins, n=10),
+       aes(x=species, y=bill_length_mm, fill=species), colour="white") +
+  geom_violin() +
+  facet_wrap(~.sample, ncol=5) +
+  colorspace::scale_fill_discrete_divergingx(palette="Temps") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+```
+
+---
+
+```{r echo=FALSE, fig.width=8, fig.height=4, fig.align="center", out.width="100%"}
+ggplot(lineup(null_permute("species"), penguins, n=10),
+       aes(x=species, y=bill_length_mm, colour=species)) +
+  ggbeeswarm::geom_quasirandom(alpha=0.8) +
+  facet_wrap(~.sample, ncol=5) +
+  colorspace::scale_color_discrete_divergingx(palette="Temps") +
+  theme_bw() +
+  theme(
+    legend.position="none",
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+```
+
+---
+
+
+Plot type | $x$ | $n$ | Power
+--- | --- | --- | --- 
+`geom_point` | $x_1=4$ | $n_1=23$ | $x_1 / n_1=0.174$
+`geom_boxplot` | $x_2=5$ | $n_2=25$ | $x_2 / n_2=0.185$
+`geom_violin` | $x_3=6$ | $n_3=29$ | $x_3 / n_3=0.206$
+`ggbeeswarm::geom_quasirandom` | $x_4=8$ | $n_4=24$ | $x_4 / n_4=0.333$
+
+<br>
+
+--
+
+* The plot type with a higher power is preferable 
+
+--
+
+* You can use this framework to find the optimal plot design
+
+
+---
+
+# Some considerations in visual inference
+
+* In practice you don't want to bias the judgement of the human viewers so for a proper visual inference:   
+   * you should _not_ show the data plot before the lineup
+   * you should _not_ give the context of the data 
+   * you should remove labels in plots
+* You can crowd source these by paying for services like:
+   * [Amazon Mechanical Turk](https://www.mturk.com/), 
+   * [Appen (formerly Figure Eight)](https://appen.com/figure-eight-is-now-appen/) and
+   * [LABVANCED](https://www.labvanced.com/).
+   * [prolific](https://www.prolific.co/).
+* If the data is for research purposes, then you may need ethics approval for publication.
+
+---
+
+# Resources and Acknowledgement
+
+.font18[
+- Buja, Andreas, Dianne Cook, Heike Hofmann, Michael Lawrence, Eun-Kyung Lee, Deborah F. Swayne, and Hadley Wickham. 2009. “Statistical Inference for Exploratory Data Analysis and Model Diagnostics.” Philosophical Transactions. Series A, Mathematical, Physical, and Engineering Sciences 367 (1906): 4361–83.
+- Wickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2010. “Graphical Inference for Infovis.” IEEE Transactions on Visualization and Computer Graphics 16 (6): 973–79.
+- Hofmann, H., L. Follett, M. Majumder, and D. Cook. 2012. “Graphical Tests for Power Comparison of Competing Designs.” IEEE Transactions on Visualization and Computer Graphics 18 (12): 2441–48.
+- Majumder, M., Heiki Hofmann, and Dianne Cook. 2013. “Validation of Visual Statistical Inference, Applied to Linear Models.” Journal of the American Statistical Association 108 (503): 942–56.
+- Data coding using [`tidyverse` suite of R packages](https://www.tidyverse.org) 
+- Slides originally written by Emi Tanaka and constructed with [`xaringan`](https://github.com/yihui/xaringan), [remark.js](https://remarkjs.com), [`knitr`](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com)
+
+]
+
+---
+
+```{r endslide, child="assets/endslide.Rmd"}
+```

@@ -19,16 +19,24 @@ schedule |>
 
 ## What you will learn this week
 
+- revision of statistical inference
+- using re-sampling methods to calibrate reading patterns
+- generating lineups of plots
+- how to specify the null hypothesis
+- calculating $p$-value and power
 
 ## Lecture slides
+
+- [html](https://ddde.numbat.space/week4/slides.html)
+- [pdf](https://ddde.numbat.space/week4/slides.pdf)
+- [qmd](https://ddde.numbat.space/week4/slides.qmd)
+- [R](https://ddde.numbat.space/week4/slides.R)
 
 
 ## Tutorial instructions
 
-Instructions:
-
-
-## Assignments
+- [html](https://ddde.numbat.space/week4/tutorial.html)
+- [qmd](https://ddde.numbat.space/week4/tutorial.qmd)
 
 ```{r}
 #| output: asis
