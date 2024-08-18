@@ -150,7 +150,9 @@ To construct a test statistic, we need to construct a summary statistic with som
 f. Consider the plot below that shows in each tile whether a person guessed correctly by order of their tasting. Suppose that under the null hypothesis, the order of tasting does not matter and people have no ability to distinguish the flavours. Generate a null plot under this null hypothesis.
 
 
-![](images/skittle-tileplot-1.png)
+<center>
+![](images/skittle-tileplot-1.png){width=300}
+</center>
 
 ::: unilur-solution
 The null plot is constructed as follows.
@@ -318,6 +320,35 @@ gqq %+% lineup(null_dist(".resid", "norm", list(mean = 0, sd = sigma(fit))),
 ```
 
 :::
+
+
+## Exercise 3: IDA skill sprint
+
+Set the timer. You have **15 minutes** to discover as many problems as possible in this data, [cafe.rda](https://github.com/numbats/ddde/blob/main/data/cafe.rda).
+
+*A small cafe in the city of Melbourne is interested in determining whether the daily earnings depend on the weather. They compiled data for a period over 2000-2001 to study this question.* The data has the following variables:
+
+```{r}
+#| echo: false
+library(kableExtra)
+desc <- tibble(var=c("dt", "wday", "revenue", "expend", "precip", "mint", "maxt", "source"),
+               description=c("Date", 
+              "Day of the week",
+              "Daily revenue in hundreds, 11=1100", 
+              "Daily expenses in hundreds",
+              "Precipitation in mm", 
+              "Minimum temperature, Celsius",
+              "Maximum temperature, Celsius",
+              "Source of the weather data"))
+kbl(desc, table.attr = 'data-quarto-disable-processing="true"') |> 
+  kable_styling(full_width = FALSE) |>
+  column_spec(1, width="2cm", border_right = T) |>
+  column_spec(2, width="10cm")
+```
+
+**Your tutor has the list of problems.**
+
+
 ## 👌 Finishing up
 
 Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.

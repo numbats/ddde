@@ -17,9 +17,11 @@ library(plotly)
 library(forcats)
 library(ggbeeswarm)
 library(gt)
+library(MASS)
 library(kableExtra)
 library(fabricerin)
 library(DiagrammeR)
+library(gganimate)
 
 # Locations
 current_file <- knitr::current_input()
@@ -53,7 +55,7 @@ theme_set(theme_bw(base_size = 14) +
      aspect.ratio = 1,
      plot.background = element_rect(fill = 'transparent', colour = NA),
      plot.title.position = "plot",
-     plot.title = element_text(size = 24),
+     plot.title = element_text(size = 18),
      panel.background = element_rect(fill = 'transparent', colour = NA),
      legend.background = element_rect(fill = 'transparent', colour = NA),
      legend.key = element_rect(fill = 'transparent', colour = NA)

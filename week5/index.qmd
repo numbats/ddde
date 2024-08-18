@@ -19,16 +19,22 @@ schedule |>
 
 ## What you will learn this week
 
+- Numeric and visual summaries for a single variable
+- Common features to discover
+- Tools for inference for a single variable
+- Imputing missings on a single variable
 
 ## Lecture slides
 
+- [html](https://ddde.numbat.space/week5/slides.html)
+- [pdf](https://ddde.numbat.space/week5/slides.pdf)
+- [qmd](https://ddde.numbat.space/week5/slides.qmd)
+- [R](https://ddde.numbat.space/week5/slides.R)
 
 ## Tutorial instructions
 
-Instructions:
-
-
-## Assignments
+- [html](https://ddde.numbat.space/week5/tutorial.html)
+- [qmd](https://ddde.numbat.space/week5/tutorial.qmd)
 
 ```{r}
 #| output: asis
