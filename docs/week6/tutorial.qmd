@@ -1,0 +1,601 @@
+---
+title: "ETC5521 Tutorial 6"
+subtitle: "Working with a single variable, making transformations, detecting outliers, using robust statistics"
+author: "Prof. Di Cook"
+date: "Aug 26, 2024"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: tutorial.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: tutorialsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+---
+
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(nullabor)
+library(mixtools)
+library(bayesm)
+library(ggbeeswarm)
+library(lvplot)
+library(patchwork)
+library(ggplot2movies)
+library(conflicted)
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+```
+
+## 🎯 Objectives
+
+These are exercises in making plots of one variable and what can be learned about the distributions and the data patterns and problems.
+
+## 🔧 Preparation 
+
+The reading for this week is [Wilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions](https://clauswilke.com/dataviz/). 
+- Complete the weekly quiz, before the deadline!
+- Make sure you have this list of R packages installed: 
+
+```{r}
+#| eval: false
+#| code-fold: false
+install.packages(c("ggplot2movies", "bayesm", "flexmix",  "ggbeeswarm", "mixtools", "lvplot", "patchwork", "nullabor"))
+```
+
+- Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
+
+## 📥 Exercises
+
+### Exercise 1: Understanding the velocity of galaxies
+
+Load the `galaxies` data in the `MASS` package and answer the following questions based on this dataset.
+
+```{r}
+data(galaxies, package = "MASS")
+```
+
+You can access documentation of the data (if available) using the `help` function specifying the package name in the argument. 
+
+```{r, eval = FALSE}
+help(galaxies, package = "MASS")
+```
+
+(a) What does the data contain? And what is the data source?
+
+::: unilur-solution
+
+```{r}
+#| label: q1data
+data(galaxies, package = "MASS")
+glimpse(galaxies)
+```
+
+The data contains velocities in km/sec of `r length(galaxies)` galaxies from 6 well-separated conic sections of an unfilled survey of the Corona Borealis region. The original data is from Postman et al. (1986) and this data is from Roeder with 83rd observation removed from the original data as well as typo for the 78th observation.
+
+* Postman, M., Huchra, J. P. and Geller, M. J. (1986) Probes of large-scale structures in the Corona Borealis region. Astronomical Journal 92, 1238–1247
+* Roeder, K. (1990) Density estimation with confidence sets exemplified by superclusters and voids in galaxies. Journal of the American Statistical Association 85, 617–624.
+:::
+
+(b) Based on the description in the R Help for the data, what would be an appropriate null distribution of this data?
+
+::: unilur-solution
+
+The description in the R help for the data says *Multimodality in such surveys is evidence for voids and superclusters in the far universe.*
+
+Deciding on an appropriate null hypothesis is always tricky. If we wanted to test the statement that the data is multimodal, we could compare against a unimodal distribution, either a normal or an exponential depending on what shape we might expect. 
+
+However, the published work has already made a claim that the data is multimodal, so it would be interesting to determine if we can generate samples from a multimodal distribution that are indistinguishable from the data.
+
+$H_0:$ The distribution is multimodal. 
+$H_a:$ The distribution is something other than multimodal.
+
+:::
+
+(c) How many observations are there?
+
+::: unilur-solution
+There are `r length(galaxies)` observations.
+:::
+
+(d) If the data is multimodal, which of the following displays do you think would be the best? Which would not be at all useful?
+
+- histogram 
+- boxplot 
+- density plot 
+- violin plot
+- jittered dot plot 
+- letter value plot
+
+::: unilur-solution
+If you said a density plot, jittered dot plot, or a histogram, you're on the right track, because each can give a fine resolution for showing modes. (The violin plot is not any different from a density plot, when only looking at one variable.)
+:::
+
+(e) Make these plots for the data. Experiment with different binwidths for the histogram and different bandwiths for the density plot. Were you right in your thinking about which would be the best?
+
+::: unilur-solution
+```{r}
+#| label: q1plot
+g <- ggplot(tibble(galaxies), aes(galaxies)) +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+g1 <- g + geom_histogram(binwidth = 1000, color = "white") 
+g2 <- g + geom_boxplot() 
+g3 <- g + geom_density() 
+g4 <- g + geom_violin(aes(x=galaxies, y=1), draw_quantiles = c(0.25, 0.5, 0.75))
+g5 <- g + geom_quasirandom(aes(x=1, y=galaxies)) + coord_flip() 
+g6 <- g + geom_lv(aes(x=1, y=galaxies)) + coord_flip() 
+
+g1 + g2 + g3 + g4 + g5 + g6 + plot_layout(ncol = 2)
+```
+:::
+
+(f) Fit your best mixture model to the data, and simulate 19 nulls to make a lineup. Did you do a good job in matching the distribution, ie does the data plot stand out or not? (Extra bonus: What is the model that you have created? Can you make a plot to show how it looks relative to the observed data?)
+
+This code might be helpful to get you started. This code generates a jittered dotplot, but you can use your preferred type from part e.
+
+
+```{r}
+#| label: fit-mixture
+#| echo: true
+#| eval: false
+# Fit a mixture model
+library(mixtools)
+galaxies_fit <- normalmixEM(galaxies, k=3)
+
+set.seed(1138)
+galaxies_sim1 <- rnormmix(n=length(galaxies), 
+              lambda=galaxies_fit$lambda, 
+              mu=galaxies_fit$mu,
+              sigma=galaxies_fit$sigma)
+```
+
+```{r}
+#| label: plot-data
+#| echo: true
+#| eval: false
+# Plot your data
+ggplot(tibble(galaxies_sim1), aes(x=galaxies_sim1)) +
+  geom_quasirandom(aes(x=1, y=galaxies_sim1)) + 
+  coord_flip() +
+  theme(
+    aspect.ratio = 0.7,
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+```
+
+```{r}
+#| label: gen-nulls
+#| echo: true
+#| eval: false
+# Generate null plots and make a lineup
+galaxies_null <- tibble(.sample=1, galaxies=galaxies_sim1)
+for (i in 2:19) {
+  gsim <- rnormmix(n=length(galaxies), 
+              lambda=galaxies_fit$lambda, 
+              mu=galaxies_fit$mu,
+              sigma=galaxies_fit$sigma)
+  galaxies_null <- bind_rows(galaxies_null,
+                             tibble(.sample=i, galaxies=gsim))
+}
+galaxies_null <- bind_rows(galaxies_null,
+                             tibble(.sample=20,
+                                    galaxies=galaxies))
+# Randomise .sample  to hide data plot
+galaxies_null$.sample <- rep(sample(1:20, 20), rep(82, 20))
+ggplot(tibble(galaxies_null), aes(x=galaxies)) +
+  geom_quasirandom(aes(x=1, y=galaxies)) + 
+  facet_wrap(~.sample, ncol=5) +
+  coord_flip() +
+  theme(
+    aspect.ratio = 0.7,
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+```
+
+::: unilur-solution
+
+```{r}
+#| label: fit-mixture
+#| echo: false
+#| eval: true 
+```
+
+```{r}
+#| label: gen-nulls
+#| echo: false
+#| eval: true 
+#| fig-height: 8
+#| fig-width: 10
+#| out-width: 100%
+```
+
+```{r}
+#| echo: true
+# To make a rough plot of your model
+plot(galaxies_fit, whichplots=2)
+```
+
+The `lambda` value provides the proportion of mixing, from three normal samples. The `mu` and `sigma` give the mean and standard deviations for each of the distributions.
+
+:::
+
+### Exercise 2: What are the common lengths of movies?
+
+Load the `movies` dataset in the `ggplot2movies` package and answer the following questions based on it.
+
+(a) How many observations are in the data?
+
+::: unilur-solution
+There are `r nrow(movies)` observations.
+:::
+
+(b) Draw a histogram with an appropriate binwidth that shows the peaks at 7 minutes and 90 minutes. Draw another set of histograms to show whether these peaks existed both before and after 1980.
+
+::: unilur-solution
+```{r q3plot}
+data(movies)
+movies |>
+  mutate(
+    after1980 = ifelse(year > 1980,
+      "After 1980",
+      "1980 or before"
+    ),
+    copy = FALSE
+  ) |>
+  bind_rows(mutate(movies, copy = TRUE, after1980 = "All")) |>
+  ggplot(aes(length)) +
+  geom_histogram(binwidth = 1, fill = "yellow", color = "black") +
+  scale_x_continuous(
+    breaks = c(0, 7, 30, 60, 90, 120, 150, 180),
+    limits = c(0, 180)
+  ) +
+  facet_grid(after1980 ~ .)
+```
+:::
+
+(c) The variable `Short` indicates whether the film was classified as a short film (`1`) or not (`0`). Draw plots to investigate what rules was used to define a film as "short" and whether the films have been consistently classified. 
+
+::: unilur-solution
+
+```{r}
+movies |>
+  group_by(Short) |>
+  summarise(x = list(summary(length))) |>
+  unnest_wider(x)
+```
+ 
+The maximum length for a film classified as short is `r filter(movies, Short == 1) %>% pull(length) %>% max` minutes. 
+
+```{r}
+movies |>
+  mutate(short = factor(Short, labels = c("Long", "Short"))) |>
+  ggplot(aes(y=length, x=short)) +
+  geom_quasirandom() +
+  scale_y_log10(
+    limits = c(1, 240),
+    breaks = c(1, 7, 10, 15, 20, 30, 45, 50, 70, 90, 110, 240)
+  ) +
+  labs(y = "") +
+  coord_flip()
+```
+
+From the graph, majority of films classified as short are under 50 minutes while those classified as long tend to be longer than 50 minutes. There are clear cases of mislabelling, e.g. a one-minute long film classified as "not short".
+
+On further detective work, the original source of the data says ["Any theatrical film or made-for-video title with a running time of less than 45 minutes, i.e., 44 minutes or less, or any TV series or TV movie with a running time of less than 22 minutes, i.e. 21 minutes or less. (A "half-hour" television program should not be listed as a Short.)"](https://help.imdb.com/article/contribution/titles/genres/GZDRMS6R742JRGAG#short) Given this is an objective measure based on the length of the film, we can see that that any films that are 45 minutes or longer should be classified as long and less than that as short. 
+
+:::
+
+(d) How would you use the lineup protocol to determine if the periodic peaks could happen by chance? What would be the null hypothesis? Make your lineup. Does the data plot stand out? Compute the $p$-value, if 5 out of 12 people picked the data plot as the most different one in the lineup. Comment on the results. (Note: It might be most useful to assess this only  for movies between 50-150 minutes long.)
+
+::: unilur-solution
+
+```{r}
+movies |> 
+  filter(between(length, 50, 150)) %>%
+  select(length) %>%
+  lineup(null_dist("length", "norm"), true=., n=9) %>%
+  ggplot(aes(x=length)) +
+    geom_histogram(binwidth = 1) +
+    scale_x_continuous(
+      breaks = c(0, 7, 30, 60, 90, 120, 150, 180),
+      limits = c(0, 180)
+    ) +
+  facet_wrap(~.sample, ncol=3, scales="free") +
+  theme(axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid.major = element_blank())
+```  
+
+Simulate samples from a normal distribution using the sample mean and standard deviation as the parameters. 
+
+$H_0$: Periodic peaks are not present by chance.
+
+I would expect the $p$-value to be 0 as the data plot is very clearly different from the nulls. This suggests that the multimodality is not possible to observe in samples from a normal distribution, and that the pattern is present because the movie lengths are commonly cut to specific numbers of minutes.
+
+:::
+
+
+### Exercise 3: What is the market for different brands of whisky?
+
+The `Scotch` data set in `bayesm` package was collated from a survey on scotch drinkers, recording the brand they consumed. Take a quick look at the data, and rearrange it to look like:
+
+```{r}
+#| label: whiskey-rearrange
+#| echo: false
+#| eval: true
+data(Scotch, package = "bayesm")
+scotch_consumption <- Scotch |>
+  pivot_longer(everything(),
+    names_to = "brand",
+    values_to = "consumed"
+  ) |>
+  filter(consumed == 1) |>
+  select(brand) |>
+  group_by(brand) |>
+  summarise(count = n()) |>
+  # clean names to match with whiskey.brand
+  mutate(
+    brand = gsub(".", " ", brand, fixed = TRUE),
+    brand = case_when(
+      brand == "the Singleton" ~ "Singleton",
+      brand == "Grants" ~ "Grant's",
+      brand == "Black   White" ~ "Black & White",
+      brand == "Pinch  Haig " ~ "Pinch (Haig)",
+      brand == "J   B" ~ "J&B",
+      brand == "Dewar s White Label" ~ "Dewar's White Label",
+      TRUE ~ brand
+    )
+  )
+
+scotch_consumption |> print(n=21)
+```
+
+(a) Produce a barplot of the number of respondents per brand. What ordering of the brands do you think is the best? What is interesting about the distribution of counts?
+
+::: unilur-solution
+```{r}
+#| label: whiskey-barplot
+scotch_consumption |>
+  mutate(
+    brand = fct_reorder(brand, count),
+    #brand = fct_relevel(brand, "Other brands")
+  ) |>
+  ggplot(aes(x=count, y=brand)) +
+  geom_col() +
+  ylab("")
+```
+:::
+
+(b) There are 20 named brands and one category that is labelled as `Other.brands`. Produce a barplot that you think best reduces the number of categories by selecting a criteria to lump certain brands to the `Other` category. 
+
+::: unilur-solution
+
+```{r}
+#| label: whiskey-relevel
+scotch_consumption |>
+  mutate(
+    brand = ifelse(count > 200, brand, "Other brands"),
+    brand = fct_reorder(brand, count),
+    brand = fct_relevel(brand, "Other brands")
+  ) |>
+  ggplot(aes(count, brand)) +
+  geom_col()
+```
+
+
+I've chosen the cut-off to be 200 as there was a gap in frequency between brands that sold more than 200 and less than 200. This reduces the comparison to 8 named brands, which is more manageable for comparison.
+:::
+
+(c) Think about what a **not interesting** pattern might be for this data, and formulate an appropriate null hypothesis. 
+
+::: unilur-solution
+The least interesting pattern is probably if all the bars are similar heights, meaning that all brands are consumed equally.
+
+This leads to a null hypothesis of $H_o: p_k = 1/K$ where all brands have the same proportion of consumers.
+:::
+
+(d) If you were to test whether this sample were consistent with a sample from a multinomial distribution, where all whiskeys were equally popular, how would to generate null samples? Make the lineup for testing this. 
+
+The following code might help:
+
+```{r}
+#| label: whiskey-lineup
+#| eval: false
+# Subset the data, and anonymmise brand name
+scotch_consumption_sub <- scotch_consumption |>
+    mutate(
+    brand = ifelse(count > 200, brand, "Other Brands")
+  ) |>
+  filter(brand != "Other Brands") |>
+  mutate(brand = as.character(factor(brand, labels=c(1:8)))) 
+
+set.seed(220)
+sim <- rmultinom(n=9,
+   size=sum(scotch_consumption_sub$count),
+   prob=rep(1/8, 8))
+sim <- t(sim)
+colnames(sim) <- as.character(c(1:8))
+sim <- sim |>
+  as_tibble() |>
+  mutate(.sample=1:9)
+sim <- sim |>
+  pivot_longer(cols=`1`:`8`, names_to = "brand", values_to = "count")
+scotch_lineup <- bind_rows(sim,
+  bind_cols(.sample=10, scotch_consumption_sub))
+
+# Randomise .sample  to hide data plot
+scotch_lineup$.sample <- rep(sample(1:10, 10), rep(8, 10))
+  
+# Make the lineup
+ggplot(scotch_lineup, aes(x=brand, y=count)) +
+  geom_col() +
+  facet_wrap(~.sample, scales="free", ncol=5) +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank())
+  
+```
+
+::: unilur-solution
+
+We need to simulate samples from a multinomial distribution for the null sets. 
+
+If the data was a sample from a uniform distribution, it would mean that all of these brands are typically consumed in equal quantity.
+
+$H_0:$ The counts for the brands are consistent with a sample from a uniform distribution.
+
+```{r}
+#| label: whiskey-lineup
+#| eval: true
+#| echo: false
+```
+
+Ideally the bars are sorted from highest to lowest in each plot. This is tricky to do with facetting. The code below will do the sorting and re-draw the lineup.
+
+```{r}
+# Order categories in all samples from highest to lowest: TRICKY
+p <- list("p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9", "p10")
+for (i in unique(scotch_lineup$.sample)) {
+  d <- scotch_lineup |> 
+    filter(.sample == i)
+  d <- d |>
+    mutate(brand = fct_reorder(brand, count))
+  p[[i]] <- ggplot(d, aes(y=brand, x=count)) +
+    geom_col() +
+    ggtitle(i) +
+    theme(axis.text = element_blank(),
+        axis.title = element_blank())
+}
+
+p[[1]] + p[[2]] + p[[3]] + p[[4]] + p[[5]] +
+  p[[6]] + p[[7]] + p[[8]] + p[[9]] + p[[10]] + 
+  plot_layout(ncol=5)
+```
+
+:::
+
+(e) Suppose you show your lineup to five of people who have not seen the data, and three of them report the data plot as the most different plot. Compute the $p$-value. What would these results tell you about the typical consumption of the different whiskey brands?
+
+::: unilur-solution
+
+```{r}
+pvisual(5, 3, 10)
+```
+
+Likely people will report that the reason for choosing the plot is that one bar is much bigger than the other bars.
+
+It tells us that the data is not a sample from multinomial with equal probabilities, at least in the sense that one brand is consumed more frequently than the others.
+:::
+
+(f) This analysis ignored structure in the data, that survey participants could report consuming more than one brand. Have a discussion about what complications this might introduce for the analysis that we have just done. What might be an alternative way to compute the "counts" that takes this multiple responses into account? What else might we want to learn about survey participant responses?
+
+::: unilur-solution
+By ignoring the number of responses per participant we have made the assumption that all responses are independent of each other. 
+
+One alternative way to compute the counts would be convert each participants' responses into a fraction of their responses, for example, participant 1, 
+
+```{r}
+Scotch[1,]
+```
+
+reports consuming Chivas.Regal, Johnnie.Walker.Red.Label, Other.Brands, Glenlivet, and Glenfiddich. Each 1 would then be converted to 1/5.
+
+The reason for re-analysing this way is to equally weight participants' responses, so a participant who responded a lot would contribute the same relative amount to the overall count as a participant who responded very little.
+
+Other questions that might be of interest are:
+
+- Do some respondents drink a variety of brands and others only few?
+- Do some brands get consumed together more often than others?
+
+You might come up with some other ideas!
+:::
+
+### Exercise 4: What is the best transformation to make?
+
+For each of the variables in the data, `which-transform.csv`, decide on an appropriate transformation to make the distribution more symmetric for five of the variables and remove discreteness on one variable.
+
+```{r}
+#| eval: false
+#| echo: false
+n <- 502
+set.seed(205)
+std <- function(x) (x-mean(x))/sd(x)
+d <- tibble(x1 = rexp(n), 
+            x2 = rf(n, 3, 20),
+            x3 = rgamma(n, 2),
+            x4 = rpois(n, 3),
+            x5 = rlnorm(n),
+            x6 = c(rnorm(n/2, -3), rnorm(n/2, 3)))
+d <- d |>
+  mutate_all(std)
+d$x2 <- -d$x2
+write_csv(d, file="data/which-transform.csv")
+```
+
+```{r}
+#| label: data-to-transform
+#| echo: false
+d <- read_csv("https://raw.githubusercontent.com/numbats/ddde/main/data/which-transform.csv")
+p1 <- ggplot(d, aes(x=x1, y=1)) + geom_quasirandom(alpha=0.5)
+p2 <- ggplot(d, aes(x=x2, y=1)) + geom_quasirandom(alpha=0.5)
+p3 <- ggplot(d, aes(x=x3, y=1)) + geom_quasirandom(alpha=0.5)
+p4 <- ggplot(d, aes(x=x4, y=1)) + geom_quasirandom(alpha=0.5)
+p5 <- ggplot(d, aes(x=x5, y=1)) + geom_quasirandom(alpha=0.5)
+p6 <- ggplot(d, aes(x=x6, y=1)) + geom_quasirandom(alpha=0.5)
+p1+p2+p3+p4+p5+p6+plot_layout(ncol=3)
+```
+
+Your tutor has suggestions. 
+
+## 👌 Finishing up
+
+Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.
