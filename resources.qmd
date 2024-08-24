@@ -17,3 +17,5 @@ title: "ETC5521 Resources"
 - Wickham et al (2010) [Graphical Inference for Infovis.](https://doi.org/10.1109/TVCG.2010.161) IEEE Transactions on Visualization and Computer Graphics 16 (6): 973–79.
 - Hofmann et al (2012) [Graphical Tests for Power Comparison of Competing Designs.](https://doi.org/10.1109/TVCG.2012.230) IEEE Transactions on Visualization and Computer Graphics 18 (12): 2441–48.
 - Majumder et al (2013) [Validation of Visual Statistical Inference, Applied to Linear Models.](https://doi.org/10.1080/01621459.2013.808157) Journal of the American Statistical Association 108 (503): 942–56.
+- Josse et al (2022) [R-miss-tastic](https://rmisstastic.netlify.app)
+

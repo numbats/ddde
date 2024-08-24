@@ -1215,7 +1215,7 @@ tdf3 |>
 
 :::
 
-## Both numerical and graphical summaries can *reveal* and/or *hide* aspects of the data. {.transition-slide .center style="text-align: center;"}
+## Both numerical and graphical summaries can *reveal* and/or *hide* aspects of the data {.transition-slide .center style="text-align: center;"}
 
 
 ## Transformations {.transition-slide .center style="text-align: center;"}
