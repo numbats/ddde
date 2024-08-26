@@ -312,6 +312,15 @@ div.info {
 .hscroll {
   width: 100%;
   height: 80%;
+  max-height: 500px;
   overflow-y: auto;
+  background-color: lightgrey;
+}
+
+.vscroll {
+  width: 100%;
+  height: 80%;
+  max-height: 500px;
+  overflow-x: auto;
   background-color: lightgrey;
 }

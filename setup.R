@@ -22,6 +22,11 @@ library(kableExtra)
 library(fabricerin)
 library(DiagrammeR)
 library(gganimate)
+library(datasauRus)
+library(ggplot2movies)
+library(ggExtra)
+library(here)
+library(nullabor)
 
 # Locations
 current_file <- knitr::current_input()
