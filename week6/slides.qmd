@@ -278,6 +278,7 @@ When you look at data, you might discover that there is a different story, or ma
 - (Robust) numerical measures of association
 - Simpson's paradox
 - Making null samples to test for association
+- Imputing missings
 
 ## The scatterplot
 
@@ -1268,8 +1269,9 @@ oly12 |>
   mutate(Sport = fct_drop(Sport), Sex = fct_drop(Sex)) |>
   ggplot(aes(x = Height, y = Weight, colour = Sport)) +
   geom_smooth(method = "lm", se = FALSE) + 
-  scale_colour_brewer("", palette = "Dark2") +
+  scale_color_discrete_divergingx(palette = "Zissou 1") +
   theme(
+    legend.title = element_blank(),
     legend.position = "bottom",
     legend.direction = "horizontal"
   )
@@ -1321,8 +1323,9 @@ oly12 |>
   mutate(Sport = fct_drop(Sport), Sex = fct_drop(Sex)) |>
   ggplot(aes(x = Height, y = Weight, colour = Sport)) +
   geom_density2d() + 
-  scale_colour_brewer("", palette = "Dark2") +
+  scale_color_discrete_divergingx(palette = "Zissou 1") +
   theme(
+    legend.title = element_blank(),
     legend.position = "bottom",
     legend.direction = "horizontal"
   )
@@ -2786,6 +2789,131 @@ ggplot(
 
 :::
 
+## Handling and imputing missings [(1/2)]{.smallest}
+
+:::: {.columns}
+::: {.column style="font-size: 80%;"}
+
+Check if missings on one variable are related to distribution of the other variable.
+
+```{r}
+#| label: check-missings
+#| fig-width: 5
+#| fig-height: 4
+#| out-width: 100%
+#| code-fold: true
+ggplot(oceanbuoys,
+       aes(x = air_temp_c,
+           y = humidity)) +
+     geom_miss_point()
+```
+
+- Missings plotted in the margins. 
+- Missings on humidity only occur for lower values of air tempoerature.
+
+
+:::
+
+::: {.column style="font-size: 80%;"}
+
+::: {.fragment}
+Imputing missings, at least for humidity requires using air temperature values.
+
+::: {.fragment}
+
+But the clustering is due to year
+
+```{r}
+#| label: check-missings-year
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: 100%
+#| code-fold: true
+ggplot(oceanbuoys,
+       aes(x = air_temp_c,
+           y = humidity)) +
+     geom_miss_point() +
+     facet_wrap(~year, ncol=2) +
+     theme(legend.position = "none")
+```
+
+:::
+:::
+:::
+
+::::
+
+
+## Handling and imputing missings [(2/2)]{.smallest}
+
+:::: {.columns}
+::: {.column style="font-size: 80%;"}
+
+Use the mean of complete cases to impute the missings
+
+```{r}
+#| label: impute-missings
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: 80%
+#| code-fold: true
+
+ocean_imp_yr_mean <- oceanbuoys |>
+  select(air_temp_c, humidity, year) |>
+  bind_shadow() |>
+  group_by(year) |>
+  impute_mean_at(vars(air_temp_c, humidity)) |>
+  ungroup() |>
+  add_label_shadow()
+  
+ggplot(ocean_imp_yr_mean,
+       aes(x = air_temp_c,
+           y = humidity,
+           colour = any_missing)) + 
+  geom_miss_point() +
+  scale_color_discrete_divergingx(palette = "Zissou 1") +
+  theme(legend.title = element_blank(),
+        legend.position = "none")
+```
+:::
+::: {.column style="font-size: 80%;"}
+
+Use simulation from a bivariate normal distribution, for each year.
+
+```{r}
+#| label: impute-missings-random
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: 80%
+#| code-fold: true
+ocean_imp_yr_sim <- nabular(oceanbuoys) |>
+  select(air_temp_c, humidity, year) |>
+  bind_shadow() |>
+  add_label_shadow()
+
+# Need to operate on each subset
+ocean_imp_yr_sim_93 <- ocean_imp_yr_sim |>
+  filter(year == 1993)
+ocean_imp_yr_sim_97 <- ocean_imp_yr_sim |>
+  filter(year == 1997)
+
+ocean_imp_yr_sim_93 <- VIM::hotdeck(ocean_imp_yr_sim_93) 
+ocean_imp_yr_sim_97 <- VIM::hotdeck(ocean_imp_yr_sim_97) 
+  
+ocean_imp_yr_sim <- bind_rows(ocean_imp_yr_sim_93, ocean_imp_yr_sim_97)  
+
+ggplot(ocean_imp_yr_sim,
+       aes(x = air_temp_c,
+           y = humidity,
+           colour = any_missing)) + 
+  geom_miss_point() +
+  scale_color_discrete_divergingx(palette = "Zissou 1") +
+  theme(legend.title = element_blank(),
+        legend.position = "none")
+```
+
+:::
+::::
 
 ## Resources
 
@@ -2793,3 +2921,6 @@ ggplot(
 - Graphics using [ggplot2](https://ggplot2.tidyverse.org)
 - Wilke (2019) Fundamentals of Data Visualization https://clauswilke.com/dataviz/
 - Friendly and Denis "Milestones in History of Thematic Cartography, Statistical Graphics and Data Visualisation" available at http://www.datavis.ca/milestones/
+- Tierney et al (2023) Expanding Tidy Data Principles to
+  Facilitate Missing Data Exploration, Visualization and Assessment
+  of Imputations.

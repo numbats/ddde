@@ -25,6 +25,7 @@ schedule |>
 - (Robust) numerical measures of association
 - Simpson's paradox
 - Making null samples to test for association
+- Imputing missing values
 
 ## Lecture slides
 

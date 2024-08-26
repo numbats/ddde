@@ -19,3 +19,6 @@ title: "ETC5521 Resources"
 - Majumder et al (2013) [Validation of Visual Statistical Inference, Applied to Linear Models.](https://doi.org/10.1080/01621459.2013.808157) Journal of the American Statistical Association 108 (503): 942–56.
 - Josse et al (2022) [R-miss-tastic](https://rmisstastic.netlify.app)
 - Friendly and Denis “Milestones in History of Thematic Cartography, Statistical Graphics and Data Visualisation” available at [http://www.datavis.ca/milestones/](http://www.datavis.ca/milestones/)
+- Tierney et al (2023) [Expanding Tidy Data Principles to
+  Facilitate Missing Data Exploration, Visualization and Assessment
+  of Imputations](https://doi.org/10.18637/jss.v105.i07).

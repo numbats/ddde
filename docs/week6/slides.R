@@ -743,8 +743,9 @@ oly12 |>
   mutate(Sport = fct_drop(Sport), Sex = fct_drop(Sex)) |>
   ggplot(aes(x = Height, y = Weight, colour = Sport)) +
   geom_smooth(method = "lm", se = FALSE) + 
-  scale_colour_brewer("", palette = "Dark2") +
+  scale_color_discrete_divergingx(palette = "Zissou 1") +
   theme(
+    legend.title = element_blank(),
     legend.position = "bottom",
     legend.direction = "horizontal"
   )
@@ -764,8 +765,9 @@ oly12 |>
 ##   mutate(Sport = fct_drop(Sport), Sex = fct_drop(Sex)) |>
 ##   ggplot(aes(x = Height, y = Weight, colour = Sport)) +
 ##   geom_smooth(method = "lm", se = FALSE) +
-##   scale_colour_brewer("", palette = "Dark2") +
+##   scale_color_discrete_divergingx(palette = "Zissou 1") +
 ##   theme(
+##     legend.title = element_blank(),
 ##     legend.position = "bottom",
 ##     legend.direction = "horizontal"
 ##   )
@@ -784,8 +786,9 @@ oly12 |>
   mutate(Sport = fct_drop(Sport), Sex = fct_drop(Sex)) |>
   ggplot(aes(x = Height, y = Weight, colour = Sport)) +
   geom_density2d() + 
-  scale_colour_brewer("", palette = "Dark2") +
+  scale_color_discrete_divergingx(palette = "Zissou 1") +
   theme(
+    legend.title = element_blank(),
     legend.position = "bottom",
     legend.direction = "horizontal"
   )
@@ -801,8 +804,9 @@ oly12 |>
 ##   mutate(Sport = fct_drop(Sport), Sex = fct_drop(Sex)) |>
 ##   ggplot(aes(x = Height, y = Weight, colour = Sport)) +
 ##   geom_density2d() +
-##   scale_colour_brewer("", palette = "Dark2") +
+##   scale_color_discrete_divergingx(palette = "Zissou 1") +
 ##   theme(
+##     legend.title = element_blank(),
 ##     legend.position = "bottom",
 ##     legend.direction = "horizontal"
 ##   )
@@ -1800,4 +1804,87 @@ ggplot(
 ##   scale_colour_brewer("", palette = "Dark2") +
 ##   facet_wrap(~.sample, ncol = 4) +
 ##   theme(legend.position = "none")
+
+
+## -------------------------------------------------------------------------
+#| label: check-missings
+#| fig-width: 5
+#| fig-height: 4
+#| out-width: 100%
+#| code-fold: true
+ggplot(oceanbuoys,
+       aes(x = air_temp_c,
+           y = humidity)) +
+     geom_miss_point()
+
+
+## -------------------------------------------------------------------------
+#| label: check-missings-year
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: 100%
+#| code-fold: true
+ggplot(oceanbuoys,
+       aes(x = air_temp_c,
+           y = humidity)) +
+     geom_miss_point() +
+     facet_wrap(~year, ncol=2) +
+     theme(legend.position = "none")
+
+
+## -------------------------------------------------------------------------
+#| label: impute-missings
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: 80%
+#| code-fold: true
+
+ocean_imp_yr_mean <- oceanbuoys |>
+  select(air_temp_c, humidity, year) |>
+  bind_shadow() |>
+  group_by(year) |>
+  impute_mean_at(vars(air_temp_c, humidity)) |>
+  ungroup() |>
+  add_label_shadow()
+  
+ggplot(ocean_imp_yr_mean,
+       aes(x = air_temp_c,
+           y = humidity,
+           colour = any_missing)) + 
+  geom_miss_point() +
+  scale_color_discrete_divergingx(palette = "Zissou 1") +
+  theme(legend.title = element_blank(),
+        legend.position = "none")
+
+
+## -------------------------------------------------------------------------
+#| label: impute-missings-random
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: 80%
+#| code-fold: true
+ocean_imp_yr_sim <- nabular(oceanbuoys) |>
+  select(air_temp_c, humidity, year) |>
+  bind_shadow() |>
+  add_label_shadow()
+
+# Need to operate on each subset
+ocean_imp_yr_sim_93 <- ocean_imp_yr_sim |>
+  filter(year == 1993)
+ocean_imp_yr_sim_97 <- ocean_imp_yr_sim |>
+  filter(year == 1997)
+
+ocean_imp_yr_sim_93 <- VIM::hotdeck(ocean_imp_yr_sim_93) 
+ocean_imp_yr_sim_97 <- VIM::hotdeck(ocean_imp_yr_sim_97) 
+  
+ocean_imp_yr_sim <- bind_rows(ocean_imp_yr_sim_93, ocean_imp_yr_sim_97)  
+
+ggplot(ocean_imp_yr_sim,
+       aes(x = air_temp_c,
+           y = humidity,
+           colour = any_missing)) + 
+  geom_miss_point() +
+  scale_color_discrete_divergingx(palette = "Zissou 1") +
+  theme(legend.title = element_blank(),
+        legend.position = "none")
 
