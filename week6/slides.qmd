@@ -2659,7 +2659,7 @@ ggplot(df, aes(x = x, y = y1, colour = y2)) +
 :::
 ::::
 
-## Simpsons paradox: famous example
+## Simpson's paradox: famous example [(1/2)]{.smallest}
 
 <br>
 ```{r}
@@ -2682,7 +2682,7 @@ Did Berkeley [discriminate]{.monash-orange2} against female applicants?
 [Example from Unwin (2015)]{.smallest}
 
 
-## Simpsons paradox: famous example
+## Simpson's paradox: famous example [(2/2)]{.smallest}
 
 ```{r}
 #| label: berkeleydd
@@ -2808,15 +2808,15 @@ ggplot(oceanbuoys,
      geom_miss_point()
 ```
 
-- Missings plotted in the margins. 
-- Missings on humidity only occur for lower values of air tempoerature.
 
 
 :::
 
 ::: {.column style="font-size: 80%;"}
 
-::: {.fragment}
+- Missings plotted in the margins. 
+- Missings on humidity only occur for lower values of air tempoerature.
+
 Imputing missings, at least for humidity requires using air temperature values.
 
 ::: {.fragment}
@@ -2837,7 +2837,6 @@ ggplot(oceanbuoys,
      theme(legend.position = "none")
 ```
 
-:::
 :::
 :::
 
