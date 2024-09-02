@@ -1,0 +1,1179 @@
+---
+title: "ETC5521: Diving Deeply into Data Exploration"
+title-slide-attributes: 
+  data-background-image: "../images/bg.png"
+  data-background-size: 100%
+subtitle: "Making comparisons between groups and strata"
+author: "Professor Di Cook"
+email: "ETC5521.Clayton-x@monash.edu"
+length: "100 minutes"
+pdflink: "lecture.pdf"
+institute: "Department of Econometrics and Business Statistics"
+footer: "ETC5521 Lecture 7 | [ddde.numbat.space](ddde.numbat.space)"
+format:
+  revealjs:
+    multiplex: false
+    slide-number: c/t
+    slide-tone: false
+    theme: "../assets/monash.scss"
+    width: 1600
+    height: 900
+    margin: 0.05
+    embed-resources: true
+---
+
+```{r, include = FALSE, echo=FALSE}
+source("../setup.R")
+```
+
+```{r DT-options, include = FALSE}
+toggle_select <- DT::JS(
+  "table.on('click.dt', 'tbody tr', function() {",
+  "$(this).toggleClass('selected');",
+  "})"
+)
+table_options <- function(scrollY, title, csv) {
+  list(
+    dom = "Bft",
+    pageLength = -1,
+    searching = TRUE,
+    scrollX = TRUE,
+    scrollY = scrollY,
+    buttons = list(
+      list(
+        extend = "copy",
+        filename = title
+      ),
+      list(
+        extend = "csv",
+        filename = csv
+      )
+    )
+  )
+}
+```
+
+## At the heart of quantitative reasoning is a single question: Compared to what? {.transition-slide .center style="text-align: center;"}
+
+<br>
+[-Edward Tufte]{.smallest}
+
+## Making comparisons
+
+- Groups defined by [strata]{.monash-blue2} labelled in categorical variables
+- [Observations]{.monash-blue2} in strata, same or different?
+- Is there a [baseline]{.monash-blue2}, or normal value?
+- What are the [dependencies]{.monash-blue2} in the way the data was collected?
+- Are multiple samples recorded for the same individual, or recorded on different individuals?
+
+## How would you answer these questions?
+
+- Are housing prices increasing more in Sydney or Melbourne?
+
+::: {.fragment}
+- Is the quoted price of the unit/apartment I might buy reasonable, or is it too high?
+:::
+
+::: {.fragment}
+- Are you more at risk of MPox in Australia or Germany?
+:::
+
+::: {.fragment}
+- Is the Alfred or Epworth hospitals better for having a baby? 
+:::
+
+::: {.fragment}
+- It's hot and dry today, is the risk of bushfires too high to go hiking?
+:::
+
+<!--
+## Outline
+
+- choropleth vs hexagon tile
+- bushfire risk: what temperatures are normal
+- kaggle study
+- temperature at different locations
+- cross-rates
+- pedestrian sensor
+- pisa: different cohorts for years; different countries
+- tuberculosis
+- before and after data
+- hospital ranking: level of service
+- propensity score matching
+- relative risk, disease
+- joy plot
+- problems with multiple segmented bars
+- population pyramids
+- parallel sets: flow
+
+Principles:
+
+- paired samples vs independent samples
+- heterogeneous strata
+- relative to what
+- normalising samples
+-->
+
+## Comparing strata {.transition-slide .center style="text-align: center;"}
+
+## Case study: Melbourne's daily maximum temperature [(1/2)]{.smallest}
+
+```{r}
+#| label: temp-data
+#| echo: false
+#| include: false
+df9 <- read_csv(here::here("data", "melb_temp.csv")) |>
+  janitor::clean_names() |>
+  rename(temp = maximum_temperature_degree_c) |>
+  filter(!is.na(temp)) |>
+  dplyr::select(year, month, day, temp)
+skimr::skim(df9)
+```
+
+::: {.panel-tabset}
+
+## 📊
+
+:::: {.columns}
+
+::: {.column}
+
+```{r}
+#| label: temp-plot1
+#| echo: false
+ggplot(df9, aes(x=month, y=temp)) +
+  geom_violin(draw_quantiles=c(0.25, 0.5, 0.75), fill= "#56B4E9") +
+  labs(x = "month", y = "max daily temp (°C)") +
+  theme(aspect.ratio=0.5)
+```
+
+:::
+
+::: {.column}
+
+Melbourne's daily maximum temperature from 1970 to 2020.
+
+What are the [strata]{.monash-blue2} in temporal data?
+
+::: {.fragment}
+
+* How are the temperatures different across months?
+* What about the temperature within a month?
+
+:::
+
+:::
+
+::::
+
+## data
+
+```{r}
+#| label: temp-data
+#| echo: true
+#| eval: true
+```
+
+
+## R
+
+```{r}
+#| label: temp-plot1
+#| echo: true
+#| eval: false
+```
+
+
+:::
+
+
+## Case study: Melbourne's daily maximum temperature [(2/2)]{.smallest}
+
+
+:::: {.columns}
+::: {.column}
+
+<br>
+Why can we make the comparison across months?
+
+::: {.fragment}
+
+*Because it is the same location, and same years, for each month subset.*
+
+:::
+
+::: {.fragment}
+<br>
+Is some variation in temperature each month due to changing climate?
+
+*How would you check this?*
+:::
+
+:::
+::: {.column style="font-size: 80%;"}
+
+::: {.fragment}
+
+```{r}
+#| label: temp-year
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 5
+#| out-width: 100%
+df9 |>
+  group_by(year, month) |>
+  summarise(temp = mean(temp)) |>
+  ggplot(aes(x=year, y=temp)) +
+  geom_point(alpha=0.5) +
+  geom_smooth(se=F) + 
+  facet_wrap(~month, ncol=4, scales="free_y") +
+  scale_x_continuous("year", breaks=seq(1970, 2020, 20)) +
+  ylab("max daily temp (°C)") +
+  theme(aspect.ratio=0.7)
+```
+
+What is `scales="free_y"` for?
+
+:::
+:::
+::::
+
+## Case study: olive oils [(1/4)]{.smallest}
+
+```{r}
+#| label: olives-data
+#| include: false
+data(olives, package = "classifly")
+df2 <- olives |>
+  mutate(Region = factor(Region, labels = c("South", "Sardinia", "North")))
+
+skimr::skim(df2)
+```
+
+
+::: {.panel-tabset}
+
+## 📊
+
+:::: {.columns}
+::: {.column width=70%}
+
+```{r}
+#| label: olives-plot1
+#| echo: false
+#| fig-height: 10
+#| fig-width: 10
+#| out-width: 60%
+g1 <-
+  df2 |>
+  mutate(Area = fct_reorder(Area, palmitic)) |>
+  ggplot(aes(Area, palmitic, color = Region)) +
+  geom_boxplot() +
+  scale_color_discrete_divergingx(palette="Zissou 1") +
+  guides(color = FALSE, x = guide_axis(n.dodge = 2)) +
+  theme(aspect.ratio=0.5)
+
+g2 <- ggplot(df2, aes(Region, palmitic, color = Region)) +
+  geom_boxplot() +
+  scale_color_discrete_divergingx(palette="Zissou 1") +
+  guides(color = FALSE) +
+  theme(axis.text = element_blank())
+
+g3 <- ggplot(df2, aes(palmitic, color = Region)) +
+  geom_density() +
+  scale_color_discrete_divergingx(palette="Zissou 1") +
+  guides(color = FALSE) +
+  theme(axis.text = element_blank())
+
+g4 <- ggplot(df2, aes(palmitic, color = Region)) +
+  stat_ecdf() +
+  scale_color_discrete_divergingx(palette="Zissou 1") +
+  guides(color = FALSE) +
+  theme(axis.text = element_blank())
+
+g5 <- g2 + g3 + g4 + plot_layout(ncol=3)
+  
+g1 + g5 + plot_layout(ncol=1, heights=c(2,1),
+  guides = "collect")
+```
+
+:::
+::: {.column style="font-size: 80%; width: 30%;"}
+
+* The olive oil data consists of the percentage composition of 8 fatty acids (palmitic, palmitoleic, stearic, oleic, linoleic, linolenic, arachidic, eicosenoic) found in the lipid fraction of 572 Italian olive oils. 
+* There are 9 collection areas, 4 from southern Italy (North and South Apulia, Calabria, Sicily), two from Sardinia (Inland and Coastal) and 3 from northern Italy (Umbria, East and West Liguria).
+
+:::
+::::
+
+## data
+
+```{r render = knitr::normal_print}
+#| label: olives-data
+#| echo: true
+```
+
+## R
+
+```{r}
+#| label: olives-plot1
+#| echo: true
+#| eval: false
+```
+
+:::
+
+## Case study: olive oils [(2/4)]{.smallest}
+
+
+::: {.panel-tabset}
+
+## 📊
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| label: color-olives
+#| echo: false
+ggplot(olives, aes(palmitoleic, palmitic, color = Area)) +
+  geom_point() +
+  scale_color_discrete_divergingx(palette="Zissou 1") 
+```
+
+:::
+::: {.column}
+
+Colour is generally good to differentiate strata but if there are too many categories then it becomes hard to compare.
+ 
+
+:::
+::::
+
+## R
+
+```{r}
+#| label: color-olives
+#| eval: false
+```
+
+:::
+
+## Case study: olive oils [(3/4)]{.smallest}
+
+::: {.panel-tabset}
+
+## 📊
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| label: no-shadow
+#| echo: false
+#| fig-width: 7
+#| fig-height: 7
+#| out-width: 80%
+ggplot(olives, aes(palmitoleic, palmitic, color = Area)) +
+  geom_point() +
+  facet_wrap(~Area) +
+  scale_color_discrete_divergingx(palette="Zissou 1") +
+  guides(color = FALSE) 
+```
+:::
+::: {.column}
+It can be hard to compare across plots, because we need to remember what the previous pattern was when focusing on the new cell.
+
+:::
+::::
+
+## R
+
+```{r}
+#| label: no-shadow
+#| eval: false
+```
+
+:::
+
+## Case study: olive oils [(4/4)]{.smallest}
+
+::: {.panel-tabset}
+
+## 📊
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| label: shadow
+#| echo: false
+#| fig-width: 7
+#| fig-height: 7
+#| out-width: 80%
+ggplot(olives, aes(palmitoleic, palmitic)) +
+  geom_point(data = dplyr::select(olives, -Area), color = "gray") +
+  geom_point(aes(color = Area), size=2) +
+  facet_wrap(~Area) +
+  scale_color_discrete_divergingx(palette="Zissou 1") +
+  guides(color = FALSE)
+```
+:::
+::: {.column}
+Comparison to all, by putting a shadow of all the data underneath the subset in each cell.
+:::
+::::
+
+## R
+
+```{r}
+#| label: shadow
+#| eval: false
+```
+
+:::
+
+## Strata from quantitative variable
+
+:::: {.columns}
+::: {.column width=40%}
+The [coplot]{.monash-blue2} divides the numerical variable into chunks, and facets by these.
+The chunks traditionally we overlapping.
+
+<br><br><br>
+[Becker, Cleveland and Shyu,  (1996); Cleveland (1993)]{.smallest}
+:::
+::: {.column style="font-size: 80%; width: 60%;"}
+```{r}
+#| code-fold: true
+#| fig-width: 10
+#| fig-height: 6
+#| out-width: 100%
+#| eval: false
+# Sizing of figure is difficult, so save it
+library(ggcleveland)
+olives_sard <- df2 |>
+  filter(Region == "Sardinia")
+p <- gg_coplot(olives_sard,
+  x=arachidic, y=oleic, 
+  faceting = linoleic,
+  number_bins = 6, 
+  overlap = 1/4) +
+  theme(aspect.ratio=0.5)
+```
+
+![](images/coplot.png)
+
+:::
+::::
+
+## Famous example: trade 
+
+```{r}
+#| label: trade-data
+#| include: false
+data(EastIndiesTrade, package = "GDAdata")
+skimr::skim(EastIndiesTrade)
+```
+
+::: {.panel-tabset}
+
+## 📊
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| label: trade-plot1
+#| echo: false
+#| fig-height: 6
+#| fig-width: 7.5
+#| out-width: 100%
+g1 <- ggplot(EastIndiesTrade, aes(Year, Exports)) +
+  annotate("rect",
+    xmin = 1701, xmax = 1714,
+    ymin = -Inf, ymax = Inf,
+    fill = "red", alpha = 0.3
+  ) +
+  annotate("rect",
+    xmin = 1756, xmax = 1763,
+    ymin = -Inf, ymax = Inf,
+    fill = "red", alpha = 0.3
+  ) +
+  annotate("rect",
+    xmin = 1775, xmax = 1780,
+    ymin = -Inf, ymax = Inf,
+    fill = "red", alpha = 0.3
+  ) +
+  geom_line(color = "#339933", size = 2) +
+  geom_line(aes(Year, Imports), color = "red", size = 2) +
+  geom_ribbon(aes(ymin = Exports, ymax = Imports), fill = "gray") +
+  labs(y = "<span style='color:#339933'>Export</span>/<span style='color:red'>Import</span>", tag = "(A)") +
+  theme(aspect.ratio=0.7, axis.title.y = ggtext::element_markdown())
+
+g2 <- ggplot(EastIndiesTrade, aes(Year, Exports - Imports)) +
+  annotate("rect",
+    xmin = 1701, xmax = 1714,
+    ymin = -Inf, ymax = Inf,
+    fill = "red", alpha = 0.3
+  ) +
+  annotate("rect",
+    xmin = 1756, xmax = 1763,
+    ymin = -Inf, ymax = Inf,
+    fill = "red", alpha = 0.3
+  ) +
+  annotate("rect",
+    xmin = 1775, xmax = 1780,
+    ymin = -Inf, ymax = Inf,
+    fill = "red", alpha = 0.3
+  ) +
+  geom_line(size = 2) +
+  labs(tag = "(B)") +
+  theme(aspect.ratio=0.7)
+
+g3 <- ggplot(EastIndiesTrade, aes(Year, (Exports - Imports) / (Exports + Imports) * 2)) +
+  annotate("rect",
+    xmin = 1701, xmax = 1714,
+    ymin = -Inf, ymax = Inf,
+    fill = "red", alpha = 0.3
+  ) +
+  annotate("rect",
+    xmin = 1756, xmax = 1763,
+    ymin = -Inf, ymax = Inf,
+    fill = "red", alpha = 0.3
+  ) +
+  annotate("rect",
+    xmin = 1775, xmax = 1780,
+    ymin = -Inf, ymax = Inf,
+    fill = "red", alpha = 0.3
+  ) +
+  geom_line(color = "#001a66", size = 2) +
+  labs(y = "Relative difference", tag = "(C)") +
+  theme(aspect.ratio=0.7)
+
+g1 + g1 + g2 + g3 + plot_layout(ncol=2)
+```
+
+:::
+::: {.column style="font-size: 80%;"}
+
+* The export from England to the East Indies and the import to England from the East Indies in millions of pounds (A).
+* Import and export figures are easier to compare by [plotting the difference]{.monash-blue2} like in (B).
+* Relative difference may be more of an interest: (C) plots the relative difference with respect to the average of export and import values. 
+* The red area correspond to War of the Spanish Succession (1701-14), Seven Years' War (1756-63) and the American Revolutionary War (1775-83).
+
+:::
+::::
+
+## data
+
+```{r render = knitr::normal_print}
+#| label: trade-data
+```
+
+## R
+
+```{r}
+#| label: trade-plot1
+#| echo: true
+#| eval: false
+```
+
+
+
+:::
+
+
+## Paired samples {.transition-slide .center style="text-align: center;"}
+
+## Pairing adjusts for individual differences
+
+If we were wanting to measure the effect of incorporating a data analytics competition on student learning which is the best design?
+
+:::: {.columns}
+::: {.column style="font-size: 70%;"}
+
+METHOD A
+
+- Divide students into two groups. Make sure that each group has similar types of students, so both groups are as similar as possible.
+- One group gets an extra traditional assignment, and the other group participates in a data competition. 
+- Each student takes an exam on the content being taught. 
+- The scores are compared using side-by-side boxplots and a two-sample permutation test
+
+:::
+::: {.column style="font-size: 70%;"}
+
+METHOD B
+
+- Each student takes an exam on the content being taught. We'll call this their [BEFORE]{.monash-blue2} score.
+- Divide students into two groups. Make sure that each group has similar types of students, so both groups are as similar as possible.
+- One group gets an extra traditional assignment, and the other group participates in a data competition. 
+- Each student takes an exam on the content being taught. We'll call this their [AFTER]{.monash-blue2} score.
+- The [difference]{.monash-blue2} between the before and after scores are compared using side-by-side boxplots and a two-sample permutation test
+
+:::
+::::
+
+::: {.fragment}
+What other modifications to the design can you think of?
+:::
+
+## Case study: choropleth vs hexagon tile [(1/3)]{.smallest}
+
+The goal is to demonstrate that the *hexagon tile map is better than the choropleth* for communicating disease incidence across Australia.
+
+:::: {.columns}
+::: {.column}
+<center>
+![](../images/thyroid-choro-1.png){width=500}
+</center>
+:::
+::: {.column}
+<center>
+![](../images/thyroid-hex-1.png){width=500}
+</center>
+:::
+
+::::
+
+::: {style="font-size: 60%;"}
+The choropleth fills geographic regions (LGAs, SA2s, ...) with colour corresponding to the thyroid cancer relative difference from the overall mean. The hexagons, are also filled this way.
+:::
+
+[[Kobakian et al](https://github.com/srkobakian/experiment/blob/master/paper/paper.pdf)]{.smallest}
+
+## Case study: choropleth vs hexagon tile [(2/3)]{.smallest}
+
+:::: {.columns}
+::: {.column}
+- Each participant can [only see the (same) data once]{.monash-blue2}.
+- Need to test for different types of spatial patterns.
+- Need to repeat measure each type of pattern, and each participant.
+
+[Pairing is done on the data set.]{.monash-blue2} Four different data sets used for each pattern.
+
+:::
+::: {.column style="font-size: 70%; width: 25%;"}
+
+**Trial 1**
+
+*Participant 1*
+
+![](../images/aus_cities_12_geo.png)
+
+
+*Participant 2*
+
+![](../images/aus_cities_12_hex.png)
+
+:::
+
+::: {.column style="font-size: 70%; width: 25%;"}
+
+::: {.fragment}
+
+**Trial 2**
+
+*Participant 1*
+
+![](../images/aus_cities_9_hex.png)
+
+
+*Participant 2*
+
+![](../images/aus_cities_9_geo.png)
+
+:::
+:::
+
+::::
+
+## Case study: choropleth vs hexagon tile [(3/3)]{.smallest}
+
+:::: {.columns}
+::: {.column style="font-size: 80%;"}
+
+**Ignore the pairing**
+
+```{r}
+#| label: read-hexmap-data
+#| code-fold: true
+#| out-width: 80%
+hstudy <- read_csv("https://raw.githubusercontent.com/srkobakian/experiment/master/data/DAT_HexmapPilotData_V1_20191115.csv")
+hstudy |>
+  filter(trend == "three cities") |>
+  ggplot(aes(x=detect)) + geom_bar() + facet_wrap(~type, ncol=2)
+```
+Looks like detection rate about 50-50 for hexagon tile map, which is better than almost zero for choropleth map. 
+
+:::
+::: {.column style="font-size: 80%;"}
+
+::: {.fragment}
+
+**Account for the pairing**
+
+```{r}
+#| label: plot-hexmap-results
+#| code-fold: true
+#| out-width: 90%
+hstudy |>
+  filter(trend == "three cities") |>
+  select(type, replicate, detect) |>
+  group_by(type, replicate) |>
+  summarise(pdetect = length(detect[detect == 1])/length(detect)) |>
+  ggplot(aes(x=type, y=pdetect)) +
+    geom_point() +
+    geom_line(aes(group=replicate)) +
+    ylim(c(0,1)) +
+    xlab("") +
+    ylab("Proportion detected")
+```
+
+For each data set, the hexagon tile map performed better.
+
+:::
+:::
+::::
+
+## Normalising {.transition-slide .center style="text-align: center;"}
+
+## Am I short?
+
+```{r}
+#| echo: false
+set.seed(744)
+df22 <- tibble(
+  sex = c(rep("F", 95), 
+          rep("M", 82), 
+          rep("U", 16)),
+  height = c(rnorm(95, 165, 6.9),
+             rnorm(82, 175, 7.9),
+             rnorm(16, 170, 14.1)))
+```
+
+:::: {.columns}
+::: {.column}
+I am 165 cms tall. 
+
+::: {style="font-size: 70%;"}
+```{r}
+#| code-fold: true
+#| fig-width: 6
+#| fig-height: 4
+#| out-width: 100%
+ggplot(df22, aes(x=height)) +
+  geom_histogram(breaks = seq(132.5, 205, 5),
+    colour="white") +
+  geom_vline(xintercept = 165, colour="#D55E00",
+    linewidth=2)
+```
+:::
+
+:::
+::: {.column}
+
+::: {.fragment}
+But, there are strata in humans, so compared to what would be better?
+:::
+
+::: {.fragment style="font-size: 70%;"}
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+#| fig-height: 4
+#| out-width: 100%
+ggplot(df22, aes(x=height)) +
+  geom_histogram(breaks = seq(137.5, 205, 5),
+    colour="white") +
+  geom_vline(xintercept = 165, colour="#D55E00",
+    linewidth=2) +
+  facet_wrap(~sex, ncol=3, scales="free_y")
+```
+
+:::
+
+::: {.fragment}
+Nope, I'm average height.
+:::
+
+:::
+
+::::
+
+## Normalising 
+
+:::: {.columns}
+::: {.column}
+
+Within each strata convert values to a z-score.
+
+$$ z = \frac{x-\bar{x}}{s} $$
+
+```{r}
+df22 <- df22 |>
+  group_by(sex) |>
+  mutate(zscore = (height -
+    mean(height))/sd(height))
+```
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 4
+#| out-width: 100%
+ggplot(df22, aes(x=zscore)) +
+  geom_histogram(breaks = seq(-3.75, 3.75, 0.5),
+    colour="white") +
+  facet_wrap(~sex, ncol=3, scales="free_y")
+```
+
+:::
+::: {.column}
+
+```{r}
+#| echo: false
+df22_smry <- df22 |>
+  group_by(sex) |>
+  summarise(m = mean(height), 
+            s = sd(height))
+```
+
+- females: $\bar{x}=$ `r df22_smry$m[1]`, $s=$ `r df22_smry$s[1]`
+- males: $\bar{x}=$ `r df22_smry$m[2]`, $s=$ `r df22_smry$s[2]`
+- unknown: $\bar{x}=$ `r df22_smry$m[3]`, $s=$ `r df22_smry$s[3]`
+
+My z-score is `r (165-df22_smry$m[1])/df22_smry$s[1]`. 
+
+::: {.fragment}
+<br>
+
+Rob's height is 170 cms. His z-score is `r (170-df22_smry$m[2])/df22_smry$s[2]`.
+
+[I am relatively TALLER than Rob.]{.monash-blue2}
+:::
+
+:::
+
+::::
+## Baselines {.transition-slide .center style="text-align: center;"}
+
+
+## Relative to a baseline
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+#| fig-height: 4
+#| out-width: 100%
+data(anorexia, package="MASS")
+ggplot(data=anorexia, 
+ aes(x=Prewt, y=Postwt, 
+	colour=Treat)) + 
+ coord_equal() +
+ xlim(c(70, 110)) + ylim(c(70, 110)) +
+ xlab("Pre-treatment weight (lbs)") +  
+ ylab("Post-treatment weight (lbs)") +
+ geom_abline(intercept=0, slope=1,  
+   colour="grey80", linewidth=1.25) + 
+ geom_density2d() + 
+ geom_point(size=3) +
+ facet_grid(.~Treat) +
+ theme(legend.position = "none")
+```
+
+- Primary comparison is before treatment weight, and after treatment weight. 
+- Three different treatments.
+
+[[Unwin, Hofmann and Cook (2013)](https://journal.r-project.org/articles/RJ-2013-012/)]{.smallest}
+
+:::
+
+::: {.column}
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+#| fig-height: 4
+#| out-width: 100%
+ggplot(data=anorexia, 
+  aes(x=Prewt, colour=Treat,
+    y=(Postwt-Prewt)/Prewt*100)) + 
+  xlab("Pre-treatment weight (lbs)") +  
+  ylab("Percent increase in weight") +
+  geom_hline(yintercept=0, linewidth=1.25, 
+    colour="grey80") + 
+  geom_point(size=3) +   
+  facet_grid(.~Treat) +
+ theme(legend.position = "none")
+```
+
+- Compute the difference
+- Compare difference relative to before weight
+- [Before weight is used as the baseline]{.monash-blue2}
+:::
+::::
+
+
+## Proportions {.transition-slide .center style="text-align: center;"}
+
+## Case study: tuberculosis [(1/3)]{.smallest}
+
+```{r}
+#| echo: false
+# https://www.who.int/teams/global-tuberculosis-programme/data
+tb <- read_csv(here::here("data/TB_notifications_2023-08-21.csv"))
+tb_oz <- tb |>
+  filter(iso3 == "AUS", between(year, 1997, 2012)) |>
+  select(year, contains("new_sp")) |>
+  select(-new_sp, -new_sp_m04, -new_sp_m514,
+         -new_sp_m014, -new_sp_f014,
+         -new_sp_mu, -new_sp_f04, -new_sp_f514,
+         -new_sp_fu) |>
+  pivot_longer(new_sp_m1524:new_sp_f65, 
+              names_to="var", values_to="count") |>
+  mutate(var = str_remove(var, "new_sp_")) |>
+  mutate(sex = str_sub(var, 1, 1),
+         age = str_sub(var, 2, length(var))) |>
+  select(-var)
+```
+
+::: {style="font-size: 80%;"}
+```{r}
+#| code-fold: true
+#| fig-width: 15
+#| fig-height: 3
+#| out-width: 100%
+tb_oz |>
+  ggplot(aes(x=year, y=count, fill=sex)) +
+    geom_col(position="fill") +
+    scale_fill_discrete_divergingx(palette = "Zissou 1") +
+    facet_wrap(~age, ncol=6) +
+    xlab("") + ylab("proportion")
+```
+
+:::
+
+Primary comparison is `sex`, relative to yearly trend. 
+
+
+## Case study: tuberculosis [(2/3)]{.smallest}
+
+::: {style="font-size: 80%;"}
+```{r}
+#| code-fold: true
+#| fig-width: 10
+#| fig-height: 5
+#| out-width: 70%
+tb_oz |>
+  ggplot(aes(x=year, y=count, fill=age)) +
+    geom_col(position="fill") +
+    scale_fill_discrete_divergingx(palette = "Zissou 1") +
+    facet_wrap(~sex, ncol=2) +
+    xlab("") + ylab("proportion")
+```
+
+:::
+
+Primary comparison is `age`, relative to yearly trend. 
+
+## Case study: tuberculosis [(3/3)]{.smallest}
+
+
+::: {style="font-size: 80%;"}
+```{r}
+#| code-fold: true
+#| fig-width: 12
+#| fig-height: 4
+#| out-width: 80%
+tb_oz |>
+  ggplot(aes(x=year, y=count, fill=age)) +
+    geom_col() +
+    scale_fill_discrete_divergingx(palette = "Zissou 1") +
+    facet_grid(sex~age, scales="free") +
+    xlab("") + ylab("count") +
+    theme(legend.position = "none")
+```
+
+:::
+
+Primary comparison is `year` trend, separately for age and sex. 
+
+## Inference {.transition-slide .center style="text-align: center;"}
+
+## Bootstrap confidence intervals
+
+::: {.panel-tabset}
+
+## 📊
+
+:::: {.columns}
+
+::: {.column style="font-size: 80%;"}
+
+- Confidence intervals show what might happen to estimates with different samples,
+- with the [same dependence structure]{.monash-blue2}.
+- Sample the current sample, but don't change anything else.
+- Reason for sampling with replacement, is to keep sample size the same - we know that variance decreases with smaller sample size.
+
+<br>
+For choropleth vs hexagon tiles, [sample participants with replacement]{.monash-blue2}.
+
+:::
+::: {.column}
+
+```{r}
+#| label: boot-hstudy
+#| echo: false
+#| fig-width: 8
+#| fig-height: 9
+#| out-width: 70%
+library(boot)
+
+hstudy_sub <- hstudy |>
+  filter(trend == "three cities") |>
+  select(id, type, replicate, detect) 
+
+# Function to compute proportions
+prop_func <- function(df) {
+  df_smry <- df |>
+    group_by(type, replicate) |>
+    summarise(pdetect = length(detect[detect == 1])/length(detect)) |> 
+    ungroup() |>
+    pivot_wider(names_from = c(type, replicate),
+               values_from = pdetect)
+  df_smry
+}
+
+nboots <- 100
+set.seed(1023)
+bsamps <- tibble(samp="0", prop_func(hstudy_sub))
+for (i in 1:nboots) {
+  samp_id <- sort(sample(unique(hstudy_sub$id),
+    replace=TRUE))
+  hs_b <- NULL
+  for (j in samp_id) {
+    x <- hstudy_sub |>
+      filter(id == j)
+    hs_b <- bind_rows(hs_b, x)
+  }
+  bsamps <- bind_rows(bsamps,
+    tibble(samp=as.character(i), prop_func(hs_b)))
+}
+
+bsamps_long <- bsamps |>
+  pivot_longer(Geography_9:Hexagons_12, 
+    names_to = "treatments", 
+    values_to = "pdetect") |> 
+  separate(treatments, into=c("type", "replicate"))
+
+ggplot() +
+    geom_line(data=filter(bsamps_long, samp != "0"),
+      aes(x=type, 
+          y=pdetect, 
+          group=samp),
+     linewidth=0.5, alpha=0.6, colour="grey70") +
+    geom_line(data=filter(bsamps_long, 
+                     samp == "0"),
+      aes(x=type, 
+          y=pdetect, 
+          group=samp),
+     linewidth=2) +
+    facet_wrap(~replicate) +
+    ylim(c(0,1)) +
+    xlab("") +
+    ylab("Proportion detected")
+```
+
+
+:::
+
+::::
+
+## data
+
+```{r}
+hstudy |> filter(trend == "three cities") |> count(type, replicate)
+```
+
+## R
+
+```{r}
+#| label: boot-hstudy
+#| echo: true
+#| eval: false
+```
+
+:::
+
+## Lineups
+
+:::: {.columns}
+
+::: {.column}
+
+- Lineups show what might happen to estimates with null samples, where (by construction) there is no relationship.
+- Thus you need to [break dependence structure]{.monash-blue2}.
+
+<br>
+For choropleth vs hexagon tiles, randomise the type of plot each participant received. This breaks any dependence between type and detection rate.
+
+:::
+::: {.column style="font-size: 70%;"}
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+#| fig-height: 8
+#| out-width: 100%
+n_nulls <- 11
+set.seed(1110)
+lsamps <- tibble(samp="0", prop_func(hstudy_sub))
+for (i in 1:n_nulls) {
+
+  hs_b <- hstudy_sub |>
+    group_by(id) |>
+    mutate(type = sample(type)) |>
+    ungroup()
+  lsamps <- bind_rows(lsamps,
+    tibble(samp=as.character(i), prop_func(hs_b)))
+}
+
+lsamps_long <- lsamps |>
+  pivot_longer(Geography_9:Hexagons_12, 
+    names_to = "treatments", 
+    values_to = "pdetect") |> 
+  separate(treatments, into=c("type", "replicate"))
+
+lsamps_long |> ggplot() +
+    geom_line(aes(x=type, 
+          y=pdetect, 
+          group=replicate)) +
+    facet_wrap(~samp, ncol=4) +
+    ylim(c(0,1)) +
+    xlab("") +
+    ylab("Proportion detected")
+
+```
+:::
+
+::::
+
+## Take-aways
+
+- In *comparison to what* is especially important for exploring [observational data]{.monash-blue2}.
+- Avoid reporting spurious associations by accounting for dependencies correctly.
+- Adjust for individual variation, by 
+    - pairing (or multiple repeated measures)
+    - relative to a baseline
+    - on a standard scale
+- Determining in *comparison to what* can be [hard]{.monash-orange2}.
+
+## Resources
+
+- Wilke (2019) [Fundamentals of Data Visualization ](https://clauswilke.com/dataviz/) Chapters 9, 10, 11
+- Unwin (2015) [Graphical Data Analysis with R](http://www.gradaanwr.net) Chapter 10

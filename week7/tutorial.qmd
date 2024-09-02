@@ -1,0 +1,589 @@
+---
+title: "ETC5521 Tutorial 7"
+subtitle: "Exploring bivariate dependencies"
+author: "Prof. Di Cook"
+date: "Sep 2, 2024"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: tutorial.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: tutorialsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+---
+
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(nullabor)
+library(ggbeeswarm)
+library(lvplot)
+library(patchwork)
+library(ggplot2movies)
+library(conflicted)
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+```
+
+## 🎯 Objectives
+
+These are exercises in making scatterplots and variations to examine association between two variables, and to make practice using transformations.
+
+## 🔧 Preparation 
+
+The reading for this week is [Wilke (2019) Ch 12 Visualizing associations](https://clauswilke.com/dataviz/). 
+- Complete the weekly quiz, before the deadline!
+- Install the following R-packages if you do not have them already:
+
+```{r}
+#| eval: false
+#| code-fold: false
+install.packages(c("VGAMdata", "Sleuth2", "colorspace", "nullabor", "broom", "patchwork"))
+```
+
+- Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
+
+## 📥 Exercises
+
+### Exercise 1: Olympics
+
+We have seen from the lecture that the Athletics category has too many different types of athletics in it for it to be a useful group for studying height and weight. There is another variable called `Event` which contains more specific information.
+
+```{r}
+#| echo: true
+# Read-in data
+data(oly12, package = "VGAMdata")
+```
+
+a. Tabulate `Event` for just the Sport category `Athletics`, and decide which new categories to create.
+
+::: unilur-solution
+World Athletics, the sport's governing body, defines athletics in six disciplines: track and field, road running, race walking, cross country running, mountain running, and trail running [wikipedia](https://en.wikipedia.org/wiki/Sport_of_athletics).
+
+That's not so helpful! Track and field should be two different groups. I suggest running (short, middle and long distance), throwing, jumping, walking, and Decathlon (men) or Heptathlon (women)
+:::
+
+b. Create the new categories, in steps, creating a new binary variable for each. The function `str_detect` is useful for searching for text patterns in a string. It also helps to know about regular expressions to work with strings like this. And there are two sites, which are great for learning: [Regex puzzles](https://regexcrossword.com/challenges/beginner/puzzles/1), [Information and testing board](https://regex101.com)
+
+::: unilur-solution
+```{r}
+# Give each athlete an id as unique identifier to facilitate relational joins
+oly12 <- oly12 %>%
+  mutate(id = row_number(), .before = Name)
+
+# For athletes with > 1 event, separate each event into a row
+oly12_ath <- oly12 %>%
+  filter(Sport == "Athletics") %>%
+  separate_rows(Event, sep = ", ")
+
+# Determine athlete types into 7 categories
+oly12_ath <- oly12_ath %>%
+  mutate(
+    Ath_type = case_when(
+      # 100m, 110m Hurdles, 200m, 400m, 400m hurdles, 800m, 4 x 100m relay, 4 x 400m relay,
+      str_detect(Event, "[1248]00m|Hurdles") ~ "Short distance",
+      # 1500m, 3000m Steeplechase, 5000m
+      str_detect(Event, "1500m|5000m|Steeplechase") ~ "Middle distance",
+      # 10,000m, Marathon
+      str_detect(Event, ",000m|Marathon") ~ "Long distance",
+      # 20km Race walk, Men's 50km Race walk
+      str_detect(Event, "Walk") ~ "Walking",
+      # discus throw, hammer throw, javelin throw, shot put,
+      str_detect(Event, "Throw|Put") ~ "Throwing",
+      # high jump, long jump, triple jump, pole vault
+      str_detect(Event, "Jump|Pole Vault") ~ "Jumping",
+      # decathlon (men) or heptathlon (women)
+      str_detect(Event, "Decathlon|Heptathlon") ~ "Decathlon/Heptathlon"
+    )
+  )
+
+# Remove rows with > 1 of the same athlete type
+oly12_ath <- oly12_ath %>%
+  select(-Event) %>%
+  distinct()
+
+# Add events back to each athlete
+oly12_ath <- oly12_ath %>%
+  left_join(
+    select(.data = oly12, c(Event, id)),
+    by = "id"
+  )
+```
+:::
+
+c. Make several plots to explore the association between height and weight for the different athletic categories, eg scatterplots faceted by sex and event type, with/without free scales, linear models for the different subsets, overlaid on the same plot, 2D density plots faceted by sex and event type, with free scales.
+
+::: unilur-solution
+```{r}
+library(colorspace)
+ggplot(data = oly12_ath, aes(x = Height, y = Weight)) +
+  geom_point(alpha = 0.4) +
+  facet_grid(Sex ~ Ath_type)
+
+ggplot(data = oly12_ath, aes(x = Height, y = Weight)) +
+  geom_point(alpha = 0.4) +
+  facet_grid(Sex ~ Ath_type, scales="free")
+
+ggplot(oly12_ath, aes(x = Height, y = Weight, colour = Ath_type)) +
+  geom_smooth(method = "lm", se = F) +
+  scale_colour_discrete_qualitative() +
+  facet_wrap(~Sex)
+
+ggplot(data = oly12_ath, aes(x = Height, y = Weight)) +
+  geom_density2d(alpha = 0.4) +
+  facet_grid(Sex ~ Ath_type, scales="free")
+
+```
+
+It is important to separate the sexes. Faceting by sport and sex and examining the scatterplots of height and weight in each is appropriate. Making a plot of just the regression models, faceted by sex can be useful also. A density plot is not so useful here because there isn't a lot of difference in variance between the groups.
+:::
+
+d. List what you learned about body types across the different athletics types and sexes. 
+
+::: unilur-solution
+
+Here are some examples:
+
+* From the scatter plots we learn that
+  * there are some heavy runners, especially in the shorter distances
+  * the throwers are generally taller and much heavier. 
+  * female walkers tend to be pretty small. 
+  * long distance runners are light!
+  
+* Decathlon/Heptathlon athletes are usually quite heavy; which makes sense as they have to be all-rounded
+  * if they're too light, they may not do well in throwing events
+  * if they're too heavy, they may not do well in running or jump events 
+
+* The comparisons between groups is easier from the models. 
+  * throwers are heavy! 
+  * long/middle distance runners and walkers are relatively light.
+:::
+
+e. If one were use visual inference to check for a different relationship between height and weight across sports how would you generate null data? Do it, and test your lineup with others in the class.
+
+::: unilur-solution
+
+You would permute the `Ath_type` variable, keeping sex fixed. You could still facet by sex for the lineup, and use a smaller number of nulls so it's not too over-whelming to read. Or you could separately make a full lineup of 20 for males and females separately. 
+
+```{r fig.height=6, fig.width=12, message=FALSE, warning=FALSE}
+library(nullabor)
+set.seed(141)
+ggplot(lineup(null_permute("Ath_type"),
+              true=oly12_ath, n=6), 
+       aes(x = Height, 
+           y = Weight, 
+           colour = Ath_type)) +
+  geom_smooth(method = "lm", se = F, 
+              fullrange=TRUE) +
+  scale_colour_discrete_qualitative() +
+  facet_grid(Sex~.sample) +
+  theme(legend.position="none",
+        axis.text = element_blank(),
+        axis.title = element_blank())
+```
+
+If there was no difference between the event types, the the lines would all be a bit varied in slope but intersect in a single point. The actual data has several differences: some events have the same slope but are shifted vertically, some have different slopes and are shifted. You don't see this in the null plots.
+:::
+
+
+### Exercise 2: Fisherman's Reach crabs
+
+Mud crabs are delicious to eat! Prof Cook's father started a crab farm at Fisherman's Reach, NSW, when he retired. He caught small crabs (with a special license) and nurtured and fed the crabs until they were marketable size. They were then sent to market, like Queen Victoria Market in Melbourne, for people to buy to eat. Mud crabs have a strong and nutty flavour, and a good to eat simply after steaming or boiling.
+
+Early in the farming setup, he collected the measurements of 62 crabs of different sizes, because he wanted to learn when was the best time to send the crab to market. Crabs re-shell from time to time. They grow too big for their shell, and need to discard it. Ideally, the crabs should be sent to market just before they re-shell, because they will be crab will be fuller in the shell, less air, less juice and more crab meat.  
+
+Note: In NSW it is legal to sell female mud crabs, as long as they are not carrying eggs. In Queensland, it is illegal to keep and sell female mud crabs. Focusing only on males could be worthwhile.
+
+![](images/mud-crab.jpg)
+
+```{r}
+#| message: false
+fr_crabs <- read_csv("https://ddde.numbat.space/data/fr-crab.csv") %>%
+  mutate(Sex = factor(Sex, levels=c(1,2),
+                      labels=c("m", "f")))
+```
+
+a. Where is Fisherman's Reach? What would you expect the relationship between Length and Weight of a crab to be?
+
+::: unilur-solution
+North coast of NSW, north-east of Kempsey, on the back-water of the Macleay River. We would expect it to be positive, and maybe nonlinear, because weight is more related to volume of the crab than length, which would be length$^p$.
+:::
+
+b. Make a scatterplot of Weight by NSW Length. Describe the relationship. It might be even better if you can add marginal density plots to the sides of the scatterplot. (Aside: Should one variable be considered a dependent variable? If so, make sure this is on the $y$ axis.)
+
+::: unilur-solution
+
+`Wgt` should be considered the dependent variable.
+
+```{r}
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point()
+```
+
+It is a little nonlinear, positive and strong relationship. Weight should be considered dependent.
+
+If you are unsure about a nonlinear relationship, fit a linear model and look at the residuals. In the plots below you can see the residuals have a U-shape, and also have major heteroskedasticity.
+
+```{r}
+#| fig.width: 10
+#| fig.height: 4
+#| out.width: "100%"
+library(broom)
+library(patchwork)
+cr_lm <- lm(Wgt ~ Length.NSW, data = fr_crabs)
+fr_crabs <- augment(cr_lm, fr_crabs)
+p1 <- ggplot(fr_crabs, 
+             aes(x = Length.NSW, 
+                 y = Wgt)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+p2 <- ggplot(fr_crabs, aes(x = Length.NSW, y = .resid)) +
+  geom_point()
+p1 + p2 + plot_layout(ncol = 2)
+```
+:::
+
+c. Examine transformations to linearise the relationship. (Think about why the relationship between Length and Weight is nonlinear.)
+
+::: unilur-solution
+
+```{r}
+#| fig.width: 9
+#| fig.height: 3
+p1 <- ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt^1/3)) +
+  geom_point() +
+  ylab("Cube root Wgt")
+p2 <- ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point() +
+  scale_y_sqrt() +
+  ylab("Square root Wgt")
+p3 <- ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point() +
+  scale_y_log10() +
+  ylab("Log10 Wgt")
+p1 + p2 + p3 + plot_layout(ncol = 3)
+```
+:::
+
+d. Is there possibly a lurking variable? Examine the variables in the data, and use colour in the plot to check for another variable explaining some of the relationship.
+
+::: unilur-solution
+```{r}
+#| fig.width: 8
+#| fig.height: 4
+p1 <- ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt, colour = Sex)) +
+  geom_point() +
+  scale_colour_brewer(palette = "Dark2") +
+  theme(legend.position = "bottom")
+p2 <- ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt, colour = Sex)) +
+  geom_point() +
+  scale_y_log10() +
+  scale_colour_brewer(palette = "Dark2") +
+  theme(legend.position = "bottom") +
+  ylab("Log10 Wgt")
+p1 + p2 + plot_layout(ncol = 2)
+```
+:::
+
+e. If you have determined that the is a lurking variable, make changes in the plots to find the best model of the relationship between Weight and Length.
+
+::: unilur-solution
+
+When only looking at males, a cube root transformation works best, and this matches the original thinking that length is related to weight in a cubic relationship, perhaps.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 4
+fr_crabs_m <- fr_crabs %>%
+  filter(Sex == "m")
+cr_m_lm <- lm(Wgt^(1/3) ~ Length.NSW, data = fr_crabs_m)
+fr_crabs_m <- augment(cr_m_lm, fr_crabs_m)
+coefs <- tidy(cr_m_lm)
+
+p1 <- ggplot(fr_crabs_m, 
+       aes(x = Length.NSW, 
+           y = Wgt^(1/3))) +
+  geom_point() +
+  geom_abline(intercept=coefs$estimate[1], 
+              slope=coefs$estimate[2])
+p2 <- ggplot(fr_crabs_m, 
+       aes(x = Length.NSW, 
+           y = .resid)) +
+  geom_point() 
+p1 + p2 + plot_layout(ncol = 2)
+```
+:::
+
+f. How would you select the crabs that were close to re-shelling based on this data?
+
+::: unilur-solution
+You would select the bigger crabs that are heavier for their length. If they are heavier, it should mean that they are more fully fitting into their shell.
+:::
+
+
+
+
+### Exercise 3: Bank discrimination
+
+```{r}
+data(case1202, package = "Sleuth2")
+```
+
+a. Look at the help page for the `case1202` from the `Sleuth2` package. What does the variable "Senior" measure? "Exper"? Age?
+
+::: unilur-solution
+Senior is the seniority of the employee in the company. Experience is the months of prior experience when starting at the company. Age is given in months, which is a bit strange!
+:::
+
+b. Make all the pairwise scatterplots of Senior, Exper and Age. What do you learn about the relationship between these three pairs of variables? How can the age be 600? Are there some wizards or witches or vampires in the data?
+
+::: unilur-solution
+```{r}
+#| fig.width: 10 
+#| fig.height: 4
+p1 <- ggplot(case1202, aes(x = Age, y = Senior)) +
+  geom_point() 
+p2 <- ggplot(case1202, aes(x = Exper, y = Senior)) +
+  geom_point() 
+p3 <- ggplot(case1202, aes(x = Age, y = Exper)) +
+  geom_point() 
+p1 + p2 + p3 + plot_layout(ncol = 3)
+```
+
+Experience and age have a moderate to strong positive association. There is no apparent relationship between seniority and age, or experience. 
+
+It would be good to check these last two statements using visual inference. 
+
+```{r}
+#| fig-width: 8
+#| fig-height: 7
+set.seed(956)
+ggplot(lineup(null_permute("Exper"), case1202),
+       aes(x = Exper, y = Senior)) +
+  geom_point() + 
+  #geom_density2d_filled() +
+  facet_wrap(~.sample) +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank())
+```
+
+:::
+
+c. Colour the observations by Sex. What do you learn?
+
+::: unilur-solution
+```{r}
+#| fig.width: 10 
+#| fig.height: 4
+p1 <- ggplot(case1202, aes(x = Age, y = Senior, colour = Sex)) +
+  geom_point() +
+  scale_colour_brewer("", palette = "Dark2") +
+  theme(legend.position = "bottom")
+p2 <- ggplot(case1202, aes(x = Exper, y = Senior, colour = Sex)) +
+  geom_point() +
+  scale_colour_brewer("", palette = "Dark2") +
+  theme(legend.position = "bottom")
+p3 <- ggplot(case1202, aes(x = Age, y = Exper, colour = Sex)) +
+  geom_point() +
+  scale_colour_brewer("", palette = "Dark2") +
+  theme(legend.position = "bottom")
+p1 + p2 + p3 + plot_layout(ncol = 3)
+```
+
+It's not clear that there are any patterns here. Maybe some small patterns: (1) that at older age and low seniority, there are only female employees, (2) and older age less experience, there are only female employees.
+
+Check this with visual inference.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 7
+set.seed(659)
+ggplot(lineup(null_permute("Sex"), case1202), 
+       aes(x = Age, 
+           y = Senior, 
+           colour = Sex)) +
+  geom_point(alpha=0.8) +
+  #geom_density2d() +
+  scale_colour_brewer("", palette = "Dark2") +
+  facet_wrap(~.sample, ncol=5) +
+  theme_bw() +
+  theme(legend.position = "none",
+    axis.text = element_blank(),
+    axis.title = element_blank())
+```
+
+:::
+
+d. Instead of scatterplots, make faceted histograms of the three variables by Sex. What do you learn about the difference in distribution of these three variables between the sexes.
+
+::: unilur-solution
+
+```{r}
+#| fig.width: 10 
+#| fig.height: 6
+p1 <- ggplot(case1202, aes(x = Senior)) +
+  geom_histogram(binwidth = 5, colour = "white") +
+  facet_wrap(~Sex, ncol = 1, scales="free")
+p2 <- ggplot(case1202, aes(x = Age)) +
+  geom_histogram(binwidth = 50, colour = "white") +
+  facet_wrap(~Sex, ncol = 1, scales="free")
+p3 <- ggplot(case1202, aes(x = Exper)) +
+  geom_histogram(binwidth = 50, colour = "white") +
+  facet_wrap(~Sex, ncol = 1, scales="free")
+p1 + p2 + p3 + plot_layout(ncol = 3)
+```
+
+There are lot of different patterns! 
+
+The distribution of seniority for women is quite uniform, but for men has a clump around 85-90. 
+
+With age, there is a bimodal pattern for women, young and older - I wonder if there is a child-bearing years drop out among women. With men, there is a large spike, of young men at 350. 
+
+The experience that employees come into the company with has a different distribution for men and women. For men there is a peak at 50. For women the peak is at 50, too but it has a much stronger right-tail. This suggests that men are being hired into the company with less experience than the women.
+:::
+
+e. The data also has 1975 salary and annual salary. Plot these two variables, in two ways: (1) coloured by Sex, and (2) faceted by Sex. Explain the relationships. 
+
+::: unilur-solution
+
+```{r}
+#| fig.width: 4 
+#| fig.height: 4
+ggplot(case1202, aes(x = Sal77, 
+                     y = Bsal, 
+                     colour=Sex)) +
+  geom_point(size=2, alpha=0.8) +
+  scale_colour_brewer("", palette = "Dark2") +
+  theme(aspect.ratio=1)
+```
+
+```{r}
+#| fig.width: 8 
+#| fig.height: 4
+ggplot(case1202, aes(x = Sal77, y = Bsal)) +
+  geom_point() +
+  facet_wrap(~Sex) + 
+  theme(aspect.ratio=1)
+```
+
+This is where we see a bigger difference: the women generally have lower salaries than men.
+:::
+
+f. Examine the annual salary against `Age`, `Senior` and `Exper`, separately by Sex, by adding a fitted linear model to the scatterplot where Sex is mapped to colour. What is the relationship and what do you learn?
+
+::: unilur-solution
+```{r}
+#| fig.width: 10 
+#| fig.height: 4
+#| message: false
+p1 <- ggplot(case1202, aes(x = Age, 
+                           y = Bsal, 
+                           colour = Sex)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  scale_colour_brewer("", palette = "Dark2") 
+p2 <- ggplot(case1202, aes(x = Senior, 
+                           y = Bsal, 
+                           colour = Sex)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  scale_colour_brewer("", palette = "Dark2") 
+p3 <- ggplot(case1202, aes(x = Exper, 
+                           y = Bsal, 
+                           colour = Sex)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  scale_colour_brewer("", palette = "Dark2") 
+p1 + p2 + p3 + 
+  plot_layout(ncol = 3, guides = "collect") & 
+  theme(legend.position = "bottom")
+```
+
+For the same age, seniority, experience women were paid less than the men, on average. The annual salary tends to decline with seniority - that's a bit surprising. With seniority, there is the same decreasing trend, but women are paid a full $1000 less across the range of seniority, on average.  The annual salary for women tends to increase with more experience, and is almost equal between the sexes at the most senior levels. 
+:::
+
+g. When you use `geom_smooth(method="lm")` to add a fitted model to the scatterplot, is it adding a model with interactions?
+
+::: unilur-solution
+Technically no, but practically yes! `ggplot` fits a separate model to each subset, which will fit a different slope and intercept. It also fits a different error model to each subset, and this what  makes it different from a single model with interaction terms.
+:::
+
+h. There is danger of misinterpreting differences when only examining marginal plots. What we need to know is: *for a person with the same age, same experience, same seniority, is the salary different for men and women.* How would you make plots to try to examine this? 
+
+::: unilur-solution
+
+We can't get exactly the same age, seniority and experience with a small sample of data, but we could get close to this by binning the variables. 
+
+```{r}
+#| message: false
+case1202 <- case1202 %>%
+  mutate(Exper_c = cut(Exper, 
+                       breaks=c(-1, 50, 100, 400), 
+                       labels=c("E-low", 
+                                "E-med", 
+                                "E-high")),
+         Senior_c = cut(Senior, 3, 
+                        labels=c("S-low", 
+                                 "S-med",
+                                 "S-high")))
+ggplot(case1202, aes(x = Age, 
+                           y = Bsal, 
+                           colour = Sex)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  scale_colour_brewer("", palette = "Dark2") +
+  facet_grid(Exper_c~Senior_c)
+```
+:::
+
+i. Would you say that this data provides evidence of sex discrimination?
+
+::: unilur-solution
+The plots suggest that there is evidence of sex discrimination. Particularly, the last comparison, when the data is subdivided into more homogeneous groups, there is still a disparity in salary, in every category.
+:::
+
+## 👌 Finishing up
+
+Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.

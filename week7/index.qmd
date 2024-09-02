@@ -19,16 +19,24 @@ schedule |>
 
 ## What you will learn this week
 
+- Why making comparisons is important
+- How to decide on what comparison to make
+- Comparing between strata, relative to a baseline
+- Comparing the same data, in many ways
+- Using normalising to compare different distributions
+- Inference using bootstrap and lineups
 
 ## Lecture slides
 
+- [html](https://ddde.numbat.space/week7/slides.html)
+- [pdf](https://ddde.numbat.space/week7/slides.pdf)
+- [qmd](https://ddde.numbat.space/week7/slides.qmd)
+- [R](https://ddde.numbat.space/week7/slides.R)
 
 ## Tutorial instructions
 
-Instructions:
-
-
-## Assignments
+- [html](https://ddde.numbat.space/week7/tutorial.html)
+- [qmd](https://ddde.numbat.space/week7/tutorial.qmd)
 
 ```{r}
 #| output: asis
