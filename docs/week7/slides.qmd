@@ -79,7 +79,7 @@ table_options <- function(scrollY, title, csv) {
 :::
 
 ::: {.fragment}
-- Is the Alfred or Epworth hospitals better for having a baby? 
+- Is the Alfred or Epworth hospital better for giving birth? 
 :::
 
 ::: {.fragment}
@@ -168,7 +168,7 @@ What are the [strata]{.monash-blue2} in temporal data?
 
 ## data
 
-```{r}
+```{r render = knitr::normal_print}
 #| label: temp-data
 #| echo: true
 #| eval: true
