@@ -511,7 +511,7 @@ g1 <- ggplot(EastIndiesTrade, aes(Year, Exports)) +
   labs(y = "<span style='color:#339933'>Export</span>/<span style='color:red'>Import</span>", tag = "(A)") +
   theme(aspect.ratio=0.7, axis.title.y = ggtext::element_markdown())
 
-g2 <- ggplot(EastIndiesTrade, aes(Year, Exports - Imports)) +
+g2 <- ggplot(EastIndiesTrade, aes(Year, Imports - Exports)) +
   annotate("rect",
     xmin = 1701, xmax = 1714,
     ymin = -Inf, ymax = Inf,
@@ -531,7 +531,7 @@ g2 <- ggplot(EastIndiesTrade, aes(Year, Exports - Imports)) +
   labs(tag = "(B)") +
   theme(aspect.ratio=0.7)
 
-g3 <- ggplot(EastIndiesTrade, aes(Year, (Exports - Imports) / (Exports + Imports) * 2)) +
+g3 <- ggplot(EastIndiesTrade, aes(Year, (Imports - Exports) / (Exports + Imports) * 2)) +
   annotate("rect",
     xmin = 1701, xmax = 1714,
     ymin = -Inf, ymax = Inf,
@@ -1032,8 +1032,6 @@ For choropleth vs hexagon tiles, [sample participants with replacement]{.monash-
 #| fig-width: 8
 #| fig-height: 9
 #| out-width: 70%
-library(boot)
-
 hstudy_sub <- hstudy |>
   filter(trend == "three cities") |>
   select(id, type, replicate, detect) 
