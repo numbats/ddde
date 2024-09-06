@@ -524,7 +524,7 @@ wdi_vars <- raw_dat  |>
 
 ```{r}
 #| echo: false
-wdi_vars |> reactable::reactable(height=600)
+wdi_vars |> gt::gt()
 ```
 :::
 
