@@ -1,0 +1,426 @@
+---
+title: "ETC5521 Tutorial 8"
+subtitle: "Making comparisons between groups and strata"
+author: "Prof. Di Cook"
+date: "Sep 9, 2024"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: tutorial.html
+        embed-resources: false
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: tutorialsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+---
+
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(patchwork)
+library(janitor)
+library(vcd)
+library(ggbeeswarm)
+library(colorspace)
+library(lvplot)
+library(kableExtra)
+library(conflicted)
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+```
+
+## 🎯 Objectives
+
+These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made.
+
+## 🔧 Preparation 
+
+- The reading for this week is [Wilke (2019) Chapters 9, 10.2-4, 11.2](https://clauswilke.com/dataviz/). 
+- Complete the weekly quiz, before the deadline!
+- Install the following R-packages if you do not have them already:
+
+```{r}
+#| eval: false
+#| code-fold: false
+install.packages(c("colorspace", "lvplot", "patchwork", "janitor", "lubridate", "vcd", "ggbeeswarm", "kableExtra"))
+```
+
+- Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
+
+## 📥 Exercises
+
+### Exercise 1: Melbourne daily maximum temperature
+
+The csv file `melb_temp_2023-09-08.csv` contains data on the daily maximum temperature from 1970 to 2023 collected from the [weather station at Melbourne Airport](http://www.bom.gov.au/climate/data/stations/). Use this to answer the following questions, with the additional information that in Australia:
+
+- Summer is from the beginning of December to the end of February,
+- Autumn is from the beginning of March to the end of May,
+- Winter is from the beginning of June to the end of August, and
+- Spring is from the beginning of September to the end of November. 
+
+(a) There are four plots below. Write the code to make them yourself. Then think about the three questions (i), (ii) or (iii) below. 
+
+- (i) Are there any winters where the daily maximum temperature is different to winter in other years? 
+- (ii) What is the general pattern of maximum daily temperatures in winter?
+- (iii) Is there evidence that winters in Melbourne are getting warmer?
+
+Which plot best matches each question? If none of them work, for any particular question, make an alternative plot. Also, if any of the plots don't help answer any of the questions, think about a question that they might answer.
+
+(b) Make a transformation of the data and a new plot with this variable, that will allow a more direct comparison to answer question (iii).
+
+The data can be read and processed using this code:
+
+```{r}
+#| message: false
+melb_df <- read_csv("https://raw.githubusercontent.com/numbats/ddde/main/data/melb_temp_2023-09-08.csv") |>
+  clean_names() |>
+  rename(temp = maximum_temperature_degree_c) |>
+  dplyr::filter(!is.na(temp)) |>
+  dplyr::select(year, month, day, temp) |>
+  mutate(
+    date = as.Date(paste(year, month, day, sep = "-")))
+```
+
+
+
+```{r}
+#| label: melb-temp
+#| echo: false
+#| fig-height: 40
+#| fig-width: 10
+#| message: false
+
+# Plot (A)
+winter_df <- melb_df |>
+  dplyr::filter(month %in% c("06", "07", "08")) |>
+  mutate(winter_day = as.numeric(
+    difftime(date, 
+             ymd(paste0(year, "-06", "-01")), 
+             units="days")))
+p_a <- ggplot(winter_df, aes(x=winter_day, y=temp)) +
+  geom_point(
+    data = dplyr::select(winter_df, -year),
+    color = "gray", size = 0.1
+  ) +
+  geom_line() +
+  facet_wrap(~year) +
+  labs(
+    tag = "(A)", x = "",
+    y = "Temperature (°C)"
+  ) + 
+  scale_x_continuous("", breaks = c(0, 31, 62, 92), labels=c("J", "J", "A", "S"))
+
+# Plot (B)
+p_b <- ggplot(winter_df, aes(x=year, y=temp)) +
+  #geom_boxplot() +
+  geom_jitter(width=0.1, height=0, alpha=0.2) +
+  stat_summary(fun="mean", geom="point", colour="orangered", size=3) +
+  geom_smooth(colour="red") +
+  labs(
+    tag = "(B)", x = "Year",
+    y = "Temperature (°C)"
+  ) 
+
+# Plot (C)
+p_c <- winter_df |>
+  mutate(year = fct_reorder(as.factor(year), temp)) |>
+  ggplot(aes(temp, year)) +
+  # geom_boxplot(aes(color = as.numeric(as.character(year)))) +
+  geom_quasirandom(aes(x=as.factor(year), y=temp,
+                       colour = as.numeric(as.character(year)))) +
+  labs(
+    tag = "(C)", x = "Year",
+    y = "Temperature (°C)",
+    color = "Year"
+  ) +
+  scale_color_continuous_divergingx(mid = 1995) +
+  coord_flip()
+
+# Plot (D)
+p_d <- winter_df |>
+  mutate(pre1995 = ifelse(year < 1995, "< 1995", "> 1995")) |>
+  ggplot(aes(x=pre1995, y=temp)) +
+  geom_lv(aes(fill=after_stat(LV))) +
+  labs(
+    tag = "(D)", y = "Temperature (°C)",
+    x = "Time Period"
+  ) +
+  scale_fill_discrete_divergingx(palette = "Fall")
+
+p_a + p_b + p_c + p_d + 
+  plot_layout(ncol=1, heights=c(5,3,5,3))
+```
+
+
+::: unilur-solution
+
+(a) Code for the plots is:
+
+```{r melb-temp}
+#| eval: false
+#| echo: true
+```
+
+Plot A is the only one that allows examining the pattern for winter each year, which helps to address questions (i) and (ii). 
+
+In answer to (i) I don't see any year that is especially different from any other year. 
+
+There is a lot of variability in the patterns for winter. For most years it appears to be fairly flat with an increase in August. However, some years temperature remain cool in August.
+
+To better study the winter pattern it might be better to use a smoother model instead of connecting the day-to-day measurements with a line. 
+
+```{r}
+#| fig-height: 14
+#| fig-width: 10
+#| message: false
+ggplot(winter_df, aes(x=winter_day, y=temp)) +
+  geom_point(
+    data = dplyr::select(winter_df, -year),
+    color = "gray", size = 0.1
+  ) +
+  geom_smooth(se=F, colour="black") +
+  facet_wrap(~year) +
+  labs(
+    tag = "(E)", x = "",
+    y = "Temperature (°C)"
+  ) + 
+  scale_x_continuous("", breaks = c(0, 31, 62, 92), labels=c("J", "J", "A", "S"))
+```
+
+From plot E, it's a bit easier to see that overall the years (grey points) there is the expected pattern of a dip to the coolest part of winter and then a warmup. However, this pattern is very rare in any year. Variability is more typical, some years the temperature is flat across June, July, August, and in some years there is a dramatic warming in August. Some years it is even warmer in July than August.
+
+Both plots C, D address question (iii). Plot C is a bit awkward! Reading the colour trend is easy. The top of the diagram is more red, and the bottom more green. To understand what this means, and how it relates to the question requires thinking about the colour mapping, in relation to the sorting of the y axis. If there was no relationship between median temperature and year, the colouring would be very mixed. That's not what is seen - the later years (more orange) occur with higher medians. Thus this plot would help us answer question (iii), with *there is evidence that winters have been warmer in recent years*.
+
+Plot D is much more compact and simple to interpret. The colder winter temperatures seen before 1995 have not been observed after 1995. Also the median is higher in the after 1995 years. It gives evidence for "winters are warmer in recent years" too, but it is too coarse a view with only these two subsets of years. Interestingly, the maximums of the maximum temperatures don't appear to have changed.
+
+(b) Using the median or a median of an early period of measurements as a baseline, compute the relative change in temperature. Plot these against year, using yearly median as points with a smoother, or possibly using bars (above and below zero) to display the yearly median. 
+
+```{r}
+#| message: false
+winter_df <- winter_df |>
+  mutate(rel_change = (temp - median(temp))/median(temp))
+
+winter_df |>
+  ggplot(aes(x=year, y=rel_change)) +
+  geom_hline(yintercept=0, linewidth=3, colour="grey90") +
+  stat_summary(fun="mean", geom="point") +
+  geom_smooth(colour="red", se=F) +
+  labs(
+    tag = "(F)", x = "Year",
+    y = "Change in temperature",
+    color = "Year"
+  ) 
+```
+
+:::
+
+### Exercise 2: Hate Crime
+
+A certain person made the following statement about this data and used the graph below to illustrate his point. 
+
+<blockquote>
+The post-9/11 upsurge in hate crimes against Muslims was real and unforgivable, but the horrible truth is that it didn’t loom that large compared with what Blacks face year in and year out.
+</blockquote>
+
+```{r} 
+#| echo: true
+#| label: crime
+df <- tribble(
+  ~year, ~offense, ~count,
+  2000, "Anti-Black", 3535,
+  2000, "Sexual Orientation", 1558,
+  2000, "Anti-Islamic", 36,
+  2001, "Anti-Black", 3700,
+  2001, "Sexual Orientation", 1664,
+  2001, "Anti-Islamic", 554,
+  2002, "Anti-Black", 3076,
+  2002, "Sexual Orientation", 1513,
+  2002, "Anti-Islamic", 174
+) |>
+  mutate(offense = fct_reorder(offense, -count))
+
+pop_df <- tribble(
+  ~pop, ~size,
+  "Anti-Black", 36.4e6,
+  "Sexual Orientation", 28.2e6,
+  "Anti-Islamic", 3.4e6
+)
+
+crime_df <- left_join(df, pop_df, by = c("offense" = "pop")) |>
+  mutate(prop = count / size)
+```
+
+
+```{r}
+#| label: crime-plot1
+#| fig-cap: "Victims of hate crime in USA in years 2000-2002."
+#| echo: false
+#| fig-width: 10
+#| fig-height: 5
+ggplot(df, aes(offense, count)) +
+  geom_col(aes(fill = offense)) +
+  facet_grid(. ~ year) +
+  guides(
+    x = guide_axis(n.dodge = 2),
+    fill = "none"
+  ) +
+  labs(x = "Offense", y = "Number of victims") +
+  scale_fill_discrete_qualitative()
+```
+
+**Discuss whether the plot supports his statement or not.** Is his comparison of the number of crimes against Muslim and Blacks fair? What graph would you suggest to make to support/disprove his statement? The data and additional information is provided below.
+
+This uses the data from the USA hate crime statistics found [here](https://ucr.fbi.gov/hate-crime). The number of victims by three particular hate crime is shown in the table below.
+
+<!-- https://twitter.com/paulkrugman/status/1305237645459628044 -->
+
+```{r}
+#| label: crime-table
+#| echo: false
+df |>
+  kable(
+    caption = "The number of victims by hate crime in the USA. Data sourced from https://ucr.fbi.gov/hate-crime.",
+    col.names = c("Year", "Offense", "Victims")
+  ) |>
+  kable_paper(bootstrap_options = "striped", full_width = F)
+```
+
+
+The [2000 USA Census reports](https://www.census.gov/prod/2001pubs/c2kbr01-5.pdf) that there were a total of 36.4 million people who reported themselves as Black or African American. [Weeks (2003)](https://www.persee.fr/doc/espos_0755-7809_2003_num_21_1_2066) estimated there are 3.4 million Muslims in the USA. The LGBT population is harder to estimate but reports indicate 2-10% of the population so likely below 28.2 million people in the USA.
+
+::: unilur-solution
+
+* The use of a line plot rather than bar plot makes it easier to compare the trend across years.
+* The second sentence compares the number of victims of anti-Black hate crimes and of anti-Islamic hate crimes. 
+* The problem with this comparison is that the population size is vastly different for the two comparisons. 
+* While the number of anti-Black victims are far larger than anti-Islamic victims as shown in Plot (A) below, the Muslim community is roughly 10% of the size of the Black community. 
+* Assuming the population size is roughly the same across 2000-2002, a rough estimate of the proportions of hate crime victims for each population is compared in Plot (B).  
+* The significant surge in anti-Islamic crimes in 2001 is more apparent in Plot (B).
+* Plot (C) shows the odds ratio with respect to year 2000. This shows that the anti-Islamic crime in 2001 was nearly 15 times higher than in 2000 lowering to about 4.8 in 2001. This however is higher than that of the incidences related to anti-Black and sexual orientation hate crimes which remain somewhat stable from 2000-2002 (odds ratio is close to 1 or slightly lower). 
+
+Once again, these plots show that the answer to the question (is the quote true), depends on how one interprets the quote. Is the person saying that the number of victims of anti-Black hate crimes is always higher than anti-Islamic hate crimes? Then the answer is likely yes. However, *per capita*, the rate of anti-Islamic hate crimes far exceeded anything else in 2001, which goes against the quote.
+
+```{r} 
+#| label: crime-plots
+ggplot(crime_df, aes(as.factor(year), count, color = offense)) +
+  geom_point() +
+  geom_line(aes(group = offense)) +
+  scale_color_discrete_qualitative() +
+  labs(
+    x = "Year", y = "The number of victims",
+    color = "Offense", tag = "(A)"
+  )
+
+ggplot(crime_df, aes(as.factor(year), prop * 10000, color = offense)) +
+  geom_point() +
+  geom_line(aes(group = offense)) +
+  scale_color_discrete_qualitative() +
+  labs(
+    x = "Year", y = "Incidence estimate per 10,000 people",
+    color = "Offense", tag = "(B)"
+  )
+
+year2000dict <- crime_df |>
+  dplyr::filter(year == 2000) |>
+  dplyr::select(offense, prop) |>
+  deframe()
+
+crime_df |>
+  mutate(rel2000 = prop / year2000dict[offense]) |>
+  dplyr::filter(year != 2000) |>
+  ggplot(aes(as.factor(year), rel2000, color = offense)) +
+  geom_point() +
+  geom_line(aes(group = offense)) +
+  scale_color_discrete_qualitative() +
+  scale_y_continuous(breaks = c(1, 4, 5, 15, 16)) +
+  labs(
+    x = "Year", y = "Odds ratio with respect to year 2000",
+    color = "Offense", tag = "(C)"
+  )
+```
+
+:::
+
+### Exercise 3
+
+Check the following data set for evidence of Simpsons Paradox, in the sense that if `group2 == "X"` the pass rate is higher.
+
+```{r}
+df <- tribble(
+  ~group1, ~group2, ~result, ~count,
+  "A", "X", "pass", 100,
+  "B", "X", "pass", 50,
+  "C", "X", "pass", 25,
+  "A", "X", "fail", 10,
+  "B", "X", "fail", 20,
+  "C", "X", "fail", 20,
+  "A", "Y", "pass", 10,
+  "B", "Y", "pass", 70,
+  "C", "Y", "pass", 15,
+  "A", "Y", "fail", 20,
+  "B", "Y", "fail", 40,
+  "C", "Y", "fail", 30)
+```
+
+::: unilur-solution
+
+Overall, if `group2` is "X" the pass rate is higher. This is true if the data is also examined separately for each of A, B, C of `group1`. The rates are slightly different though, with A having a big difference in pass rate, and B having a small difference. So there is evidence of Simpsons Paradox because the proportions differ.
+
+```{r}
+df |> group_by(group1) |> summarise(sum(count))
+df |> group_by(group2) |> summarise(sum(count))
+
+ggplot(df, aes(x=group2, y=count, fill=result)) +
+  geom_col(position="fill") +
+  scale_fill_discrete_divergingx()
+
+doubledecker(xtabs(count ~ group1 + group2 + result, data = df),
+  gp = gpar(fill = c("grey90", "orangered"))
+)
+```
+
+:::
+
+## 👌 Finishing up
+
+Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.
