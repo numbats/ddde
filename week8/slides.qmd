@@ -26,33 +26,6 @@ format:
 source("../setup.R")
 ```
 
-```{r DT-options, include = FALSE}
-toggle_select <- DT::JS(
-  "table.on('click.dt', 'tbody tr', function() {",
-  "$(this).toggleClass('selected');",
-  "})"
-)
-table_options <- function(scrollY, title, csv) {
-  list(
-    dom = "Bft",
-    pageLength = -1,
-    searching = TRUE,
-    scrollX = TRUE,
-    scrollY = scrollY,
-    buttons = list(
-      list(
-        extend = "copy",
-        filename = title
-      ),
-      list(
-        extend = "csv",
-        filename = csv
-      )
-    )
-  )
-}
-```
-
 ## Outline
 
 - What is high-dimensional data? (If all variables are quantitative)

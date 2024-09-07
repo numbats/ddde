@@ -27,6 +27,8 @@ library(ggplot2movies)
 library(ggExtra)
 library(here)
 library(nullabor)
+library(htmltools)
+library(crosstalk)
 
 # Locations
 current_file <- knitr::current_input()
