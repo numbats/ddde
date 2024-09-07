@@ -124,7 +124,7 @@ With the birth of photography, and particular motion photography, Muybridge was 
 <br>
 
 <center>
-<img src="images/hills-di1.jpg" width="60%"/>
+<img src="../images/hills-di1.jpg" width="60%"/>
 </center>
 
 <br>
@@ -140,7 +140,7 @@ so I put some shadows on.
 <br>
 
 <center>
-<img src="images/hills-di2.jpg" width="60%"/>
+<img src="../images/hills-di2.jpg" width="60%"/>
 </center>
 
 ## hills - what do you see
@@ -154,8 +154,8 @@ Mrs Robinson looks horrified!
 <br>
 
 <center>
-<img src="images/hills1.jpg" width="40%"/>
-<img src="images/hills2.jpg" width="40%"/>
+<img src="../images/hills1.jpg" width="40%"/>
+<img src="../images/hills2.jpg" width="40%"/>
 </center>
 
 :::
@@ -187,7 +187,7 @@ Is something is missing?
 <br><br>
 
 <center>
-![](images/lemon_sketch.png) 
+![](../images/lemon_sketch.png) 
 
 My sketch
 </center>
@@ -225,7 +225,7 @@ Notice the yellow reflection(s) and shine on the skin?
 Drawing trees
 
 <center>
-![](images/green_trees.png){width=500}
+![](../images/green_trees.png){width=500}
 
 <br><br>
 Does it look like a tree? What is not realistic?
@@ -245,7 +245,7 @@ Tree foliage has lots of different colours
 
 <br>
 
-![](images/trees.jpg)
+![](../images/trees.jpg)
 
 </center>
 
@@ -460,12 +460,12 @@ tribble(
                             full_width=FALSE) |>
   kableExtra::column_spec(2, 
     image=spec_image(
-      c("images/scatterplots-1.png",
-        "images/scatterplots-2.png",
-        "images/scatterplots-3.png",
-        "images/scatterplots-4.png",
-        "images/scatterplots-5.png",
-        "images/scatterplots-6.png"), width=250, height=200))
+      c("../images/scatterplots-1.png",
+        "../images/scatterplots-2.png",
+        "../images/scatterplots-3.png",
+        "../images/scatterplots-4.png",
+        "../images/scatterplots-5.png",
+        "../images/scatterplots-6.png"), width=250, height=200))
 
 ```
 
@@ -597,12 +597,12 @@ tribble(
                             full_width=FALSE) |>
   kableExtra::column_spec(2, 
     image=spec_image(
-      c("images/scatterplots2-1.png",
-        "images/scatterplots2-2.png",
-        "images/scatterplots2-3.png",
-        "images/scatterplots2-4.png",
-        "images/scatterplots2-5.png",
-        "images/scatterplots2-6.png"), width=250, height=200))
+      c("../images/scatterplots2-1.png",
+        "../images/scatterplots2-2.png",
+        "../images/scatterplots2-3.png",
+        "../images/scatterplots2-4.png",
+        "../images/scatterplots2-5.png",
+        "../images/scatterplots2-6.png"), width=250, height=200))
 ```
 
 ## Features of a pair of continuous variables [(3/3)]{.smallest}
@@ -710,11 +710,11 @@ tribble(
                             full_width=FALSE) |>
   kableExtra::column_spec(2, 
     image=spec_image(
-      c("images/scatterplots3-1.png",
-        "images/scatterplots3-2.png",
-        "images/scatterplots3-3.png",
-        "images/scatterplots3-4.png",
-        "images/scatterplots3-5.png"), width=250, height=200))
+      c("../images/scatterplots3-1.png",
+        "../images/scatterplots3-2.png",
+        "../images/scatterplots3-3.png",
+        "../images/scatterplots3-4.png",
+        "../images/scatterplots3-5.png"), width=250, height=200))
 ```
 
 ## Additional considerations (Unwin, 2015):
@@ -1235,12 +1235,12 @@ tribble(
                             full_width=FALSE) |>
   kableExtra::column_spec(2, 
     image=spec_image(
-      c("images/scatmodify-2.png",
-        "images/scatmodify-3.png",
-        "images/scatmodify-4.png",
-        "images/scatmodify-5.png",
-        "images/scatmodify-6.png",
-        "images/scatmodify-7.png"), width=250, height=200))
+      c("../images/scatmodify-2.png",
+        "../images/scatmodify-3.png",
+        "../images/scatmodify-4.png",
+        "../images/scatmodify-5.png",
+        "../images/scatmodify-6.png",
+        "../images/scatmodify-7.png"), width=250, height=200))
 ```
 
 
@@ -1974,9 +1974,9 @@ tribble(
                             full_width=FALSE) |>
   kableExtra::column_spec(1, 
     image=spec_image(
-      c("images/diffscatter-1.png",
-        "images/diffscatter-2.png",
-        "images/diffscatter-3.png"), width=250, height=200))
+      c("../images/diffscatter-1.png",
+        "../images/diffscatter-2.png",
+        "../images/diffscatter-3.png"), width=250, height=200))
 ```
 
 <br><br>
