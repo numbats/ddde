@@ -381,7 +381,7 @@ crime_df |>
 
 :::
 
-### Exercise 3
+### Exercise 3: Evidence of Simpson's paradox?
 
 Check the following data set for evidence of Simpsons Paradox, in the sense that if `group2 == "X"` the pass rate is higher.
 
@@ -418,6 +418,24 @@ doubledecker(xtabs(count ~ group1 + group2 + result, data = df),
   gp = gpar(fill = c("grey90", "orangered"))
 )
 ```
+
+:::
+
+### Exercise 4: Discussion
+
+This week the [Women's Weekly published a story about famous Australian model, Elle McPherson's breast cancer story](https://www.womensweekly.com.au/news/elle-macpherson-now/). Diagnosed 7 years ago, she is in remission after choosing alternative therapies as treatment. The original diagnosis was accompanied by lumpectomy removing the cancerous tissue. 
+
+What does data say relative to this statement?
+
+> *Alternative therapies assisted Elle's being considered cleared of cancer today.*
+
+::: unilur-solution
+
+[This article](https://theconversation.com/elle-macphersons-breast-cancer-when-the-media-reports-on-celebrity-cancer-are-we-really-getting-the-whole-story-238231) has good explanations that clarify missing pieces from the Women's Weekly article. 
+
+Elle was diagnosed with HER2 positive oestrogen receptive intraductal carcinoma. What was not reported was that her cancer was non-invasive. 
+
+If you read [this information](https://www.healthline.com/health/breast-cancer/her2-positive-survival-rates-statistics#life-expectancy) you will see the survival rate for localised (non-invasive) is 99%. 
 
 :::
 

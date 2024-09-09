@@ -19,16 +19,27 @@ schedule |>
 
 ## What you will learn this week
 
+- What is high-dimensional data? (If all variables are quantitative)
+- Exploring relationships between more than two variables
+    - Tours - scatterplots of combinations of variables
+    - Matrix of plots
+    - Parallel coordinates
+- What can be hidden
+- Automating the search for pairwise relationships using scagnostics
+- Linking elements of multiple plots
+- Exploring multiple categorical variables
 
 ## Lecture slides
 
+- [html](https://ddde.numbat.space/week8/slides.html)
+- [pdf](https://ddde.numbat.space/week8/slides.pdf)
+- [qmd](https://ddde.numbat.space/week8/slides.qmd)
+- [R](https://ddde.numbat.space/week8/slides.R)
 
 ## Tutorial instructions
 
-Instructions:
-
-
-## Assignments
+- [html](https://ddde.numbat.space/week8/tutorial.html)
+- [qmd](https://ddde.numbat.space/week8/tutorial.qmd)
 
 ```{r}
 #| output: asis

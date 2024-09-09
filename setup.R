@@ -29,6 +29,11 @@ library(here)
 library(nullabor)
 library(htmltools)
 library(crosstalk)
+library(cassowaryr)
+library(janitor)
+library(ggpcp)
+library(vcd)
+library(UpSetR)
 
 # Locations
 current_file <- knitr::current_input()
