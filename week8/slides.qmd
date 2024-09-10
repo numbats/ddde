@@ -252,12 +252,12 @@ library(palmerpenguins)
 f_std <- function(x) (x-mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)
 p_std <- penguins |>
   select(bill_length_mm:body_mass_g, species) |>
-  rename(bl = bill_length_mm,
+  dplyr::rename(bl = bill_length_mm,
          bd = bill_depth_mm,
          fl = flipper_length_mm,
          bm = body_mass_g) |>
   na.omit() |>
-  mutate(bl = f_std(bl),
+  dplyr::mutate(bl = f_std(bl),
          bd = f_std(bd),
          fl = f_std(fl),
          bm = f_std(bm))
@@ -383,7 +383,7 @@ proj <- animate_xy(p_std[,1:4],
            guided_tour(lda_pp(p_std$species)),
            start = basis_random(4,2),
            axes="bottomleft", col=p_std$species)
-best_proj <- best_proj$basis[314][[1]]
+best_proj <- proj$basis[314][[1]]
 colnames(best_proj) <- c("PP1", "PP2")
 rownames(best_proj) <- colnames(p_std[,1:4])
 set.seed(815)

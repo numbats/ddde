@@ -52,8 +52,8 @@
     "objectID": "week8/slides.html#outline",
     "href": "week8/slides.html#outline",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Outline",
-    "text": "Outline\n\nWhat is high-dimensional data? (If all variables are quantitative)\nExploring relationships between more than two variables\n\nTours - scatterplots of combinations of variables\nMatrix of plots\nParallel coordinates\n\nWhat can be hidden\nAutomating the search for pairwise relationships using scagnostics\nLinking elements of multiple plots\nExploring multiple categorical variables"
+    "section": "",
+    "text": "What is high-dimensional data? (If all variables are quantitative)\nExploring relationships between more than two variables\n\nTours - scatterplots of combinations of variables\nMatrix of plots\nParallel coordinates\n\nWhat can be hidden\nAutomating the search for pairwise relationships using scagnostics\nLinking elements of multiple plots\nExploring multiple categorical variables"
   },
   {
     "objectID": "week8/slides.html#flatland",
@@ -102,7 +102,7 @@
     "href": "week8/slides.html#grand-tour",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Grand tour",
-    "text": "Grand tour\n\n\n\n\ndata-processing\nlibrary(palmerpenguins)\nf_std &lt;- function(x) (x-mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)\np_std &lt;- penguins |&gt;\n  select(bill_length_mm:body_mass_g, species) |&gt;\n  rename(bl = bill_length_mm,\n         bd = bill_depth_mm,\n         fl = flipper_length_mm,\n         bm = body_mass_g) |&gt;\n  na.omit() |&gt;\n  mutate(bl = f_std(bl),\n         bd = f_std(bd),\n         fl = f_std(fl),\n         bm = f_std(bm))\n\n\n\n\nCode\nanimate_xy(p_std[,1:4], axes=\"off\")\nrender_gif(p_std[,1:4], grand_tour(), display_xy(axes=\"off\"),\n           gif_file = \"images/penguins_grand.gif\",\n           frames = 50,\n           start = basis_random(4,2))\n\n\n\nHow many clusters?\n\n\n\n\nCode\nanimate_xy(p_std[,1:4], axes=\"off\", col=p_std$species)\nrender_gif(p_std[,1:4], grand_tour(),\n           display_xy(col=p_std$species, axes=\"off\"),\n           gif_file = \"images/penguins_grand_sp.gif\",\n           frames = 50,\n           start = basis_random(4,2))\n\n\n\nThe clusters correspond the three species."
+    "text": "Grand tour\n\n\n\n\ndata-processing\nlibrary(palmerpenguins)\nf_std &lt;- function(x) (x-mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)\np_std &lt;- penguins |&gt;\n  select(bill_length_mm:body_mass_g, species) |&gt;\n  dplyr::rename(bl = bill_length_mm,\n         bd = bill_depth_mm,\n         fl = flipper_length_mm,\n         bm = body_mass_g) |&gt;\n  na.omit() |&gt;\n  dplyr::mutate(bl = f_std(bl),\n         bd = f_std(bd),\n         fl = f_std(fl),\n         bm = f_std(bm))\n\n\n\n\nCode\nanimate_xy(p_std[,1:4], axes=\"off\")\nrender_gif(p_std[,1:4], grand_tour(), display_xy(axes=\"off\"),\n           gif_file = \"images/penguins_grand.gif\",\n           frames = 50,\n           start = basis_random(4,2))\n\n\n\nHow many clusters?\n\n\n\n\nCode\nanimate_xy(p_std[,1:4], axes=\"off\", col=p_std$species)\nrender_gif(p_std[,1:4], grand_tour(),\n           display_xy(col=p_std$species, axes=\"off\"),\n           gif_file = \"images/penguins_grand_sp.gif\",\n           frames = 50,\n           start = basis_random(4,2))\n\n\n\nThe clusters correspond the three species."
   },
   {
     "objectID": "week8/slides.html#what-does-linear-combination-of-variables-mean",
@@ -116,7 +116,7 @@
     "href": "week8/slides.html#guided-tour",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Guided tour",
-    "text": "Guided tour\n\n\n\n\nCode\nset.seed(815)\nproj &lt;- animate_xy(p_std[,1:4], \n           guided_tour(lda_pp(p_std$species)),\n           start = basis_random(4,2),\n           axes=\"bottomleft\", col=p_std$species)\nbest_proj &lt;- best_proj$basis[314][[1]]\ncolnames(best_proj) &lt;- c(\"PP1\", \"PP2\")\nrownames(best_proj) &lt;- colnames(p_std[,1:4])\nset.seed(815)\nrender_gif(p_std[,1:4], \n           guided_tour(lda_pp(p_std$species)),\n           display_xy(col=p_std$species, axes=\"bottomleft\"),\n           gif_file = \"images/penguins_guided.gif\",\n           frames = 50,\n           start = basis_random(4,2),\n           loop = FALSE)\n\n\n\n\n Define what structure is interesting, numerically, calculated by a function. Use an optimiser to choose linear combinations that maximise this function. \nMore on creating functions defining interesting structure soon!"
+    "text": "Guided tour\n\n\n\n\nCode\nset.seed(815)\nproj &lt;- animate_xy(p_std[,1:4], \n           guided_tour(lda_pp(p_std$species)),\n           start = basis_random(4,2),\n           axes=\"bottomleft\", col=p_std$species)\nbest_proj &lt;- proj$basis[314][[1]]\ncolnames(best_proj) &lt;- c(\"PP1\", \"PP2\")\nrownames(best_proj) &lt;- colnames(p_std[,1:4])\nset.seed(815)\nrender_gif(p_std[,1:4], \n           guided_tour(lda_pp(p_std$species)),\n           display_xy(col=p_std$species, axes=\"bottomleft\"),\n           gif_file = \"images/penguins_guided.gif\",\n           frames = 50,\n           start = basis_random(4,2),\n           loop = FALSE)\n\n\n\n\n Define what structure is interesting, numerically, calculated by a function. Use an optimiser to choose linear combinations that maximise this function. \nMore on creating functions defining interesting structure soon!"
   },
   {
     "objectID": "week8/slides.html#manualradial-tour",
@@ -298,7 +298,7 @@
     "href": "week8/slides.html#resources",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Resources",
-    "text": "Resources\n\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R\nWickham et al (2011). tourr: An R Package for Exploring Multivariate Data with Projections\nSievert (2019) Interactive web-based data visualization with R, plotly, and shiny\nMason, Lee, Laa, and Cook (2022). cassowaryr: Compute Scagnostics on Pairs of Numeric Variables in a Data Set\n\n\n\n\n\nETC5521 Lecture 8 | ddde.numbat.space"
+    "text": "Resources\n\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R\nWickham et al (2011). tourr: An R Package for Exploring Multivariate Data with Projections\nSievert (2019) Interactive web-based data visualization with R, plotly, and shiny\nMason, Lee, Laa, and Cook (2022). cassowaryr: Compute Scagnostics on Pairs of Numeric Variables in a Data Set"
   },
   {
     "objectID": "week7/tutorial.html",
@@ -3848,5 +3848,12 @@
     "title": "ETC5521 Tutorial 8",
     "section": "👌 Finishing up",
     "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week8/slides.html",
+    "href": "week8/slides.html",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "What is high-dimensional data? (If all variables are quantitative)\nExploring relationships between more than two variables\n\nTours - scatterplots of combinations of variables\nMatrix of plots\nParallel coordinates\n\nWhat can be hidden\nAutomating the search for pairwise relationships using scagnostics\nLinking elements of multiple plots\nExploring multiple categorical variables"
   }
 ]
