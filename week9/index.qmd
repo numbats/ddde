@@ -19,16 +19,28 @@ schedule |>
 
 ## What you will learn this week
 
+- What is temporal data?
+- What is exploratory temporal data analysis?
+- Using temporal objects in R: `tsibble`
+- Data wrangling: aggregation, creating temporal components, missing values
+- Plotting conventions: connect the dots; aspect ratio, landscape or portrait
+- Calendar plots: arranging daily records into a calendar format
+- Visual inference for temporal data
+- tignostics: cognostics for temporal data
+- Interactive graphics for temporal data
+- Exploring longitudinal data, with the `brolgar` package
 
 ## Lecture slides
 
+- [html](https://ddde.numbat.space/week9/slides.html)
+- [pdf](https://ddde.numbat.space/week9/slides.pdf)
+- [qmd](https://ddde.numbat.space/week9/slides.qmd)
+- [R](https://ddde.numbat.space/week9/slides.R)
 
 ## Tutorial instructions
 
-Instructions:
-
-
-## Assignments
+- [html](https://ddde.numbat.space/week9/tutorial.html)
+- [qmd](https://ddde.numbat.space/week9/tutorial.qmd)
 
 ```{r}
 #| output: asis

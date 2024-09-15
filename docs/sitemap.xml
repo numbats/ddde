@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://ddde.numbat.space/week9/tutorial.html</loc>
+    <lastmod>2024-09-11T07:25:22.803Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week9/tutorialsol.html</loc>
+    <lastmod>2024-09-11T07:25:22.803Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week9/index.html</loc>
-    <lastmod>2024-09-07T08:58:46.308Z</lastmod>
+    <lastmod>2024-09-15T00:21:45.556Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week8/slides.html</loc>
@@ -151,5 +159,9 @@
   <url>
     <loc>https://ddde.numbat.space/week8/tutorial.html</loc>
     <lastmod>2024-09-10T22:03:39.673Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week9/slides.html</loc>
+    <lastmod>2024-09-15T00:18:34.018Z</lastmod>
   </url>
 </urlset>
