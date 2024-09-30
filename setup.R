@@ -43,6 +43,19 @@ library(modelr)
 library(feasts)
 library(tsibbletalk)
 library(shiny)
+library(cubble)
+# devtools::install_github("maliny12/sugarglider")
+library(sugarglider)
+library(sp)
+library(gstat)
+# devtools::install_github("mgimond/tukeyedar")
+library(tukeyedar)
+library(sugarbag)
+# devtools::install_github("runapp-aus/strayr")
+library(strayr)
+library(rmapshaper)
+library(cartogram)
+
 
 # Locations
 current_file <- knitr::current_input()
@@ -60,6 +73,7 @@ knitr::opts_chunk$set(
   echo = TRUE,
   message = FALSE,
   warning = FALSE,
+  error = FALSE,
   cache = FALSE,
   dev.args = list(pointsize = 11)
 )
@@ -95,3 +109,4 @@ conflicts_prefer(viridis::viridis_pal)
 conflicts_prefer(geozoo::simplex)
 conflicts_prefer(readr::col_factor)
 conflicts_prefer(tsibble::pedestrian)
+conflicts_prefer(nycflights13::flights)

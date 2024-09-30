@@ -1,0 +1,436 @@
+---
+title: "ETC5521 Tutorial 10"
+subtitle: "Exploring data having a space and time context"
+author: "Prof. Di Cook"
+date: "Sep 30, 2024"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: tutorial.html
+        embed-resources: false
+        keep-md: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: tutorialsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+---
+
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(here)
+library(tsibble)
+library(sugrrants)
+library(brolgar)
+library(lubridate)
+library(DAAG)
+library(broom)
+library(patchwork)
+library(colorspace)
+library(GGally)
+library(tsibbledata)
+library(forcats)
+library(chron)
+library(conflicted)
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+```
+
+## 🎯 Objectives
+
+These exercise are to do some exploratory analysis with graphics and statistical models, focusing on temporal data analysis. 
+
+## 🔧 Preparation 
+
+- The reading for this week is [Reintroducing tsibble: data tools that melt the clock](https://blog.earo.me/2018/12/20/reintro-tsibble/) and [brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R](https://journal.r-project.org/articles/RJ-2022-023/). 
+- Complete the weekly quiz, before the deadline!
+- Install the following R-packages if you do not have them already:
+
+```{r}
+#| eval: false
+#| code-fold: false
+install.packages(c("tidyverse", "here", "tsibble", "lubridate", "DAAG", "broom", "patchwork", "colorspace", "GGally", "tsibbledata", "forcats", "chron", "sugrrants", "brolgar"))
+```
+
+- Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
+
+## 📥 Exercises
+
+### Exercise 1: Australian rain 
+
+This exercise is based on one from Unwin (2015), and uses the `bomregions` data from the `DAAG` package. The data contains regional rainfall for the years 1900-2008. The regional rainfall numbers are area-weighted averages for the respective regions. Extract just the rainfall columns from the data, along with year.
+
+a. What do you think area-weighted averages are, and how would these be calculated?
+
+::: unilur-solution
+The total rainfall is divided by geographic area to get the rainfall on a scale that can be compared aross different sized regions.
+:::
+
+b. Make line plots of the rainfall for each of the regions, the states and the Australian averages. What do you learn about rainfall patterns  across the years and regions? 
+
+::: unilur-solution
+When viewed on independent scales, there are some small differences in rainfall patterns across regions. Regions `sw`, `se`, `east`, `mdb` and states `tas`, `vic` have some decline, but mostly in last few years of the data. Region `north` and states `nt`, `wa` appear to have some increasing rainfall, particularly in the last few years of this data.
+
+```{r}
+#| fig-width: 12
+#| fig-height: 7
+#| out-width: 100%
+data(bomregions)
+trend_plots <- list()
+for (i in 16:29) {
+  p <- ggplot(bomregions, aes_string(x="Year", y=colnames(bomregions)[i])) +
+  geom_point() + 
+  geom_smooth(se=F) +
+  theme(aspect.ratio = 0.8)
+  trend_plots[[paste(i-15)]] <- p
+}
+wrap_plots(trend_plots, ncol = 5)
+```
+:::
+
+c. It can be difficult to assess correlation between multiple series using line plots, and the best way to check correlation between multiple series is to make a scatterplot. Make a splom for this data, ignoring year. What regions have strong positive correlation between their rainfall averages?
+
+::: unilur-solution
+It is mostly positive linear association. Some pairs - eastRain, seRain, mdbRain, qldRain, vicRain - are strongly correlated. There are a few outliers (high values) in several regions, particularly the north.
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+#| out-width: 100%
+ggscatmat(bomregions[, c(16:29)])
+```
+:::
+
+d. One of the consequences of climate change for Australia is that some regions are likely getting drier. Make a transformation of the data to compute the difference between rainfall average in the year, and the mean over all years. Using a bar for each year, make a barchart that examines the differences in the yearly rainfall over time. (Hint: you will need to pivot the data into tidy long form to make this easier.) Are there some regions who have negative differences in recent years? What else do you notice?
+
+::: unilur-solution
+Subtracting the mean, and plotting the differences exaggerates the change in rainfall for each year. There are some regions that seem to have some increase and some with a decrease, particularly `nt`, `north`, `wa`, and in decline `sw`, `vic`, `tas`. Generally the pattern is a few wet years then a few dry years.
+
+```{r}
+#| fig-width: 12
+#| fig-height: 7
+#| out-width: 100%
+med_ctr <- function(x, na.rm = TRUE) {
+  x-mean(x, na.rm = TRUE)
+}
+bomrain <- bomregions |> as_tibble() |>
+  select(Year, contains("Rain")) |>
+  mutate_at(vars(-Year), med_ctr) |>
+  pivot_longer(cols = seRain:ausRain, 
+               names_to = "area", 
+               values_to = "rain")
+ggplot(bomrain, aes(x=Year, y=rain)) +
+  geom_col() +
+  facet_wrap(~area, ncol=5, scales="free_y") +
+  theme(aspect.ratio = 0.8)
+```
+
+:::
+
+### Exercise 2: Imputing missings for pedestrian sensor using a model
+
+Sometimes imputing by a simple method such as mean or moving average doesn't work well with multiple seasonality in a time series. Here we will use a linear model to capture the seasonality and produce better imputations for the pedestrian sensor data (from the `tsibble` package). This data has counts for four sensors, for two years 2015-2016.
+
+a. What are the multiple seasons of the pedestrian sensor data, for `QV Market-Elizabeth St (West)`? (Hint: Make a plot to check. You might filter to a single month to make it easier to see seasonality. You might also want to check when Queen Victoria Market is open.)
+
+::: unilur-solution
+There is a daily seasonality, and an open/closed market day seasonality (Tue, Thu, Fri, Sat, Sun), and there is even a summer winter seasonality (Wednesday night market, see the double-peak in Feb/Mar).
+
+```{r}
+#| fig-width: 15
+#| fig-height: 10
+#| out-width: 100%
+ped_QV <-  pedestrian |>
+  mutate(year = year(Date),
+         month = month(Date)) |>
+  dplyr::filter(Sensor == "QV Market-Elizabeth St (West)",
+                year == 2016, month %in% c(2:5))
+ggplot(ped_QV) +   
+    geom_line(aes(x=Time, y=Count)) +
+    facet_calendar(~Date) +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank(),
+        aspect.ratio = 0.5) 
+```
+
+:::
+
+b. Check temporal gaps for all the pedestrian sensor data. Subset to just the QV market sensor for the two years. Where are the missing values? Fill these with NA. 
+
+::: unilur-solution
+
+```{r echo=TRUE}
+has_gaps(pedestrian, .full = TRUE)
+ped_gaps <- pedestrian |> 
+  dplyr::filter(Sensor == "QV Market-Elizabeth St (West)") |>
+  count_gaps(.full = TRUE)
+ped_gaps
+ped_qvm_filled <- pedestrian |> 
+  dplyr::filter(Sensor == "QV Market-Elizabeth St (West)") |>
+  fill_gaps(.full = TRUE)
+```
+
+There is a block of missing values on the last day of 2015. The other two missings correspond to an hour in April, when the clocks change from summer to regular time.
+
+:::
+
+c. Create a new variable to indicate if a day is a non-working day, called `hol`. We need this to accurately model the differences between pedestrian patterns on working vs not working days. Make hour a factor - this helps to make a simple model for a non-standard daily pattern.
+
+::: unilur-solution
+```{r echo=TRUE}
+hol <- holiday_aus(2015:2016, state = "VIC")
+ped_qvm_filled <- ped_qvm_filled |> 
+  mutate(hol = is.weekend(Date)) |>
+  mutate(hol = ifelse(Date %in% hol, TRUE, hol)) |>
+  mutate(Date = as_date(Date_Time), Time = hour(Date_Time)) |>
+  mutate(Time = factor(Time))
+```
+:::
+
+c. Fit a linear model with Count as the response on  predictors `Time` and `hol` interacted. 
+
+::: unilur-solution
+```{r echo=TRUE, warning=FALSE}
+ped_qvm_lm <- lm(Count~Time*hol, data=ped_qvm_filled)
+```
+
+:::
+
+d. Predict the count for all the data at the sensor. 
+
+::: unilur-solution
+
+```{r echo=TRUE}
+ped_qvm_filled <- ped_qvm_filled |>
+  mutate(pCount = predict(ped_qvm_lm, ped_qvm_filled))
+```
+
+:::
+
+e. Make a line plot focusing on the last two weeks in 2015, where there was a day of missings, where the missing counts are substituted by the model predictions. Do you think that these imputed values match the rest of the series, nicely?
+
+::: unilur-solution
+This makes a much better imputed value. There's still room for improvement but its better than a nearest neighbour, or mean or moving average imputation.
+
+```{r}
+#| fig-width: 15
+#| fig-height: 3
+#| out-width: 100%
+ped_qvm_sub <- ped_qvm_filled |>
+  filter(Date > ymd("2015-12-17"), Date < ymd("2016-01-01")) 
+ggplot(ped_qvm_sub) +   
+    geom_line(aes(x=Date_Time, y=Count)) +
+    geom_line(data=filter(ped_qvm_sub, is.na(Count)), 
+                      aes(x=Date_Time, 
+                          y=pCount), 
+                      colour="seagreen3") +
+  scale_x_datetime("", date_breaks = "1 day", 
+                   date_labels = "%a %d") +
+  theme(aspect.ratio = 0.15)
+```
+:::
+
+
+
+### Exercise 3: Men's heights 
+
+The `heights` data provided in the `brolgar` package contains average male heights in 144 countries from 1500-1989. 
+
+a. What's the time index for this data? What is the key?
+
+::: unilur-solution
+The time index is year, and key is country.
+:::
+
+b. Filter the data to keep only measurements since 1700, when there are records for many countries. Make a spaghetti plot for the values from Australia. Does it look like Australian males are getting taller?
+
+::: unilur-solution
+Its looking like Australian males are getting taller BUT .... There are few measurements in the 1900s, and none since 1975. The data for Australia looks unreliable.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+#| out-width: 100%
+heights <- brolgar::heights |> filter(year > 1700)
+heights_oz <- heights |> 
+  filter(country == "Australia") 
+ggplot(heights_oz,
+       aes(x = year,
+           y = height_cm,
+           group = country)) + 
+  geom_point() + 
+  geom_line()
+```
+:::
+
+c. Check the number of observations for each country. How many countries have less than five years of measurements? Filter these countries out of the data, because we can't study temporal trend without sufficient measurements. 
+
+::: unilur-solution
+
+```{r echo=TRUE}
+heights <- heights |> 
+  add_n_obs() |> 
+  filter(n_obs >= 5)
+```
+:::
+
+d. Make a spaghetti plot of all the data, with a smoother overlaid. Does it look like men are generally getting taller?
+
+::: unilur-solution
+Generally, the trend is up, so yes it does look like men are getting taller acorss the globe.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+#| out-width: 100%
+ggplot(heights,
+       aes(x = year,
+           y = height_cm)) + 
+  geom_line(aes(group = country), alpha = 0.3) + 
+  geom_smooth(se=FALSE)
+```
+:::
+
+e. Use `facet_strata` to break the data into subsets using  the `year`, and plot is several facets. What sort of patterns are there in terms of the earliest year that a country appears in the data?
+
+::: unilur-solution
+The countries are pretty evenly distributed across the facets, which means that there are roughly similar numbers of countries regularly joining their data into the collection.
+
+```{r }
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 100%
+heights <- as_tsibble(heights,
+                      index = year,
+                      key = country,
+                      regular = FALSE)
+set.seed(530)
+ggplot(heights, aes(x = year,
+           y = height_cm,
+           group = country)) + 
+  geom_line() + 
+  facet_strata(along = -year)
+```
+:::
+
+f. Compute the three number summary (min, median, max) for each country. Make density plots of these statistics, overlaid in a single plot, and a parallel coordinate plot of these three statistics. What is the average minimum (median, maximum) height across countries? Are there some countries who have roughly the same minimum, median and maximum height?
+
+::: unilur-solution
+The average minimum height is about 164cm, median is about 168cm and tallest is about 172cm. The maximum height appears to be bimodal, with a small peak around 178cm.
+
+Most countries have the expected pattern of increasing heights from minimum, median to maximum. There are a few which have very similar values of these, though, which is a bit surprising. It means that there has been no change in these metrics over time.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 100%
+heights_three <- heights |>
+  features(height_cm, c(
+    min = min,
+    median = median,
+    max = max
+  ))
+heights_three_l <- heights_three |> 
+  pivot_longer(cols = min:max,
+               names_to = "feature",
+               values_to = "value")
+
+p1 <- heights_three_l |> 
+  ggplot(aes(x = value,
+             fill = feature)) + 
+  geom_density(alpha = 0.5) +
+  labs(x = "Value",
+       y = "Density",
+       fill = "Feature") + 
+  scale_fill_discrete_qualitative(palette = "Dark 3") +
+  xlab("Height") +
+  ylab("") +
+  theme(legend.position = "none",
+        aspect.ratio = 1)
+
+p2 <- heights_three_l |> 
+ ggplot(aes(x = factor(feature, 
+                       levels = c("min", "median", "max")),
+            y = value,
+             group = country)) + 
+  geom_line(alpha = 0.4) +
+  xlab("") +
+  ylab("Height") +
+  theme(aspect.ratio = 1)
+
+heights_three <- heights_three |> 
+  mutate(country = factor(country)) |>
+  mutate(country = fct_reorder(country, median)) 
+p3 <- heights_three |>
+    ggplot() + 
+    geom_point(aes(x = country,
+           y = median)) +
+    geom_errorbar(aes(x = country, 
+                      ymin=min, ymax=max), 
+                  alpha = 0.6, width=0) +
+    xlab("") + ylab("heights") +
+    coord_flip() +
+  theme(axis.text.y = element_text(size=6),
+        aspect.ratio = 2)
+ 
+design <- "
+1133
+1133
+2233
+2233"
+p1 + p2 + p3 + 
+  plot_layout(design = design)
+```
+:::
+
+g. Which country has the tallest men? Which country has highest median male height? Which country has the shortest men? Would you say that the distribution of heights within a  country is similar for all countries?
+
+::: unilur-solution
+Denmark has the tallest man (max). Estonia has the tallest median height. Papua New Guinea has the shortest men, on all metrics. The distribution of heights over the years is not the same for each country.
+:::
+
+
+
+## 👌 Finishing up
+
+Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.

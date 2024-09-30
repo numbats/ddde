@@ -19,16 +19,28 @@ schedule |>
 
 ## What you will learn this week
 
-
+- Breaking up data by time, and by space
+- Changing focus: 
+    - Maps of space over time
+    - Exploring time over space with glyph maps
+- Inference for spatial trends
+- A flash back to the 1970s: Tukey's median polish 
+- Working with spatial polygon data
+    - Making a choropleth map
+    - Bending the choropleth into a cartogram
+    - Tiling spatial regions
+    
 ## Lecture slides
 
+- [html](https://ddde.numbat.space/week10/slides.html)
+- [pdf](https://ddde.numbat.space/week10/slides.pdf)
+- [qmd](https://ddde.numbat.space/week10/slides.qmd)
+- [R](https://ddde.numbat.space/week10/slides.R)
 
 ## Tutorial instructions
 
-Instructions:
-
-
-## Assignments
+- [html](https://ddde.numbat.space/week10/tutorial.html)
+- [qmd](https://ddde.numbat.space/week10/tutorial.qmd)
 
 ```{r}
 #| output: asis
