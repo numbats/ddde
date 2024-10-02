@@ -1,0 +1,518 @@
+---
+title: "ETC5521 Diving Deeper into Data Exploration: Assignment 3"
+subtitle: "As per Monash's integrity rules, these solutions are not to be shared beyond this class."
+author: "Prof. Di Cook"
+date: "Sep 2, 2024"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html: 
+        output-file: assign03.html
+        css: "assignment.css"
+        embed-resources: true
+    unilur-html+solution:
+        output-file: assign03sol.html
+        css: "assignment.css"
+        embed-resources: true
+        show-solution: true
+---
+
+```{r}
+#| echo: false
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+```
+
+```{r}
+#| echo: false
+# Load libraries
+library(tidyverse)
+library(patchwork)
+library(vcd)
+library(nullabor)
+library(GGally)
+library(plotly)
+library(lubridate)
+library(conflicted)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+# Plot options and themes
+options(
+  digits = 2,
+  width = 60,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+```
+
+## 🎯 Goal
+
+The assignment is designed to assess your knowledge of the foundation of EDA, distinctions between EDA and IDA, and ability to construct null samples for a particular problem. The assignment represents 20\% of your final grade for ETC5521. This is an **individual** assignment.
+
+## 📌 Guidelines 
+
+1. Accept the GitHub Classroom Assignment provided in Moodle using a GitHub Classroom compatible web browser. This should generate a **private** GitHub repository that can be found at https://github.com/etc5521-2024. Your GitHub assignment 3 repo should contain the file `assign03.html`, `README.md`, `assign03-submission.qmd`, `assignment.css`, `etc5521-assignment3.Rproj`, `.gitignore`, and data files generated from your work needed to render your solution file. Code should be available but folded in report.
+
+2. Answer each question in the `assign03-submission.qmd` in the repo.
+
+3. For the final submission knit `assign03-submission.qmd` which will contain your answers. Make sure to **provide the link to the script of any Generative AI conversation** you employed in arriving at your solution. *Note that marks are allocated for overall grammar and structure of your final report.*
+
+4. Leave all of your files in your GitHub repo for marking. We will check your git commit history. You should have contributions to the repo with consistent commits over time. (*Note: nothing needs to be submitted to Moodle.*)
+
+5. You are expected to **develop your solutions by yourself**, without discussing any details with other class members or other friends or contacts. You can ask for clarifications from the teaching team and we encourage you to attend consultations to get assistance as needed.  As a Monash student you are expected to adhere to **[Monash's academic integrity policy](https://publicpolicydms.monash.edu/Monash/documents/1935748).** and the details on use of Generative AI as detailed on this unit's Moodle assessment overview. 
+
+Deadlines: 
+
+```{r create-deadline-table, echo = FALSE}
+due_date <- c("11:45pm Mon Sep 9", "11:45pm Mon Sep 16")
+
+turn_in <- c("Assignment 3 Repo on GitHub has been created", "Final solutions available on repo")
+
+library(tibble)
+df_project <- tibble(`Due date` = due_date,
+                     `Turn in` = turn_in)
+
+```
+
+```{r display-table, echo = FALSE}
+library(kableExtra)
+kable(df_project, table.attr = 'data-quarto-disable-processing="true"') %>%
+  column_spec(1, width = "3cm", bold = T, border_right = T) %>%
+  column_spec(2, width = "5cm", border_right = T) %>%
+  kable_styling(full_width = FALSE) 
+```
+
+## 🛠️ Exercises
+
+## Question 1:  Is it really there?
+
+For each of the following plot descriptions, write out the null hypothesis being tested, and explain how you would generate null samples.
+
+a. 
+
+```
+doubledecker(xtabs(n ~ Dept + Gender + Admit, data = ucba),
+  gp = gpar(fill = c("grey90", "orangered"))
+)
+```
+
+::: unilur-solution
+
+It can be useful to make the plot. From lecture notes this can be done by:
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+ucba <- as_tibble(UCBAdmissions)
+ucba <- ucba |>
+  mutate(
+    Admit = factor(Admit,
+      levels = c("Rejected", "Admitted")
+    ),
+    Gender = factor(Gender,
+      levels = c("Male", "Female"),
+      labels = c("M", "F")
+    )
+  )
+doubledecker(xtabs(n ~ Dept + Gender + Admit, data = ucba),
+  gp = gpar(fill = c("grey90", "orangered"))
+)
+```
+
+Because Admission rates are shown as colour, splitting the bars, the main relationship of interest is whether admission rate is the same for each gender.  
+
+$H_o:$ Admission rates are the same regardless of gender
+
+There are several possible ways to generate null samples. One could use 
+
+1. permutation: permute `Gender` relative to `Admit` separately for each department
+
+We need to do conditionally on department because there are different numbers of applications, and different admission rates.
+
+2. simulate from a Bernouilli for each department, using overall admission rate of that department as $p_o$.
+
+Marking: 1 point for correct $H_o$, and 1 point for a correct null generating mechanism.
+:::
+
+
+b.
+
+```
+ggplot(landmine, aes(x, y)) + 
+  geom_point(alpha=0.6)
+```
+
+::: unilur-solution
+Because this is just a scatterplot of two variables, it implies that the relationship between the two variables is of interest. Thus, 
+
+$H_o:$ No relationship between `x` and `y`
+
+The natural way to generate nulls is to permute one of the two variables.
+
+However, because this problem is about density in the 2D, it would be possible to generate null samples by simulating from two random uniform distributions.
+
+Marking: 1 point for correct $H_o$, and 1 point for a correct null generating mechanism.
+:::
+
+
+## Question 2: Can you detect landmine locations?
+
+The data for 1b is available in the file `landmine3.csv`. It represents an image taken over a field in an attempt to discover the location of landmines. The purpose is to clean the field by safely removing landmines. 
+
+a. What alternative plots might be made for the data that might help to discover the landmine locations? Plot your data with several of these choices of displays.
+b. Can you see any potential locations of landmines? Explain. 
+c. Conduct a lineup experiment with your choice of plot. The steps to doing a lineup experiment are:
+
+- Construct a lineup of your choice of plot. 
+- Show your lineups to 8 friends, individually, who are not taking this unit, and ask them to choose the most different plot, and to explain to you why they have made that choice. 
+- Compute and report the $p$-value, and summarise the reasons that your friends made. (You need to show this to each friend individually so that you get an independent evaluation of the plot.)
+
+::: unilur-solution
+
+NOTE: The data was simulated, and has three elements of interest, four small "holes" in each of the corners which one would interpret as potential landmine locations, and text string that says "you found me" (rotated and reversed) in the middle. 
+
+a. The focus is on density rather than linear relationship, so alternative plot choices should include density plots. The best plot design to see all features in rectangular binning.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+landmine <- read_csv("data/landmine3.csv")
+p1 <- ggplot(landmine, aes(x, y)) + 
+  geom_point(alpha=0.1) +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank())
+p2 <- ggplot(landmine, aes(x, y)) + 
+  geom_point(alpha=0.1) +
+  geom_density_2d(bins=50, colour="orange") +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank())
+p3 <- ggplot(landmine, aes(x, y)) + 
+  geom_density_2d_filled(bins=50) +
+  theme(legend.position="none",
+        axis.title = element_blank(),
+        axis.text = element_blank())
+p4 <- ggplot(landmine, aes(x, y)) + 
+  geom_bin_2d(bins=30) +
+  xlim(c(-2,2)) + ylim(c(-2,2)) +
+  theme(legend.position="none",
+        axis.title = element_blank(),
+        axis.text = element_blank())
+p1 + p2 + p3 + p4 + plot_layout(ncol=2)
+
+```
+
+b. Ideally one sees both the small blank spots, although this is hard, and the high density of points in the middle corresponding to the text. 
+
+c. You can generate lineup code like
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+set.seed(1258)
+ggplot(lineup(null_permute("x"), landmine), aes(x, y)) + 
+  geom_bin_2d(bins=30) +
+  xlim(c(-2,2)) + ylim(c(-2,2)) +
+  facet_wrap(~.sample, ncol=5) +
+  theme(legend.position="none",
+        axis.title = element_blank(),
+        axis.text = element_blank())
+```
+
+The lineups for your choice of plot design is shown to your 8 friends, and you record the number of times the data is detected.
+
+Use the `pvisual()` function to compute the $p$-value, as follows:
+
+```{r}
+pvisual(4, 8, 20)
+```
+
+(This calculation is 4 of the 8 friends detected the data.)
+
+Potential reasons might be the high density in the middle. It would be nice if the choice of plot also revealed the four empty holes in the corners, but this might be harder to spot.
+
+Marking:
+
+a. 1 point for suitable plot designs, with explanation justifying choice </br>
+b. 1 point for spotting the high-density, and 1 point for the four holes. BONUS: 1 point if recognised the words, too. </br>
+c. 1 point for study: summarising results from 8 friends (0.5), and computing the $p$-value appropriately (0.5)
+:::
+
+## Question 3: Exploring the relationships in availability of clean fuel and import/exports of fuel.
+
+For WDI data, just 2022, from assignment 2 (using the one created in the solution `wdi_valid.csv` using the lists of features for one- and two-variable distributions summarise: 
+
+a. The distribution of each of the variables, and
+b. The relationship between each of the pairs of variables.
+
+Next,
+
+c. Decide on which variables to transform, and examine the before and after patterns.
+d. Write down three things that you would expect to see in this data, e.g. fuel imports and exports should be negatively related.
+e. What are three things that you find to be most surprising, or unexpected in the data? (These do not all need to be related to d.)
+
+The original [website](https://data.worldbank.org/indicator/) has more information about the variables (indicators).
+
+::: unilur-solution
+
+a, b. A scatterplot matrix is a reasonable way to look at both of these
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+wdi <- read_csv("data/wdi_valid.csv")
+wdi_2022 <- wdi |>
+  filter(year == 2022)
+ggscatmat(wdi_2022, columns=3:7) +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank())
+```
+
+It can be seen that the univariate distributions are:
+
+- `clean_fuels_all`, and `clean_fuels_urban` have left-skewed distributions
+- `clean_fuels_rural` is bimodal
+- `fuel_exports` has a right-skewed distribution
+- `fuel_imports` is unimodal and symmetric
+
+and the relationships between pairs of variables are:
+
+- `clean_fuels_all`, `clean_fuels_rural` and `clean_fuels_urban` are strongly, non-linearly related. 
+- there is no relationship between the other variables.
+
+c. Based on the univariate distributions, it would be useful to transform the skewed variables, left-skew with a square, and right-skew with a square root or log. 
+
+```{r}
+w1 <- ggplot(wdi_2022, aes(x=clean_fuels_all^2)) + 
+  geom_density() 
+w2 <- ggplot(wdi_2022, aes(x=clean_fuels_urban^5)) + 
+  geom_density() 
+w3 <- ggplot(wdi_2022, aes(x=fuel_exports^(1/3))) + 
+  geom_density() 
+```
+
+The transformations that work best are square for `clean_fuels_all`, to the power 5 for `clean_fuels_urban` and cube root for `fuel_exports`. Re-generating the scatterplot matrix shows:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+
+wdi_2022 <- wdi_2022 |>
+  mutate(tclean_fuels_all = clean_fuels_all^2,
+         tclean_fuels_urban = clean_fuels_urban^5,
+         tfuel_exports = fuel_exports^(1/3))
+ggscatmat(wdi_2022, columns=c(8, 4, 9, 10, 7)) +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank())
+```
+
+The transformations have linearised the relationship between the `clean_XXX` variables. 
+
+d. We would expect that 
+
+1. the `clean_XXX` might be related, because based on the name and the information, that the `all` is constructed from the `rural` and `urban`. 
+2. if the export % is high, that the import % is low, because we would expect that a country that exports fuels would NOT need to import fuels.
+3. maybe, the higher the import % the higher the clean fuel %, because if a country imported fuel, they'd be more likely to encourage clean fuel use?
+
+e. What we can see from the scatterplot matrix is:
+
+1. There is a relationship between the `clean_XXX` variables, as expected.
+2. There is no relationship between the imports and exports!
+3. There is an outlier in the rural vs urban plot. This is a country (Jamaica) which has a very high clean fuel use in rural areas, but much less so in urban areas.
+4. Imports are between 0-40% regardless what the export % is. 
+5. Nigeria exports a lot, but is also the highest importer!
+....
+
+Here are some plots that help focus on these last couple of observations:
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+w4 <- ggplot(wdi_2022, aes(x=clean_fuels_rural, 
+                           y=tclean_fuels_urban, 
+                           label=country_code)) +
+  geom_point()
+w4p <- ggplotly(w4)
+w5 <- ggplot(wdi_2022, aes(x=fuel_exports, 
+                           y=fuel_imports, 
+                           label=country_code)) +
+  geom_point() +
+  geom_smooth(se=F, method="lm") +
+  xlim(c(0,100)) + ylim(c(0,100)) +
+  scale_x_sqrt()
+w5p <- ggplotly(w5)
+subplot(w4p, w5p, widths=c(0.5, 0.5), heights=1)
+```
+
+Marking:
+
+a, b. 2 points </br>
+c. 1 point </br>
+d. 2 points </br>
+e. 2 points
+:::
+
+
+
+## Question 4: Predicting the winner
+
+The next US presidential election will be held Nov 5, 2024. There are many polls being routinely conducted collecting preferences of the potentially voting public. The data provided in the file `polls_Sep1_2024.csv` contains polls for the popular vote collated by [fivethirtyeight.com](https://projects.fivethirtyeight.com/polls/president-general/2024/national/). It has been cleaned and re-organised.
+
+a. The variable `population` has several categories. Explain what each of these means, and how results based on different types might be expected to be different.
+b. Make your choice of plots to question whether pollsters are operating impartially, or whether they are biased. Explain what you find from this data.
+
+::: unilur-solution
+
+```{r}
+#| eval: false
+#| code-fold: true
+# This is the code used to read and clean the polls data
+polls <- read_csv("data/president_polls.csv")
+polls <- polls |>
+  filter(mdy(end_date) > mdy("7/21/24")) |>
+  filter(is.na(state)) |>
+  filter(answer %in% c("Harris", "Trump")) |>
+  select(-sponsor_candidate, -sponsor_candidate_id,
+         -endorsed_candidate_id, -endorsed_candidate_name,
+         -endorsed_candidate_party, -subpopulation, -tracking, 
+         -notes, -cycle, -office_type, -seat_number, -seat_name,
+         -election_date, -stage, -nationwide_batch,
+         -ranked_choice_reallocated, -ranked_choice_round,
+         -race_id, -candidate_id, -candidate_name,
+         -state, -created_at, -population_full,
+         -display_name, -pollster_rating_id, 
+         -pollster_rating_name, -sponsor_candidate_party)
+
+drop <- polls |> count(question_id, sort=TRUE) |> filter(n == 1)
+polls <- polls |>
+  filter(!(question_id %in% drop$question_id))
+ 
+polls_wide <- polls |>
+  pivot_wider(id_cols = question_id, 
+              names_from = answer,
+              values_from = pct)
+
+polls_demog <- polls |>
+  select(poll_id, pollster_id, pollster,
+         sponsor_ids, sponsors,
+         numeric_grade, pollscore, methodology,
+         transparency_score, 
+         start_date, end_date, 
+         question_id, sample_size, population,
+         url, source, internal, partisan) |>
+  distinct()
+
+polls_clean <- left_join(polls_demog, polls_wide, by="question_id")
+
+write_csv(polls_clean, file="data/polls_Sep1_2024.csv")
+```
+
+a. The `population` variable has several categories: `a` means adult, `lv` means likely voter, `rv` means registered voter. 
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+polls <- read_csv("data/polls_Sep1_2024.csv")
+
+# Only keep top pollsters
+pollster_count <- polls |> count(pollster, sort=TRUE) 
+polls_sub <- polls |> 
+  filter(pollster %in% pollster_count$pollster[pollster_count$n > 5])
+
+polls_sub <- polls_sub |>
+  mutate(difference = Harris - Trump)
+polls_sub |>
+  ggplot(aes(x=fct_reorder(pollster, difference), y=difference)) +
+    geom_hline(yintercept=0) +
+    geom_jitter(width=0.1, height=0) +
+  coord_flip() +
+  xlab("")
+```
+
+This suggests some bias. Need to check if time of polls is different.
+
+```{r}
+#| fig-width: 18
+#| fig-height: 5
+polls_sub |>
+  mutate(end_date = mdy(end_date)) |>
+  mutate(pollster_id = as.character(pollster_id)) |>
+  ggplot(aes(x=end_date, y=difference, colour=pollster_id)) +
+    geom_hline(yintercept = 0) +
+    geom_point() +
+    geom_smooth(se=F, method="lm") +
+    facet_wrap(~pollster, ncol=5) +
+    xlab("") +
+    theme(aspect.ratio = 0.5, 
+          legend.position = "none",
+          legend.title = element_blank())
+```
+
+Only some pollsters are doing regular polls. But some are consistently higher than others, e.g. Morning Consult and Ipsos appear to have a bias in favour of Harris.  
+
+Marking:
+
+a. 1 points </br>
+b. 2 points for making suitable plots, ideally one for distribution of results by pollster, suitably ordered, and the other examining how often the pollster collects data.</br>
+   2 points for summarising potential bias. </br>
+:::
+
+
+## Generative AI analysis
+
+In this part, we would like you to actively discuss how generative AI helped with your answers to the assignment questions, and where or how it was mistaken or misleading. 
+
+You need to provide a link that makes the full script of your conversation with any generative AI tool accessible to the teaching staff. You should not use a paid service, as the freely available systems will sufficiently helpful.
+
+
+
+## Marks
+
+
+```{r create-marks-table, echo = FALSE}
+part <- c("Q1", "Q2", "Q3", "Q4", "GitHub Repo", "Generative AI Analysis", "Formatting, Spelling & Grammar")
+
+points <- c(4, 4, 7, 5, -2, -3, -3)
+
+df_marks <- tibble(`Part` = part,
+                     `Points` = points)
+
+```
+
+```{r display-marks, echo = FALSE}
+library(kableExtra)
+kable(df_marks, table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_styling(full_width = FALSE) %>%
+  column_spec(1, width = "5cm", border_right = T) %>%
+  column_spec(2, width = "0.3cm") 
+
+```
+
+Note that the negative marks for "Generative AI Analysis", "Formatting, Spelling & Grammar" correspond to reductions in scores. You can lose up to 3 marks for poor use of the GAI. For example, no use, basic questions only, no link to the script, and no acknowledgment but clearly used. You can lose up to 3 marks for poorly formatted and written answers. Two marks will be deducted if you have NOT accepted the assignment and created your own repo by 11:45pm Mon Sep 9, and up to two marks for insufficient GitHub commits.

@@ -285,9 +285,9 @@ nasa_cb |> face_temporal() |>
 #| fig-height: 8
 #| out-width: 90%
 #| code-fold: true
-nasa_cb %>% face_temporal() %>%
-  select(id, time, month, year, surftemp) %>%
-  unfold(long, lat) %>%
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
   ggplot() +
     geom_polygon(data=sth_america, 
             aes(x=long, y=lat, group=group), 
@@ -336,9 +336,9 @@ A **glyphmap** shows a (small) time series at each spatial location.
 #| fig-height: 8
 #| out-width: 90%
 #| code-fold: true
-nasa_cb %>% face_temporal() %>%
-  select(id, time, month, year, surftemp) %>%
-  unfold(long, lat) %>%
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
   ggplot() +
     geom_polygon(data=sth_america, 
             aes(x=long, y=lat, group=group), 
@@ -378,9 +378,9 @@ nasa_cb %>% face_temporal() %>%
 #| fig-height: 8
 #| out-width: 90%
 #| code-fold: true
-nasa_cb %>% face_temporal() %>%
-  select(id, time, month, year, surftemp) %>%
-  unfold(long, lat) %>%
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
   ggplot() +
     geom_polygon(data=sth_america, 
             aes(x=long, y=lat, group=group), 
@@ -414,10 +414,10 @@ nasa_cb %>% face_temporal() %>%
 #| fig-height: 6
 #| out-width: 90%
 #| code-fold: true
-nasa_mth <- nasa_cb %>% 
-  face_temporal() %>%
-  select(id, time, month, year, surftemp) %>%
-  unfold(long, lat) %>%
+nasa_mth <- nasa_cb |> 
+  face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
   as_tibble() |>
   group_by(id, month) |>
   dplyr::summarise(tmin = min(surftemp),
@@ -459,10 +459,10 @@ library(tsibble)
 library(tsibbletalk)
 library(lubridate)
 library(plotly)
-nasa_shared <- nasa %>% 
-  mutate(date = ymd(date)) %>%
-  select(long, lat, date, surftemp, id) %>%
-  as_tsibble(index=date, key=id) %>%
+nasa_shared <- nasa |> 
+  mutate(date = ymd(date)) |>
+  select(long, lat, date, surftemp, id) |>
+  as_tsibble(index=date, key=id) |>
   as_shared_tsibble()
 p1 <- ggplot() +
   geom_polygon(data=sth_america, 
@@ -470,13 +470,13 @@ p1 <- ggplot() +
             colour="#ffffff", alpha=0.2, fill="#014221") +
   geom_point(data=nasa_shared, aes(x = long, 
          y = lat, group = id)) 
-p2 <- nasa_shared %>%
+p2 <- nasa_shared |>
   ggplot(aes(x = date, y = surftemp)) +
   geom_line(aes(group = id), alpha = 0.5) 
 subplot(
     ggplotly(p1, tooltip = "Region"),
     ggplotly(p2, tooltip = "Region"),
-    nrows = 1, widths=c(0.3, 0.7)) %>%
+    nrows = 1, widths=c(0.3, 0.7)) |>
   highlight(dynamic = TRUE)
 ```
 
@@ -575,7 +575,7 @@ set.seed(945)
 x <- 1:24
 y <- 1:24
 xy <- expand.grid(x, y)
-d <- tibble(x=xy$Var1, y=xy$Var2) %>%
+d <- tibble(x=xy$Var1, y=xy$Var2) |>
   mutate(v = x+2*y) 
 d_sf <- SpatialPointsDataFrame(d[,1:2],
                    data.frame(d[,3]))
@@ -583,8 +583,8 @@ vgm_mod <- vgm(psill=5, model = "Sph", range=20, nmax=30)
 d_dummy <- gstat(formula = v~1, dummy=TRUE, beta=0,
            model=vgm_mod)
 d_err <- predict(d_dummy, d_sf, nsim=1)
-d <- d %>%
-  mutate(e = d_err@data$sim1*3) %>%
+d <- d |>
+  mutate(e = d_err@data$sim1*3) |>
   mutate(ve = v+e)
 ```
 
@@ -814,8 +814,8 @@ err + pol_res + plot_layout(ncol=2)
 ```{r}
 #| echo: false
 world_map <- map_data("world")
-world_map %>% 
-  filter(region %in% c("Australia", "New Zealand")) %>% 
+world_map |> 
+  filter(region %in% c("Australia", "New Zealand")) |> 
       DT::datatable(width=1150, height=100)
 ```
 :::
@@ -828,8 +828,8 @@ world_map %>%
 #| fig-width: 12
 #| fig-height: 4
 #| out-width: 100%
-oz <- world_map %>% 
-  filter(region == "Australia") %>%
+oz <- world_map |> 
+  filter(region == "Australia") |>
   filter(lat > -50)
 m1 <- ggplot(oz, aes(x = long, y = lat)) + 
   geom_point(size=0.2) + #<<
@@ -876,7 +876,7 @@ For data analysis needs fast plotting, and resolution can be smaller.
 #| results: hide
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
-nc %>% slice_head(n=5) 
+nc |> slice_head(n=5) 
 ```
 :::
 
@@ -927,30 +927,30 @@ aus_colours <- function(sir_p50){
 #| label: thyroiddata
 #| code-fold: true
 #| eval: false
-sa2 <- strayr::read_absmap("sa22011") %>% 
-  filter(!st_is_empty(geometry)) %>% 
-  filter(!state_name_2011 == "Other Territories") %>% 
+sa2 <- strayr::read_absmap("sa22011") |> 
+  filter(!st_is_empty(geometry)) |> 
+  filter(!state_name_2011 == "Other Territories") |> 
   filter(!sa2_name_2011 == "Lord Howe Island")
-sa2 <- sa2 %>% rmapshaper::ms_simplify(keep = 0.5, keep_shapes = TRUE) # Simplify the map!!!
-SIR <- read_csv(here::here("data/SIR Downloadable Data.csv")) %>% 
-  filter(SA2_name %in% sa2$sa2_name_2011) %>% 
-  dplyr::select(Cancer_name, SA2_name, Sex_name, p50) %>% 
+sa2 <- sa2 |> rmapshaper::ms_simplify(keep = 0.5, keep_shapes = TRUE) # Simplify the map!!!
+SIR <- read_csv(here::here("data/SIR Downloadable Data.csv")) |> 
+  filter(SA2_name %in% sa2$sa2_name_2011) |> 
+  dplyr::select(Cancer_name, SA2_name, Sex_name, p50) |> 
   filter(Cancer_name == "Thyroid", Sex_name == "Females")
-ERP <- read_csv(here::here("data/ERP.csv")) %>%
-  filter(REGIONTYPE == "SA2", Time == 2011, Region %in% SIR$SA2_name) %>% 
+ERP <- read_csv(here::here("data/ERP.csv")) |>
+  filter(REGIONTYPE == "SA2", Time == 2011, Region %in% SIR$SA2_name) |> 
   dplyr::select(Region, Value)
 # Alternative maps
 # Join with sa2 sf object
-sa2thyroid_ERP <- SIR %>% 
-  left_join(sa2, ., by = c("sa2_name_2011" = "SA2_name")) %>%
-  left_join(., ERP %>% 
+sa2thyroid_ERP <- SIR |> 
+  left_join(sa2, ., by = c("sa2_name_2011" = "SA2_name")) |>
+  left_join(., ERP |> 
               dplyr::select(Region, 
-              Population = Value), by = c("sa2_name_2011"= "Region")) %>% 
+              Population = Value), by = c("sa2_name_2011"= "Region")) |> 
   filter(!st_is_empty(geometry))
-sa2thyroid_ERP <- sa2thyroid_ERP %>% 
-  #filter(!is.na(Population)) %>% 
-  filter(!sa2_name_2011 == "Lord Howe Island") %>% 
-  mutate(SIR = map_chr(p50, aus_colours)) %>% 
+sa2thyroid_ERP <- sa2thyroid_ERP |> 
+  #filter(!is.na(Population)) |> 
+  filter(!sa2_name_2011 == "Lord Howe Island") |> 
+  mutate(SIR = map_chr(p50, aus_colours)) |> 
   st_as_sf() 
 save(sa2, file="data/sa2.rda")
 save(sa2thyroid_ERP, file="data/sa2thyroid_ERP.rda")
@@ -1054,7 +1054,7 @@ It's not perfect, but now the higher incidence in Perth suburbs, some melbourne 
 if (!file.exists(here::here("data/aus_hexmap.rda"))) {
   
 ## Create centroids set
-centroids <- sa2 %>% 
+centroids <- sa2 |> 
   create_centroids(., "sa2_name_2011")
 ## Create hexagon grid
 grid <- create_grid(centroids = centroids,
@@ -1081,8 +1081,8 @@ load(here::here("data/aus_hexmap.rda"))
 ## Prepare to plot
 fort_hex <- fortify_hexagon(data = aus_hexmap,
                             sf_id = "sa2_name_2011",
-                            hex_size = 0.2) %>% 
-            left_join(sa2thyroid_ERP %>% select(sa2_name_2011, SIR, p50))
+                            hex_size = 0.2) |> 
+            left_join(sa2thyroid_ERP |> select(sa2_name_2011, SIR, p50))
 ## Make a plot
 aus_hexmap_plot <- ggplot() +
   geom_sf(data=sa2thyroid_ERP, fill=NA, colour="grey60", size=0.1) +

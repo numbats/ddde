@@ -1,15 +1,15 @@
-## ----include = FALSE, echo=FALSE------------------------------
+## ----include = FALSE, echo=FALSE-------------------------------------------------
 source("../setup.R")
 
 
-## ----nasa-----------------------------------------------------
+## ----nasa------------------------------------------------------------------------
 #| label: nasa
 #| echo: false
 data(nasa)
 glimpse(nasa)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| code-fold: true
 nasa_cb <- as_cubble(as_tibble(nasa), 
                      key=id, 
@@ -18,7 +18,7 @@ nasa_cb <- as_cubble(as_tibble(nasa),
 nasa_cb
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: spatial
 #| fig-width: 6
 #| fig-height: 6
@@ -36,7 +36,7 @@ ggplot() +
        colour="turquoise", size=4)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: temporal
 #| fig-width: 8
 #| fig-height: 4
@@ -63,7 +63,7 @@ ggplot(nasa_cb_f) +
   theme(aspect.ratio = 0.5)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: raster
 #| fig-width: 6
 #| fig-height: 6
@@ -90,7 +90,7 @@ nasa_cb |>
         plot.title = element_text(size = 24)) 
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: raster
 #| eval: false
 #| echo: true
@@ -115,7 +115,7 @@ nasa_cb |>
 ##         plot.title = element_text(size = 24))
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: space-time
 #| fig-width: 10
 #| fig-height: 6
@@ -132,7 +132,7 @@ nasa_cb |> face_temporal() |>
   theme(legend.position = "bottom") 
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: space-time
 #| eval: false
 #| echo: true
@@ -147,15 +147,15 @@ nasa_cb |> face_temporal() |>
 ##   theme(legend.position = "bottom")
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: time-space1
 #| fig-width: 8
 #| fig-height: 8
 #| out-width: 90%
 #| code-fold: true
-nasa_cb %>% face_temporal() %>%
-  select(id, time, month, year, surftemp) %>%
-  unfold(long, lat) %>%
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
   ggplot() +
     geom_polygon(data=sth_america, 
             aes(x=long, y=lat, group=group), 
@@ -174,15 +174,15 @@ nasa_cb %>% face_temporal() %>%
 
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: time-space2
 #| fig-width: 8
 #| fig-height: 8
 #| out-width: 90%
 #| code-fold: true
-nasa_cb %>% face_temporal() %>%
-  select(id, time, month, year, surftemp) %>%
-  unfold(long, lat) %>%
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
   ggplot() +
     geom_polygon(data=sth_america, 
             aes(x=long, y=lat, group=group), 
@@ -201,15 +201,15 @@ nasa_cb %>% face_temporal() %>%
     theme_map() 
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: time-space3
 #| fig-width: 8
 #| fig-height: 8
 #| out-width: 90%
 #| code-fold: true
-nasa_cb %>% face_temporal() %>%
-  select(id, time, month, year, surftemp) %>%
-  unfold(long, lat) %>%
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
   ggplot() +
     geom_polygon(data=sth_america, 
             aes(x=long, y=lat, group=group), 
@@ -224,16 +224,16 @@ nasa_cb %>% face_temporal() %>%
     theme_map() 
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: time-space4
 #| fig-width: 6
 #| fig-height: 6
 #| out-width: 90%
 #| code-fold: true
-nasa_mth <- nasa_cb %>% 
-  face_temporal() %>%
-  select(id, time, month, year, surftemp) %>%
-  unfold(long, lat) %>%
+nasa_mth <- nasa_cb |> 
+  face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
   as_tibble() |>
   group_by(id, month) |>
   dplyr::summarise(tmin = min(surftemp),
@@ -256,7 +256,7 @@ ggplot() +
     theme_map() 
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| eval: false
 #| code-fold: true
 #| code-summary: DEMO
@@ -264,10 +264,10 @@ ggplot() +
 ## library(tsibbletalk)
 ## library(lubridate)
 ## library(plotly)
-## nasa_shared <- nasa %>%
-##   mutate(date = ymd(date)) %>%
-##   select(long, lat, date, surftemp, id) %>%
-##   as_tsibble(index=date, key=id) %>%
+## nasa_shared <- nasa |>
+##   mutate(date = ymd(date)) |>
+##   select(long, lat, date, surftemp, id) |>
+##   as_tsibble(index=date, key=id) |>
 ##   as_shared_tsibble()
 ## p1 <- ggplot() +
 ##   geom_polygon(data=sth_america,
@@ -275,17 +275,17 @@ ggplot() +
 ##             colour="#ffffff", alpha=0.2, fill="#014221") +
 ##   geom_point(data=nasa_shared, aes(x = long,
 ##          y = lat, group = id))
-## p2 <- nasa_shared %>%
+## p2 <- nasa_shared |>
 ##   ggplot(aes(x = date, y = surftemp)) +
 ##   geom_line(aes(group = id), alpha = 0.5)
 ## subplot(
 ##     ggplotly(p1, tooltip = "Region"),
 ##     ggplotly(p2, tooltip = "Region"),
-##     nrows = 1, widths=c(0.3, 0.7)) %>%
+##     nrows = 1, widths=c(0.3, 0.7)) |>
 ##   highlight(dynamic = TRUE)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| code-fold: true
 #| eval: false
 #| echo: false
@@ -363,7 +363,7 @@ ggplot() +
 ## p_data + p_null1 + p_null2 + p_null3 + plot_layout(ncol=2)
 
 
-## ----toy-spatial, out.width = "80%"---------------------------
+## ----toy-spatial, out.width = "80%"----------------------------------------------
 #| code-fold: true
 #| code-summary: generate-data
 #| results: hide
@@ -372,7 +372,7 @@ set.seed(945)
 x <- 1:24
 y <- 1:24
 xy <- expand.grid(x, y)
-d <- tibble(x=xy$Var1, y=xy$Var2) %>%
+d <- tibble(x=xy$Var1, y=xy$Var2) |>
   mutate(v = x+2*y) 
 d_sf <- SpatialPointsDataFrame(d[,1:2],
                    data.frame(d[,3]))
@@ -380,12 +380,12 @@ vgm_mod <- vgm(psill=5, model = "Sph", range=20, nmax=30)
 d_dummy <- gstat(formula = v~1, dummy=TRUE, beta=0,
            model=vgm_mod)
 d_err <- predict(d_dummy, d_sf, nsim=1)
-d <- d %>%
-  mutate(e = d_err@data$sim1*3) %>%
+d <- d |>
+  mutate(e = d_err@data$sim1*3) |>
   mutate(ve = v+e)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: plot-simple example
 #| code-fold: true
 #| code-summary: plot
@@ -419,7 +419,7 @@ err <- ggplot(d, aes(x, y, fill = e)) +
 obs + trend + err + plot_layout(ncol=3)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: gen-nulls
 #| code-fold: true
 #| code-summary: generate-nulls
@@ -454,7 +454,7 @@ for (i in 1:6) {
 wrap_plots(lineup_plots, ncol = 3)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: plot-margins
 #| code-fold: true
 #| code-summary: plot
@@ -474,7 +474,7 @@ lat <- ggplot(d, aes(y, y=ve)) +
 long + lat + plot_layout(ncol=2)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| echo: false
 fabric_drawing(cid = "twoway", 
                cwidth = 700, 
@@ -496,7 +496,7 @@ fabric_text_add(cid = "twoway", textId = "txt3",
                 fontFamily = "Courier", fontSize = 18)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| code-fold: true
 #| fig-width: 8
 #| fig-height: 4
@@ -522,7 +522,7 @@ lat <- ggplot(d, aes(y, y=ve)) +
 long + lat + plot_layout(ncol=2)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| code-fold: true
 #| fig-width: 8
 #| fig-height: 4
@@ -542,22 +542,22 @@ err <- err +
 err + pol_res + plot_layout(ncol=2)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| echo: false
 world_map <- map_data("world")
-world_map %>% 
-  filter(region %in% c("Australia", "New Zealand")) %>% 
+world_map |> 
+  filter(region %in% c("Australia", "New Zealand")) |> 
       DT::datatable(width=1150, height=100)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: mappolygon
 #| code-fold: true
 #| fig-width: 12
 #| fig-height: 4
 #| out-width: 100%
-oz <- world_map %>% 
-  filter(region == "Australia") %>%
+oz <- world_map |> 
+  filter(region == "Australia") |>
   filter(lat > -50)
 m1 <- ggplot(oz, aes(x = long, y = lat)) + 
   geom_point(size=0.2) + #<<
@@ -576,16 +576,16 @@ m3 <- ggplot(oz, aes(x = long, y = lat,
 m1 + m2 + m3
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: sfobject
 #| echo: false
 #| results: hide
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
-nc %>% slice_head(n=5) 
+nc |> slice_head(n=5) 
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: setup-choro
 #| echo: false
 library(sf)
@@ -614,40 +614,40 @@ aus_colours <- function(sir_p50){
 }
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: thyroiddata
 #| code-fold: true
 #| eval: false
-## sa2 <- strayr::read_absmap("sa22011") %>%
-##   filter(!st_is_empty(geometry)) %>%
-##   filter(!state_name_2011 == "Other Territories") %>%
+## sa2 <- strayr::read_absmap("sa22011") |>
+##   filter(!st_is_empty(geometry)) |>
+##   filter(!state_name_2011 == "Other Territories") |>
 ##   filter(!sa2_name_2011 == "Lord Howe Island")
-## sa2 <- sa2 %>% rmapshaper::ms_simplify(keep = 0.5, keep_shapes = TRUE) # Simplify the map!!!
-## SIR <- read_csv(here::here("data/SIR Downloadable Data.csv")) %>%
-##   filter(SA2_name %in% sa2$sa2_name_2011) %>%
-##   dplyr::select(Cancer_name, SA2_name, Sex_name, p50) %>%
+## sa2 <- sa2 |> rmapshaper::ms_simplify(keep = 0.5, keep_shapes = TRUE) # Simplify the map!!!
+## SIR <- read_csv(here::here("data/SIR Downloadable Data.csv")) |>
+##   filter(SA2_name %in% sa2$sa2_name_2011) |>
+##   dplyr::select(Cancer_name, SA2_name, Sex_name, p50) |>
 ##   filter(Cancer_name == "Thyroid", Sex_name == "Females")
-## ERP <- read_csv(here::here("data/ERP.csv")) %>%
-##   filter(REGIONTYPE == "SA2", Time == 2011, Region %in% SIR$SA2_name) %>%
+## ERP <- read_csv(here::here("data/ERP.csv")) |>
+##   filter(REGIONTYPE == "SA2", Time == 2011, Region %in% SIR$SA2_name) |>
 ##   dplyr::select(Region, Value)
 ## # Alternative maps
 ## # Join with sa2 sf object
-## sa2thyroid_ERP <- SIR %>%
-##   left_join(sa2, ., by = c("sa2_name_2011" = "SA2_name")) %>%
-##   left_join(., ERP %>%
+## sa2thyroid_ERP <- SIR |>
+##   left_join(sa2, ., by = c("sa2_name_2011" = "SA2_name")) |>
+##   left_join(., ERP |>
 ##               dplyr::select(Region,
-##               Population = Value), by = c("sa2_name_2011"= "Region")) %>%
+##               Population = Value), by = c("sa2_name_2011"= "Region")) |>
 ##   filter(!st_is_empty(geometry))
-## sa2thyroid_ERP <- sa2thyroid_ERP %>%
-##   #filter(!is.na(Population)) %>%
-##   filter(!sa2_name_2011 == "Lord Howe Island") %>%
-##   mutate(SIR = map_chr(p50, aus_colours)) %>%
+## sa2thyroid_ERP <- sa2thyroid_ERP |>
+##   #filter(!is.na(Population)) |>
+##   filter(!sa2_name_2011 == "Lord Howe Island") |>
+##   mutate(SIR = map_chr(p50, aus_colours)) |>
 ##   st_as_sf()
 ## save(sa2, file="data/sa2.rda")
 ## save(sa2thyroid_ERP, file="data/sa2thyroid_ERP.rda")
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: choro
 #| code-fold: true
 #| fig-width: 10
@@ -661,7 +661,7 @@ aus_ggchoro <- ggplot(sa2thyroid_ERP) +
 aus_ggchoro
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: cartogram
 #| code-fold: true
 #| fig-width: 6
@@ -697,7 +697,7 @@ dorl <- ggplot(nc_utm_dorl) +
 orig + carto + dorl + plot_layout(ncol=1)
 
 
-## -------------------------------------------------------------
+## --------------------------------------------------------------------------------
 #| label: hexmap
 #| code-fold: true
 #| fig-width: 10
@@ -706,7 +706,7 @@ orig + carto + dorl + plot_layout(ncol=1)
 if (!file.exists(here::here("data/aus_hexmap.rda"))) {
   
 ## Create centroids set
-centroids <- sa2 %>% 
+centroids <- sa2 |> 
   create_centroids(., "sa2_name_2011")
 ## Create hexagon grid
 grid <- create_grid(centroids = centroids,
@@ -733,8 +733,8 @@ load(here::here("data/aus_hexmap.rda"))
 ## Prepare to plot
 fort_hex <- fortify_hexagon(data = aus_hexmap,
                             sf_id = "sa2_name_2011",
-                            hex_size = 0.2) %>% 
-            left_join(sa2thyroid_ERP %>% select(sa2_name_2011, SIR, p50))
+                            hex_size = 0.2) |> 
+            left_join(sa2thyroid_ERP |> select(sa2_name_2011, SIR, p50))
 ## Make a plot
 aus_hexmap_plot <- ggplot() +
   geom_sf(data=sa2thyroid_ERP, fill=NA, colour="grey60", size=0.1) +
