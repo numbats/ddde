@@ -19,13 +19,27 @@ schedule |>
 
 ## What you will learn this week
 
+- Different types of model fitting
+- Decomposing data from model
+    - fitted
+    - residual
+- Diagnostic calculations 
+    - anomalies
+    - leverage
+    - influence
 
 ## Lecture slides
 
 
+- [html](https://ddde.numbat.space/week11/slides.html)
+- [pdf](https://ddde.numbat.space/week11/slides.pdf)
+- [qmd](https://ddde.numbat.space/week11/slides.qmd)
+- [R](https://ddde.numbat.space/week11/slides.R)
+
 ## Tutorial instructions
 
-Instructions:
+- [html](https://ddde.numbat.space/week11/tutorial.html)
+- [qmd](https://ddde.numbat.space/week11/tutorial.qmd)
 
 
 ## Assignments

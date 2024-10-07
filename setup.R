@@ -55,7 +55,7 @@ library(sugarbag)
 library(strayr)
 library(rmapshaper)
 library(cartogram)
-
+library(mgcv)
 
 # Locations
 current_file <- knitr::current_input()

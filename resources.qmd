@@ -10,11 +10,22 @@ title: "ETC5521 Resources"
 - van der Loo and de Jonge (2018). Statistical Data Cleaning with Applications in R, John Wiley and Sons Ltd.
 - Cleveland (1993) Visualizing Data, Hobart Press.
 - Cox & Snell (1981) Applied Statistics, London: Chapman and Hall.
+- Moraga (2019) [Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny](https://www.paulamoraga.com/book-geospatial/index.html)
+- Sievert (2019) [Interactive web-based data visualization with R, plotly, and shiny](https://plotly-r.com)
 
 # Websites
 
 - Josse et al (2022) [R-miss-tastic](https://rmisstastic.netlify.app)
 - Friendly and Denis *Milestones in History of Thematic Cartography, Statistical Graphics and Data Visualisation* available at [http://www.datavis.ca/milestones/](http://www.datavis.ca/milestones/)
+- Wang, Cook, Hyndman, O'Hara-Wild (2019) [tsibble](https://tsibble.tidyverts.org)
+- [cubble](https://huizezhang-sherry.github.io/cubble): A Vector Spatio-Temporal Data Structure for Data Analysis
+- Tierney, Cook, Prvan (2020) [Browse Over Longitudinal Data Graphically and Analytically in R](https://github.com/njtierney/brolgar)
+- [sf](https://r-spatial.github.io/sf/): Simple Features for R
+- [Visualising spatial data using R](https://rspatialdata.github.io)
+- Cook and Laa (2023) [Interactively exploring high-dimensional data and models in R](https://dicook.github.io/mulgar_book/)
+- Mason, Lee, Laa, and Cook (2022). [cassowaryr:
+  Compute Scagnostics on Pairs of Numeric Variables in a
+  Data Set](https://CRAN.R-project.org/package=cassowary)
 
 # Articles
 
@@ -30,3 +41,7 @@ title: "ETC5521 Resources"
 - Majumder et al (2013) [Validation of Visual Statistical Inference, Applied to Linear Models.](https://doi.org/10.1080/01621459.2013.808157) Journal of the American Statistical Association 108 (503): 942–56.
 - Tierney et al (2023) [Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations](https://doi.org/10.18637/jss.v105.i07).
 - Becker, R. A., Cleveland, W. S., & Shyu, M. J. (1996). "The Visual Design and Control of Trellis Display." Journal of Computational and Graphical Statistics, 5(2), 123-155.
+- Wang, Cook, Hyndman (2019) [A New Tidy Data Structure to Support Exploration and Modeling of Temporal Data](https://www.tandfonline.com/doi/full/10.1080/10618600.2019.1695624)
+- Kobakian et al [Hexagon tile map](https://journal.r-project.org/articles/RJ-2023-021/)
+- Wickham et al (2011). [tourr: An R Package for Exploring
+  Multivariate Data with Projections](http://www.jstatsoft.org/v40/i02/)
