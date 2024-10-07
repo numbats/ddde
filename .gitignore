@@ -49,3 +49,8 @@ rsconnect/
 
 # Junk files
 .DS_Store
+
+# Assignment student folders
+assignments/assign01/
+assignments/assign02/
+assignments/assign03/
