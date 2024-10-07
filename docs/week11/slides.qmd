@@ -917,7 +917,7 @@ render_gif(track[,1:7],
            rescale=TRUE,
            gif_file = "images/track.gif",
            apf = 1/30,
-           frames = 1500,
+           frames = 500,
            width = 400, 
            height = 400)
 ```
