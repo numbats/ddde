@@ -22,7 +22,7 @@ schedule <- tibble(
         "Exploring data having a space and time context Part I",
         "Exploring data having a space and time context Part II",
         "Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
-        "Extending beyond the data, what can and cannot be inferred more generally, given the data collection"
+        "Help session"
     ),
     Reference = c(
         "The Landscape of R Packages for Automated Exploratory Data Analysis",

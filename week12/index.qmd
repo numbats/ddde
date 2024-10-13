@@ -1,5 +1,5 @@
 ---
-title: "Week 12: Extending beyond the data, what can and cannot be inferred more generally, given the data collection"
+title: "Week 12: Long help session"
 ---
 
 ```{r}
@@ -16,19 +16,6 @@ schedule |>
   mutate(ref = glue::glue("[{Reference}]({Reference_URL})")) |>
   pull(ref)
 ```
-
-## What you will learn this week
-
-
-## Lecture slides
-
-
-## Tutorial instructions
-
-Instructions:
-
-
-## Assignments
 
 ```{r}
 #| output: asis
