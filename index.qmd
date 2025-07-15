@@ -19,19 +19,19 @@ week <- as.integer(1 + ((Sys.Date() - as_date(start_semester))/7))
 
 * **Professor Di Cook**
     - Email: [etc5521.clayton-x@monash.edu](mailto:etc5521.clayton-x@monash.edu) 
-    - Consultation: Thu 11:00-12:00, 352 Education Blg, and zoom
+    - Consultation: TBD
 
 ## Tutors
 
 * Krisanat Anukarnsakulchularp
-    - Tutorials: Wed 9:30-11:00am and 7:30-9:00pm CL_Anc-19.LTB_134
-    - Consultation: Mon 9.30-11:00 am, Menzies W9.20 
+    - Tutorials: Thu 9am (CL_LTB_188), 10am (CL_LTB_188), 3pm (CL_LTB_188)
+    - Consultation: TBD
 
 ## Weekly schedule
 
-* Lecture: Tues 10-12 on zoom (link in [Moodle](https://learning.monash.edu/course/view.php?id=18864&section=6))
-* Tutorial: 1.5 hours
-* Weekly learning quizzes due each Wednesday 9am, from week 2
+* Lecture+workshop: Tues 2-5pm on zoom (link in [Moodle](https://learning.monash.edu/course/view.php?id=34784))
+* Tutorial: 1 hour
+* Weekly learning quizzes due each Thursday 9am, from week 2
 
 ```{r}
 #| label: schedule2
@@ -54,12 +54,12 @@ schedule |>
 
 ## Assessments
 
-* [Weekly learning quizzes](https://learning.monash.edu/course/view.php?id=18864&section=8): 5%
-* Assignment 1: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2966868) (15%)
-* Assignment 2: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2587917) (20%)
-* Assignment 3: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2587917) (20%)
-* Assignment 4 part 1: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2587918) (20%)
-* Assignment 4 part 2: [Instructions](https://learning.monash.edu/mod/assign/view.php?id=2587919) (20%)
+* [Weekly learning quizzes](https://learning.monash.edu/course/view.php?id=34784&section=8): 5% (**Due** each week by Thu 9am, weeks 2-12)
+* Exercises 1: [Instructions](https://learning.monash.edu/course/view.php?id=34784&section=8) (15%) (**Due** Monday 11:55pm)
+* Exercises 2: [Instructions](https://learning.monash.edu/course/view.php?id=34784&section=8) (20%) (**Due** Monday 11:55pm)
+* Exercises 3: [Instructions](https://learning.monash.edu/course/view.php?id=34784&section=8) (20%) (**Due** Monday 11:55pm)
+* Project part 1: [Instructions](https://learning.monash.edu/course/view.php?id=34784&section=8) (20%) (**Due** Monday 11:55pm)
+* Project part 2: [Instructions](https://learning.monash.edu/course/view.php?id=34784&section=8) (20%) (**Due** Monday 11:55pm)
 
 ## Software
 
@@ -77,6 +77,6 @@ From GitHub, install
 remotes::install_github("casperhart/detourr")
 ```
 
-If you are relatively new to R, working through the materials at [https://learnr.numbat.space](https://learnr.numbat.space) is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you. 
+If you are relatively new to R, working through the materials at [https://startr.numbat.space](https://learnr.numbat.space) is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you. 
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />These materials are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.

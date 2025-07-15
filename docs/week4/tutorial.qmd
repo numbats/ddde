@@ -25,6 +25,7 @@ library(ggbeeswarm)
 library(nullabor)
 library(broom)
 library(conflicted)
+conflicts_prefer(palmerpenguins::penguins)
 
 # Set up chunk for all slides
 knitr::opts_chunk$set(

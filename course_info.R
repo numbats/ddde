@@ -2,10 +2,10 @@
 library(tidyverse)
 
 # Start of semester
-start_semester <- "2024-07-22"
+start_semester <- "2025-07-29"
 
 # Week of mid-semester break
-mid_semester_break <- "2024-09-23"
+mid_semester_break <- "2025-09-30"
 
 # Schedule
 schedule <- tibble(
@@ -60,7 +60,7 @@ calendar <- tibble(
 ) |>
     mutate(
         Week = row_number(),
-        Week = if_else(Date < mid_semester_break, Week, Week - 1),
+        Week = if_else(Date <= mid_semester_break, Week, Week - 1),
         # Week =
     )
 
@@ -76,20 +76,20 @@ schedule <- schedule |>
     select(Week, Date, everything())
 
 # Add assignment details
-lastmon <- function(x) {
-    7 * floor(as.numeric(x - 1 + 4) / 7) + as.Date(1 - 4, origin = "1970-01-01")
-}
+#lastmon <- function(x) {
+#    7 * floor(as.numeric(x - 1 + 4) / 7) + as.Date(1 - 4, origin = "1970-01-01")
+#}
 
 assignments <- read_csv(here::here("assignments.csv")) |>
     mutate(
-        Date = lastmon(Due)
+        Date = Due + days(1)
     )
 
 schedule <- schedule |>
     full_join(assignments, by = "Date") |>
-    mutate(Week = if_else(is.na(Week) & Date > "2024-10-27", 14, Week)) |>
-    mutate(Topic = if_else(Date > "2024-10-27", " ", Topic),
-           Reference = if_else(Date > "2024-10-27", " ", Reference)) |>
+    mutate(Week = if_else(is.na(Week) & Date > "2025-10-27", 14, Week)) |>
+    mutate(Topic = if_else(Date > "2025-10-27", " ", Topic),
+           Reference = if_else(Date > "2025-10-27", " ", Reference)) |>
     #mutate(Assignment = if_else(is.na(Assignment), " ", glue::glue("[{Assignment}]({Link})"))) |>
     select(-Marks)
 
