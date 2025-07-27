@@ -94,6 +94,7 @@ conflicts_prefer(geozoo::simplex)
 conflicts_prefer(readr::col_factor)
 conflicts_prefer(tsibble::pedestrian)
 conflicts_prefer(nycflights13::flights)
+conflicts_prefer(mvtnorm::rmvnorm)
 
 # Locations
 current_file <- knitr::current_input()

@@ -36,10 +36,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-de070a7b0ab54f8780927367ac907214.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c1a70322e27d077f7ea372d73b2c9463.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d09986739cfb9a056da91814c7efe706.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b999c4676519be8dd60d344fdb5a1378.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -67,9 +67,25 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans|Merriweather" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3/build/web/hack-subset.css">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -100,7 +116,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -212,7 +228,19 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#main-reference" id="toc-main-reference" class="nav-link active" data-scroll-target="#main-reference">Main reference</a></li>
+  <li><a href="#what-you-will-learn-this-week" id="toc-what-you-will-learn-this-week" class="nav-link" data-scroll-target="#what-you-will-learn-this-week">What you will learn this week</a></li>
+  <li><a href="#lecture-slides" id="toc-lecture-slides" class="nav-link" data-scroll-target="#lecture-slides">Lecture slides</a></li>
+  <li><a href="#tutorial-instructions" id="toc-tutorial-instructions" class="nav-link" data-scroll-target="#tutorial-instructions">Tutorial instructions</a></li>
+  <li><a href="#assignments" id="toc-assignments" class="nav-link" data-scroll-target="#assignments">Assignments</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -237,7 +265,7 @@ window.Quarto = {
 
 <section id="main-reference" class="level2">
 <h2 class="anchored" data-anchor-id="main-reference">Main reference</h2>
-<p><a href="https://vita.had.co.nz/papers/inference-infovis.pdf"></a></p>
+<p><a href="https://vita.had.co.nz/papers/inference-infovis.pdf">Wickham et al.&nbsp;(2010) Graphical inference for Infovis</a></p>
 </section>
 <section id="what-you-will-learn-this-week" class="level2">
 <h2 class="anchored" data-anchor-id="what-you-will-learn-this-week">What you will learn this week</h2>
@@ -246,7 +274,7 @@ window.Quarto = {
 <li>using re-sampling methods to calibrate reading patterns</li>
 <li>generating lineups of plots</li>
 <li>how to specify the null hypothesis</li>
-<li>calculating <span class="math inline">\(p\)</span>-value and power</li>
+<li>calculating <span class="math inline">p</span>-value and power</li>
 </ul>
 </section>
 <section id="lecture-slides" class="level2">
@@ -263,6 +291,13 @@ window.Quarto = {
 <ul>
 <li><a href="https://ddde.numbat.space/week4/tutorial.html">html</a></li>
 <li><a href="https://ddde.numbat.space/week4/tutorial.qmd">qmd</a></li>
+</ul>
+</section>
+<section id="assignments" class="level2">
+<h2 class="anchored" data-anchor-id="assignments">Assignments</h2>
+<ul>
+<li><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Exercises 1</a> is due on Monday 18 August.</li>
+<li><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Exercises 2</a> is due on Monday 01 September.</li>
 </ul>
 
 
