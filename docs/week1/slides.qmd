@@ -55,7 +55,7 @@ Monash University <br>
 * I am a Fellow of the American Statistical Association, elected member of the the R Foundation and International Statistical Institute, Past-Editor of the Journal of Computational and Graphical Statistics, and the R Journal.
 * My research is in data visualisation, statistical graphics and computing, with application to sports, ecology and bioinformatics. I likes to develop new methodology and software. 
 
-* My students always work on methods and software that is generally useful for the world. They have been responsible for bringing you the tidyverse suite, knitr, plotly, and many other R packages we regularly use. 
+* My students work on methods and software that is generally useful for the world. They have been responsible for bringing you the tidyverse suite, knitr, plotly, and many other R packages we regularly use. 
 
 :::
 ::::
@@ -84,8 +84,8 @@ Monash University <br>
 * He has a Bachelor of Actuarial Science, Monash University, 2018 - 2021
 * and a Master of Business Analytics, Monash University | 2022 - 2023.
 * He has published the R package [animbook](https://krisanata.github.io/animbook/)
-* and hopes to be a PhD student at Monash from 2025.
-* This is his second semester tutoring at Monash, and one of several units working on this semester.
+* and is a first year PhD student at Monash, working on data structures, visualisation and models for spatiotemporal networks.
+* This is his fourth semester tutoring at Monash, and the only unit working on this semester.
 
 :::
 ::::
@@ -98,22 +98,35 @@ Monash University <br>
 
 <br><br>
 
-💻 If watching the recording, please [post]{.monash-blue2} in the discussion (ED) forum.
+💻 If watching the recording, please [post]{.monash-blue2} questions in the discussion (ED) forum.
+
+<br><br>
+
+[I hope you have many questions!]{.monash-orange2}  🙋🏻👣 
 
 ## Welcome!
 
 :::: {.columns}
 ::: {.column}
+### Synopsis
 
-[Beyond modelling and prediction, data might have many more stories to tell. Exploring data to uncover patterns and structures, involves both numerical and visual techniques designed to reveal interesting information that may be unexpected. However, an analyst must be cautious not to over-interpret apparent patterns, and to use randomisation tools to assess whether the patterns are real or spurious.]{.monash-blue}
+Beyond modelling and prediction, [data might have many more stories]{.monash-blue} to tell. Exploring data to uncover patterns and structures, involves both numerical and visual techniques designed to [reveal interesting information that may be unexpected]{.monash-blue}. However, an analyst must be cautious not to over-interpret apparent patterns, and to use [randomisation tools to assess]{.monash-blue} whether the patterns are [real or spurious]{.monash-blue}.
 
 ::: 
-::: {.column style="font-size: 80%;"}
+::: {.column width=5%}
+:::
 
-1. learn to use modern data exploration tools with many different types of contemporary data to uncover interesting structures, unusual relationships and anomalies.
-2. understand how to map out appropriate analyses for a given data set and description, define what we would expect to see in the data, and whether what we see is contrary to expectations.
-3. be able to compute null samples in order to test apparent patterns, and to interpret the results using computational methods for statistical inference. 
-4. critically assess the strength and adequacy of data analysis.
+::: {.column style="font-size: 80%; width: 45%;"}
+
+### Learning objectives
+
+::: {.incremental}
+
+1. [learn to use modern data exploration tools]{.monash-blue} with many different types of contemporary data to uncover interesting structures, unusual relationships and anomalies.
+2. [understand how to map out]{.monash-blue} appropriate analyses for a given data set and description, define what we would expect to see in the data, and whether what we see is contrary to expectations.
+3. [be able to compute null samples]{.monash-blue} in order to test apparent patterns, and to interpret the results using computational methods for statistical inference. 
+4. [critically assess]{.monash-blue} the strength and adequacy of data analysis.
+:::
 
 :::
 ::::
@@ -122,10 +135,12 @@ Monash University <br>
 
 <br>
 
--  [2 hour lecture]{.monash-blue2} 👩‍🏫 Tue 10.00am - noon, on zoom (see moodle for the link) *Class is more fun if you can attend live!*
+- [2 hour lecture]{.monash-blue2} 👩‍🏫 Tue 2.00 - 4:00pm, on zoom (see moodle for the link) *Class is more fun if you can attend live!*
 
-- [2 x 1.5 hour on-campus tutorial]{.monash-blue2} 🛠️
-Wed 9:30-11:00 and Wed 7:30-9:00pm  CL_Anc-19.LTB_134 *Attendance is expected - this is the chance to practice what is explained in lecture under your tutor's guidance.* 
+- [1 hour workshop]{.monash-blue2} Tue 4:00 - 5:00pm, on same zoom link. This is based on material during lecture.
+
+- [1 hour on-campus tutorial]{.monash-blue2} 🛠️
+Thu 9:00-10:00am, 10:00-11am and 3:00-4:00pm  CL_Anc-19.LTB_188 *Attendance is expected - this is the chance to practice and get help with assignments from your tutor's.* 
 
 ## 📚 Resources
 
@@ -135,143 +150,45 @@ Wed 9:30-11:00 and Wed 7:30-9:00pm  CL_Anc-19.LTB_134 *Attendance is expected - 
 <br>
 
 🈴 **Moodle**: this is where you find discussion forum, zoom links, and marks
-[https://learning.monash.edu/course/view.php?id=18864](https://learning.monash.edu/course/view.php?id=18864)
+[https://learning.monash.edu/course/view.php?id=34784](https://learning.monash.edu/course/view.php?id=34784)
 
 <br>
 
 🧰 **GitHub classroom**: this is where you will find assignments, but links to each will be available in moodle.
-[https://classroom.github.com/classrooms/175896553-etc5521-2024-classroom-29a96a](https://classroom.github.com/classrooms/175896553-etc5521-2024-classroom-29a96a)
+[https://classroom.github.com/classrooms/223071331-etc5521-2025-classroom-61789a](https://classroom.github.com/classrooms/223071331-etc5521-2025-classroom-61789a)
 
 ## 💯 Assessment [Part 1/2]{.smaller}
-
 
 - Weekly quizzes (**5%**)
 There will be a weekly quiz starting week 2 provided through Moodle. These are a great chance to check your knowledge, and help you prepare for the tutorial and to keep up to date with the weekly course material. Your best 10 scores will be used for your final quiz total. 
 <br>
 
-- Assignment 1 (**15%**), through GitHub classroom,  Due: Aug 5, 11:55pm. This is an individual assessment. 
+- Exercises 1 (**15%**), through GitHub classroom,  Due: Aug 18, 11:55pm. This is an individual assessment. 
 <br>
 
-- Assignment 2 (**20%**), through GitHub classroom,  Due: Aug 26, 11:55pm. This is an individual assessment. 
+- Exercises 2 (**20%**), through GitHub classroom,  Due: Sep 1, 11:55pm. This is an individual assessment. 
 <br>
 
-- Assignment 3 (**20%**): through GitHub classroom,  Due: Sep 16, 11:55pm. This is an individual assessment. 
+- Exercises 3 (**20%**): through GitHub classroom,  Due: Sep 22, 11:55pm. This is an individual assessment. 
 <br>
 
-- Assignment 4, parts 1 and 2 (**20%** each), through GitHub classroom, Due: Oct 7, 11:55pm and Oct 28, 11:55pm. 
+- Project, parts 1 and 2 (**20%** each), through GitHub classroom, Due: Oct 13, 11:55pm and Nov 3, 11:55pm. 
 
 
 ## GitHub Classroom
 
-We are going to use [GitHub Classroom (etc5521 2024: Diving Deeper into Data Exploration)](https://classroom.github.com/classrooms/175896553-etc5521-2024-classroom-29a96a) to  distribute assignment templates and keep track of your assignment progress. 
+We are going to use [GitHub Classroom (etc5521 2025: Diving Deeper into Data Exploration)](https://classroom.github.com/classrooms/223071331-etc5521-2025-classroom-61789a) to distribute assignment templates and keep track of your assignment progress. 
+
+::: {.smaller}
 
 1. Clone the first assignment by clicking on the link given in Moodle.
 2. Once you have accepted it, you will get a cloned copy on your own GitHub account. It is a private repo, which means you and the teaching staff will be the only people with access.
 3. If you need some help getting started, check [this information](https://github.com/education/students).
-4. The week 1 tutorial is the best place to get help with GitHub. 
-
-## Why exploratory data analysis? {.transition-slide .center}
-
-<br><br>
-What's special about exploring data, in contrast to confirmatory data analysis?
-
-::: {.fragment}
-Let's look at some common definitions and quotes of "exploratory data analysis".
-:::
-
-## {background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Data_visualization_process_v1.png/800px-Data_visualization_process_v1.png" background-size="40%" background-position="100% 90%"}
-
-> In statistics, exploratory data analysis (EDA) is an approach to analyzing data sets to summarize their main characteristics, often with visual methods. A statistical model can be used or not, but primarily EDA is for seeing what the data can tell us beyond the formal modeling or hypothesis testing task. 
-
-<br>
-
-::: { style="font-size: 70%;"}
-
-[https://en.wikipedia.org/wiki/Exploratory_data_analysis](https://en.wikipedia.org/wiki/Exploratory_data_analysis)
+4. The week 1 tutorial will help you get started. 
 
 :::
 
-## {background-image="https://d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png" background-size="20%" background-position="100% 90%"}
-
-> EDA is not a formal process with a strict set of rules. More than anything, EDA is a state of mind. During the initial phases of EDA you should feel free to investigate every idea that occurs to you. Some of these ideas will pan out, and some will be dead ends.
-
-<br>
-
-::: { style="font-size: 70%;"}
-
-[https://r4ds.had.co.nz/exploratory-data-analysis.html](https://r4ds.had.co.nz/exploratory-data-analysis.html)
-
-:::
-
-## {background-image="https://www.itl.nist.gov/div898/handbook/gifs/nvgtbr.gif" background-size="40%" background-position="100% 90%"}
-
-> Exploratory Data Analysis (EDA) is an approach/philosophy for data analysis that employs a variety of techniques (mostly graphical) to (1) maximize insight into a data set;
-(2) uncover underlying structure;
-(3) extract important variables;
-(4) detect outliers and anomalies;
-(5) test underlying assumptions;
-(6) develop parsimonious models; and
-(7) determine optimal factor settings.
-
-<br>
-
-::: {style="font-size: 70%;"}
-
-[https://www.itl.nist.gov/div898/handbook/eda/section1/eda11.htm](https://www.itl.nist.gov/div898/handbook/eda/section1/eda11.htm)
-
-:::
-
-## {background-image="https://www.kaggle.com/static/images/site-logo.png" background-size="40%" background-position="100% 90%"}
-
-> What is Exploratory Data Analysis (EDA)? (1) How to ensure you are ready to use machine learning algorithms in a project?
-(2) How to choose the most suitable algorithms for your data set?
-(3) How to define the feature variables that can potentially be used for machine learning?
-
-<br>
-
-::: {style="font-size: 70%;"}
-
-[https://www.kaggle.com/pavansanagapati/a-simple-tutorial-on-exploratory-data-analysis](https://www.kaggle.com/pavansanagapati/a-simple-tutorial-on-exploratory-data-analysis)
-
-:::
-
-## {background-image="https://seleritysas.com/wp-content/uploads/2020/05/shutterstock_330005462.jpg" background-size="30%" background-position="90% 90%"}
-
-> EDA is necessary for the next stage of data research. If there was an analogy to exploratory data analysis, it would be that of a painter examining their tools and available time, before deciding on what best to paint.
-
-<br>
-
-::: {style="font-size: 70%;"}
-
-[https://seleritysas.com/blog/2020/05/08/exploratory-data-analysis-and-its-role-in-improving-business-operations/](https://seleritysas.com/blog/2020/05/08/exploratory-data-analysis-and-its-role-in-improving-business-operations/)
-
-:::
-
-## {background-image="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://coursera-university-assets.s3.amazonaws.com/74/7ae340ec6911e5b395490a2a565172/JHU-Logo-Square-Mini_180px.png?auto=format%2Ccompress&dpr=2&w=120&h=120" background-size="30%" background-position="90% 90%"}
-
-> These techniques are typically applied before formal modeling commences and can help inform the development of more complex statistical models. Exploratory techniques are also important for eliminating or sharpening potential hypotheses about the world that can be addressed by the data. 
-
-<br>
-
-::: {style="font-size: 70%;"}
-
-[https://www.coursera.org/learn/exploratory-data-analysis#syllabus](https://www.coursera.org/learn/exploratory-data-analysis#syllabus)
-
-:::
-
-## {background-image="https://miro.medium.com/max/1400/1*hjKHnI-ZQxHAjCISzGHfNQ.png" background-size="30%" background-position="90% 90%"}
-
-> The purpose of doing the Exploratory Data Analysis or EDA is to find new information in data. The understanding of EDA that practitioners may not aware of, is the EDA uses a visually-examined dataset to understand and summarize the main characteristics of the dataset without having a prior hypothesis or relying upon statistical models.
-
-<br>
-
-::: {style="font-size: 70%;"}
-
-[https://towardsdatascience.com/if-you-dont-find-anything-new-you-don-t-do-eda-right-d356f9995098](https://towardsdatascience.com/if-you-dont-find-anything-new-you-don-t-do-eda-right-d356f9995098)
-
-:::
-
-## None of these capture what this course is about
+## What does it mean to explore data?
 
 <center>
 <img src="images/calvin_and_hobbes.png" width="1000px">
@@ -680,10 +597,11 @@ When exploring data, we are using data plots to discover things we **didn't alre
 :::: {.columns}
 ::: {.column}
 
-Its a good idea to examine the data description, the explanation of the variables, and how the data was collected. 
+It's a good idea to examine the data description, the explanation of the variables, and how the data was collected. 
 
-- You need to know what [type of variables]{.monash-blue2} are in the data in order to decide appropriate choice of plots, and calculations to make. 
-- Data description should have information about [data collection methods]{.monash-blue2}, so that the extent of what we learn from the data might apply to new data. 
+You need to know what [type of variables]{.monash-blue2} are in the data in order to decide appropriate choice of plots, and calculations to make. 
+
+Data description should have information about [data collection methods]{.monash-blue2}, so that the extent of what we learn from the data might apply to new data. 
 
 :::
 ::: {.column}
@@ -702,14 +620,19 @@ options(width = 50)
 glimpse(tips)
 ```
 
-
+::: {.smaller}
 Look at the distribution of [quantitative]{.monash-orange2} variables tips, total bill.
 :::
 
-::: {.fragment}
+:::
+
+::: {.fragment .smaller}
 
 Examine the distributions across [categorical]{.monash-orange2} variables.
 
+:::
+
+::: {.fragment .smaller}
 
 Examine [quantitative]{.monash-orange2} variables relative to [categorical]{.monash-orange2} variables
 
@@ -943,12 +866,31 @@ For this waiter and the restaurant manager, there is some useful information. Li
 
 *False discovery* is the lesser danger when compared to non-discovery. **Non-discovery** is the failure to identify meaningful structure, and it may result in false or incomplete modeling. In a healthy scientific enterprise, the **fear of non-discovery** should be at least as great as the *fear of false discovery*.
 
-## Where do we go from here?
+## Guide
+
+:::: {.columns}
+::: {.column .incremental}
+1. Read the data description to understand the context, and the extent of the data collection. 
+2. Understand the types of variables that have been measured.
+3. Brainstorm a set of questions that might be interesting to answer with this data.
+4. For each of your question, write down what you EXPECT to find.
+5. Map out the possible plots and numerical summaries to make, that could be made, but particularly, what needs to be computed in order to answer the questions. 
+:::
+
+::: {.column .incremental}
+6. What potential errors might be in the data? Missing values, not recorded data, errors in coding, and think about the strategy to deal with them.
+7. Start on your analysis. Think about the results suggested and whether they match or contradict what you expected.
+8. Use randomisation methods to learn whether what you have observed is possibly spurious.
+9. Communicate findings.
+:::
+::::
+
+## Topics covered
 
 - Methods for single, bivariate, multivariate
     - numerical variables
     - categorical variables
-- Methods to accommodate temporal and spatial context
+- Methods to accommodate temporal and spatial (maybe also networks) context
 - How to make effective comparisons
 - Utilising computational methods to assess what you see is "real"
 

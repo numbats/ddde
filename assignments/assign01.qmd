@@ -2,7 +2,7 @@
 title: "ETC5521 Diving Deeper into Data Exploration: Assignment 1"
 subtitle: "As per Monash's integrity rules, these solutions are not to be shared beyond this class."
 author: "Prof. Di Cook"
-date: "Jul 22, 2024"
+date: "Jul 28, 2025"
 quarto-required: ">=1.3.0"
 format:
     unilur-html: 
@@ -56,7 +56,7 @@ options(
 
 theme_set(theme_bw(base_size = 14) +
    theme(
-     aspect.ratio = 1,
+     #aspect.ratio = 1,
      plot.background = element_rect(fill = 'transparent', colour = NA),
      plot.title.position = "plot",
      plot.title = element_text(size = 24),
@@ -73,22 +73,26 @@ The assignment is designed to assess your knowledge of data wrangling and GitHub
 
 ## 📌 Guidelines 
 
-1. Accept the GitHub Classroom Assignment provided in Moodle using a GitHub Classroom compatible web browser. This should generate a **private** GitHub repository that can be found at https://github.com/etc5521-2024. Your GitHub assignment 1 repo should contain the file `assign01.html`, `README.md`, `assign01-submission.qmd`, `assignment.css`, `etc5521-assignment1.Rproj` and `.gitignore`.
+1. Accept the GitHub Classroom Assignment provided in Moodle using a GitHub Classroom compatible web browser. This should generate a **private** GitHub repository that can be found at https://github.com/etc5521-2025. Your GitHub assignment 1 repo should contain the file `assign01.html`, `README.md`, `assign01-submission.qmd`, `assignment.css`, `etc5521-assignment1.Rproj` and `.gitignore`.
 
 2. Answer each question in the `assign01-submission.qmd` in the repo.
 
-3. For the final submission knit `assign01-submission.qmd` which will contain your answers. Make sure to **provide the link to the script of any Generative AI conversation** you employed in arriving at your solution. *Note that marks are allocated for overall grammar and structure of your final report.*
+3. For the final submission knit `assign01-submission.qmd` which will contain your answers. Make sure to **provide the link to the script of Generative AI conversation** you employed in arriving at your solution. *Note that marks are allocated for overall grammar and structure of your final report.*
 
 4. Leave all of your files in your GitHub repo for marking. We will check your git commit history. You should have contributions to the repo with consistent commits over time. (*Note: nothing needs to be submitted to Moodle.*)
 
-5. You are expected to **develop your solutions by yourself**, without discussing any details with other class members or other friends or contacts. You can ask for clarifications from the teaching team and we encourage you to attend consultations to get assistance as needed.  As a Monash student you are expected to adhere to **[Monash's academic integrity policy](https://publicpolicydms.monash.edu/Monash/documents/1935748).** and the details on use of Generative AI as detailed on this unit's Moodle assessment overview. 
+5. You are expected to **develop your solutions by yourself**, without discussing any details with other class members or other friends or contacts. You can ask for clarifications from the teaching team and we encourage you to attend consultations to get assistance as needed.  As a Monash student you are expected to adhere to **[Monash's academic integrity policy](https://publicpolicydms.monash.edu/Monash/documents/1935748).** and the details on use of Generative AI as detailed on this unit's Moodle assessment overview. Failure to adhere to this policy may result in a ZERO for this assignment, followed by an academic integrity breach report. The chief examiner reserves the right to question you about any part of your solution.
+
+6. The primary sources for methods needed for this assignment are [R for Data Science (2e)](https://r4ds.hadley.nz) and (Text Mining with R: A Tidy Approach)[https://www.tidytextmining.com). 
+
+7. We expect that this assignment takes about 10 hours of time to complete. You should work on this analysis steadily over the time period between release and due date. Spend a couple of hours soon after the assignment is released getting started, and several hours each of the following two weeks to refine your analysis. Your GitHub `commit` history should reflect this working pattern.
 
 Deadlines: 
 
 ```{r create-deadline-table, echo = FALSE}
-due_date <- c("11:45pm Mon Jul 29", "11:45pm Mon Aug 5")
+due_date <- c("11:45pm Mon Aug 4", "11:45pm Mon Aug 18")
 
-turn_in <- c("Assignment 1 Repo on GitHub has been created", "Final solutions available on repo")
+turn_in <- c("Assignment 1 Repo on GitHub has been created by due date, and commit history shows steady effort on analysis.", "Final solutions available on repo.")
 
 points <- c(3, 12)
 
@@ -101,225 +105,21 @@ df_project <- tibble(`Due date` = due_date,
 
 ```{r display-table, echo = FALSE}
 library(kableExtra)
-kable(df_project, table.attr = 'data-quarto-disable-processing="true"') %>%
-  column_spec(1, width = "3cm", bold = T, border_right = T) %>%
-  column_spec(2, width = "5cm", border_right = T) %>%
-  column_spec(3, width = "0.3cm") %>%
+kable(df_project, table.attr = 'data-quarto-disable-processing="true"') |>
+  column_spec(1, width = "3cm", bold = T, border_right = T) |>
+  column_spec(2, width = "5cm", border_right = T) |>
+  column_spec(3, width = "0.3cm") |>
   kable_styling(full_width = FALSE) 
 ```
-
-## 🛠️ Exercises
-
-The data to use is available from [Tidy Tuesday 28 May 2024 page](https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-05-28/readme.md). Download the data from here, ideally using the `tidytuesdayR` package. You should only download the data from the Tidy Tuesday once, and save a copy locally on your computer. 
-
-In addition the `gardenR` package, available from `remotes::install_github("llendway/gardenR")` has extra details about the garden. 
-
-::: unilur-solution
-
-This is the code to download the data, and load relevant libraries. 
-
-```{r}
-#| eval: false
-# remotes::install_github("llendway/gardenR")
-# install.packages("tidytuesdayR")
-tuesdata <- tidytuesdayR::tt_load('2024-05-28')
-save(tuesdata, file="tuesdata.rda")
-```
-
-```{r}
-library(gardenR)
-library(tidyverse)
-library(ggbeeswarm)
-
-load("tuesdata.rda")
-harvest_2020 <- tuesdata$harvest_2020
-harvest_2021 <- tuesdata$harvest_2021
-planting_2020 <- tuesdata$planting_2020
-planting_2021 <- tuesdata$planting_2021
-spending_2020 <- tuesdata$spending_2020
-spending_2021 <- tuesdata$spending_2021
-
-data("garden_coords")
-```
-:::
-
-## Question 1 
-
-a. How many types of vegetables were grown in each year?
-b. How many vegetables were grown in 2020 that were not grown in 2021? 
-c. What are some of the data recording errors that can be seen by comparing vegetables grown in each year?
-
-::: unilur-solution
-
-a. There were `r harvest_2020 |> count(vegetable, sort=TRUE) |> nrow()` vegetables grown in 2020, and `r harvest_2021 |> count(vegetable, sort=TRUE) |> nrow()` grown in 2021.
-
-b. To work out which differ between years, use the `anti_join()` function. Because there are multiple plots of vegetables use `distinct()` to remove duplicates, and then arrange alpabetically for ease of comperison. 
-
-```{r}
-#| label: mismatches
-in20butnot21 <- anti_join(select(harvest_2020, vegetable), select(harvest_2021, vegetable), by="vegetable") |> 
-  distinct() |> 
-  arrange(vegetable)
-in21butnot20 <- anti_join(select(harvest_2021, vegetable), select(harvest_2020, vegetable), by="vegetable") |> 
-  distinct() |> 
-  arrange(vegetable)
-in20butnot21$vegetable
-in21butnot20$vegetable
-```
-
-c. 
-
-- `swiss chard` was grown in each year but capital "S" was used in 2020. 
-- `apples` were grown in each year, but singular name was used in 2021.
-- similarly for `pumpkins` but in reverse, singular used in 2020!
-
-```{r}
-harvest_2020 <- harvest_2020 |>
-  mutate(vegetable = tolower(vegetable),
-         variety = tolower(variety)) |>
-  mutate(vegetable = case_match(
-    vegetable,
-    "apple" ~ "apples",
-    .default = vegetable)
-  )
-harvest_2021 <- harvest_2021 |>
-  mutate(vegetable = case_match(
-    vegetable,
-    "pumpkin" ~ "pumpkins",
-    .default = vegetable)
-  )
-```
-
-So final answer for (b) is here are the vegetables not grown both years:
-
-```{r}
-#| label: mismatches
-#| echo: false
-```
-
-
-:::
-
-## Question 2
-
-a. Join the harvest data for the two years, after adding a new variable each, called `year`. Show your code.
-b. For the `tomatoes` compare the weight of the harvest in both years.
-c. Explain what might be a problem when comparing the tomato yield from these two years.
-
-::: unilur-solution
-
-a.
-
-```{r}
-harvest_2020 <- harvest_2020 |>
-  mutate(year = "2020")
-harvest_2021 <- harvest_2021 |>
-  mutate(year = "2021")
-harvest <- bind_rows(harvest_2020, harvest_2021)
-```
-
-b. You can compare by adding the weights up or by making a plot of the two years and the multiple yields from different garden plots.
-
-```{r}
-harvest |> 
-  filter(vegetable == "tomatoes") |>
-  group_by(year) |> 
-  summarise(weight = sum(weight),
-            nplots = n())
-harvest |> 
-  filter(vegetable == "tomatoes") |>
-  ggplot(aes(x=year, y=weight)) +
-    geom_quasirandom() +
-    xlab("")
-```
-
-c. From the summary, we can see that there are a different number of plants grown in each year. While the yield was slightly higher in 2020, it appears that there were also more plants grown in 2020.
-
-One could average the weight per plant, and recompute means.
-
-```{r}
-harvest |> 
-  filter(vegetable == "tomatoes") |>
-  group_by(year) |> 
-  summarise(weight = mean(weight))
-```
-
-We then see that the yield is slightly higher in 2021. Note that from the plot, we can also see the distribution of weights is skewed, so using the median would be better than the mean.
-
-However, another problem in making the comparison is that the type of tomatoes grown each year might be different, and then the yield difference may be due to type of tomatoes grown.
-
-```{r}
-harvest |> 
-  filter(vegetable == "tomatoes") |>
-  group_by(year) |> 
-  count(variety) |>
-  distinct() |>
-  arrange(variety) |>
-  print(n=26)
-```
-
-We can see a problem with data recording again, that upper case was used in 2020 to label the variety but all were lower case in 2021.
-:::
-
-## Question 3
-
-The planting data has the label of the garden plot where each vegetable is grown. The `gardenR` package has the spatial coordinates of these spots in the garden. 
-
-- Join the `planting_2020` and `planting_2021` data, after adding a variable labelling the year. And then joining with the `garden_coords` data, so that the locations of each plot are recorded.
-- Plot garden layout, with locations of tomatoes coloured, facetted by year.
-
-::: unilur-solution
-
-```{r}
-planting_2020 <- planting_2020 |>
-  mutate(year = "2020") |>
-  select(plot, vegetable, year)
-planting_2021 <- planting_2021 |>
-  mutate(year = "2021") |>
-  select(plot, vegetable, year)
-planting <- bind_rows(planting_2020,
-                      planting_2021)
-gcoords_center <- garden_coords |>
-  group_by(plot) |>
-  summarise(x = mean(x),
-            y = mean(y))
-planting_coords <- planting |>
-  filter(vegetable == "tomatoes") |>
-  left_join(gcoords_center, by = "plot")
-
-ggplot(garden_coords, aes(x=x, y=y, group=plot)) +   geom_polygon() +
-  geom_jitter(data=planting_coords, 
-    aes(x=x, y=y), colour="red", 
-    alpha=0.8, width=0.8, height=0.8) +
-  facet_wrap(~year, ncol=2) 
-```
-
-Interestingly, the garden plots are not all rectangular. But the spots where tomatoes are grown are, so using the mean of the vertices gives a reasonable spot to place a point indicating that they are in this box.
-
-Also note the missing data warning! This comes because one location is labelled as `front` which does not have coordinates.
-
-Two of the boxes are the same in both years. 
-:::
-
-
-## Generative AI analysis
-
-In this part, we would like you to actively discuss how generative AI helped with your answers to the assignment questions, and where or how it was mistaken or misleading. 
-
-You need to provide a link that makes the full script of your conversation with any generative AI tool accessible to the teaching staff. You should not use a paid service, as the freely available systems will sufficiently helpful.
-
-::: unilur-solution
-The link to my use of ChatGPT for help on this project is https://chatgpt.com/share/876df8e2-70df-41b2-b567-63e9c029788e. 
-:::
 
 
 ## Marks
 
 
 ```{r create-marks-table, echo = FALSE}
-part <- c("GitHub Repo", "Q1-Q3 each worth", "Generative AI Analysis", "Formatting, Spelling & Grammar")
+part <- c("GitHub Repo", "Q1-Q4 each worth", "References and AI", "Formatting, spelling,  grammar, code and reproducibility")
 
-points <- c(3, 4, -3, -3)
+points <- c(3, 3, -3, -3)
 
 library(tibble)
 df_marks <- tibble(`Part` = part,
@@ -327,11 +127,302 @@ df_marks <- tibble(`Part` = part,
 
 ```
 
+
 ```{r display-marks, echo = FALSE}
 library(kableExtra)
-kable(df_marks, table.attr = 'data-quarto-disable-processing="true"') %>%
-  kable_styling(full_width = FALSE) %>%
-  column_spec(1, width = "5cm", border_right = T) %>%
+kable(df_marks, table.attr = 'data-quarto-disable-processing="true"') |>
+  kable_styling(full_width = FALSE) |>
+  column_spec(1, width = "5cm", border_right = T) |>
   column_spec(2, width = "0.3cm") 
 
 ```
+
+Appropriate use of GitHub is an important collaborative analysis skill, and demonstrating this counts towards marks. 
+
+Spelling and grammar mistakes and lack of nice formatting, detract from the score because it makes it harder to mark, and harder to read. It is expected that we can reproduce your report, so all code needs to be included, and the code needs to be readable. 
+
+Using GAI well is an emerging skill. Inadequate use or over-use without fully processing the responses detracts from a data analysis. 
+
+## 🛠️ Exercises
+
+The data to use is available in the [orcas](https://jadeynryan.github.io/orcas/) R package on GitHub. The package can be installed using
+
+`remotes::install_github("jadeynryan/orcas")`
+
+to access the data. The descriptions of the variables can be found [here](https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-10-15/readme.md).
+
+Why are we interested in orca encounters? Whale watching is a major tourism business in many parts of the world. Monitoring the population of whales is important for the sustainability of many businesses and for the health of the planet. Beyond this, orcas are cool! They are intelligent, social, beautiful and one of the top predators in the ocean. 
+
+An interesting fact is that orcas routinely helped whalers hunt baleen whales in Two Fold Bay near Eden, Australia, in the 1800s. They would herd the whales into the bay for the whalers. When the whale was killed, the whalers rewarded them with the whales' tongue and lips. Actually, this is quite gruesome 😳 😬. 
+
+::: unilur-solution
+
+```{r}
+library(orcas)
+glimpse(cwr_tidy)
+```
+
+:::
+
+## Question 1 
+
+Summarise the temporal patterns in this data. For example, 
+
+- what is the time frame of the data collection?
+- are there any seasonal patterns in the measurements?
+- what is the usual length of the encounters?
+
+::: unilur-solution
+
+#### Overall time
+
+Examining the year variable to get an overview of the timing of measurements. 
+
+```{r}
+#| label: year-summary
+#| code-fold: true
+yr_smry <- cwr_tidy |> count(year) 
+yr_smry
+```
+
+We can see that there are a similar number of encounters every year between `r min(yr_smry$year, na.rm=TRUE)` and `r max(yr_smry$year, na.rm=TRUE)`. We also notice that there are some missing values on `year`, and these observations might need removing for later analysis.
+
+#### Seasonality
+
+Next extract the month and examine if there are any seasonal trends. 
+
+```{r}
+#| label: fig-month-smry
+#| fig-width: 12
+#| fig-height: 8
+#| code-fold: true
+library(lubridate)
+cwr_tidy <- cwr_tidy |>
+  mutate(month = month(date, label=TRUE))
+cwr_tidy |>
+  filter(!is.na(month)) |>
+  ggplot(aes(x=month)) +
+  geom_bar() + 
+  facet_wrap(~year, ncol=4) +
+  xlab("")
+```
+
+@fig-month-smry doesn't show any strong seasonal patterns. There is some hint of more encounters Jun-Oct, and less in Nov-Dec, but the variation from month to month is large. This suggests that orcas are around this area all year long. Note: If you don't facet, you will find that the number per month is reasonably constant, for Jan-Oct, and less in Nov-Dec. However, this is something that you should be careful doing. You should always examine on strata and smaller time scale, which reveals the month to month variability for this data.
+
+#### Duration of encounters
+
+```{r}
+#| label: fig-duration
+#| code-fold: true
+#| out-width: 60%
+cwr_tidy <- cwr_tidy |>
+  mutate(duration_num = str_remove_all(duration, "\\([^)]*\\)")) |>
+  mutate(duration_num = as.numeric(str_remove_all(duration_num, "[A-Za-z\\-~\\s]")))
+ggplot(cwr_tidy, aes(duration_num)) +
+  geom_histogram() +
+  xlab("Duration (sec)")
+```
+
+From @fig-duration the distribution is bimodal. We can see that most encounters were around 1.5 hours, which is the mode of the first peak. The second mode has a peak around 9-10 hours!
+
+:::
+
+## Question 2
+
+Summarise the spatial patterns, for example
+
+- where are these encounters happening?
+- are the boats following the whales based on the tracks of the encounters?
+
+::: unilur-solution
+
+#### Spatial location
+
+Plotting the longitude and latitude, particularly overlaid on a map, can help work out where the encounters are happening.
+
+```{r}
+#| code-fold: true
+library(leaflet)
+cwr_tidy |>
+  leaflet() |>
+  addTiles() |>
+  addCircleMarkers(
+    radius=1, 
+    opacity = 0.5, 
+    color = "hotpink", 
+    label = ~date,
+    lat = ~begin_latitude, lng = ~begin_longitude) 
+```
+
+These encounters are all in the Puget Sound area of northwest USA, and western Canada.
+
+#### Encounter tracks
+
+```{r}
+#| label: fig-enc-l-yr
+#| fig-width: 12
+#| fig-height: 7
+#| fig-cap: "Encounters with segments marking start and end, and circles indicating the start. Most are short. There is little difference between years."
+#| code-fold: true
+library(ggthemes)
+cwr_tidy |>
+  filter(!is.na(year)) |>
+  ggplot() +
+    geom_segment(aes(x=begin_longitude, 
+                     y=begin_latitude,
+                     xend=end_longitude,
+                     yend=end_latitude)) +
+    geom_point(aes(x=begin_longitude, 
+                     y=begin_latitude), shape = 1) +
+    facet_wrap(~month, ncol=4) +
+    coord_map() +
+    theme_map() +
+    theme(panel.border = element_rect(colour = "black", fill = NA))
+```
+
+Most of the encounters are short distance, seen by the small or non-existent lengths, as seen in @fig-enc-l-yr.
+
+```{r}
+#| label: fig-enc-l-mth
+#| fig-width: 12
+#| fig-height: 9
+#| fig-cap: "Encounters with segments marking start and end, and circles indicating the start. Most are short. September is when there seems to be more varied locations of encounters."
+#| code-fold: true
+library(ggthemes)
+cwr_tidy |>
+  filter(!is.na(month)) |>
+  ggplot() +
+    geom_segment(aes(x=begin_longitude, 
+                     y=begin_latitude,
+                     xend=end_longitude,
+                     yend=end_latitude)) +
+    geom_point(aes(x=begin_longitude, 
+                     y=begin_latitude), shape = 1) +
+    facet_wrap(~year, ncol=4) +
+    coord_map() +
+    theme_map() +
+    theme(panel.border = element_rect(colour = "black", fill = NA))
+```
+
+:::
+
+## Question 3
+
+Summarise the encounters by the vessels and observers. Are they the same whales that are frequently seen?
+
+- Are there some especially frequent observers or active vessels?
+- Are the long encounters made by special vessels?
+- Do some vessels make multiple encounters?
+
+::: unilur-solution
+
+```{r}
+#| code-fold: true
+vessel_cnt <- cwr_tidy |>
+  count(vessel, sort=TRUE) 
+vessel_cnt |>
+  filter(n > 9)
+```
+
+There are two especially active vessels `r vessel_cnt$vessel[1]` and `r vessel_cnt$vessel[2]`.
+
+```{r}
+#| code-fold: true
+cwr_tidy |> 
+  filter(duration_num > 30000) |>
+  count(vessel, sort=TRUE) 
+```
+
+It is the same two vessels also are the ones that made long encounters. Some error in the data in that some vessel names and observer names are mashed together.
+
+```{r}
+#| code-fold: true
+cwr_tidy |> 
+  count(observers, sort=TRUE) 
+```
+
+XXX Maybe need to split names, and recount. Are these always associated with the same boats?
+
+```{r}
+#| code-fold: true
+cwr_tidy |> 
+  count(pods_or_ecotype, sort=TRUE) 
+```
+
+XXX This information is a bit inconsistent. It needs more processing.
+
+:::
+
+## Question 4
+
+Each encounter has a text description. Summarise the common words used for the encounters.
+
+::: unilur-solution
+
+```{r}
+#| label: fig-text
+#| fig-cap: "Word cloud of top 100 words."
+#| code-fold: true
+library(tidytext)
+library(ggwordcloud)
+cwr_text <- cwr_tidy |>
+  unnest_tokens(word, encounter_summary) |>
+  select(word) |>
+  anti_join(stop_words)
+
+cwr_text_top <- cwr_text |> 
+  filter(!is.na(word)) |>
+  count(word, sort=TRUE) |>
+  slice_head(n=100) 
+cwr_text_top |>
+  ggplot() +
+  geom_text_wordcloud_area(aes(label = word, size=n)) +
+  scale_size_area(max_size = 30) + 
+  theme_minimal()
+
+```
+
+The text descriptions are not especially interesting word-wise (@fig-text), because the top words are `r paste(cwr_text_top$word[1:10], collapse=", ")`.  A few of the top 100 words are interesting, "dave", "mike" and "joe" feature. The words "calf", "seal", "fish" suggest the nature of the encounters are more interesting, and "milling", "foraging", suggest activities of the whales. More processing of the text could be done to remove uninteresting words, and also look for two or three words used together, n-grams. 
+
+:::
+
+
+## Resources
+
+In this part, you should cite major resources used, including R packages, and actively discuss how generative AI helped with your answers to the assignment questions, and where or how it was mistaken or misleading. 
+
+You need to provide links to the full script of your conversations generative AI tools. You should not use a paid service, as the freely available systems will sufficiently helpful.
+
+For example, the `citation()` function in R can give R package details:
+
+Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R,
+  Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL,
+  Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu
+  V, Takahashi K, Vaughan D, Wilke C, Woo K, Yutani H (2019).
+  "Welcome to the tidyverse." _Journal of Open Source Software_,
+  *4*(43), 1686. [doi:10.21105/joss.01686](https://doi.org/10.21105/joss.01686)..
+  
+  
+The links to my use of ChatGPT for help on this assignment are:
+
+- [https://chatgpt.com/share/68857a22-debc-8001-bfcc-10552befba4c](https://chatgpt.com/share/68857a22-debc-8001-bfcc-10552befba4c) helped to construct the regex to process the duration variable.
+
+## Rubric
+
+To help you complete in your report, below is a rubric to guide you  to what we are expecting:
+
+```{r, echo = FALSE, message=FALSE}
+rubric <- readr::read_tsv("rubric_assign01.tsv") 
+
+rubric |>
+  replace_na(list(`Very good (D)` = "", `Good (C)` = "")) |>
+  kable() |>
+  kable_styling(full_width = FALSE) |> 
+  column_spec(1, bold = TRUE, width = "10em", border_right = TRUE) |> 
+  column_spec(2, width = "30em") |> 
+  column_spec(3, width = "20em") |> 
+  column_spec(4, width = "20em") |> 
+  column_spec(5, width = "20em") |> 
+  column_spec(6, width = "20em") 
+```
+

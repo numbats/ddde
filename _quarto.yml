@@ -44,10 +44,10 @@ website:
           - week12/index.qmd
       - text: Discussion
         icon: chat-fill
-        href: "https://edstem.org/au/courses/18508/discussion/"
+        href: "https://edstem.org/au/courses/27016/discussion/"
       - text: Moodle
         icon: mortarboard-fill
-        href: "https://learning.monash.edu/course/view.php?id=18864"
+        href: "https://learning.monash.edu/course/view.php?id=34784"
       - text: Resources
         icon: book
         href: resources.qmd

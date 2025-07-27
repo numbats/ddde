@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Prof. Di Cook">
-<meta name="dcterms.date" content="2024-07-22">
 
 <title>ETC5521 Tutorial 1 – ETC5521: Diving Deeply into Data Exploration</title>
 <style>
@@ -4118,12 +4117,12 @@ color: #C8008F;
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="https://edstem.org/au/courses/18508/discussion/"> <i class="bi bi-chat-fill" role="img">
+    <a class="nav-link" href="https://edstem.org/au/courses/27016/discussion/"> <i class="bi bi-chat-fill" role="img">
 </i> 
 <span class="menu-text">Discussion</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://learning.monash.edu/course/view.php?id=18864"> <i class="bi bi-mortarboard-fill" role="img">
+    <a class="nav-link" href="https://learning.monash.edu/course/view.php?id=34784"> <i class="bi bi-mortarboard-fill" role="img">
 </i> 
 <span class="menu-text">Moodle</span></a>
   </li>  
@@ -4171,12 +4170,6 @@ color: #C8008F;
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">22 July 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -4193,8 +4186,7 @@ color: #C8008F;
 <section id="preparation" class="level2">
 <h2 class="anchored" data-anchor-id="preparation">🔧 Preparation</h2>
 <ul>
-<li>Complete the weekly quiz, before the deadline!</li>
-<li>Have <code>git</code> installed on your laptop so that you can access the test classroom.</li>
+<li>Have <code>git</code> installed on your laptop so that you can access the GitHub classroom.</li>
 <li>Have the latest versions of RStudio and R installed on your laptop.</li>
 <li>Install this list of R packages:</li>
 </ul>
@@ -4205,13 +4197,16 @@ color: #C8008F;
 <section id="exercises" class="level2">
 <h2 class="anchored" data-anchor-id="exercises">📥 Exercises</h2>
 </section>
-<section id="ice-breaker" class="level2">
-<h2 class="anchored" data-anchor-id="ice-breaker">1. Ice breaker</h2>
-<ul>
-<li>Grab your name tag<br>
-</li>
-<li>Follow the instructions of your tutor to get to know your classmates.</li>
-</ul>
+<section id="how-good-are-your-detective-skills" class="level2">
+<h2 class="anchored" data-anchor-id="how-good-are-your-detective-skills">1. How good are your detective skills?</h2>
+<p>Being good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.</p>
+<p>Play the game <code>alzheimer_test</code> from the <code>fun</code> package by running this code:</p>
+<p>You will be given 6 tasks to complete. Each one is to find a specific letter hidden among a <span class="math inline">\(10\times 30\)</span> grid of letters. When you are finished, answer these questions:</p>
+<ol type="1">
+<li>Which task did you THINK was the most difficult?</li>
+<li>Which task does the DATA say was most difficult based, based on the time taken to answer, <code>tm1.1.j.</code> in your results data?</li>
+<li>Save the dataset to an <code>.rda</code> file.</li>
+</ol>
 <div class="callout callout-style-default callout-solution no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -4223,40 +4218,6 @@ Solution
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="unilur-solution">
-<ul>
-<li>Which R package is your favourite? <code>ggplot2</code> or <code>plotly</code></li>
-<li>Do you prefer to use <code>geom_boxplot</code> or <code>geom_quasirandom</code> to compare subsets of nuemrical variables?</li>
-<li>Have you used the R package <code>purrr</code> before? Y or N</li>
-<li>What does the package <code>profvis</code> do? Visualisation data or Profiling code?</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="how-good-are-your-detective-skills" class="level2">
-<h2 class="anchored" data-anchor-id="how-good-are-your-detective-skills">2. How good are your detective skills?</h2>
-<p>Being good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.</p>
-<p>Play the game <code>alzheimer_test</code> from the <code>fun</code> package by running this code:</p>
-<p>You will be given 6 tasks to complete. Each one is to find a specific letter hidden among a <span class="math inline">\(10\times 30\)</span> grid of letters. When you are finished, answer these questions:</p>
-<ol type="1">
-<li>Which task did you THINK was the most difficult?</li>
-<li>Which task does the DATA say was most difficult based, based on the time taken to answer, <code>tm1.1.j.</code> in your results data?</li>
-<li>Save the dataset to an <code>.rda</code> file.</li>
-</ol>
-<div class="callout callout-style-default callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="unilur-solution">
 <div class="cell">
@@ -4278,7 +4239,7 @@ ans.user            9          6  3.812386</code></pre>
 <section id="get-started-using-github-classroom" class="level2">
 <h2 class="anchored" data-anchor-id="get-started-using-github-classroom">3. Get started using GitHub Classroom</h2>
 <ol type="1">
-<li>In <a href="https://learning.monash.edu/mod/assign/view.php?id=2966868">Moodle</a> go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.</li>
+<li>In <a href="https://learning.monash.edu/course/view.php?id=34784">Moodle</a> go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.</li>
 <li>Clone the assignment repo to your computer.</li>
 <li>Open the <code>assign01.html</code> instructions.</li>
 <li>Make a start on loading the data into R.</li>
