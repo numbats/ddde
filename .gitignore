@@ -51,6 +51,8 @@ rsconnect/
 .DS_Store
 
 # Assignment student folders
+assignments/*sol*
 assignments/assign01/
 assignments/assign02/
 assignments/assign03/
+assignments/exercise1
