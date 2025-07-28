@@ -18,6 +18,7 @@ project:
   - "week*/tutorial.qmd"
   - "week*/slides.R"
   - "week*/slides.pdf"
+  - "week*/workshop.qmd"
   - "!assignments/"
 website:
   title: "ETC5521: Diving Deeply into Data Exploration"

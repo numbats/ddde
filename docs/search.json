@@ -224,6 +224,195 @@
     "text": "Assignments\n\nProject Part 1 is due on Monday 13 October.\nProject Part 2 is due on Monday 03 November."
   },
   {
+    "objectID": "week1/tutorial.html",
+    "href": "week1/tutorial.html",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
+  },
+  {
+    "objectID": "week1/tutorial.html#objectives",
+    "href": "week1/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
+  },
+  {
+    "objectID": "week1/tutorial.html#preparation",
+    "href": "week1/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 1",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nHave git installed on your laptop so that you can access the GitHub classroom.\nHave the latest versions of RStudio and R installed on your laptop.\nInstall this list of R packages:\n\n\nCreate an RStudio Project for this unit, called ETC5521. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for data, one for tutorial_XX, … Each week when you begin your tutorial, open the project."
+  },
+  {
+    "objectID": "week1/tutorial.html#exercises",
+    "href": "week1/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 1",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises"
+  },
+  {
+    "objectID": "week1/tutorial.html#how-good-are-your-detective-skills",
+    "href": "week1/tutorial.html#how-good-are-your-detective-skills",
+    "title": "ETC5521 Tutorial 1",
+    "section": "1. How good are your detective skills?",
+    "text": "1. How good are your detective skills?\nBeing good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.\nPlay the game alzheimer_test from the fun package by running this code:\nYou will be given 6 tasks to complete. Each one is to find a specific letter hidden among a \\(10\\times 30\\) grid of letters. When you are finished, answer these questions:\n\nWhich task did you THINK was the most difficult?\nWhich task does the DATA say was most difficult based, based on the time taken to answer, tm1.1.j. in your results data?\nSave the dataset to an .rda file.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n           char1.1.j. char2.1.j.  tm1.1.j.\nans.user.2          M          N 30.839718\nans.user.3          I          T 19.695932\nans.user.5          D          O 17.189302\nans.user.1          O          C 16.534676\nans.user.4          F          E  4.424869\nans.user            9          6  3.812386"
+  },
+  {
+    "objectID": "week1/tutorial.html#get-started-using-github-classroom",
+    "href": "week1/tutorial.html#get-started-using-github-classroom",
+    "title": "ETC5521 Tutorial 1",
+    "section": "3. Get started using GitHub Classroom",
+    "text": "3. Get started using GitHub Classroom\n\nIn Moodle go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.\nClone the assignment repo to your computer.\nOpen the assign01.html instructions.\nMake a start on loading the data into R."
+  },
+  {
+    "objectID": "week1/tutorial.html#finishing-up",
+    "href": "week1/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 1",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week1/tutorialsol.html",
+    "href": "week1/tutorialsol.html",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
+  },
+  {
+    "objectID": "week1/tutorialsol.html#objectives",
+    "href": "week1/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
+  },
+  {
+    "objectID": "week1/tutorialsol.html#preparation",
+    "href": "week1/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 1",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nHave git installed on your laptop so that you can access the GitHub classroom.\nHave the latest versions of RStudio and R installed on your laptop.\nInstall this list of R packages:\n\n\nCreate an RStudio Project for this unit, called ETC5521. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for data, one for tutorial_XX, … Each week when you begin your tutorial, open the project."
+  },
+  {
+    "objectID": "week1/tutorialsol.html#exercises",
+    "href": "week1/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 1",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises"
+  },
+  {
+    "objectID": "week1/tutorialsol.html#how-good-are-your-detective-skills",
+    "href": "week1/tutorialsol.html#how-good-are-your-detective-skills",
+    "title": "ETC5521 Tutorial 1",
+    "section": "1. How good are your detective skills?",
+    "text": "1. How good are your detective skills?\nBeing good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.\nPlay the game alzheimer_test from the fun package by running this code:\nYou will be given 6 tasks to complete. Each one is to find a specific letter hidden among a \\(10\\times 30\\) grid of letters. When you are finished, answer these questions:\n\nWhich task did you THINK was the most difficult?\nWhich task does the DATA say was most difficult based, based on the time taken to answer, tm1.1.j. in your results data?\nSave the dataset to an .rda file.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n           char1.1.j. char2.1.j.  tm1.1.j.\nans.user.2          M          N 30.839718\nans.user.3          I          T 19.695932\nans.user.5          D          O 17.189302\nans.user.1          O          C 16.534676\nans.user.4          F          E  4.424869\nans.user            9          6  3.812386"
+  },
+  {
+    "objectID": "week1/tutorialsol.html#get-started-using-github-classroom",
+    "href": "week1/tutorialsol.html#get-started-using-github-classroom",
+    "title": "ETC5521 Tutorial 1",
+    "section": "3. Get started using GitHub Classroom",
+    "text": "3. Get started using GitHub Classroom\n\nIn Moodle go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.\nClone the assignment repo to your computer.\nOpen the assign01.html instructions.\nMake a start on loading the data into R."
+  },
+  {
+    "objectID": "week1/tutorialsol.html#finishing-up",
+    "href": "week1/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 1",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week1/index.html",
+    "href": "week1/index.html",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "",
+    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week1/index.html#reading",
+    "href": "week1/index.html#reading",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "",
+    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week1/index.html#what-you-will-learn-this-week",
+    "href": "week1/index.html#what-you-will-learn-this-week",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nHow exploring data is different from a confirmatory analysis\nGet up and running with GitHub Classroom"
+  },
+  {
+    "objectID": "week1/index.html#lecture-slides",
+    "href": "week1/index.html#lecture-slides",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week1/index.html#worksheet",
+    "href": "week1/index.html#worksheet",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Worksheet",
+    "text": "Worksheet\n\nqmd\nhtml"
+  },
+  {
+    "objectID": "week1/index.html#tutorial-instructions",
+    "href": "week1/index.html#tutorial-instructions",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: TBD"
+  },
+  {
+    "objectID": "index.html#lecturerchief-examiner",
+    "href": "index.html#lecturerchief-examiner",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: TBD"
+  },
+  {
+    "objectID": "index.html#tutors",
+    "href": "index.html#tutors",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Tutors",
+    "text": "Tutors\n\nKrisanat Anukarnsakulchularp\n\nTutorials: Thu 9am (CL_LTB_188), 10am (CL_LTB_188), 3pm (CL_LTB_188)\nConsultation: TBD"
+  },
+  {
+    "objectID": "index.html#weekly-schedule",
+    "href": "index.html#weekly-schedule",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Weekly schedule",
+    "text": "Weekly schedule\n\nLecture+workshop: Tues 2-5pm on zoom (link in Moodle)\nTutorial: 1 hour\nWeekly learning quizzes due each Thursday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n29 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n05 Aug\nLearning from history\nEDA Case Study: Bay area blues\n\n\n\n12 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\n\n\n\n19 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\nExercises 1\n\n\n26 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\n\n\n\n02 Sep\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nExercises 2\n\n\n09 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\n\n\n\n16 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\n\n\n\n23 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nExercises 3\n\n\n30 Sep\nMid-semester break\n\n\n\n\n07 Oct\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\n\n\n\n14 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nProject Part 1\n\n\n21 Oct\nHelp session\n\n\n\n\n04 Nov\n\n\nProject Part 2"
+  },
+  {
+    "objectID": "index.html#assessments",
+    "href": "index.html#assessments",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Assessments",
+    "text": "Assessments\n\nWeekly learning quizzes: 5% (Due each week by Thu 9am, weeks 2-12)\nExercises 1: Instructions (15%) (Due Monday 11:55pm)\nExercises 2: Instructions (20%) (Due Monday 11:55pm)\nExercises 3: Instructions (20%) (Due Monday 11:55pm)\nProject part 1: Instructions (20%) (Due Monday 11:55pm)\nProject part 2: Instructions (20%) (Due Monday 11:55pm)"
+  },
+  {
+    "objectID": "index.html#software",
+    "href": "index.html#software",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Software",
+    "text": "Software\nWe will be using the latest versions of R and RStudio.\nHere is the code to install (most of) the R packages we will be using in this unit.\ninstall.packages(c(\"tidyr\", \"dplyr\", \"readr\", \"readxl\", \"readabs\", \"forcats\", \"tsibble\", \"cubble\", \"lubridate\", \"ggplot2\", \"GGally\", \"ggthemes\", \"sugrrants\", \"ggbeeswarm\", \"plotly\", \"gganimate\", \"tourr\", \"sugarbag\", \"tsibbletalk\", \"visdat\", \"inspectdf\", \"naniar\", \"validate\", \"vcd\", \"mvtnorm\", \"nullabor\", \"visage\", \"forecast\", \"cassowaryr\", \"brolgar\", \"palmerpenguins\", \"housingData\",  \"broom\", \"kableExtra\", \"lvplot\", \"colorspace\", \"patchwork\"), dependencies=TRUE)\nFrom GitHub, install\nremotes::install_github(\"casperhart/detourr\")\nIf you are relatively new to R, working through the materials at https://startr.numbat.space is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you.\nThese materials are licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License."
+  },
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "ETC5521 Resources",
+    "section": "",
+    "text": "Books\n\nUnwin (2015) Graphical Data Analysis with R\nWilke (2019) Fundamentals of Data Visualization\nCook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, Introduction\nvan der Loo and de Jonge (2018). Statistical Data Cleaning with Applications in R, John Wiley and Sons Ltd.\nCleveland (1993) Visualizing Data, Hobart Press.\nCox & Snell (1981) Applied Statistics, London: Chapman and Hall.\nMoraga (2019) Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny\nSievert (2019) Interactive web-based data visualization with R, plotly, and shiny\n\n\n\nWebsites\n\nJosse et al (2022) R-miss-tastic\nFriendly and Denis Milestones in History of Thematic Cartography, Statistical Graphics and Data Visualisation available at http://www.datavis.ca/milestones/\nWang, Cook, Hyndman, O’Hara-Wild (2019) tsibble\ncubble: A Vector Spatio-Temporal Data Structure for Data Analysis\nTierney, Cook, Prvan (2020) Browse Over Longitudinal Data Graphically and Analytically in R\nsf: Simple Features for R\nVisualising spatial data using R\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R\nMason, Lee, Laa, and Cook (2022). cassowaryr: Compute Scagnostics on Pairs of Numeric Variables in a Data Set\n\n\n\nArticles\n\nDonoho (2017) 50 Years of Data Science\nStaniak and Biecek (2019) The Landscape of R Packages for Automated Exploratory Data Analysis\nHuebner et al (2018) A Contemporary Conceptual Framework for Initial Data Analysis\nHuebner et al (2020) Hidden analyses\nChatfield (1985) The Initial Examination of Data, Journal of the Royal Statistical Society, Series A (General) 148(3):214–231\nHyndman (2014) Explaining the ABS unemployment fluctuations\nBuja et al. (2009). Statistical Inference for Exploratory Data Analysis and Model Diagnostics. Philosophical Transactions. Series A, Mathematical, Physical, and Engineering Sciences 367 (1906): 4361–83.\nWickham et al (2010) Graphical Inference for Infovis. IEEE Transactions on Visualization and Computer Graphics 16 (6): 973–79.\nHofmann et al (2012) Graphical Tests for Power Comparison of Competing Designs. IEEE Transactions on Visualization and Computer Graphics 18 (12): 2441–48.\nMajumder et al (2013) Validation of Visual Statistical Inference, Applied to Linear Models. Journal of the American Statistical Association 108 (503): 942–56.\nTierney et al (2023) Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.\nBecker, R. A., Cleveland, W. S., & Shyu, M. J. (1996). “The Visual Design and Control of Trellis Display.” Journal of Computational and Graphical Statistics, 5(2), 123-155.\nWang, Cook, Hyndman (2019) A New Tidy Data Structure to Support Exploration and Modeling of Temporal Data\nKobakian et al Hexagon tile map\nWickham et al (2011). tourr: An R Package for Exploring Multivariate Data with Projections"
+  },
+  {
     "objectID": "week1/slides.html#about-this-unit",
     "href": "week1/slides.html#about-this-unit",
     "title": "ETC5521: Diving Deeply into Data Exploration",
@@ -574,186 +763,60 @@
     "text": "Resources\n\nCook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, Introduction\nDonoho (2017) 50 Years of Data Science\nStaniak and Biecek (2019) The Landscape of R Packages for Automated Exploratory Data Analysis"
   },
   {
-    "objectID": "resources.html",
-    "href": "resources.html",
-    "title": "ETC5521 Resources",
+    "objectID": "week1/worksheetsol.html",
+    "href": "week1/worksheetsol.html",
+    "title": "ETC5521 Worksheet 1",
     "section": "",
-    "text": "Books\n\nUnwin (2015) Graphical Data Analysis with R\nWilke (2019) Fundamentals of Data Visualization\nCook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, Introduction\nvan der Loo and de Jonge (2018). Statistical Data Cleaning with Applications in R, John Wiley and Sons Ltd.\nCleveland (1993) Visualizing Data, Hobart Press.\nCox & Snell (1981) Applied Statistics, London: Chapman and Hall.\nMoraga (2019) Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny\nSievert (2019) Interactive web-based data visualization with R, plotly, and shiny\n\n\n\nWebsites\n\nJosse et al (2022) R-miss-tastic\nFriendly and Denis Milestones in History of Thematic Cartography, Statistical Graphics and Data Visualisation available at http://www.datavis.ca/milestones/\nWang, Cook, Hyndman, O’Hara-Wild (2019) tsibble\ncubble: A Vector Spatio-Temporal Data Structure for Data Analysis\nTierney, Cook, Prvan (2020) Browse Over Longitudinal Data Graphically and Analytically in R\nsf: Simple Features for R\nVisualising spatial data using R\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R\nMason, Lee, Laa, and Cook (2022). cassowaryr: Compute Scagnostics on Pairs of Numeric Variables in a Data Set\n\n\n\nArticles\n\nDonoho (2017) 50 Years of Data Science\nStaniak and Biecek (2019) The Landscape of R Packages for Automated Exploratory Data Analysis\nHuebner et al (2018) A Contemporary Conceptual Framework for Initial Data Analysis\nHuebner et al (2020) Hidden analyses\nChatfield (1985) The Initial Examination of Data, Journal of the Royal Statistical Society, Series A (General) 148(3):214–231\nHyndman (2014) Explaining the ABS unemployment fluctuations\nBuja et al. (2009). Statistical Inference for Exploratory Data Analysis and Model Diagnostics. Philosophical Transactions. Series A, Mathematical, Physical, and Engineering Sciences 367 (1906): 4361–83.\nWickham et al (2010) Graphical Inference for Infovis. IEEE Transactions on Visualization and Computer Graphics 16 (6): 973–79.\nHofmann et al (2012) Graphical Tests for Power Comparison of Competing Designs. IEEE Transactions on Visualization and Computer Graphics 18 (12): 2441–48.\nMajumder et al (2013) Validation of Visual Statistical Inference, Applied to Linear Models. Journal of the American Statistical Association 108 (503): 942–56.\nTierney et al (2023) Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.\nBecker, R. A., Cleveland, W. S., & Shyu, M. J. (1996). “The Visual Design and Control of Trellis Display.” Journal of Computational and Graphical Statistics, 5(2), 123-155.\nWang, Cook, Hyndman (2019) A New Tidy Data Structure to Support Exploration and Modeling of Temporal Data\nKobakian et al Hexagon tile map\nWickham et al (2011). tourr: An R Package for Exploring Multivariate Data with Projections"
+    "text": "The goal of this worksheet is to tackle a data analysis together, by\n\nmapping out an analysis, with class input and help of AI\nwork on cleaning a data set\nmaking some plots\ndiscussing what is surprising, and what is expected"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "objectID": "week1/worksheetsol.html#objectives",
+    "href": "week1/worksheetsol.html#objectives",
+    "title": "ETC5521 Worksheet 1",
     "section": "",
-    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: TBD"
+    "text": "The goal of this worksheet is to tackle a data analysis together, by\n\nmapping out an analysis, with class input and help of AI\nwork on cleaning a data set\nmaking some plots\ndiscussing what is surprising, and what is expected"
   },
   {
-    "objectID": "index.html#lecturerchief-examiner",
-    "href": "index.html#lecturerchief-examiner",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "objectID": "week1/worksheetsol.html#about-the-data",
+    "href": "week1/worksheetsol.html#about-the-data",
+    "title": "ETC5521 Worksheet 1",
+    "section": "📋 About the data",
+    "text": "📋 About the data\nThe data to use is available from Tidy Tuesday 28 May 2024 page. Download the data from here, ideally using the tidytuesdayR package. You should only download the data from the Tidy Tuesday once, and save a copy locally on your computer.\nIn addition the gardenR package, available from remotes::install_github(\"llendway/gardenR\") has extra details about the garden.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThis is the code to download the data, and load relevant libraries."
+  },
+  {
+    "objectID": "week1/worksheetsol.html#tasks",
+    "href": "week1/worksheetsol.html#tasks",
+    "title": "ETC5521 Worksheet 1",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\n1. What are the variable types, how and when was the data collected?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n2. What would some possible questions be to ask about this data?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n3. What do you expect to find?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n4. Pick one of the questions, and let’s try to answer it.\n\nWhat summaries should we make?\nAre we likely going to need to pre-process the data in any way?\n\n\n\n\n\n\n\nSolution"
+  },
+  {
+    "objectID": "week1/worksheet.html",
+    "href": "week1/worksheet.html",
+    "title": "ETC5521 Worksheet 1",
     "section": "",
-    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: TBD"
+    "text": "The goal of this worksheet is to tackle a data analysis together, by\n\nmapping out an analysis, with class input and help of AI\nwork on cleaning a data set\nmaking some plots\ndiscussing what is surprising, and what is expected"
   },
   {
-    "objectID": "index.html#tutors",
-    "href": "index.html#tutors",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Tutors",
-    "text": "Tutors\n\nKrisanat Anukarnsakulchularp\n\nTutorials: Thu 9am (CL_LTB_188), 10am (CL_LTB_188), 3pm (CL_LTB_188)\nConsultation: TBD"
-  },
-  {
-    "objectID": "index.html#weekly-schedule",
-    "href": "index.html#weekly-schedule",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Weekly schedule",
-    "text": "Weekly schedule\n\nLecture+workshop: Tues 2-5pm on zoom (link in Moodle)\nTutorial: 1 hour\nWeekly learning quizzes due each Thursday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n29 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n05 Aug\nLearning from history\nEDA Case Study: Bay area blues\n\n\n\n12 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\n\n\n\n19 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\nExercises 1\n\n\n26 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\n\n\n\n02 Sep\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nExercises 2\n\n\n09 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\n\n\n\n16 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\n\n\n\n23 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nExercises 3\n\n\n30 Sep\nMid-semester break\n\n\n\n\n07 Oct\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\n\n\n\n14 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nProject Part 1\n\n\n21 Oct\nHelp session\n\n\n\n\n04 Nov\n\n\nProject Part 2"
-  },
-  {
-    "objectID": "index.html#assessments",
-    "href": "index.html#assessments",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Assessments",
-    "text": "Assessments\n\nWeekly learning quizzes: 5% (Due each week by Thu 9am, weeks 2-12)\nExercises 1: Instructions (15%) (Due Monday 11:55pm)\nExercises 2: Instructions (20%) (Due Monday 11:55pm)\nExercises 3: Instructions (20%) (Due Monday 11:55pm)\nProject part 1: Instructions (20%) (Due Monday 11:55pm)\nProject part 2: Instructions (20%) (Due Monday 11:55pm)"
-  },
-  {
-    "objectID": "index.html#software",
-    "href": "index.html#software",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Software",
-    "text": "Software\nWe will be using the latest versions of R and RStudio.\nHere is the code to install (most of) the R packages we will be using in this unit.\ninstall.packages(c(\"tidyr\", \"dplyr\", \"readr\", \"readxl\", \"readabs\", \"forcats\", \"tsibble\", \"cubble\", \"lubridate\", \"ggplot2\", \"GGally\", \"ggthemes\", \"sugrrants\", \"ggbeeswarm\", \"plotly\", \"gganimate\", \"tourr\", \"sugarbag\", \"tsibbletalk\", \"visdat\", \"inspectdf\", \"naniar\", \"validate\", \"vcd\", \"mvtnorm\", \"nullabor\", \"visage\", \"forecast\", \"cassowaryr\", \"brolgar\", \"palmerpenguins\", \"housingData\",  \"broom\", \"kableExtra\", \"lvplot\", \"colorspace\", \"patchwork\"), dependencies=TRUE)\nFrom GitHub, install\nremotes::install_github(\"casperhart/detourr\")\nIf you are relatively new to R, working through the materials at https://startr.numbat.space is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you.\nThese materials are licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License."
-  },
-  {
-    "objectID": "week1/index.html",
-    "href": "week1/index.html",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "objectID": "week1/worksheet.html#objectives",
+    "href": "week1/worksheet.html#objectives",
+    "title": "ETC5521 Worksheet 1",
     "section": "",
-    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+    "text": "The goal of this worksheet is to tackle a data analysis together, by\n\nmapping out an analysis, with class input and help of AI\nwork on cleaning a data set\nmaking some plots\ndiscussing what is surprising, and what is expected"
   },
   {
-    "objectID": "week1/index.html#reading",
-    "href": "week1/index.html#reading",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "",
-    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+    "objectID": "week1/worksheet.html#about-the-data",
+    "href": "week1/worksheet.html#about-the-data",
+    "title": "ETC5521 Worksheet 1",
+    "section": "📋 About the data",
+    "text": "📋 About the data\nThe data to use is available from Tidy Tuesday 28 May 2024 page. Download the data from here, ideally using the tidytuesdayR package. You should only download the data from the Tidy Tuesday once, and save a copy locally on your computer.\nIn addition the gardenR package, available from remotes::install_github(\"llendway/gardenR\") has extra details about the garden.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThis is the code to download the data, and load relevant libraries."
   },
   {
-    "objectID": "week1/index.html#what-you-will-learn-this-week",
-    "href": "week1/index.html#what-you-will-learn-this-week",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "What you will learn this week",
-    "text": "What you will learn this week\n\nHow exploring data is different from a confirmatory analysis\nGet up and running with GitHub Classroom"
-  },
-  {
-    "objectID": "week1/index.html#lecture-slides",
-    "href": "week1/index.html#lecture-slides",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "Lecture slides",
-    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
-  },
-  {
-    "objectID": "week1/index.html#tutorial-instructions",
-    "href": "week1/index.html#tutorial-instructions",
-    "title": "Week 1: Overview. Why this course? What is EDA?",
-    "section": "Tutorial instructions",
-    "text": "Tutorial instructions\n\nhtml\nqmd"
-  },
-  {
-    "objectID": "week1/tutorialsol.html",
-    "href": "week1/tutorialsol.html",
-    "title": "ETC5521 Tutorial 1",
-    "section": "",
-    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
-  },
-  {
-    "objectID": "week1/tutorialsol.html#objectives",
-    "href": "week1/tutorialsol.html#objectives",
-    "title": "ETC5521 Tutorial 1",
-    "section": "",
-    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
-  },
-  {
-    "objectID": "week1/tutorialsol.html#preparation",
-    "href": "week1/tutorialsol.html#preparation",
-    "title": "ETC5521 Tutorial 1",
-    "section": "🔧 Preparation",
-    "text": "🔧 Preparation\n\nHave git installed on your laptop so that you can access the GitHub classroom.\nHave the latest versions of RStudio and R installed on your laptop.\nInstall this list of R packages:\n\n\nCreate an RStudio Project for this unit, called ETC5521. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for data, one for tutorial_XX, … Each week when you begin your tutorial, open the project."
-  },
-  {
-    "objectID": "week1/tutorialsol.html#exercises",
-    "href": "week1/tutorialsol.html#exercises",
-    "title": "ETC5521 Tutorial 1",
-    "section": "📥 Exercises",
-    "text": "📥 Exercises"
-  },
-  {
-    "objectID": "week1/tutorialsol.html#how-good-are-your-detective-skills",
-    "href": "week1/tutorialsol.html#how-good-are-your-detective-skills",
-    "title": "ETC5521 Tutorial 1",
-    "section": "1. How good are your detective skills?",
-    "text": "1. How good are your detective skills?\nBeing good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.\nPlay the game alzheimer_test from the fun package by running this code:\nYou will be given 6 tasks to complete. Each one is to find a specific letter hidden among a \\(10\\times 30\\) grid of letters. When you are finished, answer these questions:\n\nWhich task did you THINK was the most difficult?\nWhich task does the DATA say was most difficult based, based on the time taken to answer, tm1.1.j. in your results data?\nSave the dataset to an .rda file.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n           char1.1.j. char2.1.j.  tm1.1.j.\nans.user.2          M          N 30.839718\nans.user.3          I          T 19.695932\nans.user.5          D          O 17.189302\nans.user.1          O          C 16.534676\nans.user.4          F          E  4.424869\nans.user            9          6  3.812386"
-  },
-  {
-    "objectID": "week1/tutorialsol.html#get-started-using-github-classroom",
-    "href": "week1/tutorialsol.html#get-started-using-github-classroom",
-    "title": "ETC5521 Tutorial 1",
-    "section": "3. Get started using GitHub Classroom",
-    "text": "3. Get started using GitHub Classroom\n\nIn Moodle go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.\nClone the assignment repo to your computer.\nOpen the assign01.html instructions.\nMake a start on loading the data into R."
-  },
-  {
-    "objectID": "week1/tutorialsol.html#finishing-up",
-    "href": "week1/tutorialsol.html#finishing-up",
-    "title": "ETC5521 Tutorial 1",
-    "section": "👌 Finishing up",
-    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
-  },
-  {
-    "objectID": "week1/tutorial.html",
-    "href": "week1/tutorial.html",
-    "title": "ETC5521 Tutorial 1",
-    "section": "",
-    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
-  },
-  {
-    "objectID": "week1/tutorial.html#objectives",
-    "href": "week1/tutorial.html#objectives",
-    "title": "ETC5521 Tutorial 1",
-    "section": "",
-    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
-  },
-  {
-    "objectID": "week1/tutorial.html#preparation",
-    "href": "week1/tutorial.html#preparation",
-    "title": "ETC5521 Tutorial 1",
-    "section": "🔧 Preparation",
-    "text": "🔧 Preparation\n\nHave git installed on your laptop so that you can access the GitHub classroom.\nHave the latest versions of RStudio and R installed on your laptop.\nInstall this list of R packages:\n\n\nCreate an RStudio Project for this unit, called ETC5521. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for data, one for tutorial_XX, … Each week when you begin your tutorial, open the project."
-  },
-  {
-    "objectID": "week1/tutorial.html#exercises",
-    "href": "week1/tutorial.html#exercises",
-    "title": "ETC5521 Tutorial 1",
-    "section": "📥 Exercises",
-    "text": "📥 Exercises"
-  },
-  {
-    "objectID": "week1/tutorial.html#how-good-are-your-detective-skills",
-    "href": "week1/tutorial.html#how-good-are-your-detective-skills",
-    "title": "ETC5521 Tutorial 1",
-    "section": "1. How good are your detective skills?",
-    "text": "1. How good are your detective skills?\nBeing good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.\nPlay the game alzheimer_test from the fun package by running this code:\nYou will be given 6 tasks to complete. Each one is to find a specific letter hidden among a \\(10\\times 30\\) grid of letters. When you are finished, answer these questions:\n\nWhich task did you THINK was the most difficult?\nWhich task does the DATA say was most difficult based, based on the time taken to answer, tm1.1.j. in your results data?\nSave the dataset to an .rda file.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n           char1.1.j. char2.1.j.  tm1.1.j.\nans.user.2          M          N 30.839718\nans.user.3          I          T 19.695932\nans.user.5          D          O 17.189302\nans.user.1          O          C 16.534676\nans.user.4          F          E  4.424869\nans.user            9          6  3.812386"
-  },
-  {
-    "objectID": "week1/tutorial.html#get-started-using-github-classroom",
-    "href": "week1/tutorial.html#get-started-using-github-classroom",
-    "title": "ETC5521 Tutorial 1",
-    "section": "3. Get started using GitHub Classroom",
-    "text": "3. Get started using GitHub Classroom\n\nIn Moodle go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.\nClone the assignment repo to your computer.\nOpen the assign01.html instructions.\nMake a start on loading the data into R."
-  },
-  {
-    "objectID": "week1/tutorial.html#finishing-up",
-    "href": "week1/tutorial.html#finishing-up",
-    "title": "ETC5521 Tutorial 1",
-    "section": "👌 Finishing up",
-    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+    "objectID": "week1/worksheet.html#tasks",
+    "href": "week1/worksheet.html#tasks",
+    "title": "ETC5521 Worksheet 1",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\n1. What are the variable types, how and when was the data collected?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n2. What would some possible questions be to ask about this data?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n3. What do you expect to find?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n4. Pick one of the questions, and let’s try to answer it.\n\nWhat summaries should we make?\nAre we likely going to need to pre-process the data in any way?\n\n\n\n\n\n\n\nSolution"
   },
   {
     "objectID": "week11/index.html",
