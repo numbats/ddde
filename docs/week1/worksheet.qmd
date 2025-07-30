@@ -1,0 +1,199 @@
+---
+title: "ETC5521 Worksheet 1"
+subtitle: "Introduction to exploratory data analysis"
+author: "Prof. Di Cook"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: worksheet.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: worksheetsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+show-solution: true
+code-fold: true
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  error = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+```
+
+## 🎯 Objectives
+
+The goal of this worksheet is to tackle a data analysis together, by
+
+- mapping out an analysis, with class input and help of AI
+- work on cleaning a data set
+- making some plots
+- discussing what is surprising, and what is expected
+
+## 📋 About the data 
+
+The data to use is available from [Tidy Tuesday 28 May 2024 page](https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-05-28/readme.md). Download the data from here, ideally using the `tidytuesdayR` package. You should only download the data from the Tidy Tuesday once, and save a copy locally on your computer. 
+
+In addition the `gardenR` package, available from `remotes::install_github("llendway/gardenR")` has extra details about the garden. 
+
+::: unilur-solution
+
+This is the code to download the data, and load relevant libraries. 
+
+```{r}
+#| eval: false
+# remotes::install_github("llendway/gardenR")
+# install.packages("tidytuesdayR")
+library(tidytuesdayR)
+tuesdata <- tidytuesdayR::tt_load('2024-05-28')
+save(tuesdata, file="tuesdata.rda")
+```
+
+```{r}
+library(gardenR)
+library(tidyverse)
+library(ggbeeswarm)
+
+load("tuesdata.rda")
+harvest_2020 <- tuesdata$harvest_2020
+harvest_2021 <- tuesdata$harvest_2021
+planting_2020 <- tuesdata$planting_2020
+planting_2021 <- tuesdata$planting_2021
+spending_2020 <- tuesdata$spending_2020
+spending_2021 <- tuesdata$spending_2021
+
+data("garden_coords")
+```
+
+:::
+
+## 🧩 Tasks 
+
+#### 1. What are the variable types, how and when was the data collected?
+
+::: unilur-solution
+This is collected in 2020 and 2021, and has a variety of numeric and categorical and time variables.
+
+:::
+
+#### 2. What would some possible questions be to ask about this data?
+
+::: unilur-solution
+
+The link to the ChatGPT conversation is [here](https://chatgpt.com/share/688978a8-ca1c-8001-81b9-2d0604f2fd6d). It was prompted by 
+
+- Do you know the gardenR package by Lisa Lendway?
+- What might be some questions that we could answer with this data?
+
+We chose to tackle one of the Economics questions: "How much produce (by weight or value) was harvested per dollar spent?"
+But realised that it was not possible answer this particular question with this data. It was refined to be:
+
+**Compare the ROI for varieties of beans.**
+
+The next step was to filter the data to focus on one vegetable, beans, and one year to get started.
+
+```{r}
+beans_planting_2020 <- planting_2020 |>
+  filter(vegetable == "beans")
+beans_harvest_2020 <- harvest_2020 |>
+  filter(vegetable == "beans")
+beans_spending_2020 <- spending_2020 |>
+  filter(vegetable == "beans")
+```
+:::
+
+#### 3. What do you expect to find?
+
+::: unilur-solution
+
+We might expect some difference in ROI between varieties.
+
+:::
+
+#### 4. Pick one of the questions, and let's try to answer it. 
+
+- What summaries should we make?
+- Are we likely going to need to pre-process the data in any way?
+
+::: unilur-solution
+
+We need to decide on a common scale. Steps are: 
+
+1. examine the price for each variety
+2. summarise the planting data by variety and join to spending data.
+3. summarise the harvest data by variety and join to spending.
+
+```{r}
+beans_spending_2020 |>
+  select(variety, brand, price_with_tax)
+
+beans_planting_2020_smry <- beans_planting_2020 |>
+  group_by(variety) |>
+  summarise(number_seeds_planted = sum(number_seeds_planted))
+
+beans_2020_smry <- beans_spending_2020 |>
+  select(variety, brand, price_with_tax) |>
+  left_join(beans_planting_2020_smry)
+
+ggplot(beans_2020_smry, 
+       aes(price_with_tax, 
+           number_seeds_planted)) + geom_point()
+
+beans_2020_smry |> 
+  mutate(pr_per_seed = price_with_tax/number_seeds_planted) |>
+  select(variety, pr_per_seed)
+# Do all the seed packs have the same number of seeds, 
+# or did Lisa plant every seed in every pack?
+
+# Harvest
+beans_harvest_2020_smry <- beans_harvest_2020 |>
+  group_by(variety) |>
+  summarise(weight = sum(weight))
+beans_harvest_2020_smry
+
+beans_2020_smry <- beans_2020_smry |>
+  left_join(beans_harvest_2020_smry)
+
+beans_2020_smry <- beans_2020_smry |>
+  mutate(psy = weight/number_seeds_planted)
+beans_2020_smry
+```
+
+Problems encountered. 
+
+- Spending didn't specify what the cost involved, whether it was one packet of seeds, 
+- Not clear whether all seeds in each packet were planted. Numbers suggest, no, because some varieties had many sends and others very few.
+
+Adjustments:
+
+- weight was adjusted by number of seeds planted
+
+Conclusion:
+
+Bush Bush Slender outperforms the other two, by a lot! This should also indicate that this variety is a better ROI. 
+
+
+Caveats: Need to check that 
+
+- the plots where each was planted was a reasonable chance that they had same access to sunlight and nutrients.
+- Assuming that seeds were planted at same distance from each other.
+
+#### Next steps
+
+Examine the 2021 data. If same varieties grown do the same results happen. 
+
+Problems discovered in doing this: Name of variety in 2021 might have changed to be just "Bush", and the other two were not used. Could compare against the one new variety. 
+
+:::
