@@ -1,0 +1,87 @@
+---
+title: "ETC5521 Worksheet Week 2"
+subtitle: "Learning from history"
+author: "Prof. Di Cook"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: worksheet.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: worksheetsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+show-solution: true
+code-fold: true
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  error = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+```
+
+## 🎯 Objectives
+
+The goal of this worksheet is to search for R packages that can be used for exploring data, and to understand their capacity. 
+
+The paper [The Landscape of R Packages for Automated Exploratory Data Analysis](https://journal.r-project.org/articles/RJ-2019-033/)
+
+
+## 🧩 Tasks 
+
+#### 1. Use AI to obtain a list of packages that might be used for exploring data in R.
+
+::: unilur-solution
+Here is my list of prompts:
+
+- Do you know the paper "The Landscape of R Packages for Automated Exploratory Data Analysis" ?
+- What would you recommend for R packages for exploratory data analysis today? I'm not sure that the package list in that paper are reasonable 5 years into the future of today.
+- What about databot? (Notice the botching of author: "Jennifer (Yihui) Cheng and others")
+- Are there any packages that are true to Tukey's original book Exploratory Data Analysis from 1977?
+- What about packages that can explore high-dimensional data?
+
+
+:::
+
+#### 2. Pick one of the packages mentioned and give it a spin
+
+::: unilur-solution
+:::
+
+#### 3. Use AI to learn about some of Tukey's most famous quotes, and also what methods he developed are still in common use today
+
+::: unilur-solution
+
+My prompts:
+
+- What are some of Tukey's most famous quotes?
+- What are some methods that Tukey developed that are commonly used today?
+- What are the R packages that have these methods?
+- What about the letter value plot?
+- I would love a "A one-page “Tukey contributions” teaching sheet for a lecture?" Can you provide it as a quarto document?
+
+:::
+
+#### 4. For the gardenR example from week 1, ask for some Tukey-style summaries of this data
+
+::: unilur-solution
+
+Prompt:
+
+- For the gardenR package data, could you make some code to do Tukey-like summaries of the data?
+
+
+:::

@@ -155,7 +155,7 @@ Thu 9:00-10:00am, 10:00-11am and 3:00-4:00pm  CL_Anc-19.LTB_188 *Attendance is e
 <br>
 
 🧰 **GitHub classroom**: this is where you will find assignments, but links to each will be available in moodle.
-[https://classroom.github.com/classrooms/223071331-etc5521-2025-classroom-61789a](https://classroom.github.com/classrooms/223071331-etc5521-2025-classroom-61789a)
+[https://classroom.github.com/](https://classroom.github.com/)
 
 ## 💯 Assessment [Part 1/2]{.smaller}
 
@@ -177,11 +177,11 @@ There will be a weekly quiz starting week 2 provided through Moodle. These are a
 
 ## GitHub Classroom
 
-We are going to use [GitHub Classroom (etc5521 2025: Diving Deeper into Data Exploration)](https://classroom.github.com/classrooms/223071331-etc5521-2025-classroom-61789a) to distribute assignment templates and keep track of your assignment progress. 
+We are going to use [GitHub Classroom](https://classroom.github.com/) to distribute assignment templates and keep track of your assignment progress. 
 
 ::: {.smaller}
 
-1. Clone the first assignment by clicking on the link given in Moodle.
+1. Clone the first assignment by [clicking on the link given in Moodle](https://learning.monash.edu/mod/assign/view.php?id=4669425).
 2. Once you have accepted it, you will get a cloned copy on your own GitHub account. It is a private repo, which means you and the teaching staff will be the only people with access.
 3. If you need some help getting started, check [this information](https://github.com/education/students).
 4. The week 1 tutorial will help you get started. 

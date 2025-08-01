@@ -19,12 +19,12 @@ week <- as.integer(1 + ((Sys.Date() - as_date(start_semester))/7))
 
 * **Professor Di Cook**
     - Email: [etc5521.clayton-x@monash.edu](mailto:etc5521.clayton-x@monash.edu) 
-    - Consultation: Fridays 11-1 Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 352
+    - Consultation: Fridays 11-1 Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 352 and on zoom (see link in moodle)
 
 ## Tutors
 
 * Krisanat Anukarnsakulchularp
-    - Tutorials: Thu 9am (CL_LTB_188), 10am (CL_LTB_188), 3pm (CL_LTB_188)
+    - Tutorials: Thu 9am (CL_LTB_188), 10am (CL_LTB_188), 3pm (CL_LTB_387)
     - Consultation: Thursdays 4-6pm Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 232A
 
 ## Weekly schedule
