@@ -1,5 +1,250 @@
 [
   {
+    "objectID": "week9/index.html",
+    "href": "week9/index.html",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "",
+    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
+  },
+  {
+    "objectID": "week9/index.html#main-reference",
+    "href": "week9/index.html#main-reference",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "",
+    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
+  },
+  {
+    "objectID": "week9/index.html#what-you-will-learn-this-week",
+    "href": "week9/index.html#what-you-will-learn-this-week",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nWhat is temporal data?\nWhat is exploratory temporal data analysis?\nUsing temporal objects in R: tsibble\nData wrangling: aggregation, creating temporal components, missing values\nPlotting conventions: connect the dots; aspect ratio, landscape or portrait\nCalendar plots: arranging daily records into a calendar format\nVisual inference for temporal data\ntignostics: cognostics for temporal data\nInteractive graphics for temporal data\nExploring longitudinal data, with the brolgar package"
+  },
+  {
+    "objectID": "week9/index.html#lecture-slides",
+    "href": "week9/index.html#lecture-slides",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week9/index.html#tutorial-instructions",
+    "href": "week9/index.html#tutorial-instructions",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week9/index.html#assignments",
+    "href": "week9/index.html#assignments",
+    "title": "Week 9: Exploring data having a space and time context Part I",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 3 is due on Monday 22 September.\nProject Part 1 is due on Monday 13 October.\nProject Part 2 is due on Monday 03 November."
+  },
+  {
+    "objectID": "week7/index.html",
+    "href": "week7/index.html",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "",
+    "text": "Wilke (2019) Ch 9, 10.2-4, 11.2"
+  },
+  {
+    "objectID": "week7/index.html#main-reference",
+    "href": "week7/index.html#main-reference",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "",
+    "text": "Wilke (2019) Ch 9, 10.2-4, 11.2"
+  },
+  {
+    "objectID": "week7/index.html#what-you-will-learn-this-week",
+    "href": "week7/index.html#what-you-will-learn-this-week",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nWhy making comparisons is important\nHow to decide on what comparison to make\nComparing between strata, relative to a baseline\nComparing the same data, in many ways\nUsing normalising to compare different distributions\nInference using bootstrap and lineups"
+  },
+  {
+    "objectID": "week7/index.html#lecture-slides",
+    "href": "week7/index.html#lecture-slides",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week7/index.html#tutorial-instructions",
+    "href": "week7/index.html#tutorial-instructions",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week7/index.html#assignments",
+    "href": "week7/index.html#assignments",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 3 is due on Monday 22 September."
+  },
+  {
+    "objectID": "week5/index.html",
+    "href": "week5/index.html",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "",
+    "text": "Wilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions"
+  },
+  {
+    "objectID": "week5/index.html#main-reference",
+    "href": "week5/index.html#main-reference",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "",
+    "text": "Wilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions"
+  },
+  {
+    "objectID": "week5/index.html#what-you-will-learn-this-week",
+    "href": "week5/index.html#what-you-will-learn-this-week",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nNumeric and visual summaries for a single variable\nCommon features to discover\nTools for inference for a single variable\nImputing missings on a single variable"
+  },
+  {
+    "objectID": "week5/index.html#lecture-slides",
+    "href": "week5/index.html#lecture-slides",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week5/index.html#tutorial-instructions",
+    "href": "week5/index.html#tutorial-instructions",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week5/index.html#assignments",
+    "href": "week5/index.html#assignments",
+    "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 2 is due on Monday 01 September."
+  },
+  {
+    "objectID": "week3/index.html",
+    "href": "week3/index.html",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "",
+    "text": "The initial examination of data"
+  },
+  {
+    "objectID": "week3/index.html#main-reference",
+    "href": "week3/index.html#main-reference",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "",
+    "text": "The initial examination of data"
+  },
+  {
+    "objectID": "week3/index.html#what-you-will-learn-this-week",
+    "href": "week3/index.html#what-you-will-learn-this-week",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nRole of IDA\nTechniques for\n\ndata screening\ndata cleaning\nimputation\nvalidation\n\nChecking assumptions for hypothesis testing and fitting linear models"
+  },
+  {
+    "objectID": "week3/index.html#lecture-slides",
+    "href": "week3/index.html#lecture-slides",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week3/index.html#tutorial-instructions",
+    "href": "week3/index.html#tutorial-instructions",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week3/index.html#assignments",
+    "href": "week3/index.html#assignments",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week3/index.html#assignments-1",
+    "href": "week3/index.html#assignments-1",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August."
+  },
+  {
+    "objectID": "week2/tutorial.html",
+    "href": "week2/tutorial.html",
+    "title": "ETC5521 Tutorial 2",
+    "section": "",
+    "text": "Constructing, planning and evaluating an exploratory data analysis are important skills. This tutorial is an exercise in reading and digesting a really good analysis. Your goal is to understand the analysis, reproduce it, and the choices the analysts made, and why these were would be considered high quality."
+  },
+  {
+    "objectID": "week2/tutorial.html#objectives",
+    "href": "week2/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 2",
+    "section": "",
+    "text": "Constructing, planning and evaluating an exploratory data analysis are important skills. This tutorial is an exercise in reading and digesting a really good analysis. Your goal is to understand the analysis, reproduce it, and the choices the analysts made, and why these were would be considered high quality."
+  },
+  {
+    "objectID": "week2/tutorial.html#preparation",
+    "href": "week2/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 2",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is EDA Case Study: Bay area blues. It is authored by Hadley Wickham, Deborah F. Swayne, and David Poole. It appeared in the book “Beautiful Data” edited by Jeff Hammerbacher and Toby Segaran. Not all the chapters in the book are good examples of data analysis, though.\n\nComplete the weekly quiz, before the deadline!\nMake sure you have this list of R packages installed:\n\n\ninstall.packages(c(\"tidyverse\", \"forcats\", \"patchwork\"))\n\n\nNote that the code and data for reproducing their analysis can be found here.\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week2/tutorial.html#exercises",
+    "href": "week2/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 2",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nPoint your web browser to the github site for the analysis, https://github.com/hadley/sfhousing. The main data file is house-sales.csv. Read this data into your R session. (🛑 ARE YOU USING A PROJECT FOR THIS UNIT? IF NOT, STOP and OPEN IT NOW.)\nYou can read the data in directly from the web site using this code:\n\nlibrary(tidyverse)\nlibrary(patchwork)\nlibrary(forcats)\nsales &lt;- read_csv(\"https://raw.githubusercontent.com/hadley/sfhousing/master/house-sales.csv\")\n\n\n1. What’s in the data?\n\nIs the data in tidy form?\nOf the variables in the data, which are\n\nnumeric?\ncategorical?\ntemporal?\n\nWhat would be an appropriate plot to make to examine the\n\nnumeric variables?\ncategorical variables?\na categorical and numeric variable?\na temporal variable and a numeric variable?\n\n\n\n\n2. Time series plots\nReproduce the time series plots of weekly average price and volume of sales.\n\n\n\n\n\n\n\n\n\n\n\n3. Correlation between series\nIt looks like volume goes down as price goes up. There is a better plot to make to examine this. What is it? Make the plot. After making the plot, report what you learn about the apparent correlation.\n\n\n4. Geographic differences\nThink about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn.\n\n\n5. The Rich Get Richer and the Poor Get Poorer\nIn the section “The Rich Get Richer and the Poor Get Poorer” there are some interesting transformations of the data, and unusual types of plots. Explain why looking at proportional change in value refines the view of price movement in different higher vs lower priced properties.\n\n\n6. Anything surprising?\nWere there any findings that surprised the authors? Or would surprise you?\n\n\n7. Additional resources\nSome of the findings were compared against information gathered from external sources. Can you point to an example of this, and how the other information was used to support or question the finding?"
+  },
+  {
+    "objectID": "week2/tutorial.html#finishing-up",
+    "href": "week2/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 2",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week2/tutorialsol.html",
+    "href": "week2/tutorialsol.html",
+    "title": "ETC5521 Tutorial 2",
+    "section": "",
+    "text": "Constructing, planning and evaluating an exploratory data analysis are important skills. This tutorial is an exercise in reading and digesting a really good analysis. Your goal is to understand the analysis, reproduce it, and the choices the analysts made, and why these were would be considered high quality."
+  },
+  {
+    "objectID": "week2/tutorialsol.html#objectives",
+    "href": "week2/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 2",
+    "section": "",
+    "text": "Constructing, planning and evaluating an exploratory data analysis are important skills. This tutorial is an exercise in reading and digesting a really good analysis. Your goal is to understand the analysis, reproduce it, and the choices the analysts made, and why these were would be considered high quality."
+  },
+  {
+    "objectID": "week2/tutorialsol.html#preparation",
+    "href": "week2/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 2",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is EDA Case Study: Bay area blues. It is authored by Hadley Wickham, Deborah F. Swayne, and David Poole. It appeared in the book “Beautiful Data” edited by Jeff Hammerbacher and Toby Segaran. Not all the chapters in the book are good examples of data analysis, though.\n\nComplete the weekly quiz, before the deadline!\nMake sure you have this list of R packages installed:\n\n\ninstall.packages(c(\"tidyverse\", \"forcats\", \"patchwork\"))\n\n\nNote that the code and data for reproducing their analysis can be found here.\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week2/tutorialsol.html#exercises",
+    "href": "week2/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 2",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nPoint your web browser to the github site for the analysis, https://github.com/hadley/sfhousing. The main data file is house-sales.csv. Read this data into your R session. (🛑 ARE YOU USING A PROJECT FOR THIS UNIT? IF NOT, STOP and OPEN IT NOW.)\nYou can read the data in directly from the web site using this code:\n\nlibrary(tidyverse)\nlibrary(patchwork)\nlibrary(forcats)\nsales &lt;- read_csv(\"https://raw.githubusercontent.com/hadley/sfhousing/master/house-sales.csv\")\n\n\n1. What’s in the data?\n\nIs the data in tidy form?\nOf the variables in the data, which are\n\nnumeric?\ncategorical?\ntemporal?\n\nWhat would be an appropriate plot to make to examine the\n\nnumeric variables?\ncategorical variables?\na categorical and numeric variable?\na temporal variable and a numeric variable?\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nYes\n\nprice, br, lsqft, bsqft\ncounty, city, zip, street\nyear, date, datesold\n\n\nscatterplots\nbar charts, pie charts, mosaic\nfacet by the categorical variable. could be boxplots, or density plots, or facetted scatterplots to look at multiple numeric variables\n\ntime series plot, connect lines to indicate time, maybe need to aggregate over time to get one value per time point\n\n\n\n\n\n\n\n\n2. Time series plots\nReproduce the time series plots of weekly average price and volume of sales.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nNote, stacking time series plots helps compare the series relative to the time point.\n\nsales_weekly &lt;- sales |&gt;\n  group_by(date) |&gt;\n  summarise(av_price = mean(price, na.rm=TRUE),\n            volume = n())\np1 &lt;- ggplot(sales_weekly, aes(x=date,\n                               y=av_price)) +\n  geom_line() +\n  scale_y_continuous(\"Average price (millions)\", \n              breaks = seq(500000, 800000, 50000), \n              labels = c(\"0.50\", \"0.55\", \"0.60\", \"0.65\",\n                         \"0.70\", \"0.75\", \"0.80\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\") +\n  theme(aspect.ratio = 0.5)\np2 &lt;- ggplot(sales_weekly, aes(x=date, y=volume)) + geom_line() +\n  scale_y_continuous(\"Number of sales\", \n              breaks = seq(500,3000,500), \n              labels = c(\"500\", \"1,000\", \"1,500\", \"2,000\",\n                         \"2,500\", \"3,000\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\") +\n  theme(aspect.ratio = 0.5)\np1 + p2 + plot_layout(ncol=1)\n\n\n\n\n\n\n\n3. Correlation between series\nIt looks like volume goes down as price goes up. There is a better plot to make to examine this. What is it? Make the plot. After making the plot, report what you learn about the apparent correlation.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nggplot(sales_weekly, aes(x=av_price, y=volume)) +\n  geom_point() +\n  theme(aspect.ratio = 1)\n\n\n\n\n\n\n\n\nAny correlation is very weak, and negative.\n\n\n\n\n\n\n4. Geographic differences\nThink about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nggplot(sales, \n       aes(x = fct_reorder(county, \n                  price, na.rm=TRUE), \n           y = price)) +\n         geom_boxplot() + \n  scale_y_log10() +\n  xlab(\"\") +\n  coord_flip()\n\n\n\n\n\n\n\n\nMarin County has the highest prices on average, and San Joaquin the lowest. The lowest priced house was sold in Sonoma County. The highest priced properties and lowest priced are pretty similar from one county to another - that is, the variability within county is large.\n\n\n\n\n\n\n5. The Rich Get Richer and the Poor Get Poorer\nIn the section “The Rich Get Richer and the Poor Get Poorer” there are some interesting transformations of the data, and unusual types of plots. Explain why looking at proportional change in value refines the view of price movement in different higher vs lower priced properties.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe transformation makes changes relative to the initial average price at the start of the time period. All curves produced will start from the same point. This means that we only need to compare the end points of each line, saving us from calculating differences between lines relative to the difference at the beginning.\n\n\n\n\n\n\n6. Anything surprising?\nWere there any findings that surprised the authors? Or would surprise you?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nI found it interesting that Mountain View had no decline in housing prices. This city has the headquarters of many of the world’s largest technology companies are in the city, including Google, Mozilla Foundation, Symantec, and Intuit.\n\n\n\n\n\n\n7. Additional resources\nSome of the findings were compared against information gathered from external sources. Can you point to an example of this, and how the other information was used to support or question the finding?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nAll of this is consistent with what we have learned about subprime mortgages since the housing bust hit the headlines.\nSubprime mortgages were offered on little collateral which meant they were quite risky, and they tended to be on the lower end of the housing market. This information was in all the news headlines at the time, and the analysis that these authors have done was checked against the common reporting at the time. The data was consistent with these reports."
+  },
+  {
+    "objectID": "week2/tutorialsol.html#finishing-up",
+    "href": "week2/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 2",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
     "objectID": "week2/slides.html#birth-of-eda",
     "href": "week2/slides.html#birth-of-eda",
     "title": "ETC5521: Diving Deeply into Data Exploration",
@@ -126,13 +371,6 @@
     "text": "More summaries of numerical values"
   },
   {
-    "objectID": "week2/slides.html#section-5",
-    "href": "week2/slides.html#section-5",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "",
-    "text": "Isn’t this imposing a belief?"
-  },
-  {
     "objectID": "week2/slides.html#hinges-and-5-number-summaries",
     "href": "week2/slides.html#hinges-and-5-number-summaries",
     "title": "ETC5521: Diving Deeply into Data Exploration",
@@ -168,18 +406,18 @@
     "text": "Identified end values\n\n\n\nWhy are some individual points singled out?\n\n\nRules for this one may be clearer?"
   },
   {
+    "objectID": "week2/slides.html#section-5",
+    "href": "week2/slides.html#section-5",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Isn’t this imposing a belief?"
+  },
+  {
     "objectID": "week2/slides.html#section-6",
     "href": "week2/slides.html#section-6",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
     "text": "There is no excuse for failing to plot and look\nAnother Tukey wisdom drop"
-  },
-  {
-    "objectID": "week2/slides.html#section-7",
-    "href": "week2/slides.html#section-7",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "",
-    "text": "We now regard re-expression as a tool, something to let us do a better job of grasping. The grasping is done with the eye and the better job is through a more symmetric appearance.\nAnother Tukey wisdom drop"
   },
   {
     "objectID": "week2/slides.html#fences-and-outside-values",
@@ -196,11 +434,11 @@
     "text": "New statistics: trimeans\nThe number that comes closest to\n\\[\\frac{\\text{lower hinge} + 2\\times \\text{median} + \\text{upper hinge}}{4}\\] is the trimean.\n \nThink about trimmed means, where we might drop the highest and lowest 5% of observations."
   },
   {
-    "objectID": "week2/slides.html#letter-value-plots",
-    "href": "week2/slides.html#letter-value-plots",
+    "objectID": "week2/slides.html#letter-value-plots-todays-solution",
+    "href": "week2/slides.html#letter-value-plots-todays-solution",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Letter value plots",
-    "text": "Letter value plots\n\n\nWhy break the data into quarters? Why not eighths, sixteenths? k-number summaries?\nWhat does a 7-number summary look like?\n\nHow would you make an 11-number summary?\n\n\nlibrary(lvplot)\np &lt;- ggplot(mpg, \n            aes(class, hwy))\np + geom_lv(aes(fill=..LV..)) + \n  scale_fill_brewer() + \n  coord_flip() + \n  xlab(\"\")"
+    "section": "Letter value plots: today’s solution",
+    "text": "Letter value plots: today’s solution\n\n\nWhy break the data into quarters? Why not eighths, sixteenths? k-number summaries?\nWhat does a 7-number summary look like?\n\nHow would you make an 11-number summary?\n\n\nlibrary(lvplot)\np &lt;- ggplot(mpg, \n            aes(class, hwy))\np + geom_lv(aes(fill=..LV..)) + \n  scale_fill_brewer() + \n  coord_flip() + \n  xlab(\"\")"
   },
   {
     "objectID": "week2/slides.html#box-plots-are-ubiquitous-in-use-today.",
@@ -238,11 +476,11 @@
     "text": "Power ladder\n \n⬅️ fix RIGHT-skewed values  \n-2, -1, -1/2, 0 (log), 1/3, 1/2, 1, 2, 3, 4\n\nfix LEFT-skewed values ➡️"
   },
   {
-    "objectID": "week2/slides.html#section-8",
-    "href": "week2/slides.html#section-8",
+    "objectID": "week2/slides.html#section-7",
+    "href": "week2/slides.html#section-7",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
-    "text": "The book is a digest of 🌟 tricks and treats 🌟 of massaging numbers and drafting displays.\nMany of the tools have made it into today’s analyses in various ways. Many have not.\nNotice the word developments too: froots, fences. Tukey brought you the word “software”\nThe temperament of the book is an inspiration for the mind-set for this unit. There is such delight in working with numbers!\n“We love data!”"
+    "text": "We now regard re-expression as a tool, something to let us do a better job of grasping. The grasping is done with the eye and the better job is through a more symmetric appearance.\nAnother Tukey wisdom drop"
   },
   {
     "objectID": "week2/slides.html#linearising-bivariate-relationships",
@@ -259,13 +497,6 @@
     "text": "Linearising bivariate relationships\n  \n\nSee some fluctuations in the early years, too. Note that the log transformation couldn’t linearise."
   },
   {
-    "objectID": "week2/slides.html#section-9",
-    "href": "week2/slides.html#section-9",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "",
-    "text": "The book is a digest of 🌟 tricks and treats 🌟 of massaging numbers and drafting displays.\nMany of the tools have made it into today’s analyses in various ways. Many have not.\nNotice the word developments too: froots, fences. Tukey brought you the word “software”\nThe temperament of the book is an inspiration for the mind-set for this unit. There is such delight in working with numbers!\n“We love data!”"
-  },
-  {
     "objectID": "week2/slides.html#rules-and-advice",
     "href": "week2/slides.html#rules-and-advice",
     "title": "ETC5521: Diving Deeply into Data Exploration",
@@ -273,8 +504,8 @@
     "text": "Rules and advice\n\n\n\nGraphics are friendly.\nArithmetic often exists to make graphs possible.\nGraphs force us to notice the unexpected; nothing could be more important.\nDifferent graphs show us quite different aspects of the same data.\nThere is no more reason to expect one graph to “tell all” than to expect one number to do the same.\n“Plotting \\(y\\) against \\(x\\)” involves significant choices–how we express one or both variables can be crucial.\n\n\n\n\n\nThe first step in penetrating plotting is to straighten out the dependence or point scatter as much as reasonable.\nPlotting \\(y^2\\), \\(\\sqrt{y}\\), \\(log(y)\\), \\(-1/y\\) or the like instead of \\(y\\) is one plausible step to take in search of straightness.\nPlotting \\(x^2\\), \\(\\sqrt{x}\\), \\(log(x)\\), \\(-1/x\\) or the like instead of \\(x\\) is another.\nOnce the plot is straightened, we can usually gain much by flattening it, usually by plotting residuals.\nWhen plotting scatters, we may need to be careful about how we express \\(x\\) and \\(y\\) in order to avoid concealment by crowding."
   },
   {
-    "objectID": "week2/slides.html#section-10",
-    "href": "week2/slides.html#section-10",
+    "objectID": "week2/slides.html#section-8",
+    "href": "week2/slides.html#section-8",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
     "text": "The book is a digest of 🌟 tricks and treats 🌟 of massaging numbers and drafting displays.\nMany of the tools have made it into today’s analyses in various ways. Many have not.\nNotice the word developments too: froots, fences. Tukey brought you the word “software”\nThe temperament of the book is an inspiration for the mind-set for this unit. There is such delight in working with numbers!\n“We love data!”"
@@ -294,10 +525,906 @@
     "text": "Resources\n\nwikipedia\nJohn W. Tukey (1977) Exploratory data analysis\nData coding using tidyverse suite of R packages\nSketching canvases made using fabricerin"
   },
   {
-    "objectID": "week2/slides.html#letter-value-plots-todays-solution",
-    "href": "week2/slides.html#letter-value-plots-todays-solution",
+    "objectID": "week12/index.html#assignments",
+    "href": "week12/index.html#assignments",
+    "title": "Week 12: Long help session",
+    "section": "Assignments",
+    "text": "Assignments\n\nProject Part 2 is due on Monday 03 November."
+  },
+  {
+    "objectID": "week10/index.html",
+    "href": "week10/index.html",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "",
+    "text": "cubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data"
+  },
+  {
+    "objectID": "week10/index.html#main-reference",
+    "href": "week10/index.html#main-reference",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "",
+    "text": "cubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data"
+  },
+  {
+    "objectID": "week10/index.html#what-you-will-learn-this-week",
+    "href": "week10/index.html#what-you-will-learn-this-week",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nBreaking up data by time, and by space\nChanging focus:\n\nMaps of space over time\nExploring time over space with glyph maps\n\nInference for spatial trends\nA flash back to the 1970s: Tukey’s median polish\nWorking with spatial polygon data\n\nMaking a choropleth map\nBending the choropleth into a cartogram\nTiling spatial regions"
+  },
+  {
+    "objectID": "week10/index.html#lecture-slides",
+    "href": "week10/index.html#lecture-slides",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week10/index.html#tutorial-instructions",
+    "href": "week10/index.html#tutorial-instructions",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week10/index.html#assignments",
+    "href": "week10/index.html#assignments",
+    "title": "Week 10: Exploring data having a space and time context Part II",
+    "section": "Assignments",
+    "text": "Assignments\n\nProject Part 1 is due on Monday 13 October.\nProject Part 2 is due on Monday 03 November."
+  },
+  {
+    "objectID": "week1/tutorial.html",
+    "href": "week1/tutorial.html",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
+  },
+  {
+    "objectID": "week1/tutorial.html#objectives",
+    "href": "week1/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
+  },
+  {
+    "objectID": "week1/tutorial.html#preparation",
+    "href": "week1/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 1",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nHave git installed on your laptop so that you can access the GitHub classroom.\nHave the latest versions of RStudio and R installed on your laptop.\nInstall this list of R packages:\n\n\nCreate an RStudio Project for this unit, called ETC5521. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for data, one for tutorial_XX, … Each week when you begin your tutorial, open the project."
+  },
+  {
+    "objectID": "week1/tutorial.html#exercises",
+    "href": "week1/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 1",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises"
+  },
+  {
+    "objectID": "week1/tutorial.html#how-good-are-your-detective-skills",
+    "href": "week1/tutorial.html#how-good-are-your-detective-skills",
+    "title": "ETC5521 Tutorial 1",
+    "section": "1. How good are your detective skills?",
+    "text": "1. How good are your detective skills?\nBeing good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.\nPlay the game alzheimer_test from the fun package by running this code:\nYou will be given 6 tasks to complete. Each one is to find a specific letter hidden among a \\(10\\times 30\\) grid of letters. When you are finished, answer these questions:\n\nWhich task did you THINK was the most difficult?\nWhich task does the DATA say was most difficult based, based on the time taken to answer, tm1.1.j. in your results data?\nSave the dataset to an .rda file.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n           char1.1.j. char2.1.j.  tm1.1.j.\nans.user.2          M          N 30.839718\nans.user.3          I          T 19.695932\nans.user.5          D          O 17.189302\nans.user.1          O          C 16.534676\nans.user.4          F          E  4.424869\nans.user            9          6  3.812386"
+  },
+  {
+    "objectID": "week1/tutorial.html#get-started-using-github-classroom",
+    "href": "week1/tutorial.html#get-started-using-github-classroom",
+    "title": "ETC5521 Tutorial 1",
+    "section": "3. Get started using GitHub Classroom",
+    "text": "3. Get started using GitHub Classroom\n\nIn Moodle go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.\nClone the assignment repo to your computer.\nOpen the assign01.html instructions.\nMake a start on loading the data into R."
+  },
+  {
+    "objectID": "week1/tutorial.html#finishing-up",
+    "href": "week1/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 1",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week1/tutorialsol.html",
+    "href": "week1/tutorialsol.html",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
+  },
+  {
+    "objectID": "week1/tutorialsol.html#objectives",
+    "href": "week1/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 1",
+    "section": "",
+    "text": "This is the first tutorial meeting of the semester. The goal is to get to know other people in the class with you, and your tutors, and check you’ve got the right skills to get started, and to begin thinking about exploratory data analysis."
+  },
+  {
+    "objectID": "week1/tutorialsol.html#preparation",
+    "href": "week1/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 1",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nHave git installed on your laptop so that you can access the GitHub classroom.\nHave the latest versions of RStudio and R installed on your laptop.\nInstall this list of R packages:\n\n\nCreate an RStudio Project for this unit, called ETC5521. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for data, one for tutorial_XX, … Each week when you begin your tutorial, open the project."
+  },
+  {
+    "objectID": "week1/tutorialsol.html#exercises",
+    "href": "week1/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 1",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises"
+  },
+  {
+    "objectID": "week1/tutorialsol.html#how-good-are-your-detective-skills",
+    "href": "week1/tutorialsol.html#how-good-are-your-detective-skills",
+    "title": "ETC5521 Tutorial 1",
+    "section": "1. How good are your detective skills?",
+    "text": "1. How good are your detective skills?\nBeing good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.\nPlay the game alzheimer_test from the fun package by running this code:\nYou will be given 6 tasks to complete. Each one is to find a specific letter hidden among a \\(10\\times 30\\) grid of letters. When you are finished, answer these questions:\n\nWhich task did you THINK was the most difficult?\nWhich task does the DATA say was most difficult based, based on the time taken to answer, tm1.1.j. in your results data?\nSave the dataset to an .rda file.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n           char1.1.j. char2.1.j.  tm1.1.j.\nans.user.2          M          N 30.839718\nans.user.3          I          T 19.695932\nans.user.5          D          O 17.189302\nans.user.1          O          C 16.534676\nans.user.4          F          E  4.424869\nans.user            9          6  3.812386"
+  },
+  {
+    "objectID": "week1/tutorialsol.html#get-started-using-github-classroom",
+    "href": "week1/tutorialsol.html#get-started-using-github-classroom",
+    "title": "ETC5521 Tutorial 1",
+    "section": "3. Get started using GitHub Classroom",
+    "text": "3. Get started using GitHub Classroom\n\nIn Moodle go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.\nClone the assignment repo to your computer.\nOpen the assign01.html instructions.\nMake a start on loading the data into R."
+  },
+  {
+    "objectID": "week1/tutorialsol.html#finishing-up",
+    "href": "week1/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 1",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week1/index.html",
+    "href": "week1/index.html",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "",
+    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week1/index.html#reading",
+    "href": "week1/index.html#reading",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "",
+    "text": "The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week1/index.html#what-you-will-learn-this-week",
+    "href": "week1/index.html#what-you-will-learn-this-week",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nHow exploring data is different from a confirmatory analysis\nGet up and running with GitHub Classroom"
+  },
+  {
+    "objectID": "week1/index.html#lecture-slides",
+    "href": "week1/index.html#lecture-slides",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week1/index.html#worksheet",
+    "href": "week1/index.html#worksheet",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Worksheet",
+    "text": "Worksheet\n\nqmd\nhtml"
+  },
+  {
+    "objectID": "week1/index.html#tutorial-instructions",
+    "href": "week1/index.html#tutorial-instructions",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Letter value plots: today’s solution",
-    "text": "Letter value plots: today’s solution\n\n\nWhy break the data into quarters? Why not eighths, sixteenths? k-number summaries?\nWhat does a 7-number summary look like?\n\nHow would you make an 11-number summary?\n\n\nlibrary(lvplot)\np &lt;- ggplot(mpg, \n            aes(class, hwy))\np + geom_lv(aes(fill=..LV..)) + \n  scale_fill_brewer() + \n  coord_flip() + \n  xlab(\"\")"
+    "section": "",
+    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: Fridays 11-1 Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 352 and on zoom (see link in moodle)"
+  },
+  {
+    "objectID": "index.html#lecturerchief-examiner",
+    "href": "index.html#lecturerchief-examiner",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Professor Di Cook\n\nEmail: etc5521.clayton-x@monash.edu\nConsultation: Fridays 11-1 Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 352 and on zoom (see link in moodle)"
+  },
+  {
+    "objectID": "index.html#tutors",
+    "href": "index.html#tutors",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Tutors",
+    "text": "Tutors\n\nKrisanat Anukarnsakulchularp\n\nTutorials: Thu 9am (CL_LTB_188), 10am (CL_LTB_188), 3pm (CL_LTB_387)\nConsultation: Thursdays 4-6pm Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 232A"
+  },
+  {
+    "objectID": "index.html#weekly-schedule",
+    "href": "index.html#weekly-schedule",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Weekly schedule",
+    "text": "Weekly schedule\n\nLecture+workshop: Tues 2-5pm on zoom (link in Moodle)\nTutorial: 1 hour\nWeekly learning quizzes due each Thursday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n29 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n05 Aug\nLearning from history\nEDA Case Study: Bay area blues\n\n\n\n12 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\n\n\n\n19 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\nExercises 1\n\n\n26 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\n\n\n\n02 Sep\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nExercises 2\n\n\n09 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\n\n\n\n16 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\n\n\n\n23 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nExercises 3\n\n\n30 Sep\nMid-semester break\n\n\n\n\n07 Oct\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\n\n\n\n14 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nProject Part 1\n\n\n21 Oct\nHelp session\n\n\n\n\n04 Nov\n\n\nProject Part 2"
+  },
+  {
+    "objectID": "index.html#assessments",
+    "href": "index.html#assessments",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Assessments",
+    "text": "Assessments\n\nWeekly learning quizzes: 5% (Due each week by Thu 9am, weeks 2-12)\nExercises 1: Instructions (15%) (Due Monday 11:55pm)\nExercises 2: Instructions (20%) (Due Monday 11:55pm)\nExercises 3: Instructions (20%) (Due Monday 11:55pm)\nProject part 1: Instructions (20%) (Due Monday 11:55pm)\nProject part 2: Instructions (20%) (Due Monday 11:55pm)"
+  },
+  {
+    "objectID": "index.html#software",
+    "href": "index.html#software",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Software",
+    "text": "Software\nWe will be using the latest versions of R and RStudio.\nHere is the code to install (most of) the R packages we will be using in this unit.\ninstall.packages(c(\"tidyr\", \"dplyr\", \"readr\", \"readxl\", \"readabs\", \"forcats\", \"tsibble\", \"cubble\", \"lubridate\", \"ggplot2\", \"GGally\", \"ggthemes\", \"sugrrants\", \"ggbeeswarm\", \"plotly\", \"gganimate\", \"tourr\", \"sugarbag\", \"tsibbletalk\", \"visdat\", \"inspectdf\", \"naniar\", \"validate\", \"vcd\", \"mvtnorm\", \"nullabor\", \"visage\", \"forecast\", \"cassowaryr\", \"brolgar\", \"palmerpenguins\", \"housingData\",  \"broom\", \"kableExtra\", \"lvplot\", \"colorspace\", \"patchwork\"), dependencies=TRUE)\nFrom GitHub, install\nremotes::install_github(\"casperhart/detourr\")\nIf you are relatively new to R, working through the materials at https://startr.numbat.space is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you.\nThese materials are licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License."
+  },
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "ETC5521 Resources",
+    "section": "",
+    "text": "Books\n\nUnwin (2015) Graphical Data Analysis with R\nWilke (2019) Fundamentals of Data Visualization\nCook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, Introduction\nvan der Loo and de Jonge (2018). Statistical Data Cleaning with Applications in R, John Wiley and Sons Ltd.\nCleveland (1993) Visualizing Data, Hobart Press.\nCox & Snell (1981) Applied Statistics, London: Chapman and Hall.\nMoraga (2019) Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny\nSievert (2019) Interactive web-based data visualization with R, plotly, and shiny\n\n\n\nWebsites\n\nJosse et al (2022) R-miss-tastic\nFriendly and Denis Milestones in History of Thematic Cartography, Statistical Graphics and Data Visualisation available at http://www.datavis.ca/milestones/\nWang, Cook, Hyndman, O’Hara-Wild (2019) tsibble\ncubble: A Vector Spatio-Temporal Data Structure for Data Analysis\nTierney, Cook, Prvan (2020) Browse Over Longitudinal Data Graphically and Analytically in R\nsf: Simple Features for R\nVisualising spatial data using R\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R\nMason, Lee, Laa, and Cook (2022). cassowaryr: Compute Scagnostics on Pairs of Numeric Variables in a Data Set\n\n\n\nArticles\n\nDonoho (2017) 50 Years of Data Science\nStaniak and Biecek (2019) The Landscape of R Packages for Automated Exploratory Data Analysis\nHuebner et al (2018) A Contemporary Conceptual Framework for Initial Data Analysis\nHuebner et al (2020) Hidden analyses\nChatfield (1985) The Initial Examination of Data, Journal of the Royal Statistical Society, Series A (General) 148(3):214–231\nHyndman (2014) Explaining the ABS unemployment fluctuations\nBuja et al. (2009). Statistical Inference for Exploratory Data Analysis and Model Diagnostics. Philosophical Transactions. Series A, Mathematical, Physical, and Engineering Sciences 367 (1906): 4361–83.\nWickham et al (2010) Graphical Inference for Infovis. IEEE Transactions on Visualization and Computer Graphics 16 (6): 973–79.\nHofmann et al (2012) Graphical Tests for Power Comparison of Competing Designs. IEEE Transactions on Visualization and Computer Graphics 18 (12): 2441–48.\nMajumder et al (2013) Validation of Visual Statistical Inference, Applied to Linear Models. Journal of the American Statistical Association 108 (503): 942–56.\nTierney et al (2023) Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.\nBecker, R. A., Cleveland, W. S., & Shyu, M. J. (1996). “The Visual Design and Control of Trellis Display.” Journal of Computational and Graphical Statistics, 5(2), 123-155.\nWang, Cook, Hyndman (2019) A New Tidy Data Structure to Support Exploration and Modeling of Temporal Data\nKobakian et al Hexagon tile map\nWickham et al (2011). tourr: An R Package for Exploring Multivariate Data with Projections"
+  },
+  {
+    "objectID": "week1/slides.html#about-this-unit",
+    "href": "week1/slides.html#about-this-unit",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "About this unit",
+    "text": "About this unit"
+  },
+  {
+    "objectID": "week1/slides.html#teaching-team-12",
+    "href": "week1/slides.html#teaching-team-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Teaching team 1/2",
+    "text": "Teaching team 1/2\n\n\n\nDi Cook  Distinguished Professor  Monash University \n\n🌐 https://dicook.org/\n✉️ ETC5521.Clayton-x@monash.edu\n🦣 @visnut@aus.social  @visnut.bsky.social\n\n\nI have a PhD from Rutgers University, NJ, and a Bachelor of Science from University of New England\nI am a Fellow of the American Statistical Association, elected member of the the R Foundation and International Statistical Institute, Past-Editor of the Journal of Computational and Graphical Statistics, and the R Journal.\nMy research is in data visualisation, statistical graphics and computing, with application to sports, ecology and bioinformatics. I likes to develop new methodology and software.\nMy students work on methods and software that is generally useful for the world. They have been responsible for bringing you the tidyverse suite, knitr, plotly, and many other R packages we regularly use."
+  },
+  {
+    "objectID": "week1/slides.html#teaching-team-22",
+    "href": "week1/slides.html#teaching-team-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Teaching team 2/2",
+    "text": "Teaching team 2/2\n\n\n\nKrisanat Anukarnsakulchularp  Master of Business Analytics  Monash University \n\n🌐 https://github.com/KrisanatA\n✉️ ETC5521.Clayton-x@monash.edu\n\n\nHe has a Bachelor of Actuarial Science, Monash University, 2018 - 2021\nand a Master of Business Analytics, Monash University | 2022 - 2023.\nHe has published the R package animbook\nand is a first year PhD student at Monash, working on data structures, visualisation and models for spatiotemporal networks.\nThis is his fourth semester tutoring at Monash, and the only unit working on this semester."
+  },
+  {
+    "objectID": "week1/slides.html#got-a-question-or-a-comment",
+    "href": "week1/slides.html#got-a-question-or-a-comment",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Got a question, or a comment?",
+    "text": "Got a question, or a comment?\n\n✋ 🔡 You can ask directly by unmuting yourself, or typing in the chat, of the live lecture.\n\n💻 If watching the recording, please post questions in the discussion (ED) forum.\n\nI hope you have many questions! 🙋🏻👣"
+  },
+  {
+    "objectID": "week1/slides.html#welcome",
+    "href": "week1/slides.html#welcome",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Welcome!",
+    "text": "Welcome!\n\n\nSynopsis\nBeyond modelling and prediction, data might have many more stories to tell. Exploring data to uncover patterns and structures, involves both numerical and visual techniques designed to reveal interesting information that may be unexpected. However, an analyst must be cautious not to over-interpret apparent patterns, and to use randomisation tools to assess whether the patterns are real or spurious.\n\n\n\nLearning objectives\n\nlearn to use modern data exploration tools with many different types of contemporary data to uncover interesting structures, unusual relationships and anomalies.\nunderstand how to map out appropriate analyses for a given data set and description, define what we would expect to see in the data, and whether what we see is contrary to expectations.\nbe able to compute null samples in order to test apparent patterns, and to interpret the results using computational methods for statistical inference.\ncritically assess the strength and adequacy of data analysis."
+  },
+  {
+    "objectID": "week1/slides.html#unit-structure",
+    "href": "week1/slides.html#unit-structure",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "📅 Unit Structure",
+    "text": "📅 Unit Structure\n\n\n2 hour lecture 👩‍🏫 Tue 2.00 - 4:00pm, on zoom (see moodle for the link) Class is more fun if you can attend live!\n1 hour workshop Tue 4:00 - 5:00pm, on same zoom link. This is based on material during lecture.\n1 hour on-campus tutorial 🛠️ Thu 9:00-10:00am, 10:00-11am and 3:00-4:00pm CL_Anc-19.LTB_188 Attendance is expected - this is the chance to practice and get help with assignments from your tutor’s."
+  },
+  {
+    "objectID": "week1/slides.html#resources",
+    "href": "week1/slides.html#resources",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "📚 Resources",
+    "text": "📚 Resources\n🏡 Course homepage: this is where you find the course materials  (lecture slides, tutorials and tutorial solutions) https://ddde.numbat.space/\n\n🈴 Moodle: this is where you find discussion forum, zoom links, and marks https://learning.monash.edu/course/view.php?id=34784\n\n🧰 GitHub classroom: this is where you will find assignments, but links to each will be available in moodle. https://classroom.github.com/"
+  },
+  {
+    "objectID": "week1/slides.html#assessment-part-12",
+    "href": "week1/slides.html#assessment-part-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "💯 Assessment Part 1/2",
+    "text": "💯 Assessment Part 1/2\n\nWeekly quizzes (5%) There will be a weekly quiz starting week 2 provided through Moodle. These are a great chance to check your knowledge, and help you prepare for the tutorial and to keep up to date with the weekly course material. Your best 10 scores will be used for your final quiz total. \nExercises 1 (15%), through GitHub classroom, Due: Aug 18, 11:55pm. This is an individual assessment. \nExercises 2 (20%), through GitHub classroom, Due: Sep 1, 11:55pm. This is an individual assessment. \nExercises 3 (20%): through GitHub classroom, Due: Sep 22, 11:55pm. This is an individual assessment. \nProject, parts 1 and 2 (20% each), through GitHub classroom, Due: Oct 13, 11:55pm and Nov 3, 11:55pm."
+  },
+  {
+    "objectID": "week1/slides.html#github-classroom",
+    "href": "week1/slides.html#github-classroom",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "GitHub Classroom",
+    "text": "GitHub Classroom\nWe are going to use GitHub Classroom to distribute assignment templates and keep track of your assignment progress.\n\n\nClone the first assignment by clicking on the link given in Moodle.\nOnce you have accepted it, you will get a cloned copy on your own GitHub account. It is a private repo, which means you and the teaching staff will be the only people with access.\nIf you need some help getting started, check this information.\nThe week 1 tutorial will help you get started."
+  },
+  {
+    "objectID": "week1/slides.html#what-does-it-mean-to-explore-data",
+    "href": "week1/slides.html#what-does-it-mean-to-explore-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What does it mean to explore data?",
+    "text": "What does it mean to explore data?\n\n\n\n\nhttps://www.gocomics.com/calvinandhobbes/2015/08/26"
+  },
+  {
+    "objectID": "week1/slides.html#a-simple-example-to-illustrate-exploratory-data-analysis-contrasted-with-a-confirmatory-data-analysis",
+    "href": "week1/slides.html#a-simple-example-to-illustrate-exploratory-data-analysis-contrasted-with-a-confirmatory-data-analysis",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "A simple example to illustrate “exploratory data analysis” contrasted with a “confirmatory data analysis”",
+    "text": "A simple example to illustrate “exploratory data analysis” contrasted with a “confirmatory data analysis”"
+  },
+  {
+    "objectID": "week1/slides.html#what-are-the-factors-that-affect-tipping-behaviour",
+    "href": "week1/slides.html#what-are-the-factors-that-affect-tipping-behaviour",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What are the factors that affect tipping behaviour?",
+    "text": "What are the factors that affect tipping behaviour?\n\n\nIn one restaurant, a food server recorded the following data on all customers they served during an interval of two and a half months in early 1990.\nFood servers’ tips in restaurants may be influenced by many factors, including the nature of the restaurant, size of the party, and table locations in the restaurant. Restaurant managers need to know which factors matter when they assign tables to food servers.\n\n\n\nlibrary(tidyverse)\ntips &lt;- read_csv(\"http://ggobi.org/book/data/tips.csv\")"
+  },
+  {
+    "objectID": "week1/slides.html#what-is-tipping",
+    "href": "week1/slides.html#what-is-tipping",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What is tipping?",
+    "text": "What is tipping?\n\nWhen you’re dining at a full-service restaurant\n\nTip 20 percent of your full bill.\n\nWhen you grab a cup of coffee\n\nRound up or add a dollar if you’re a regular or ordered a complicated drink.\n\nWhen you have lunch at a food truck\n\nDrop a few dollars into the tip jar, but a little less than you would at a dine-in spot.\n\nWhen you use a gift card\n\nTip on the total value of the meal, not just what you paid out of pocket.\n\n\n\n\nThe basic rules of tipping that everyone should know about"
+  },
+  {
+    "objectID": "week1/slides.html#recommended-procedure-in-the-book",
+    "href": "week1/slides.html#recommended-procedure-in-the-book",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Recommended procedure in the book",
+    "text": "Recommended procedure in the book\n\nStep 1: Develop a model\n\nShould the response be tip alone and use the total bill as a predictor?\nShould you create a new variable tip rate and use this as the response?\n\nStep 2: Fit the full model with sex, smoker, day, time and size as predictors\nStep 3: Refine model: Should some variables should be dropped?\nStep 4: Check distribution of residuals\nStep 5: Summarise the model, if X=something, what would be the expected tip"
+  },
+  {
+    "objectID": "week1/slides.html#step-1",
+    "href": "week1/slides.html#step-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Step 1",
+    "text": "Step 1\nCalculate tip % as tip/total bill \\(\\times\\) 100\n  \n\ntips &lt;- tips %&gt;%\n  mutate(tip_pct = tip/totbill * 100) \n\n\n\nNote: Creating new variables (sometimes called feature engineering), is a common step in any data analysis."
+  },
+  {
+    "objectID": "week1/slides.html#step-2-fit",
+    "href": "week1/slides.html#step-2-fit",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Step 2 Fit",
+    "text": "Step 2 Fit\nFit the full model with all variables\n \n\ntips_lm &lt;- tips %&gt;%\n  select(tip_pct, sex, smoker, day, time, size) %&gt;%\n  lm(tip_pct ~ ., data=.)"
+  },
+  {
+    "objectID": "week1/slides.html#step-2-model-summary",
+    "href": "week1/slides.html#step-2-model-summary",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Step 2 Model summary",
+    "text": "Step 2 Model summary\n\n\n\nlibrary(broom)\nlibrary(kableExtra)\ntidy(tips_lm) %&gt;% \n  kable(digits=2) %&gt;% \n  kable_styling() \n\n\nglance(tips_lm) %&gt;% \n  select(r.squared, statistic, \n         p.value) %&gt;% \n  kable(digits=3)\n\n\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n20.66\n2.49\n8.29\n0.00\n\n\nsexM\n-0.85\n0.83\n-1.02\n0.31\n\n\nsmokerYes\n0.36\n0.85\n0.43\n0.67\n\n\ndaySat\n-0.18\n1.83\n-0.10\n0.92\n\n\ndaySun\n1.67\n1.90\n0.88\n0.38\n\n\ndayThu\n-1.82\n2.32\n-0.78\n0.43\n\n\ntimeNight\n-2.34\n2.61\n-0.89\n0.37\n\n\nsize\n-0.96\n0.42\n-2.28\n0.02\n\n\n\n\n\n\n\n\n\n\n\nr.squared\nstatistic\np.value\n\n\n\n\n0.042\n1.5\n0.17\n\n\n\n\n\n🤔 Which variable(s) would be considered important for predicting tip %?"
+  },
+  {
+    "objectID": "week1/slides.html#step-3-refine-model",
+    "href": "week1/slides.html#step-3-refine-model",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Step 3: Refine model",
+    "text": "Step 3: Refine model\n\n\n\ntips_lm &lt;- tips %&gt;%\n  select(tip_pct, size) %&gt;% \n  lm(tip_pct ~ ., data=.) \ntidy(tips_lm) %&gt;% \n  kable(digits=2) %&gt;% \n  kable_styling() \n\n\nglance(tips_lm) %&gt;% \n  select(r.squared, statistic, p.value) %&gt;% \n  kable(digits=3)\n\n\n\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n18.44\n1.12\n16.5\n0.00\n\n\nsize\n-0.92\n0.41\n-2.2\n0.03\n\n\n\n\n\n\n\n\n\n\n\nr.squared\nstatistic\np.value\n\n\n\n\n0.02\n5\n0.026"
+  },
+  {
+    "objectID": "week1/slides.html#model-summary",
+    "href": "week1/slides.html#model-summary",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model summary",
+    "text": "Model summary\n \n\\[\\widehat{tip %} = 18.44 - 0.92 \\times size\\]\n\n \nAs the size of the dining party increases by one person the tip decreases by approximately 1%."
+  },
+  {
+    "objectID": "week1/slides.html#model-assessment",
+    "href": "week1/slides.html#model-assessment",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model assessment",
+    "text": "Model assessment\n   \\(R^2 = 0.02\\).\n\n  This dropped by half from the full model, even though no other variables contributed significantly to the model. It might be a good step to examine interaction terms.\nWhat does \\(R^2 = 0.02\\) mean?"
+  },
+  {
+    "objectID": "week1/slides.html#model-assessment-1",
+    "href": "week1/slides.html#model-assessment-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model assessment",
+    "text": "Model assessment\n\\(R^2 = 0.02\\) means that size explains just 2% of the variance in tip %. This is a very weak model.\n\nAnd \\(R^2 = 0.04\\) is also a very weak model.\nWhat do the \\(F\\) statistic and \\(p\\)-value mean?\nWhat do the \\(t\\) statistics and \\(p\\)-value associated with model coefficients mean?"
+  },
+  {
+    "objectID": "week1/slides.html#overall-model-significance",
+    "href": "week1/slides.html#overall-model-significance",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Overall model significance",
+    "text": "Overall model significance\nAssume that we have a random sample from a population. Assume that the model for the population is\n\\[ \\widehat{tip %} = \\beta_0 + \\beta_1 sexM + ... + \\beta_7 size \\] and we have observed\n\\[ \\widehat{tip %} = b_0 + b_1  sexM + ... + b_7 size \\] The \\(F\\) statistic refers to\n\\[ H_o: \\beta_1 = ... = \\beta_7 = 0 ~~ vs ~~ H_a: \\text{at least one is not 0}\\] The \\(p\\)-value is the probability that we observe the given \\(F\\) value or larger, computed assuming \\(H_o\\) is true."
+  },
+  {
+    "objectID": "week1/slides.html#term-significance",
+    "href": "week1/slides.html#term-significance",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Term significance",
+    "text": "Term significance\nAssume that we have a random sample from a population. Assume that the model for the population is\n\\[ \\widehat{tip %} = \\beta_0 + \\beta_1 sexM + ... + \\beta_7 size \\] and we have observed\n\\[ \\widehat{tip %} = b_0 + b_1  sexM + ... + b_7 size \\]\nThe \\(t\\) statistics in the coefficient summary refer to\n\\[ H_o: \\beta_k = 0 ~~ vs ~~ H_a: \\beta_k \\neq 0 \\] The \\(p\\)-value is the probability that we observe the given \\(t\\) value or more extreme, computed assuming \\(H_o\\) is true."
+  },
+  {
+    "objectID": "week1/slides.html#model-diagnostics-md",
+    "href": "week1/slides.html#model-diagnostics-md",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Model diagnostics (MD)",
+    "text": "Model diagnostics (MD)\nNormally, the final model summary would be accompanied diagnostic plots\n\nobserved vs fitted values to check strength and appropriateness of the fit\nunivariate plot, and normal probability plot, of residuals to check for normality\nin the simple final model like this, the observed vs predictor, with model overlaid would be advised to assess the model relative to the variability around the model\nwhen the final model has more terms, using a partial dependence plot to check the relative relationship between the response and predictors would be recommended."
+  },
+  {
+    "objectID": "week1/slides.html#residual-plots",
+    "href": "week1/slides.html#residual-plots",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Residual plots",
+    "text": "Residual plots\n\n\n\ntips_aug &lt;- augment(tips_lm)\nggplot(tips_aug, \n    aes(x=.resid)) + \n  geom_histogram() +\n  xlab(\"residuals\")"
+  },
+  {
+    "objectID": "week1/slides.html#residual-normal-probability-plots",
+    "href": "week1/slides.html#residual-normal-probability-plots",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Residual normal probability plots",
+    "text": "Residual normal probability plots\n\n\n\nggplot(tips_aug, \n    aes(sample=.resid)) + \n  stat_qq() +\n  stat_qq_line() +\n  xlab(\"residuals\") +\n  theme(aspect.ratio=1)"
+  },
+  {
+    "objectID": "week1/slides.html#fitted-vs-observed",
+    "href": "week1/slides.html#fitted-vs-observed",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Fitted vs observed",
+    "text": "Fitted vs observed\n\n\n\nggplot(tips_aug, \n    aes(x=.fitted, y=tip_pct)) + \n  geom_point() +\n  geom_smooth(method=\"lm\", se=FALSE) +\n  xlab(\"observed\") +\n  ylab(\"fitted\")"
+  },
+  {
+    "objectID": "week1/slides.html#model-in-the-data-space",
+    "href": "week1/slides.html#model-in-the-data-space",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "“Model-in-the-data-space”",
+    "text": "“Model-in-the-data-space”\n\n\n\nggplot(tips_aug, \n    aes(x=size, y=tip_pct)) + \n  geom_point() +\n  geom_smooth(method=\"lm\", se=FALSE) +\n  ylab(\"tip %\")\n\n\nThe fitted model is overlaid on a plot of the data. This is called “model-in-the-data-space” (Wickham et al, 2015).\n\nAll the plots on the previous three slides: histogram of residuals, normal probability plot, fitted vs residuals are considered to be “data-in-the-model-space”. Stay tuned for more discussion on this later."
+  },
+  {
+    "objectID": "week1/slides.html#section",
+    "href": "week1/slides.html#section",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "The result of this work might leave us with\n\na model that could be used to impose a dining/tipping policy in restaurants (see here)\n\n\nbut it should also leave us with an unease that this policy is based on weak support."
+  },
+  {
+    "objectID": "week1/slides.html#summary",
+    "href": "week1/slides.html#summary",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Summary",
+    "text": "Summary\n\n\n\nPlots as we have just seen, associated with pursuit of an answer to a specific question may be best grouped into the category of “model diagnostics (MD)”.\n\nThere are additional categories of plots for data analysis that include initial data analysis (IDA), descriptive statistics. Stay tuned for more on these.\n\n\nA separate and big area for plots of data is for communication, where we already know what is in the data and we want to communicate the information as best possible.\n\nWhen exploring data, we are using data plots to discover things we didn’t already know."
+  },
+  {
+    "objectID": "week1/slides.html#what-did-this-analysis-miss",
+    "href": "week1/slides.html#what-did-this-analysis-miss",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What did this analysis miss?",
+    "text": "What did this analysis miss?"
+  },
+  {
+    "objectID": "week1/slides.html#general-strategy-for-exploring-data",
+    "href": "week1/slides.html#general-strategy-for-exploring-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "General strategy for EXPLORING DATA",
+    "text": "General strategy for EXPLORING DATA\n\n\nIt’s a good idea to examine the data description, the explanation of the variables, and how the data was collected.\nYou need to know what type of variables are in the data in order to decide appropriate choice of plots, and calculations to make.\nData description should have information about data collection methods, so that the extent of what we learn from the data might apply to new data.\n\n\nWhat does that look like here?\n\nglimpse(tips)\n\nRows: 244\nColumns: 9\n$ obs     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1…\n$ totbill &lt;dbl&gt; 17.0, 10.3, 21.0, 23.7, 24.6, 25…\n$ tip     &lt;dbl&gt; 1.0, 1.7, 3.5, 3.3, 3.6, 4.7, 2.…\n$ sex     &lt;chr&gt; \"F\", \"M\", \"M\", \"M\", \"F\", \"M\", \"M…\n$ smoker  &lt;chr&gt; \"No\", \"No\", \"No\", \"No\", \"No\", \"N…\n$ day     &lt;chr&gt; \"Sun\", \"Sun\", \"Sun\", \"Sun\", \"Sun…\n$ time    &lt;chr&gt; \"Night\", \"Night\", \"Night\", \"Nigh…\n$ size    &lt;dbl&gt; 2, 3, 3, 2, 4, 4, 2, 4, 2, 2, 2,…\n$ tip_pct &lt;dbl&gt; 5.9, 16.1, 16.7, 14.0, 14.7, 18.…\n\n\n\nLook at the distribution of quantitative variables tips, total bill.\n\n\n\nExamine the distributions across categorical variables.\n\n\nExamine quantitative variables relative to categorical variables"
+  },
+  {
+    "objectID": "week1/slides.html#distributions-of-tips",
+    "href": "week1/slides.html#distributions-of-tips",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Distributions of tips",
+    "text": "Distributions of tips\n\n\n\nggplot(tips, \n    aes(x=tip)) + \n  geom_histogram(\n    colour=\"white\")"
+  },
+  {
+    "objectID": "week1/slides.html#because-one-binwidth-is-never-enough",
+    "href": "week1/slides.html#because-one-binwidth-is-never-enough",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Because, one binwidth is never enough …",
+    "text": "Because, one binwidth is never enough …"
+  },
+  {
+    "objectID": "week1/slides.html#distributions-of-tips-1",
+    "href": "week1/slides.html#distributions-of-tips-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Distributions of tips",
+    "text": "Distributions of tips\n\n\n\nggplot(tips, \n    aes(x=tip)) +\n  geom_histogram(\n    breaks=seq(0.5,10.5,1),  \n    colour=\"white\") + \n  scale_x_continuous(\n    breaks=seq(0,11,1))\n\nBig fat bins. Tips are skewed, which means most tips are relatively small."
+  },
+  {
+    "objectID": "week1/slides.html#distributions-of-tips-2",
+    "href": "week1/slides.html#distributions-of-tips-2",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Distributions of tips",
+    "text": "Distributions of tips\n\n\n\nggplot(tips, \n    aes(x=tip)) + \n  geom_histogram(\n    breaks=seq(0.5,10.5,0.1), \n    colour=\"white\") +\n  scale_x_continuous(\n    breaks=seq(0,11,1))\n\nSkinny bins. Tips are multimodal, and occurring at the full dollar and 50c amounts."
+  },
+  {
+    "objectID": "week1/slides.html#we-could-also-look-at-total-bill-this-way",
+    "href": "week1/slides.html#we-could-also-look-at-total-bill-this-way",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "We could also look at total bill this way",
+    "text": "We could also look at total bill this way\nbut I’ve already done this, and we don’t learn anything more about the multiple peaks than waht is learned by plotting tips."
+  },
+  {
+    "objectID": "week1/slides.html#relationship-between-tip-and-total",
+    "href": "week1/slides.html#relationship-between-tip-and-total",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Relationship between tip and total",
+    "text": "Relationship between tip and total\n\n\n\np &lt;- ggplot(tips, \n    aes(x= totbill, y=tip)) + \n  geom_point() + \n  scale_y_continuous(\n    breaks=seq(0,11,1))\np\n\nWhy is total on the x axis? \nShould we add a guideline?"
+  },
+  {
+    "objectID": "week1/slides.html#add-a-guideline-indicating-common-practice",
+    "href": "week1/slides.html#add-a-guideline-indicating-common-practice",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Add a guideline indicating common practice",
+    "text": "Add a guideline indicating common practice\n\n\n\np &lt;- p + geom_abline(intercept=0, \n              slope=0.2) + \n  annotate(\"text\", x=45, y=10, \n           label=\"20% tip\") \np\n\n\n\n\nMost tips less than 20%: Skin flints vs generous diners\nA couple of big tips\nBanding horizontally is the rounding seen previously"
+  },
+  {
+    "objectID": "week1/slides.html#we-should-examine-bar-charts-and-mosaic-plots-of-the-categorical-variables-next",
+    "href": "week1/slides.html#we-should-examine-bar-charts-and-mosaic-plots-of-the-categorical-variables-next",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "We should examine bar charts and mosaic plots of the categorical variables next",
+    "text": "We should examine bar charts and mosaic plots of the categorical variables next\nbut I’ve already done that, and there’s not too much of interest there."
+  },
+  {
+    "objectID": "week1/slides.html#relative-to-categorical-variables",
+    "href": "week1/slides.html#relative-to-categorical-variables",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Relative to categorical variables",
+    "text": "Relative to categorical variables\n\n\n\np + facet_grid(smoker~sex) \n\n\n\n\n\n\n\n\n\n\n\n\nThe bigger bills tend to be paid by men (and females that smoke).\nExcept for three diners, female non-smokers are very consistent tippers, probably around 15-18% though.\nThe variability in the smokers is much higher than for the non-smokers."
+  },
+  {
+    "objectID": "week1/slides.html#isnt-this-interesting",
+    "href": "week1/slides.html#isnt-this-interesting",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Isn’t this interesting?",
+    "text": "Isn’t this interesting?"
+  },
+  {
+    "objectID": "week1/slides.html#procedure-of-eda",
+    "href": "week1/slides.html#procedure-of-eda",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Procedure of EDA",
+    "text": "Procedure of EDA\n\nWe gained a wealth of insight in a short time.\nUsing nothing but graphical methods we investigated univariate, bivariate, and multivariate relationships.\nWe found both global features and local detail. We saw that\n\ntips were rounded; then we saw the obvious\n\ncorrelation between the tip and the size of the bill, noting the scarcity of generous tippers; finally we\ndiscovered differences in the tipping behavior of male and female smokers and non-smokers.\n\n\nThese are unexpected insights were missed from the analysis that focused solely on the primary question."
+  },
+  {
+    "objectID": "week1/slides.html#what-can-go-wrong",
+    "href": "week1/slides.html#what-can-go-wrong",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What can go wrong?",
+    "text": "What can go wrong?"
+  },
+  {
+    "objectID": "week1/slides.html#how-was-data-collected",
+    "href": "week1/slides.html#how-was-data-collected",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "How was data collected?",
+    "text": "How was data collected?\n\n\nIn one restaurant, a food server recorded the following data on all customers they served during an interval of two and a half months in early 1990.\n\nHow much can you infer about tipping more broadly?\n\n\nTip has a weak but significant relationship with total bill?\nTips have a skewed distribution? (More small tips and fewer large tips?)\nTips tend to be made in nice round numbers.\nPeople generally under-tip?\nSmokers are less reliable tippers."
+  },
+  {
+    "objectID": "week1/slides.html#ways-to-verify-support-or-refute-generalisations",
+    "href": "week1/slides.html#ways-to-verify-support-or-refute-generalisations",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Ways to verify, support or refute generalisations",
+    "text": "Ways to verify, support or refute generalisations\n\n\n\nexternal information\nother studies/samples\ngood choice of calculations and plots\nall the permutations and subsets of measured variables\ncomputational re-sampling methods (we’ll see these soon)\n\n\n\nPoor data collection methods affects every analysis, including statistical or computational modeling.\n\n\nFor this waiter and the restaurant manager, there is some useful information. Like what?\n\n\nService fee for smokers to ensure consistency?\nAssign waiter to variety of party sizes and composition.\nShifts on different days or time of day (not shown)."
+  },
+  {
+    "objectID": "week1/slides.html#words-of-wisdom",
+    "href": "week1/slides.html#words-of-wisdom",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Words of wisdom",
+    "text": "Words of wisdom\nFalse discovery is the lesser danger when compared to non-discovery. Non-discovery is the failure to identify meaningful structure, and it may result in false or incomplete modeling. In a healthy scientific enterprise, the fear of non-discovery should be at least as great as the fear of false discovery."
+  },
+  {
+    "objectID": "week1/slides.html#guide",
+    "href": "week1/slides.html#guide",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Guide",
+    "text": "Guide\n\n\n\nRead the data description to understand the context, and the extent of the data collection.\nUnderstand the types of variables that have been measured.\nBrainstorm a set of questions that might be interesting to answer with this data.\nFor each of your question, write down what you EXPECT to find.\nMap out the possible plots and numerical summaries to make, that could be made, but particularly, what needs to be computed in order to answer the questions.\n\n\n\nWhat potential errors might be in the data? Missing values, not recorded data, errors in coding, and think about the strategy to deal with them.\nStart on your analysis. Think about the results suggested and whether they match or contradict what you expected.\nUse randomisation methods to learn whether what you have observed is possibly spurious.\nCommunicate findings."
+  },
+  {
+    "objectID": "week1/slides.html#topics-covered",
+    "href": "week1/slides.html#topics-covered",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Topics covered",
+    "text": "Topics covered\n\nMethods for single, bivariate, multivariate\n\nnumerical variables\ncategorical variables\n\nMethods to accommodate temporal and spatial (maybe also networks) context\nHow to make effective comparisons\nUtilising computational methods to assess what you see is “real”"
+  },
+  {
+    "objectID": "week1/slides.html#resources-1",
+    "href": "week1/slides.html#resources-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Resources",
+    "text": "Resources\n\nCook and Swayne (2007) Interactive and Dynamic Graphics for Data Analysis, Introduction\nDonoho (2017) 50 Years of Data Science\nStaniak and Biecek (2019) The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week1/worksheetsol.html",
+    "href": "week1/worksheetsol.html",
+    "title": "ETC5521 Worksheet 1",
+    "section": "",
+    "text": "The goal of this worksheet is to tackle a data analysis together, by\n\nmapping out an analysis, with class input and help of AI\nwork on cleaning a data set\nmaking some plots\ndiscussing what is surprising, and what is expected"
+  },
+  {
+    "objectID": "week1/worksheetsol.html#objectives",
+    "href": "week1/worksheetsol.html#objectives",
+    "title": "ETC5521 Worksheet 1",
+    "section": "",
+    "text": "The goal of this worksheet is to tackle a data analysis together, by\n\nmapping out an analysis, with class input and help of AI\nwork on cleaning a data set\nmaking some plots\ndiscussing what is surprising, and what is expected"
+  },
+  {
+    "objectID": "week1/worksheetsol.html#about-the-data",
+    "href": "week1/worksheetsol.html#about-the-data",
+    "title": "ETC5521 Worksheet 1",
+    "section": "📋 About the data",
+    "text": "📋 About the data\nThe data to use is available from Tidy Tuesday 28 May 2024 page. Download the data from here, ideally using the tidytuesdayR package. You should only download the data from the Tidy Tuesday once, and save a copy locally on your computer.\nIn addition the gardenR package, available from remotes::install_github(\"llendway/gardenR\") has extra details about the garden.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThis is the code to download the data, and load relevant libraries.\n\n\nCode\n# remotes::install_github(\"llendway/gardenR\")\n# install.packages(\"tidytuesdayR\")\nlibrary(tidytuesdayR)\ntuesdata &lt;- tidytuesdayR::tt_load('2024-05-28')\nsave(tuesdata, file=\"tuesdata.rda\")\n\n\n\n\nCode\nlibrary(gardenR)\nlibrary(tidyverse)\nlibrary(ggbeeswarm)\n\nload(\"tuesdata.rda\")\nharvest_2020 &lt;- tuesdata$harvest_2020\nharvest_2021 &lt;- tuesdata$harvest_2021\nplanting_2020 &lt;- tuesdata$planting_2020\nplanting_2021 &lt;- tuesdata$planting_2021\nspending_2020 &lt;- tuesdata$spending_2020\nspending_2021 &lt;- tuesdata$spending_2021\n\ndata(\"garden_coords\")"
+  },
+  {
+    "objectID": "week1/worksheetsol.html#tasks",
+    "href": "week1/worksheetsol.html#tasks",
+    "title": "ETC5521 Worksheet 1",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\n1. What are the variable types, how and when was the data collected?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThis is collected in 2020 and 2021, and has a variety of numeric and categorical and time variables.\n\n\n\n\n\n\n2. What would some possible questions be to ask about this data?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe link to the ChatGPT conversation is here. It was prompted by\n\nDo you know the gardenR package by Lisa Lendway?\nWhat might be some questions that we could answer with this data?\n\nWe chose to tackle one of the Economics questions: “How much produce (by weight or value) was harvested per dollar spent?” But realised that it was not possible answer this particular question with this data. It was refined to be:\nCompare the ROI for varieties of beans.\nThe next step was to filter the data to focus on one vegetable, beans, and one year to get started.\n\n\nCode\nbeans_planting_2020 &lt;- planting_2020 |&gt;\n  filter(vegetable == \"beans\")\nbeans_harvest_2020 &lt;- harvest_2020 |&gt;\n  filter(vegetable == \"beans\")\nbeans_spending_2020 &lt;- spending_2020 |&gt;\n  filter(vegetable == \"beans\")\n\n\n\n\n\n\n\n\n3. What do you expect to find?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nWe might expect some difference in ROI between varieties.\n\n\n\n\n\n\n4. Pick one of the questions, and let’s try to answer it.\n\nWhat summaries should we make?\nAre we likely going to need to pre-process the data in any way?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nWe need to decide on a common scale. Steps are:\n\nexamine the price for each variety\nsummarise the planting data by variety and join to spending data.\nsummarise the harvest data by variety and join to spending.\n\n\n\nCode\nbeans_spending_2020 |&gt;\n  select(variety, brand, price_with_tax)\n\n\n# A tibble: 3 × 3\n  variety             brand          price_with_tax\n  &lt;chr&gt;               &lt;chr&gt;                   &lt;dbl&gt;\n1 Bush Bush Slender   Renee's Garden           3.01\n2 Chinese Red Noodle  Baker Creek              3.24\n3 Classic Slenderette Renee's Garden           3.23\n\n\nCode\nbeans_planting_2020_smry &lt;- beans_planting_2020 |&gt;\n  group_by(variety) |&gt;\n  summarise(number_seeds_planted = sum(number_seeds_planted))\n\nbeans_2020_smry &lt;- beans_spending_2020 |&gt;\n  select(variety, brand, price_with_tax) |&gt;\n  left_join(beans_planting_2020_smry)\n\nggplot(beans_2020_smry, \n       aes(price_with_tax, \n           number_seeds_planted)) + geom_point()\n\n\n\n\n\n\n\n\n\nCode\nbeans_2020_smry |&gt; \n  mutate(pr_per_seed = price_with_tax/number_seeds_planted) |&gt;\n  select(variety, pr_per_seed)\n\n\n# A tibble: 3 × 2\n  variety             pr_per_seed\n  &lt;chr&gt;                     &lt;dbl&gt;\n1 Bush Bush Slender        0.0752\n2 Chinese Red Noodle       0.324 \n3 Classic Slenderette      0.111 \n\n\nCode\n# Do all the seed packs have the same number of seeds, \n# or did Lisa plant every seed in every pack?\n\n# Harvest\nbeans_harvest_2020_smry &lt;- beans_harvest_2020 |&gt;\n  group_by(variety) |&gt;\n  summarise(weight = sum(weight))\nbeans_harvest_2020_smry\n\n\n# A tibble: 3 × 2\n  variety             weight\n  &lt;chr&gt;                &lt;dbl&gt;\n1 Bush Bush Slender    10038\n2 Chinese Red Noodle     356\n3 Classic Slenderette   1635\n\n\nCode\nbeans_2020_smry &lt;- beans_2020_smry |&gt;\n  left_join(beans_harvest_2020_smry)\n\nbeans_2020_smry &lt;- beans_2020_smry |&gt;\n  mutate(psy = weight/number_seeds_planted)\nbeans_2020_smry\n\n\n# A tibble: 3 × 6\n  variety             brand     price_with_tax number_seeds_planted weight   psy\n  &lt;chr&gt;               &lt;chr&gt;              &lt;dbl&gt;                &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 Bush Bush Slender   Renee's …           3.01                   40  10038 251. \n2 Chinese Red Noodle  Baker Cr…           3.24                   10    356  35.6\n3 Classic Slenderette Renee's …           3.23                   29   1635  56.4\n\n\nProblems encountered.\n\nSpending didn’t specify what the cost involved, whether it was one packet of seeds,\nNot clear whether all seeds in each packet were planted. Numbers suggest, no, because some varieties had many sends and others very few.\n\nAdjustments:\n\nweight was adjusted by number of seeds planted\n\nConclusion:\nBush Bush Slender outperforms the other two, by a lot! This should also indicate that this variety is a better ROI.\nCaveats: Need to check that\n\nthe plots where each was planted was a reasonable chance that they had same access to sunlight and nutrients.\nAssuming that seeds were planted at same distance from each other.\n\n\nNext steps\nExamine the 2021 data. If same varieties grown do the same results happen.\nProblems discovered in doing this: Name of variety in 2021 might have changed to be just “Bush”, and the other two were not used. Could compare against the one new variety."
+  },
+  {
+    "objectID": "week1/worksheet.html",
+    "href": "week1/worksheet.html",
+    "title": "ETC5521 Worksheet 1",
+    "section": "",
+    "text": "The goal of this worksheet is to tackle a data analysis together, by\n\nmapping out an analysis, with class input and help of AI\nwork on cleaning a data set\nmaking some plots\ndiscussing what is surprising, and what is expected"
+  },
+  {
+    "objectID": "week1/worksheet.html#objectives",
+    "href": "week1/worksheet.html#objectives",
+    "title": "ETC5521 Worksheet 1",
+    "section": "",
+    "text": "The goal of this worksheet is to tackle a data analysis together, by\n\nmapping out an analysis, with class input and help of AI\nwork on cleaning a data set\nmaking some plots\ndiscussing what is surprising, and what is expected"
+  },
+  {
+    "objectID": "week1/worksheet.html#about-the-data",
+    "href": "week1/worksheet.html#about-the-data",
+    "title": "ETC5521 Worksheet 1",
+    "section": "📋 About the data",
+    "text": "📋 About the data\nThe data to use is available from Tidy Tuesday 28 May 2024 page. Download the data from here, ideally using the tidytuesdayR package. You should only download the data from the Tidy Tuesday once, and save a copy locally on your computer.\nIn addition the gardenR package, available from remotes::install_github(\"llendway/gardenR\") has extra details about the garden.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThis is the code to download the data, and load relevant libraries.\n\n\nCode\n# remotes::install_github(\"llendway/gardenR\")\n# install.packages(\"tidytuesdayR\")\nlibrary(tidytuesdayR)\ntuesdata &lt;- tidytuesdayR::tt_load('2024-05-28')\nsave(tuesdata, file=\"tuesdata.rda\")\n\n\n\n\nCode\nlibrary(gardenR)\nlibrary(tidyverse)\nlibrary(ggbeeswarm)\n\nload(\"tuesdata.rda\")\nharvest_2020 &lt;- tuesdata$harvest_2020\nharvest_2021 &lt;- tuesdata$harvest_2021\nplanting_2020 &lt;- tuesdata$planting_2020\nplanting_2021 &lt;- tuesdata$planting_2021\nspending_2020 &lt;- tuesdata$spending_2020\nspending_2021 &lt;- tuesdata$spending_2021\n\ndata(\"garden_coords\")"
+  },
+  {
+    "objectID": "week1/worksheet.html#tasks",
+    "href": "week1/worksheet.html#tasks",
+    "title": "ETC5521 Worksheet 1",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\n1. What are the variable types, how and when was the data collected?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThis is collected in 2020 and 2021, and has a variety of numeric and categorical and time variables.\n\n\n\n\n\n\n2. What would some possible questions be to ask about this data?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe link to the ChatGPT conversation is here. It was prompted by\n\nDo you know the gardenR package by Lisa Lendway?\nWhat might be some questions that we could answer with this data?\n\nWe chose to tackle one of the Economics questions: “How much produce (by weight or value) was harvested per dollar spent?” But realised that it was not possible answer this particular question with this data. It was refined to be:\nCompare the ROI for varieties of beans.\nThe next step was to filter the data to focus on one vegetable, beans, and one year to get started.\n\n\nCode\nbeans_planting_2020 &lt;- planting_2020 |&gt;\n  filter(vegetable == \"beans\")\nbeans_harvest_2020 &lt;- harvest_2020 |&gt;\n  filter(vegetable == \"beans\")\nbeans_spending_2020 &lt;- spending_2020 |&gt;\n  filter(vegetable == \"beans\")\n\n\n\n\n\n\n\n\n3. What do you expect to find?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nWe might expect some difference in ROI between varieties.\n\n\n\n\n\n\n4. Pick one of the questions, and let’s try to answer it.\n\nWhat summaries should we make?\nAre we likely going to need to pre-process the data in any way?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nWe need to decide on a common scale. Steps are:\n\nexamine the price for each variety\nsummarise the planting data by variety and join to spending data.\nsummarise the harvest data by variety and join to spending.\n\n\n\nCode\nbeans_spending_2020 |&gt;\n  select(variety, brand, price_with_tax)\n\n\n# A tibble: 3 × 3\n  variety             brand          price_with_tax\n  &lt;chr&gt;               &lt;chr&gt;                   &lt;dbl&gt;\n1 Bush Bush Slender   Renee's Garden           3.01\n2 Chinese Red Noodle  Baker Creek              3.24\n3 Classic Slenderette Renee's Garden           3.23\n\n\nCode\nbeans_planting_2020_smry &lt;- beans_planting_2020 |&gt;\n  group_by(variety) |&gt;\n  summarise(number_seeds_planted = sum(number_seeds_planted))\n\nbeans_2020_smry &lt;- beans_spending_2020 |&gt;\n  select(variety, brand, price_with_tax) |&gt;\n  left_join(beans_planting_2020_smry)\n\nggplot(beans_2020_smry, \n       aes(price_with_tax, \n           number_seeds_planted)) + geom_point()\n\n\n\n\n\n\n\n\n\nCode\nbeans_2020_smry |&gt; \n  mutate(pr_per_seed = price_with_tax/number_seeds_planted) |&gt;\n  select(variety, pr_per_seed)\n\n\n# A tibble: 3 × 2\n  variety             pr_per_seed\n  &lt;chr&gt;                     &lt;dbl&gt;\n1 Bush Bush Slender        0.0752\n2 Chinese Red Noodle       0.324 \n3 Classic Slenderette      0.111 \n\n\nCode\n# Do all the seed packs have the same number of seeds, \n# or did Lisa plant every seed in every pack?\n\n# Harvest\nbeans_harvest_2020_smry &lt;- beans_harvest_2020 |&gt;\n  group_by(variety) |&gt;\n  summarise(weight = sum(weight))\nbeans_harvest_2020_smry\n\n\n# A tibble: 3 × 2\n  variety             weight\n  &lt;chr&gt;                &lt;dbl&gt;\n1 Bush Bush Slender    10038\n2 Chinese Red Noodle     356\n3 Classic Slenderette   1635\n\n\nCode\nbeans_2020_smry &lt;- beans_2020_smry |&gt;\n  left_join(beans_harvest_2020_smry)\n\nbeans_2020_smry &lt;- beans_2020_smry |&gt;\n  mutate(psy = weight/number_seeds_planted)\nbeans_2020_smry\n\n\n# A tibble: 3 × 6\n  variety             brand     price_with_tax number_seeds_planted weight   psy\n  &lt;chr&gt;               &lt;chr&gt;              &lt;dbl&gt;                &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 Bush Bush Slender   Renee's …           3.01                   40  10038 251. \n2 Chinese Red Noodle  Baker Cr…           3.24                   10    356  35.6\n3 Classic Slenderette Renee's …           3.23                   29   1635  56.4\n\n\nProblems encountered.\n\nSpending didn’t specify what the cost involved, whether it was one packet of seeds,\nNot clear whether all seeds in each packet were planted. Numbers suggest, no, because some varieties had many sends and others very few.\n\nAdjustments:\n\nweight was adjusted by number of seeds planted\n\nConclusion:\nBush Bush Slender outperforms the other two, by a lot! This should also indicate that this variety is a better ROI.\nCaveats: Need to check that\n\nthe plots where each was planted was a reasonable chance that they had same access to sunlight and nutrients.\nAssuming that seeds were planted at same distance from each other.\n\n\nNext steps\nExamine the 2021 data. If same varieties grown do the same results happen.\nProblems discovered in doing this: Name of variety in 2021 might have changed to be just “Bush”, and the other two were not used. Could compare against the one new variety."
+  },
+  {
+    "objectID": "week11/index.html",
+    "href": "week11/index.html",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "",
+    "text": "How to use a tour to check if your model suffers from multicollinearity"
+  },
+  {
+    "objectID": "week11/index.html#main-reference",
+    "href": "week11/index.html#main-reference",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "",
+    "text": "How to use a tour to check if your model suffers from multicollinearity"
+  },
+  {
+    "objectID": "week11/index.html#what-you-will-learn-this-week",
+    "href": "week11/index.html#what-you-will-learn-this-week",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nDifferent types of model fitting\nDecomposing data from model\n\nfitted\nresidual\n\nDiagnostic calculations\n\nanomalies\nleverage\ninfluence"
+  },
+  {
+    "objectID": "week11/index.html#lecture-slides",
+    "href": "week11/index.html#lecture-slides",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week11/index.html#tutorial-instructions",
+    "href": "week11/index.html#tutorial-instructions",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week11/index.html#assignments",
+    "href": "week11/index.html#assignments",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "Assignments",
+    "text": "Assignments"
+  },
+  {
+    "objectID": "week11/index.html#assignments-1",
+    "href": "week11/index.html#assignments-1",
+    "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
+    "section": "Assignments",
+    "text": "Assignments\n\nProject Part 1 is due on Monday 13 October.\nProject Part 2 is due on Monday 03 November."
+  },
+  {
+    "objectID": "week2/index.html",
+    "href": "week2/index.html",
+    "title": "Week 2: Learning from history",
+    "section": "",
+    "text": "EDA Case Study: Bay area blues"
+  },
+  {
+    "objectID": "week2/index.html#main-reference",
+    "href": "week2/index.html#main-reference",
+    "title": "Week 2: Learning from history",
+    "section": "",
+    "text": "EDA Case Study: Bay area blues"
+  },
+  {
+    "objectID": "week2/index.html#what-you-will-learn-this-week",
+    "href": "week2/index.html#what-you-will-learn-this-week",
+    "title": "Week 2: Learning from history",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nThe historical origins of EDA\nPencil and paper methods like stem-and-leaf plots\nHow to symmetrise and linearise your data\nWhere EDA is relevant today"
+  },
+  {
+    "objectID": "week2/index.html#lecture-slides",
+    "href": "week2/index.html#lecture-slides",
+    "title": "Week 2: Learning from history",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week2/index.html#tutorial-instructions",
+    "href": "week2/index.html#tutorial-instructions",
+    "title": "Week 2: Learning from history",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week2/index.html#assignments",
+    "href": "week2/index.html#assignments",
+    "title": "Week 2: Learning from history",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August."
+  },
+  {
+    "objectID": "week2/worksheetsol.html",
+    "href": "week2/worksheetsol.html",
+    "title": "ETC5521 Worksheet Week 2",
+    "section": "",
+    "text": "The goal of this worksheet is to search for R packages that can be used for exploring data, and to understand their capacity.\nThe paper The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week2/worksheetsol.html#objectives",
+    "href": "week2/worksheetsol.html#objectives",
+    "title": "ETC5521 Worksheet Week 2",
+    "section": "",
+    "text": "The goal of this worksheet is to search for R packages that can be used for exploring data, and to understand their capacity.\nThe paper The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week2/worksheetsol.html#tasks",
+    "href": "week2/worksheetsol.html#tasks",
+    "title": "ETC5521 Worksheet Week 2",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\n1. Use AI to obtain a list of packages that might be used for exploring data in R.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nHere is my list of prompts:\n\nDo you know the paper “The Landscape of R Packages for Automated Exploratory Data Analysis” ?\nWhat would you recommend for R packages for exploratory data analysis today? I’m not sure that the package list in that paper are reasonable 5 years into the future of today.\nWhat about databot? (Notice the botching of author: “Jennifer (Yihui) Cheng and others”)\nAre there any packages that are true to Tukey’s original book Exploratory Data Analysis from 1977?\nWhat about packages that can explore high-dimensional data?\n\n\n\n\n\n\n\n2. Pick one of the packages mentioned and give it a spin\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n3. Use AI to learn about some of Tukey’s most famous quotes, and also what methods he developed are still in common use today\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nMy prompts:\n\nWhat are some of Tukey’s most famous quotes?\nWhat are some methods that Tukey developed that are commonly used today?\nWhat are the R packages that have these methods?\nWhat about the letter value plot?\nI would love a “A one-page “Tukey contributions” teaching sheet for a lecture?” Can you provide it as a quarto document?\n\n\n\n\n\n\n\n4. For the gardenR example from week 1, ask for some Tukey-style summaries of this data\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nPrompt:\n\nFor the gardenR package data, could you make some code to do Tukey-like summaries of the data?"
+  },
+  {
+    "objectID": "week2/worksheet.html",
+    "href": "week2/worksheet.html",
+    "title": "ETC5521 Worksheet Week 2",
+    "section": "",
+    "text": "The goal of this worksheet is to search for R packages that can be used for exploring data, and to understand their capacity.\nThe paper The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week2/worksheet.html#objectives",
+    "href": "week2/worksheet.html#objectives",
+    "title": "ETC5521 Worksheet Week 2",
+    "section": "",
+    "text": "The goal of this worksheet is to search for R packages that can be used for exploring data, and to understand their capacity.\nThe paper The Landscape of R Packages for Automated Exploratory Data Analysis"
+  },
+  {
+    "objectID": "week2/worksheet.html#tasks",
+    "href": "week2/worksheet.html#tasks",
+    "title": "ETC5521 Worksheet Week 2",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\n1. Use AI to obtain a list of packages that might be used for exploring data in R.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nHere is my list of prompts:\n\nDo you know the paper “The Landscape of R Packages for Automated Exploratory Data Analysis” ?\nWhat would you recommend for R packages for exploratory data analysis today? I’m not sure that the package list in that paper are reasonable 5 years into the future of today.\nWhat about databot? (Notice the botching of author: “Jennifer (Yihui) Cheng and others”)\nAre there any packages that are true to Tukey’s original book Exploratory Data Analysis from 1977?\nWhat about packages that can explore high-dimensional data?\n\n\n\n\n\n\n\n2. Pick one of the packages mentioned and give it a spin\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n3. Use AI to learn about some of Tukey’s most famous quotes, and also what methods he developed are still in common use today\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nMy prompts:\n\nWhat are some of Tukey’s most famous quotes?\nWhat are some methods that Tukey developed that are commonly used today?\nWhat are the R packages that have these methods?\nWhat about the letter value plot?\nI would love a “A one-page “Tukey contributions” teaching sheet for a lecture?” Can you provide it as a quarto document?\n\n\n\n\n\n\n\n4. For the gardenR example from week 1, ask for some Tukey-style summaries of this data\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nPrompt:\n\nFor the gardenR package data, could you make some code to do Tukey-like summaries of the data?"
+  },
+  {
+    "objectID": "week4/index.html",
+    "href": "week4/index.html",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "",
+    "text": "Wickham et al. (2010) Graphical inference for Infovis"
+  },
+  {
+    "objectID": "week4/index.html#main-reference",
+    "href": "week4/index.html#main-reference",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "",
+    "text": "Wickham et al. (2010) Graphical inference for Infovis"
+  },
+  {
+    "objectID": "week4/index.html#what-you-will-learn-this-week",
+    "href": "week4/index.html#what-you-will-learn-this-week",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nrevision of statistical inference\nusing re-sampling methods to calibrate reading patterns\ngenerating lineups of plots\nhow to specify the null hypothesis\ncalculating p-value and power"
+  },
+  {
+    "objectID": "week4/index.html#lecture-slides",
+    "href": "week4/index.html#lecture-slides",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week4/index.html#tutorial-instructions",
+    "href": "week4/index.html#tutorial-instructions",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week4/index.html#assignments",
+    "href": "week4/index.html#assignments",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nExercises 2 is due on Monday 01 September."
+  },
+  {
+    "objectID": "week6/index.html",
+    "href": "week6/index.html",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "",
+    "text": "Wilke (2019) Ch 12 Visualising associations"
+  },
+  {
+    "objectID": "week6/index.html#main-reference",
+    "href": "week6/index.html#main-reference",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "",
+    "text": "Wilke (2019) Ch 12 Visualising associations"
+  },
+  {
+    "objectID": "week6/index.html#what-you-will-learn-this-week",
+    "href": "week6/index.html#what-you-will-learn-this-week",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nThe humble but powerful scatterplot\nAdditions and variations\nTransformations to linearity\n(Robust) numerical measures of association\nSimpson’s paradox\nMaking null samples to test for association\nImputing missing values"
+  },
+  {
+    "objectID": "week6/index.html#lecture-slides",
+    "href": "week6/index.html#lecture-slides",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week6/index.html#tutorial-instructions",
+    "href": "week6/index.html#tutorial-instructions",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week6/index.html#assignments",
+    "href": "week6/index.html#assignments",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 2 is due on Monday 01 September."
+  },
+  {
+    "objectID": "week8/index.html",
+    "href": "week8/index.html",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "",
+    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
+  },
+  {
+    "objectID": "week8/index.html#main-reference",
+    "href": "week8/index.html#main-reference",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "",
+    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
+  },
+  {
+    "objectID": "week8/index.html#what-you-will-learn-this-week",
+    "href": "week8/index.html#what-you-will-learn-this-week",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nWhat is high-dimensional data? (If all variables are quantitative)\nExploring relationships between more than two variables\n\nTours - scatterplots of combinations of variables\nMatrix of plots\nParallel coordinates\n\nWhat can be hidden\nAutomating the search for pairwise relationships using scagnostics\nLinking elements of multiple plots\nExploring multiple categorical variables"
+  },
+  {
+    "objectID": "week8/index.html#lecture-slides",
+    "href": "week8/index.html#lecture-slides",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week8/index.html#tutorial-instructions",
+    "href": "week8/index.html#tutorial-instructions",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week8/index.html#assignments",
+    "href": "week8/index.html#assignments",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 3 is due on Monday 22 September."
   }
 ]
