@@ -82,7 +82,9 @@ schedule <- schedule |>
 
 assignments <- read_csv(here::here("assignments.csv")) |>
     mutate(
-        Date = Due + days(1)
+        Date = if_else(str_detect(Assignment, "Quiz"), 
+                       Due - days(2),
+                       Due + days(1))
     )
 
 schedule <- schedule |>

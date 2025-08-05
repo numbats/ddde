@@ -4,14 +4,14 @@
     "href": "week9/index.html",
     "title": "Week 9: Exploring data having a space and time context Part I",
     "section": "",
-    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
+    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
   },
   {
     "objectID": "week9/index.html#main-reference",
     "href": "week9/index.html#main-reference",
     "title": "Week 9: Exploring data having a space and time context Part I",
     "section": "",
-    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
+    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
   },
   {
     "objectID": "week9/index.html#what-you-will-learn-this-week",
@@ -39,7 +39,7 @@
     "href": "week9/index.html#assignments",
     "title": "Week 9: Exploring data having a space and time context Part I",
     "section": "Assignments",
-    "text": "Assignments\n\nExercises 3 is due on Monday 22 September.\nProject Part 1 is due on Monday 13 October.\nProject Part 2 is due on Monday 03 November."
+    "text": "Assignments\n\nExercises 3 is due on Monday 22 September.\nQuiz 8 is due on Thursday 25 September.\nQuiz 9 is due on Thursday 09 October.\nProject Part 1 is due on Monday 13 October.\nQuiz 10 is due on Thursday 16 October.\nQuiz 11 is due on Thursday 23 October.\nProject Part 2 is due on Monday 03 November."
   },
   {
     "objectID": "week7/index.html",
@@ -81,7 +81,7 @@
     "href": "week7/index.html#assignments",
     "title": "Week 7: Making comparisons between groups and strata",
     "section": "Assignments",
-    "text": "Assignments\n\nExercises 3 is due on Monday 22 September."
+    "text": "Assignments\n\nQuiz 6 is due on Thursday 11 September.\nQuiz 7 is due on Thursday 18 September.\nExercises 3 is due on Monday 22 September.\nQuiz 8 is due on Thursday 25 September."
   },
   {
     "objectID": "week5/index.html",
@@ -123,7 +123,7 @@
     "href": "week5/index.html#assignments",
     "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
     "section": "Assignments",
-    "text": "Assignments\n\nExercises 2 is due on Monday 01 September."
+    "text": "Assignments\n\nQuiz 4 is due on Thursday 28 August.\nExercises 2 is due on Monday 01 September.\nQuiz 5 is due on Thursday 04 September.\nQuiz 6 is due on Thursday 11 September."
   },
   {
     "objectID": "week3/index.html",
@@ -172,7 +172,7 @@
     "href": "week3/index.html#assignments-1",
     "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
     "section": "Assignments",
-    "text": "Assignments\n\nExercises 1 is due on Monday 18 August."
+    "text": "Assignments\n\nQuiz 2 is due on Thursday 14 August.\nExercises 1 is due on Monday 18 August.\nQuiz 3 is due on Thursday 21 August.\nQuiz 4 is due on Thursday 28 August."
   },
   {
     "objectID": "week2/tutorial.html",
@@ -529,7 +529,7 @@
     "href": "week12/index.html#assignments",
     "title": "Week 12: Long help session",
     "section": "Assignments",
-    "text": "Assignments\n\nProject Part 2 is due on Monday 03 November."
+    "text": "Assignments\n\nQuiz 11 is due on Thursday 23 October.\nProject Part 2 is due on Monday 03 November."
   },
   {
     "objectID": "week10/index.html",
@@ -571,7 +571,7 @@
     "href": "week10/index.html#assignments",
     "title": "Week 10: Exploring data having a space and time context Part II",
     "section": "Assignments",
-    "text": "Assignments\n\nProject Part 1 is due on Monday 13 October.\nProject Part 2 is due on Monday 03 November."
+    "text": "Assignments\n\nQuiz 9 is due on Thursday 09 October.\nProject Part 1 is due on Monday 13 October.\nQuiz 10 is due on Thursday 16 October.\nQuiz 11 is due on Thursday 23 October.\nProject Part 2 is due on Monday 03 November."
   },
   {
     "objectID": "week1/tutorial.html",
@@ -714,6 +714,13 @@
     "text": "Tutorial instructions\n\nhtml\nqmd"
   },
   {
+    "objectID": "week1/index.html#assignments",
+    "href": "week1/index.html#assignments",
+    "title": "Week 1: Overview. Why this course? What is EDA?",
+    "section": "Assignments",
+    "text": "Assignments\n\nQuiz 1 is due on Thursday 07 August.\nQuiz 2 is due on Thursday 14 August."
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "ETC5521: Diving Deeply into Data Exploration",
@@ -739,7 +746,7 @@
     "href": "index.html#weekly-schedule",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Weekly schedule",
-    "text": "Weekly schedule\n\nLecture+workshop: Tues 2-5pm on zoom (link in Moodle)\nTutorial: 1 hour\nWeekly learning quizzes due each Thursday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n29 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n05 Aug\nLearning from history\nEDA Case Study: Bay area blues\n\n\n\n12 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\n\n\n\n19 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\nExercises 1\n\n\n26 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\n\n\n\n02 Sep\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nExercises 2\n\n\n09 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\n\n\n\n16 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\n\n\n\n23 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nExercises 3\n\n\n30 Sep\nMid-semester break\n\n\n\n\n07 Oct\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\n\n\n\n14 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nProject Part 1\n\n\n21 Oct\nHelp session\n\n\n\n\n04 Nov\n\n\nProject Part 2"
+    "text": "Weekly schedule\n\nLecture+workshop: Tues 2-5pm on zoom (link in Moodle)\nTutorial: 1 hour\nWeekly learning quizzes due each Thursday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n29 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n05 Aug\nLearning from history\nEDA Case Study: Bay area blues\nQuiz 1\n\n\n12 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\nQuiz 2\n\n\n19 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\nExercises 1\n\n\n19 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\nQuiz 3\n\n\n26 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\nQuiz 4\n\n\n02 Sep\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nExercises 2\n\n\n02 Sep\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nQuiz 5\n\n\n09 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\nQuiz 6\n\n\n16 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\nQuiz 7\n\n\n23 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nExercises 3\n\n\n23 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nQuiz 8\n\n\n30 Sep\nMid-semester break\n\n\n\n\n07 Oct\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\nQuiz 9\n\n\n14 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nProject Part 1\n\n\n14 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nQuiz 10\n\n\n21 Oct\nHelp session\n\nQuiz 11\n\n\n04 Nov\n\n\nProject Part 2"
   },
   {
     "objectID": "index.html#assessments",
@@ -1173,14 +1180,14 @@
     "href": "week11/index.html",
     "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
     "section": "",
-    "text": "How to use a tour to check if your model suffers from multicollinearity"
+    "text": "How to use a tour to check if your model suffers from multicollinearity How to use a tour to check if your model suffers from multicollinearity"
   },
   {
     "objectID": "week11/index.html#main-reference",
     "href": "week11/index.html#main-reference",
     "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
     "section": "",
-    "text": "How to use a tour to check if your model suffers from multicollinearity"
+    "text": "How to use a tour to check if your model suffers from multicollinearity How to use a tour to check if your model suffers from multicollinearity"
   },
   {
     "objectID": "week11/index.html#what-you-will-learn-this-week",
@@ -1215,7 +1222,7 @@
     "href": "week11/index.html#assignments-1",
     "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
     "section": "Assignments",
-    "text": "Assignments\n\nProject Part 1 is due on Monday 13 October.\nProject Part 2 is due on Monday 03 November."
+    "text": "Assignments\n\nProject Part 1 is due on Monday 13 October.\nQuiz 10 is due on Thursday 16 October.\nQuiz 11 is due on Thursday 23 October.\nProject Part 2 is due on Monday 03 November."
   },
   {
     "objectID": "week2/index.html",
@@ -1264,7 +1271,7 @@
     "href": "week2/index.html#assignments",
     "title": "Week 2: Learning from history",
     "section": "Assignments",
-    "text": "Assignments\n\nExercises 1 is due on Monday 18 August."
+    "text": "Assignments\n\nQuiz 1 is due on Thursday 07 August.\nQuiz 2 is due on Thursday 14 August.\nExercises 1 is due on Monday 18 August.\nQuiz 3 is due on Thursday 21 August."
   },
   {
     "objectID": "week2/worksheetsol.html",
@@ -1313,14 +1320,14 @@
     "href": "week4/index.html",
     "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
     "section": "",
-    "text": "Wickham et al. (2010) Graphical inference for Infovis"
+    "text": "Wickham et al. (2010) Graphical inference for Infovis Wickham et al. (2010) Graphical inference for Infovis"
   },
   {
     "objectID": "week4/index.html#main-reference",
     "href": "week4/index.html#main-reference",
     "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
     "section": "",
-    "text": "Wickham et al. (2010) Graphical inference for Infovis"
+    "text": "Wickham et al. (2010) Graphical inference for Infovis Wickham et al. (2010) Graphical inference for Infovis"
   },
   {
     "objectID": "week4/index.html#what-you-will-learn-this-week",
@@ -1348,21 +1355,21 @@
     "href": "week4/index.html#assignments",
     "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
     "section": "Assignments",
-    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nExercises 2 is due on Monday 01 September."
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 3 is due on Thursday 21 August.\nQuiz 4 is due on Thursday 28 August.\nExercises 2 is due on Monday 01 September.\nQuiz 5 is due on Thursday 04 September."
   },
   {
     "objectID": "week6/index.html",
     "href": "week6/index.html",
     "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
     "section": "",
-    "text": "Wilke (2019) Ch 12 Visualising associations"
+    "text": "Wilke (2019) Ch 12 Visualising associations Wilke (2019) Ch 12 Visualising associations"
   },
   {
     "objectID": "week6/index.html#main-reference",
     "href": "week6/index.html#main-reference",
     "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
     "section": "",
-    "text": "Wilke (2019) Ch 12 Visualising associations"
+    "text": "Wilke (2019) Ch 12 Visualising associations Wilke (2019) Ch 12 Visualising associations"
   },
   {
     "objectID": "week6/index.html#what-you-will-learn-this-week",
@@ -1390,7 +1397,7 @@
     "href": "week6/index.html#assignments",
     "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
     "section": "Assignments",
-    "text": "Assignments\n\nExercises 2 is due on Monday 01 September."
+    "text": "Assignments\n\nExercises 2 is due on Monday 01 September.\nQuiz 5 is due on Thursday 04 September.\nQuiz 6 is due on Thursday 11 September.\nQuiz 7 is due on Thursday 18 September."
   },
   {
     "objectID": "week8/index.html",
@@ -1432,6 +1439,6 @@
     "href": "week8/index.html#assignments",
     "title": "Week 8: Going beyond two variables, exploring high dimensions",
     "section": "Assignments",
-    "text": "Assignments\n\nExercises 3 is due on Monday 22 September."
+    "text": "Assignments\n\nQuiz 7 is due on Thursday 18 September.\nExercises 3 is due on Monday 22 September.\nQuiz 8 is due on Thursday 25 September.\nQuiz 9 is due on Thursday 09 October."
   }
 ]
