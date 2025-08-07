@@ -1,0 +1,114 @@
+---
+title: "ETC5521 Tutorial 3"
+subtitle: "Initial data analysis"
+author: "Prof. Di Cook"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: tutorial.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: tutorialsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+---
+
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(ggbeeswarm)
+library(nullabor)
+library(broom)
+library(conflicted)
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+```
+
+## 🎯 Objectives
+
+Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns. 
+
+## 🔧 Preparation 
+
+The reading for this week is [The initial examination of data](https://www.jstor.org/stable/28c1953a-8130-3c31-bd91-3ca6ce1d96d8?seq=7). It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis. 
+
+- Complete the weekly quiz, before the deadline!
+- Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
+
+
+## 📥 Exercises
+
+Today, you have sprint competition to discover as many problems as possible in this data, [cafe.rda](https://github.com/numbats/ddde/blob/main/data/cafe.rda).
+
+*A small cafe in the city of Melbourne is interested in determining whether the daily earnings depend on the weather. They compiled data for a period over 2000-2001 to study this question.* The data has the following variables:
+
+```{r}
+#| echo: false
+library(kableExtra)
+desc <- tibble(var=c("dt", "wday", "revenue", "expend", "precip", "mint", "maxt", "source"),
+               description=c("Date", 
+              "Day of the week",
+              "Daily revenue in hundreds, 11=1100", 
+              "Daily expenses in hundreds",
+              "Precipitation in mm", 
+              "Minimum temperature, Celsius",
+              "Maximum temperature, Celsius",
+              "Source of the weather data"))
+kbl(desc, table.attr = 'data-quarto-disable-processing="true"') |> 
+  kable_styling(full_width = FALSE) |>
+  column_spec(1, width="2cm", border_right = T) |>
+  column_spec(2, width="10cm")
+```
+
+#### Guidelines
+
+- Use whatever R package or software or tool you'd like, and report how you found the error.
+- Feel free to buddy up, and work with another student in your tutorial session.
+- No cheating! This time do the assignment without AI help, or searching for answers on the web.
+- Please don't ruin the later tutorials by sharing your work!
+
+The most complete list with best process for findings, as decided by your tutor, wins the prize! Your tutor's decision is final!
+
+## 👌 Finishing up
+
+Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.

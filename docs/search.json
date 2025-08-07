@@ -1440,5 +1440,530 @@
     "title": "Week 8: Going beyond two variables, exploring high dimensions",
     "section": "Assignments",
     "text": "Assignments\n\nQuiz 7 is due on Thursday 18 September.\nExercises 3 is due on Monday 22 September.\nQuiz 8 is due on Thursday 25 September.\nQuiz 9 is due on Thursday 09 October."
+  },
+  {
+    "objectID": "week3/slides.html#the-role-of-initial-data-analysis",
+    "href": "week3/slides.html#the-role-of-initial-data-analysis",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "The role of initial data analysis",
+    "text": "The role of initial data analysis\n\n\nThe first thing to do with data is to look at them …. usually means tabulating and plotting the data in many different ways to see what’s going on. With the wide availability of computer packages and graphics nowadays there is no excuse for ducking the labour of this preliminary phase, and it may save some red faces later.\nCrowder, M. J. & Hand, D. J. (1990) “Analysis of Repeated Measures”"
+  },
+  {
+    "objectID": "week3/slides.html#initial-data-analysis-and-confirmatory-analysis",
+    "href": "week3/slides.html#initial-data-analysis-and-confirmatory-analysis",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Initial Data Analysis and Confirmatory Analysis",
+    "text": "Initial Data Analysis and Confirmatory Analysis\n\n\n\nPrior to conducting a confirmatory data analysis, it is important to conduct an initial data analysis (IDA).\n\n\n\nConfirmatory data analysis (CDA) is focused on statistical inference and includes procedures for:\n\nhypothesis testing,\npredictive modelling,\nparameter estimation including uncertainty,\nmodel selection.\n\n\n\n\n\n\nIDA includes:\n\ndescribing the data and collection procedures\nscrutinise data for errors, outliers, missing observations\ncheck assumptions for confirmatory data analysis\n\n\n\nIDA is sometimes called preliminary data analysis.\n\n\n\n\nIDA is related to exploratory data analysis (EDA) in the sense that it is primarily conducted graphically, and there are few formal tests available."
+  },
+  {
+    "objectID": "week3/slides.html#taxonomies-are-useful-but-rarely-perfect",
+    "href": "week3/slides.html#taxonomies-are-useful-but-rarely-perfect",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Taxonomies are useful but rarely perfect",
+    "text": "Taxonomies are useful but rarely perfect"
+  },
+  {
+    "objectID": "week3/slides.html#objectives-of-ida",
+    "href": "week3/slides.html#objectives-of-ida",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Objectives of IDA?",
+    "text": "Objectives of IDA?\n\nThe main objective for IDA is to intercept any problems in the data that might adversely affect the confirmatory data analysis.\n\n\n\nThe role of CDA is to answer the intended question(s) that the data were collected for.\n\n\nIDA is often unreported in the data analysis reports or scientific papers, for various reasons. It might not have been done, or it may have been conducted but there was no space in the paper to report on it."
+  },
+  {
+    "objectID": "week3/slides.html#ida-in-government-statistics",
+    "href": "week3/slides.html#ida-in-government-statistics",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "IDA in government statistics",
+    "text": "IDA in government statistics\nThe purpose of data cleaning is to bring data up to a level of quality such that it can reliably be used for the production of statistical models or statements.\nA statistical value chain is constructed by defining a number of meaningful intermediate data products, for which a chosen set of quality attributes are well described.\n\n\n\n\nvan der Loo & de Jonge (2018) Statistical Data Cleaning with Applications in R"
+  },
+  {
+    "objectID": "week3/slides.html#ida-in-health-and-medical-data",
+    "href": "week3/slides.html#ida-in-health-and-medical-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "IDA in health and medical data",
+    "text": "IDA in health and medical data\n\nHuebner et al (2018)’s six steps of IDA: (1) Metadata setup, (2) Data cleaning, (3) Data screening, (4) Initial reporting, (5) Refining and updating the analysis plan, (6) Reporting IDA in documentation."
+  },
+  {
+    "objectID": "week3/slides.html#heed-these-words",
+    "href": "week3/slides.html#heed-these-words",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Heed these words",
+    "text": "Heed these words\n\n\n\nIDA prepares an analyst for CDA. One needs to be careful about NOT compromising the inference.\n\nHow do you compromise inference?\n\n\nChange your inference or questions based on what you find in IDA.\nOutlier removal or not.\nMissing value imputation choices.\nTreatment of zeros.\nHandling of variable type, categorical temporal.\nLack of multivariate relationship checking, including subsets based on levels of categorical variables.\nChoosing variables and observations.\n\n\n\n\nHow do you avoid these errors?\n\nDocument ALL the IDA, using a reproducible analysis script.\nPre-register your CDA plan, so that your CDA questions do not change.\nDecisions made on outlier removal, variable selection, recoding, sampling, handling of zeros have known affects on results, and are justifiable.\n\nInsure yourself against accusations of data snooping, data dredging, data fishing."
+  },
+  {
+    "objectID": "week3/slides.html#data-screening",
+    "href": "week3/slides.html#data-screening",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data screening",
+    "text": "Data screening"
+  },
+  {
+    "objectID": "week3/slides.html#data-screening-1",
+    "href": "week3/slides.html#data-screening-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data screening",
+    "text": "Data screening\n\n\n\nIt’s important to check how the data are understood by the computer.\n\nthat is, checking for data type:\n\nWas the date read in as character?\nWas a factor read in as numeric?\n\n\n\nAlso important for making inference is to know whether the data supports making broader conclusions. How was the data collected? Is it clear what the population of interest is, and that the data is a representative sample of this population?"
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-12",
+    "href": "week3/slides.html#example-checking-the-data-type-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type (1/2)",
+    "text": "Example: Checking the data type (1/2)\n\n\nlecture3-example.xlsx\n\n\n\n\n\nlibrary(readxl)\nlibrary(here)\ndf &lt;- read_excel(here(\"data/lecture3-example.xlsx\"))\ndf\n\n# A tibble: 5 × 4\n     id date                loc       temp\n  &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;    &lt;dbl&gt;\n1     1 2010-01-03 00:00:00 New York  42  \n2     2 2010-02-03 00:00:00 New York  41.4\n3     3 2010-03-03 00:00:00 New York  38.5\n4     4 2010-04-03 00:00:00 New York  41.1\n5     5 2010-05-03 00:00:00 New York  39.8\n\n\n\nWhat problems are there with the computer’s interpretation of data type?\nWhat context specific issues indicate incorrect computer interpretation?"
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-22",
+    "href": "week3/slides.html#example-checking-the-data-type-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type (2/2)",
+    "text": "Example: Checking the data type (2/2)\n\n\n\nlibrary(lubridate)\ndf &lt;- read_excel(here(\"data/lecture3-example.xlsx\"), \n                 col_types = c(\"text\", \n                               \"date\", \n                               \"text\",\n                               \"numeric\"))\n\ndf |&gt; \n  mutate(id = as.factor(id),\n         date = ydm(date)) |&gt;\n  mutate(\n         day = day(date),\n         month = month(date),\n         year = year(date)) \n\n# A tibble: 5 × 7\n  id    date       loc       temp   day month  year\n  &lt;fct&gt; &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 1     2010-03-01 New York  42       1     3  2010\n2 2     2010-03-02 New York  41.4     2     3  2010\n3 3     2010-03-03 New York  38.5     3     3  2010\n4 4     2010-03-04 New York  41.1     4     3  2010\n5 5     2010-03-05 New York  39.8     5     3  2010\n\n\n\n\nid is now a factor instead of integer\nday, month and year are now extracted from the date\nIs it okay now?\n\n\n\n\nIn the United States, it’s common to use the date format MM/DD/YYYY (gasps) while the rest of the world commonly uses DD/MM/YYYY or better still YYYY/MM/DD.\n\n\n\n\nIt’s highly probable that the dates are 1st-5th March and not 3rd of Jan-May.\n\n\n\n\nYou can validate interpretation of temperature using weather database."
+  },
+  {
+    "objectID": "week3/slides.html#example-specifying-the-data-type-with-r",
+    "href": "week3/slides.html#example-specifying-the-data-type-with-r",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Specifying the data type with R",
+    "text": "Example: Specifying the data type with R\n\n\n\nYou can robustify your workflow by ensuring you have a check for the expected data type in your code.\n\n\nxlsx_df &lt;- read_excel(here(\"data/lecture3-example.xlsx\"),\n                 col_types = c(\"text\", \"date\", \"text\", \"numeric\"))  |&gt; \n  mutate(id = as.factor(id), \n         date = as.character(date),\n         date = as.Date(date, format = \"%Y-%d-%m\"))\n\n\n\nread_csv has a broader support for col_types\n\n\ncsv_df &lt;- read_csv(here::here(\"data/lecture3-example.csv\"),\n                 col_types = cols(\n                      id = col_factor(),\n                      date = col_date(format = \"%m/%d/%y\"),\n                      loc = col_character(),\n                      temp = col_double()))\n\n\nThe checks (or coercions) ensure that even if the data are updated, you can have some confidence that any data type error will be picked up before further analysis."
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-with-r",
+    "href": "week3/slides.html#example-checking-the-data-type-with-r",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type with R",
+    "text": "Example: Checking the data type with R\nYou can have a quick glimpse of the data type with:\n\ndplyr::glimpse(xlsx_df)\n\nRows: 5\nColumns: 4\n$ id   &lt;fct&gt; 1, 2, 3, 4, 5\n$ date &lt;date&gt; 2010-03-01, 2010-03-02, 2010-03-03, 2010-03-0…\n$ loc  &lt;chr&gt; \"New York\", \"New York\", \"New York\", \"New Yor…\n$ temp &lt;dbl&gt; 42, 41, 38, 41, 40\n\ndplyr::glimpse(csv_df)\n\nRows: 5\nColumns: 4\n$ id   &lt;fct&gt; 1, 2, 3, 4, 5\n$ date &lt;date&gt; 2010-03-01, 2010-03-02, 2010-03-03, 2010-03-0…\n$ loc  &lt;chr&gt; \"New York\", \"New York\", \"New York\", \"New Yor…\n$ temp &lt;dbl&gt; 42, 41, 38, 41, 40"
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-type-visually",
+    "href": "week3/slides.html#example-checking-the-data-type-visually",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data type visually",
+    "text": "Example: Checking the data type visually\n\n\nYou can also visualise the data type with:\n\nlibrary(visdat)\nvis_dat(xlsx_df)\n\n\n\n\n\n\n\n\n\n\nlibrary(inspectdf)\ninspect_types(xlsx_df)  |&gt; \n  show_plot()"
+  },
+  {
+    "objectID": "week3/slides.html#data-cleaning",
+    "href": "week3/slides.html#data-cleaning",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data cleaning",
+    "text": "Data cleaning"
+  },
+  {
+    "objectID": "week3/slides.html#data-cleaning-12",
+    "href": "week3/slides.html#data-cleaning-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data cleaning (1/2)",
+    "text": "Data cleaning (1/2)\nData quality checks should be one of the first steps in the data analysis to assess any problems with the data.\nThese include using common or domain knowledge to check if the recorded data have sensible values.\n\n\nAre positive values, e.g. height and weight, recorded as positive values with a plausible range?\nIf the data are counts, do the recorded values contain non-integer values?\nFor compositional data, do the values add up to 100% (or 1)? If not, is that a measurement error or due to rounding? Or is another variable missing?\nDoes the data contain only positives, ie disease occurrences, or warranty claims? If so, what would the no report group look like?"
+  },
+  {
+    "objectID": "week3/slides.html#data-cleaning-22",
+    "href": "week3/slides.html#data-cleaning-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data cleaning (2/2)",
+    "text": "Data cleaning (2/2)\nIn addition, numerical or graphical summaries may reveal that there is unwanted structure in the data, for example,\n\n\n\nDoes the treatment group have different demographic characteristics to the control group?\nAre the distributions similar between the or training and test sets?\nAre there sufficient measurements for each level of categorical variable, or across the range of numerical variables?\n\n\n\n\nDoes the distribution of the data imply violations of assumptions for the CDA, such as\n\nnon-normality,\ndiscrete rather real-valued, or\ndifferent variance in different domains?\n\n\n\n\n\nData scrutinizing is a process that you get better at with practice and have familiarity with the domain area."
+  },
+  {
+    "objectID": "week3/slides.html#example-checking-the-data-quality",
+    "href": "week3/slides.html#example-checking-the-data-quality",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example: Checking the data quality",
+    "text": "Example: Checking the data quality\n\n\n\n\n# A tibble: 9 × 4\n  id    date       loc        temp\n  &lt;fct&gt; &lt;date&gt;     &lt;chr&gt;     &lt;dbl&gt;\n1 1     2010-03-01 New York   42  \n2 2     2010-03-02 New York   41.4\n3 3     2010-03-03 New York   38.5\n4 4     2010-03-04 New York   41.1\n5 5     2010-03-05 New York   39.8\n6 6     2020-03-01 Melbourne  30.6\n7 7     2020-03-02 Melbourne  17.9\n8 8     2020-03-03 Melbourne  18.6\n9 9     2020-03-04 &lt;NA&gt;       21.3\n\n\n\n\nNumerical or graphical summaries or even just eye-balling the data helps to uncover some data quality issues.\nAny issues here?\n\n\n\n\nThere’s a missing value in loc.\nTemperature is in Farenheit for New York but Celsius in Melbourne (you can validate this again using external sources)."
+  },
+  {
+    "objectID": "week3/slides.html#case-study-world-development-indicators-17",
+    "href": "week3/slides.html#case-study-world-development-indicators-17",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: World development indicators (1/7)",
+    "text": "Case study: World development indicators (1/7)\n\n\n\noptions(width=80)\nraw_dat &lt;- read_csv(here(\"data/world-development-indicators.csv\"), \n                    na = \"..\", n_max = 11935)\nglimpse(raw_dat)\n\nRows: 11,935\nColumns: 54\n$ `Country Name`  &lt;chr&gt; \"Argentina\", \"Argentina\", \"Argentina\", \"Argentina\", \"A…\n$ `Country Code`  &lt;chr&gt; \"ARG\", \"ARG\", \"ARG\", \"ARG\", \"ARG\", \"ARG\", \"ARG\", \"ARG\"…\n$ `Series Name`   &lt;chr&gt; \"Adolescent fertility rate (births per 1,000 women age…\n$ `Series Code`   &lt;chr&gt; \"SP.ADO.TFRT\", \"NV.AGR.TOTL.ZS\", \"ER.H2O.FWTL.ZS\", \"SH…\n$ `1969 [YR1969]` &lt;dbl&gt; 6.4e+01, 9.2e+00, NA, NA, 3.3e+00, NA, 2.2e+01, NA, NA…\n$ `1970 [YR1970]` &lt;dbl&gt; 6.5e+01, 9.6e+00, NA, NA, 3.5e+00, NA, 2.5e+01, NA, NA…\n$ `1971 [YR1971]` &lt;dbl&gt; 6.7e+01, 1.1e+01, NA, NA, 3.7e+00, NA, 2.4e+01, 8.7e+0…\n$ `1972 [YR1972]` &lt;dbl&gt; 6.8e+01, 1.1e+01, NA, NA, 3.6e+00, NA, 1.9e+01, 9.2e+0…\n$ `1973 [YR1973]` &lt;dbl&gt; 7.1e+01, 1.2e+01, NA, NA, 3.7e+00, NA, 2.7e+01, 9.6e+0…\n$ `1974 [YR1974]` &lt;dbl&gt; 7.5e+01, 1.0e+01, NA, NA, 3.7e+00, NA, 3.0e+01, 9.9e+0…\n$ `1975 [YR1975]` &lt;dbl&gt; 7.8e+01, 6.6e+00, NA, NA, 3.6e+00, NA, 2.9e+01, 1.0e+0…\n$ `1976 [YR1976]` &lt;dbl&gt; 8.1e+01, 8.2e+00, NA, NA, 3.8e+00, NA, 2.0e+01, 1.0e+0…\n$ `1977 [YR1977]` &lt;dbl&gt; 8.4e+01, 8.1e+00, 9.5e+00, NA, 3.7e+00, NA, 2.6e+01, 1…\n$ `1978 [YR1978]` &lt;dbl&gt; 8.2e+01, 7.5e+00, NA, NA, 3.8e+00, NA, 2.9e+01, 1.1e+0…\n$ `1979 [YR1979]` &lt;dbl&gt; 8.0e+01, 7.8e+00, NA, NA, 4.0e+00, NA, 3.1e+01, 1.2e+0…\n$ `1980 [YR1980]` &lt;dbl&gt; 7.8e+01, 6.4e+00, NA, NA, 3.9e+00, NA, 3.3e+01, 1.2e+0…\n$ `1981 [YR1981]` &lt;dbl&gt; 7.6e+01, 6.5e+00, NA, NA, 3.6e+00, NA, 4.8e+01, 1.2e+0…\n$ `1982 [YR1982]` &lt;dbl&gt; 7.4e+01, 9.6e+00, NA, NA, 3.6e+00, NA, 4.6e+01, 1.2e+0…\n$ `1983 [YR1983]` &lt;dbl&gt; 7.4e+01, 8.7e+00, NA, NA, 3.6e+00, NA, 4.6e+01, 1.3e+0…\n$ `1984 [YR1984]` &lt;dbl&gt; 7.4e+01, 8.3e+00, NA, NA, 3.6e+00, NA, 4.2e+01, 1.3e+0…\n$ `1985 [YR1985]` &lt;dbl&gt; 7.4e+01, 7.6e+00, NA, NA, 3.3e+00, NA, 3.3e+01, 1.3e+0…\n$ `1986 [YR1986]` &lt;dbl&gt; 7.4e+01, 7.8e+00, NA, NA, 3.4e+00, NA, 3.3e+01, 1.3e+0…\n$ `1987 [YR1987]` &lt;dbl&gt; 7.3e+01, 8.1e+00, NA, NA, 3.7e+00, NA, 4.8e+01, 1.4e+0…\n$ `1988 [YR1988]` &lt;dbl&gt; 7.3e+01, 9.0e+00, NA, NA, 3.8e+00, NA, 4.3e+01, 1.4e+0…\n$ `1989 [YR1989]` &lt;dbl&gt; 7.3e+01, 9.6e+00, NA, NA, 3.6e+00, NA, 8.0e+01, 1.3e+0…\n$ `1990 [YR1990]` &lt;dbl&gt; 7.3e+01, 8.1e+00, NA, 9.7e+01, 3.4e+00, NA, 3.2e+01, 1…\n$ `1991 [YR1991]` &lt;dbl&gt; 7.3e+01, 6.7e+00, NA, NA, 3.5e+00, NA, 2.3e+01, 1.3e+0…\n$ `1992 [YR1992]` &lt;dbl&gt; 7.3e+01, 6.0e+00, NA, 9.6e+01, 3.6e+00, NA, 2.2e+01, 1…\n$ `1993 [YR1993]` &lt;dbl&gt; 7.3e+01, 5.1e+00, NA, NA, 3.5e+00, NA, 2.6e+01, 1.5e+0…\n$ `1994 [YR1994]` &lt;dbl&gt; 7.2e+01, 5.1e+00, NA, NA, 3.5e+00, NA, 2.7e+01, 1.6e+0…\n$ `1995 [YR1995]` &lt;dbl&gt; 7.1e+01, 5.4e+00, NA, 9.8e+01, 3.7e+00, NA, 2.8e+01, 1…\n$ `1996 [YR1996]` &lt;dbl&gt; 7.0e+01, 5.6e+00, NA, NA, 3.8e+00, NA, 2.8e+01, 1.7e+0…\n$ `1997 [YR1997]` &lt;dbl&gt; 7.0e+01, 5.2e+00, 9.8e+00, 9.7e+01, 3.9e+00, NA, 3.0e+…\n$ `1998 [YR1998]` &lt;dbl&gt; 6.9e+01, 5.3e+00, NA, 9.8e+01, 3.9e+00, NA, 3.3e+01, 2…\n$ `1999 [YR1999]` &lt;dbl&gt; 6.8e+01, 4.5e+00, NA, 9.8e+01, 4.0e+00, NA, 3.6e+01, 2…\n$ `2000 [YR2000]` &lt;dbl&gt; 6.7e+01, 4.7e+00, NA, 9.9e+01, 3.8e+00, NA, 3.4e+01, 2…\n$ `2001 [YR2001]` &lt;dbl&gt; 6.6e+01, 4.6e+00, NA, 9.8e+01, 3.6e+00, 6.5e+01, 3.7e+…\n$ `2002 [YR2002]` &lt;dbl&gt; 6.5e+01, 1.0e+01, NA, 9.9e+01, 3.3e+00, NA, 6.2e+01, 2…\n$ `2003 [YR2003]` &lt;dbl&gt; 6.5e+01, 1.0e+01, NA, 9.9e+01, 3.5e+00, NA, 5.1e+01, 2…\n$ `2004 [YR2004]` &lt;dbl&gt; 6.4e+01, 8.4e+00, NA, 9.9e+01, 4.1e+00, NA, 4.2e+01, 2…\n$ `2005 [YR2005]` &lt;dbl&gt; 6.4e+01, 7.9e+00, NA, 9.9e+01, 4.1e+00, 7.9e+01, 3.5e+…\n$ `2006 [YR2006]` &lt;dbl&gt; 6.4e+01, 6.9e+00, NA, 9.9e+01, 4.4e+00, NA, 2.8e+01, 2…\n$ `2007 [YR2007]` &lt;dbl&gt; 6.4e+01, 7.5e+00, NA, 9.9e+01, 4.4e+00, NA, 2.6e+01, 2…\n$ `2008 [YR2008]` &lt;dbl&gt; 6.4e+01, 7.3e+00, NA, 9.5e+01, 4.7e+00, NA, 2.2e+01, 2…\n$ `2009 [YR2009]` &lt;dbl&gt; 6.4e+01, 5.3e+00, NA, 9.8e+01, 4.4e+00, NA, 2.6e+01, 2…\n$ `2010 [YR2010]` &lt;dbl&gt; 6.4e+01, 7.1e+00, NA, 9.5e+01, 4.6e+00, NA, 2.5e+01, 2…\n$ `2011 [YR2011]` &lt;dbl&gt; 6.4e+01, 7.0e+00, NA, 9.7e+01, 4.6e+00, NA, 2.6e+01, 2…\n$ `2012 [YR2012]` &lt;dbl&gt; 6.4e+01, 5.8e+00, 1.3e+01, 9.8e+01, 4.6e+00, 5.5e+01, …\n$ `2013 [YR2013]` &lt;dbl&gt; 6.4e+01, 6.1e+00, NA, 9.7e+01, 4.5e+00, 8.1e+01, 3.3e+…\n$ `2014 [YR2014]` &lt;dbl&gt; 6.4e+01, 6.7e+00, 1.3e+01, 1.0e+02, 4.7e+00, NA, 3.4e+…\n$ `2015 [YR2015]` &lt;dbl&gt; 6.3e+01, 5.2e+00, NA, 1.0e+02, NA, NA, 4.0e+01, NA, NA…\n$ `2016 [YR2016]` &lt;dbl&gt; 6.3e+01, 6.4e+00, NA, NA, NA, NA, 3.8e+01, NA, NA, 1.3…\n$ `2017 [YR2017]` &lt;dbl&gt; NA, 5.6e+00, NA, NA, NA, NA, 3.9e+01, NA, NA, 1.1e+01,…\n$ `2018 [YR2018]` &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…\n\n\nWorld Development Indicators (WDI), sourced from the World Bank Group (2019)\n\n\n\nWhat are the data types?\nWhat are the variables?\nWhat are the observations?\nIs the data in tidy form?"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-world-development-indicators-27",
+    "href": "week3/slides.html#case-study-world-development-indicators-27",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: World development indicators (2/7)",
+    "text": "Case study: World development indicators (2/7)\n\n\n\ncountry_code_df &lt;- raw_dat  |&gt;\n  distinct(`Country Name`, `Country Code`)  |&gt;\n  rename_all(janitor::make_clean_names)  |&gt;\n  left_join(\n    countrycode::codelist |&gt; select(iso3c, region, continent),\n    by = c(\"country_code\" = \"iso3c\")\n  )  |&gt;\n  arrange(continent, region) \n\n\n\n\nRows: 217\nColumns: 4\n$ country_name &lt;chr&gt; \"Algeria\", \"Djibouti\", \"Egypt, Arab Rep.\", \"Libya\", \"Moro…\n$ country_code &lt;chr&gt; \"DZA\", \"DJI\", \"EGY\", \"LBY\", \"MAR\", \"TUN\", \"AGO\", \"BEN\", \"…\n$ region       &lt;chr&gt; \"Middle East & North Africa\", \"Middle East & North Africa…\n$ continent    &lt;chr&gt; \"Africa\", \"Africa\", \"Africa\", \"Africa\", \"Africa\", \"Africa…\n\n\n# A tibble: 6 × 2\n  continent     n\n  &lt;chr&gt;     &lt;int&gt;\n1 Africa       54\n2 Americas     46\n3 Asia         50\n4 Europe       46\n5 Oceania      19\n6 &lt;NA&gt;          2\n\n\n# A tibble: 8 × 2\n  region                         n\n  &lt;chr&gt;                      &lt;int&gt;\n1 East Asia & Pacific           37\n2 Europe & Central Asia         56\n3 Latin America & Caribbean     42\n4 Middle East & North Africa    21\n5 North America                  3\n6 South Asia                     8\n7 Sub-Saharan Africa            48\n8 &lt;NA&gt;                           2\n\n\n\n\n\n\nHow many countries are included\nHow many continents, regions?\nWhy are there NAs here?\n\n\n\ncountry_code_df |&gt; filter(is.na(continent))\n\n# A tibble: 2 × 4\n  country_name    country_code region continent\n  &lt;chr&gt;           &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;    \n1 Channel Islands CHI          &lt;NA&gt;   &lt;NA&gt;     \n2 Kosovo          XKX          &lt;NA&gt;   &lt;NA&gt;"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-world-development-indicators-37",
+    "href": "week3/slides.html#case-study-world-development-indicators-37",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: World development indicators (3/7)",
+    "text": "Case study: World development indicators (3/7)\n\n\n\nwdi_vars &lt;- raw_dat  |&gt;\n  select(`Series Name`, `Series Code`) |&gt;\n  distinct() |&gt;\n  rename_all(janitor::make_clean_names) \n\n\n\n\n\n\n\n\n\n\n\nseries_name\nseries_code\n\n\n\n\nAdolescent fertility rate (births per 1,000 women ages 15-19)\nSP.ADO.TFRT\n\n\nAgriculture, forestry, and fishing, value added (% of GDP)\nNV.AGR.TOTL.ZS\n\n\nAnnual freshwater withdrawals, total (% of internal resources)\nER.H2O.FWTL.ZS\n\n\nBirths attended by skilled health staff (% of total)\nSH.STA.BRTC.ZS\n\n\nCO2 emissions (metric tons per capita)\nEN.ATM.CO2E.PC\n\n\nContraceptive prevalence, any methods (% of women ages 15-49)\nSP.DYN.CONU.ZS\n\n\nDomestic credit provided by financial sector (% of GDP)\nFS.AST.DOMS.GD.ZS\n\n\nElectric power consumption (kWh per capita)\nEG.USE.ELEC.KH.PC\n\n\nEnergy use (kg of oil equivalent per capita)\nEG.USE.PCAP.KG.OE\n\n\nExports of goods and services (% of GDP)\nNE.EXP.GNFS.ZS\n\n\nExternal debt stocks, total (DOD, current US$)\nDT.DOD.DECT.CD\n\n\nFertility rate, total (births per woman)\nSP.DYN.TFRT.IN\n\n\nForeign direct investment, net inflows (BoP, current US$)\nBX.KLT.DINV.CD.WD\n\n\nForest area (sq. km)\nAG.LND.FRST.K2\n\n\nGDP (current US$)\nNY.GDP.MKTP.CD\n\n\nGDP growth (annual %)\nNY.GDP.MKTP.KD.ZG\n\n\nGNI per capita, Atlas method (current US$)\nNY.GNP.PCAP.CD\n\n\nGNI per capita, PPP (current international $)\nNY.GNP.PCAP.PP.CD\n\n\nGNI, Atlas method (current US$)\nNY.GNP.ATLS.CD\n\n\nGNI, PPP (current international $)\nNY.GNP.MKTP.PP.CD\n\n\nGross capital formation (% of GDP)\nNE.GDI.TOTL.ZS\n\n\nHigh-technology exports (% of manufactured exports)\nTX.VAL.TECH.MF.ZS\n\n\nImmunization, measles (% of children ages 12-23 months)\nSH.IMM.MEAS\n\n\nImports of goods and services (% of GDP)\nNE.IMP.GNFS.ZS\n\n\nIncome share held by lowest 20%\nSI.DST.FRST.20\n\n\nIndustry (including construction), value added (% of GDP)\nNV.IND.TOTL.ZS\n\n\nInflation, GDP deflator (annual %)\nNY.GDP.DEFL.KD.ZG\n\n\nLife expectancy at birth, total (years)\nSP.DYN.LE00.IN\n\n\nMerchandise trade (% of GDP)\nTG.VAL.TOTL.GD.ZS\n\n\nMilitary expenditure (% of GDP)\nMS.MIL.XPND.GD.ZS\n\n\nMobile cellular subscriptions (per 100 people)\nIT.CEL.SETS.P2\n\n\nMortality rate, under-5 (per 1,000 live births)\nSH.DYN.MORT\n\n\nNet barter terms of trade index (2000 = 100)\nTT.PRI.MRCH.XD.WD\n\n\nNet migration\nSM.POP.NETM\n\n\nNet official development assistance and official aid received (current US$)\nDT.ODA.ALLD.CD\n\n\nPersonal remittances, received (current US$)\nBX.TRF.PWKR.CD.DT\n\n\nPopulation density (people per sq. km of land area)\nEN.POP.DNST\n\n\nPopulation growth (annual %)\nSP.POP.GROW\n\n\nPopulation, total\nSP.POP.TOTL\n\n\nPoverty headcount ratio at $1.90 a day (2011 PPP) (% of population)\nSI.POV.DDAY\n\n\nPoverty headcount ratio at national poverty lines (% of population)\nSI.POV.NAHC\n\n\nPrevalence of HIV, total (% of population ages 15-49)\nSH.DYN.AIDS.ZS\n\n\nPrevalence of underweight, weight for age (% of children under 5)\nSH.STA.MALN.ZS\n\n\nPrimary completion rate, total (% of relevant age group)\nSE.PRM.CMPT.ZS\n\n\nRevenue, excluding grants (% of GDP)\nGC.REV.XGRT.GD.ZS\n\n\nSchool enrollment, primary (% gross)\nSE.PRM.ENRR\n\n\nSchool enrollment, primary and secondary (gross), gender parity index (GPI)\nSE.ENR.PRSC.FM.ZS\n\n\nSchool enrollment, secondary (% gross)\nSE.SEC.ENRR\n\n\nStatistical Capacity score (Overall average)\nIQ.SCI.OVRL\n\n\nSurface area (sq. km)\nAG.SRF.TOTL.K2\n\n\nTax revenue (% of GDP)\nGC.TAX.TOTL.GD.ZS\n\n\nTerrestrial and marine protected areas (% of total territorial area)\nER.PTD.TOTL.ZS\n\n\nTime required to start a business (days)\nIC.REG.DURS\n\n\nTotal debt service (% of exports of goods, services and primary income)\nDT.TDS.DECT.EX.ZS\n\n\nUrban population growth (annual %)\nSP.URB.GROW\n\n\n\n\n\n\n\n\n\n\nAnalysis will use the short name (series_code) for variables.\nStore full variable name (series_name) and short name (series_code) in a separate table.\nThe series_code will be used as the key whenever the full name is needed."
+  },
+  {
+    "objectID": "week3/slides.html#case-study-world-development-indicators-47",
+    "href": "week3/slides.html#case-study-world-development-indicators-47",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: World development indicators (4/7)",
+    "text": "Case study: World development indicators (4/7)\n\n\n\nwdi &lt;- raw_dat  |&gt;\n  select(`Country Code`, `Series Code`, `1969 [YR1969]`:`2018 [YR2018]`) |&gt;\n  rename_all(janitor::make_clean_names) |&gt;\n  pivot_longer(x1969_yr1969:x2018_yr2018,\n               names_to = \"year\", \n               values_to = \"value\") |&gt;\n  mutate(year = as.numeric(str_sub(year, 2, 5)) ) |&gt;\n  pivot_wider(names_from = series_code,\n              values_from = value)\n\nwdi2017 &lt;- wdi  |&gt; filter(year == 2017)\n\n\nOrganise data into tidy form\nCheck missing value distribution"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-world-development-indicators-57",
+    "href": "week3/slides.html#case-study-world-development-indicators-57",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: World development indicators (5/7)",
+    "text": "Case study: World development indicators (5/7)\n\n\nCheck missings by\n\nvariable\ncountry"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-world-development-indicators-67",
+    "href": "week3/slides.html#case-study-world-development-indicators-67",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: World development indicators (6/7)",
+    "text": "Case study: World development indicators (6/7)\n\n\nLook at Costa Rica (CRI), most complete country\n\n\n\n\n\n\n\n\n\n\nTo illustrate imputation, we’ll show one of the variables, that is relatively complete.\n\n\n\n\n\n\n\n\n\nImpute a few temporal missings using nearest neighbours."
+  },
+  {
+    "objectID": "week3/slides.html#case-study-world-development-indicators-67-1",
+    "href": "week3/slides.html#case-study-world-development-indicators-67-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: World development indicators (6/7)",
+    "text": "Case study: World development indicators (6/7)\n\n\nMissings imputed using imputeTS using the moving average method.\n\n\n\n\n\n\n\n\n\n\n\nDon’t have to impute before scrutinizing data\nWhat are these numbers supposed to be?\n\nSE.PRM.CMPT.ZS is “Primary completion rate, total (% of relevant age group)”\nDo we have any problems?\n\nYes. The explanation of the variable suggests the numbers should range between 0-100."
+  },
+  {
+    "objectID": "week3/slides.html#summary-of-the-process",
+    "href": "week3/slides.html#summary-of-the-process",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "📋 Summary of the process",
+    "text": "📋 Summary of the process\nThe steps we took roughly followed these:\n\n\n\n\n\n\n\n\nAt the end of this stage we would have:\n\n3 tables of data: country name/code, variables name/key, time series of multiple variables for many countries\nWhat would you like to learn from this data? What sort of models might be fitted? What types of hypotheses might be tested?\nHave we done anything that might have compromised the later analysis?"
+  },
+  {
+    "objectID": "week3/slides.html#data-collection",
+    "href": "week3/slides.html#data-collection",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Data collection",
+    "text": "Data collection"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-employment-data-in-australia-13",
+    "href": "week3/slides.html#case-study-employment-data-in-australia-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Employment Data in Australia (1/3)",
+    "text": "Case study: Employment Data in Australia (1/3)\nBelow is the data from ABS that shows the total number of people employed in a given month from February 1976 to December 2019 using the original time series.\n\n\nload(here(\"data/employed.rda\"))\nglimpse(employed)\n\nRows: 557\nColumns: 4\n$ date  &lt;date&gt; 1978-02-01, 1978-03-01, 1978-04-01, 1978-05-01, 1978-06-01, 197…\n$ month &lt;dbl&gt; 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1…\n$ year  &lt;dbl&gt; 1978, 1978, 1978, 1978, 1978, 1978, 1978, 1978, 1978, 1978, 1978…\n$ value &lt;dbl&gt; 5986, 6041, 6054, 6038, 6031, 6036, 6005, 6024, 6046, 6034, 6125…\n\n\nAustralian Bureau of Statistics, Labour force, Australia, Table 01. Labour force status by Sex, Australia - Trend, Seasonally adjusted and Original"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-employment-data-in-australia-23",
+    "href": "week3/slides.html#case-study-employment-data-in-australia-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Employment Data in Australia (2/3)",
+    "text": "Case study: Employment Data in Australia (2/3)\n\n\nDo you notice anything?\n\n\n\n\n\n\n\n\n\n\n\nWhy do you think the number of people employed is going up each year?\n\n\n\nAustralian population is 25.39 million in 2019\n1.5% annual increase in population\nVic population is 6.681 million (Sep 2020) - 26%\nNSW population is 8.166 (Sep 2020) - 32%"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-employment-data-in-australia-33",
+    "href": "week3/slides.html#case-study-employment-data-in-australia-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Employment Data in Australia (3/3)",
+    "text": "Case study: Employment Data in Australia (3/3)\n\n\n\nThere’s a suspicious change in August numbers from 2014.\n\n\n\n\n\n\n\n\n\n\n\n\n\nA potential explanation for this is that there was a change in the survey from 2014.\n\nSee discussion on this at Hyndsight blog (10 October 2014)."
+  },
+  {
+    "objectID": "week3/slides.html#case-study-2014-data-mining-cup-winners",
+    "href": "week3/slides.html#case-study-2014-data-mining-cup-winners",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: 2014 Data Mining Cup winners",
+    "text": "Case study: 2014 Data Mining Cup winners\n\n\n\nUgly plot of all observations provided in training sample, with response variable in colour, and test sample to predict.\nWhat does this tell you about the test sample?"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-french-frieshot-chips-12",
+    "href": "week3/slides.html#case-study-french-frieshot-chips-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: french fries/hot chips (1/2)",
+    "text": "Case study: french fries/hot chips (1/2)\n\n\n\n\nRows: 696\nColumns: 9\n$ time      &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …\n$ treatment &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …\n$ subject   &lt;fct&gt; 3, 3, 10, 10, 15, 15, 16, 16, …\n$ rep       &lt;dbl&gt; 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, …\n$ potato    &lt;dbl&gt; 2.9, 14.0, 11.0, 9.9, 1.2, 8.8…\n$ buttery   &lt;dbl&gt; 0.0, 0.0, 6.4, 5.9, 0.1, 3.0, …\n$ grassy    &lt;dbl&gt; 0.0, 0.0, 0.0, 2.9, 0.0, 3.6, …\n$ rancid    &lt;dbl&gt; 0.0, 1.1, 0.0, 2.2, 1.1, 1.5, …\n$ painty    &lt;dbl&gt; 5.5, 0.0, 0.0, 0.0, 5.1, 2.3, …\n\n\n\n10 week sensory experiment, 12 individuals assessed taste of french fries on several scales (how potato-y, buttery, grassy, rancid, paint-y do they taste?), fried in one of 3 different oils, replicated twice.\n\nIs the design complete?\nAre replicates like each other?\nHow do the ratings on the different scales differ?\nAre raters giving different scores on average?\nDo ratings change over the weeks?"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-french-frieshot-chips-22",
+    "href": "week3/slides.html#case-study-french-frieshot-chips-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: french fries/hot chips (2/2)",
+    "text": "Case study: french fries/hot chips (2/2)\n\n\n\nIs the design complete?\n\n\nfrench_fries |&gt; count(subject)\n\n# A tibble: 12 × 2\n   subject     n\n   &lt;fct&gt;   &lt;int&gt;\n 1 3          54\n 2 10         60\n 3 15         60\n 4 16         60\n 5 19         60\n 6 31         54\n 7 51         60\n 8 52         60\n 9 63         60\n10 78         60\n11 79         54\n12 86         54\n\n\n\n\n\nfrench_fries |&gt; count(time)\n\n# A tibble: 10 × 2\n   time      n\n   &lt;fct&gt; &lt;int&gt;\n 1 1        72\n 2 2        72\n 3 3        72\n 4 4        72\n 5 5        72\n 6 6        72\n 7 7        72\n 8 8        72\n 9 9        60\n10 10       60\n\nfrench_fries |&gt; count(treatment)\n\n# A tibble: 3 × 2\n  treatment     n\n  &lt;fct&gt;     &lt;int&gt;\n1 1           232\n2 2           232\n3 3           232\n\nfrench_fries |&gt; count(rep)\n\n# A tibble: 2 × 2\n    rep     n\n  &lt;dbl&gt; &lt;int&gt;\n1     1   348\n2     2   348"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-warranty-claims",
+    "href": "week3/slides.html#case-study-warranty-claims",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Warranty claims",
+    "text": "Case study: Warranty claims\n\n\n\n\nRows: 4,561\nColumns: 14\n$ Region           &lt;chr&gt; \"East\", \"West\", \"North …\n$ State            &lt;chr&gt; \"Delhi\", \"Gujarat\", \"We…\n$ Area             &lt;chr&gt; \"Urban\", \"Rural\", \"Urba…\n$ City             &lt;chr&gt; \"New Delhi\", \"Ahmedabad…\n$ Consumer_profile &lt;chr&gt; \"Personal\", \"Personal\",…\n$ TV_2001_Issue    &lt;dbl&gt; 1, 1, 0, 0, 0, 0, 1, 1,…\n$ TV_2002_Issue    &lt;dbl&gt; 1, 1, 1, 0, 0, 0, 1, 1,…\n$ TV_2003_Issue    &lt;dbl&gt; 1, 0, 1, 0, 0, 0, 1, 0,…\n$ Claim_Value      &lt;dbl&gt; 25000, 4216, 4000, 5000…\n$ Service_Centre   &lt;dbl&gt; 13, 10, 10, 12, 10, 10,…\n$ Product_Age      &lt;dbl&gt; 60, 672, 275, 10, 4, 34…\n$ Purchased_from   &lt;chr&gt; \"Dealer\", \"Dealer\", \"De…\n$ Call_details     &lt;dbl&gt; 1.3, 25.0, 11.0, 1.6, 0…\n$ Purpose          &lt;chr&gt; \"Complaint\", \"Other\", \"…\n\n\n\nTV_2001_Issue: failure of power supply\nTV_2002_Issue: failure of inverter\nTV_2003_Issue: failure of motherboard\n\n\n\n\nWhat is the population that this data is measuring?\nWhat is not measured?\n\n\n\n\n# A tibble: 2 × 2\n  City          n\n  &lt;chr&gt;     &lt;int&gt;\n1 Delhi       106\n2 Bangalore   320\n\n\nCan we say that Delhi has fewer problems with TVs than Bangalore?\n\n\nSource: ExcelR Projects. (2019). Warranty Claims. Kaggle."
+  },
+  {
+    "objectID": "week3/slides.html#summary-of-checks-for-data-collection",
+    "href": "week3/slides.html#summary-of-checks-for-data-collection",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "📋 Summary of checks for data collection",
+    "text": "📋 Summary of checks for data collection\n✅ Has the collection process been consistent?\n✅ Does the set to be predicted match the training set?\n✅ Is the experimental design correctly applied?\n✅ Have treatments been appropriately randomised or assigned comprehensively across subjects?\n✅ What is the population that the collected data describes?\n✅ If the data is observational, can you group them into comparison sets?"
+  },
+  {
+    "objectID": "week3/slides.html#imputing-missing-values",
+    "href": "week3/slides.html#imputing-missing-values",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Imputing missing values",
+    "text": "Imputing missing values"
+  },
+  {
+    "objectID": "week3/slides.html#example-1-olympic-medals",
+    "href": "week3/slides.html#example-1-olympic-medals",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example 1: Olympic medals",
+    "text": "Example 1: Olympic medals\n\n\n\n\n             country totalmedal\n1       UnitedStates        104\n2              China         88\n3             Russia         82\n4       GreatBritain         65\n5            Germany         44\n6              Japan         38\n7          Australia         35\n8             France         34\n9         SouthKorea         28\n10             Italy         28\n11       Netherlands         20\n12           Ukraine         20\n13            Canada         18\n14           Hungary         17\n15             Spain         17\n16            Brazil         17\n17              Cuba         14\n18        Kazakhstan         13\n19        NewZealand         13\n20              Iran         12\n21           Jamaica         12\n22           Belarus         12\n23             Kenya         11\n24     CzechRepublic         10\n25            Poland         10\n26        Azerbaijan         10\n27           Romania          9\n28           Denmark          9\n29            Sweden          8\n30          Colombia          8\n31          Ethiopia          7\n32            Mexico          7\n33           Georgia          7\n34        NorthKorea          6\n35       SouthAfrica          6\n36           Croatia          6\n37             India          6\n38            Turkey          5\n39         Lithuania          5\n40           Ireland          5\n41          Mongolia          5\n42       Switzerland          4\n43            Norway          4\n44          Slovenia          4\n45            Serbia          4\n46         Argentina          4\n47        Uzbekistan          4\n48 TrinidadandTobago          4\n49          Slovakia          4\n50           Tunisia          3\n51          Thailand          3\n52           Finland          3\n53           Belgium          3\n54           Armenia          3\n55 DominicanRepublic          2\n56            Latvia          2\n57             Egypt          2\n58        PuertoRico          2\n59          Malaysia          2\n60         Indonesia          2\n61           Estonia          2\n62            Taiwan          2\n63          Bulgaria          2\n64         Singapore          2\n65             Qatar          2\n66           Moldova          2\n67            Greece          2\n68         Venezuela          1\n69            Uganda          1\n70           Grenada          1\n71           Bahamas          1\n72           Algeria          1\n73          Portugal          1\n74        Montenegro          1\n75         Guatemala          1\n76             Gabon          1\n77            Cyprus          1\n78          Botswana          1\n79        Tajikistan          1\n80       SaudiArabia          1\n81           Morocco          1\n82            Kuwait          1\n83          HongKong          1\n84           Bahrain          1\n85       Afghanistan          1\n\n\n Is the average number of medals equal to 962/85 = 11.32?\n\n\nWhat is missing?\n\n\nWhat is the correct average number of medals?\n\n\n962/204 = 4.72\n Working out what is missing can be hard!"
+  },
+  {
+    "objectID": "week3/slides.html#example-2-el-nino",
+    "href": "week3/slides.html#example-2-el-nino",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example 2: El Nino",
+    "text": "Example 2: El Nino\n\n\nExplore missings\n\nplotting on edge of plots, or\nusing simple imputation like mean\n\n\noceanbuoys |&gt;\n  ggplot(aes(x=air_temp_c, y=humidity)) +\n  geom_miss_point()\n\n\n\n\n\n\n\n\n\nImpute and check\n\nImpute using regression or simulation\nCheck distribution relative to complete cases\n\n\n\n\nCode\nlibrary(simputation)\nocean_imp_yr &lt;- oceanbuoys %&gt;%\n  bind_shadow() %&gt;%\n  impute_lm(air_temp_c ~ wind_ew + wind_ns + year + longitude + latitude) %&gt;%\n  impute_lm(humidity ~  wind_ew + wind_ns + year + longitude + latitude) %&gt;%\n  impute_lm(sea_temp_c ~  wind_ew + wind_ns + year + longitude + latitude) %&gt;%\n  add_label_shadow()\n\nggplot(ocean_imp_yr,\n       aes(x = air_temp_c,\n           y = humidity,\n           color = any_missing)) + \n  geom_point() +\n  theme(legend.title = element_blank())"
+  },
+  {
+    "objectID": "week3/slides.html#validators",
+    "href": "week3/slides.html#validators",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Validators",
+    "text": "Validators\nAutomating some checks"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-13",
+    "href": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Dutch supermarket revenue and cost (1/3)",
+    "text": "Case study: Dutch supermarket revenue and cost (1/3)\n\nData contains the revenue and cost (in Euros) for 60 supermarkets\nData has been anonymised and distorted\n\n\ndata(\"SBS2000\", package = \"validate\")\ndplyr::glimpse(SBS2000)\n\nRows: 60\nColumns: 11\n$ id          &lt;fct&gt; RET01, RET02, RET03, RET04, …\n$ size        &lt;fct&gt; sc0, sc3, sc3, sc3, sc3, sc0…\n$ incl.prob   &lt;dbl&gt; 0.02, 0.14, 0.14, 0.14, 0.14…\n$ staff       &lt;int&gt; 75, 9, NA, NA, NA, 1, 5, 3, …\n$ turnover    &lt;int&gt; NA, 1607, 6886, 3861, NA, 25…\n$ other.rev   &lt;int&gt; NA, NA, -33, 13, 37, NA, NA,…\n$ total.rev   &lt;int&gt; 1130, 1607, 6919, 3874, 5602…\n$ staff.costs &lt;int&gt; NA, 131, 324, 290, 314, NA, …\n$ total.costs &lt;int&gt; 18915, 1544, 6493, 3600, 553…\n$ profit      &lt;int&gt; 20045, 63, 426, 274, 72, 3, …\n$ vat         &lt;int&gt; NA, NA, NA, NA, NA, NA, 1346…"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-23",
+    "href": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Dutch supermarket revenue and cost (2/3)",
+    "text": "Case study: Dutch supermarket revenue and cost (2/3)\n\nChecking for completeness of records\n\n\nlibrary(validate)\nrules &lt;- validator(\n          is_complete(id),\n          is_complete(id, turnover),\n          is_complete(id, turnover, profit))\nout &lt;- confront(SBS2000, rules)\nsummary(out)\n\n  name items passes fails nNA error warning\n1   V1    60     60     0   0 FALSE   FALSE\n2   V2    60     56     4   0 FALSE   FALSE\n3   V3    60     52     8   0 FALSE   FALSE\n                         expression\n1                   is_complete(id)\n2         is_complete(id, turnover)\n3 is_complete(id, turnover, profit)"
+  },
+  {
+    "objectID": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-33",
+    "href": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Dutch supermarket revenue and cost (3/3)",
+    "text": "Case study: Dutch supermarket revenue and cost (3/3)\n\nSanity check derived variables\n\n\nlibrary(validate)\nrules &lt;- validator(\n    total.rev - profit == total.costs,\n    turnover + other.rev == total.rev,\n    profit &lt;= 0.6 * total.rev\n)\nout &lt;- confront(SBS2000, rules)\nsummary(out)\n\n  name items passes fails nNA error warning\n1   V1    60     39    14   7 FALSE   FALSE\n2   V2    60     19     4  37 FALSE   FALSE\n3   V3    60     49     6   5 FALSE   FALSE\n                                      expression\n1 abs(total.rev - profit - total.costs) &lt;= 1e-08\n2 abs(turnover + other.rev - total.rev) &lt;= 1e-08\n3              profit - 0.6 * total.rev &lt;= 1e-08"
+  },
+  {
+    "objectID": "week3/slides.html#ida-for-hypothesis-testing",
+    "href": "week3/slides.html#ida-for-hypothesis-testing",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "IDA for hypothesis testing",
+    "text": "IDA for hypothesis testing"
+  },
+  {
+    "objectID": "week3/slides.html#hypothesis-testing-13",
+    "href": "week3/slides.html#hypothesis-testing-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Hypothesis testing (1/3)",
+    "text": "Hypothesis testing (1/3)\n\nState the hypothesis (pair), e.g. \\(H_o: \\mu_1 = \\mu_2\\) vs \\(H_a: \\mu_1 &lt; \\mu_2\\).\nTest statistic depends on assumption about the distribution, e.g. \n\n\\(t\\)-test will assume that distributions are normal, or small departures from if we have a large sample.\ntwo-sample might assume both groups have the same variance\n\n\n\n\nSteps to complete:\n\nCompute the test statistic\nMeasure it against a standard distribution\nIf it is extreme, \\(p\\)-value is small, decision is to reject \\(H_o\\)\n\\(p\\)-value is the probability of observing a value as large as this, or large, assuming \\(H_o\\) is true."
+  },
+  {
+    "objectID": "week3/slides.html#example-1-checking-variance-and-distribution-23",
+    "href": "week3/slides.html#example-1-checking-variance-and-distribution-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example 1: Checking variance and distribution (2/3)",
+    "text": "Example 1: Checking variance and distribution (2/3)\n\n\n\n\n\nCode\ndata(sleep)\nggplot(sleep, aes(x=group, y=extra)) + \n  geom_boxplot() +\n  geom_point(colour=\"#D55E00\")\n\n\n\n\n\n\n\n\n\n\nCushny, A. R. and Peebles, A. R. (1905) The action of optical isomers: II hyoscines. The Journal of Physiology 32, 501–510.\n\n\nFew observations. Nothing strongly suggests violation of normality and spread of points is similar for each group.\n\ntt &lt;- with(sleep,\n     t.test(extra[group == 1],\n            extra[group == 2], \n            paired = TRUE))\ntt\n\n\n    Paired t-test\n\ndata:  extra[group == 1] and extra[group == 2]\nt = -4, df = 9, p-value = 0.003\nalternative hypothesis: true mean difference is not equal to 0\n95 percent confidence interval:\n -2.5 -0.7\nsample estimates:\nmean difference \n           -1.6"
+  },
+  {
+    "objectID": "week3/slides.html#example-2-checking-distribution-and-variance-33",
+    "href": "week3/slides.html#example-2-checking-distribution-and-variance-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Example 2: Checking distribution and variance (3/3)",
+    "text": "Example 2: Checking distribution and variance (3/3)\n\n\n\n\n\nCode\nInsectSprays  |&gt; \n  ggplot(aes(x=fct_reorder(spray, count), \n             y=count)) + \n  geom_jitter(width=0.1, height=0, colour=\"#D55E00\", size=3, alpha=0.8) +\n  xlab(\"\") \n\n\n\n\n\n\n\n\n\n\nIs it plausible that the samples are from a normal population? Do they have equal variance?\n\n\n\nfm1 &lt;- aov(count ~ spray, data = InsectSprays)\nsummary(fm1)\n\n            Df Sum Sq Mean Sq F value Pr(&gt;F)    \nspray        5   2669     534    34.7 &lt;2e-16 ***\nResiduals   66   1015      15                   \n---\nSignif. codes:  \n0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\nWhat hypothesis being tested? What would the decision be?\n\n\nWhy does equal variance matter in this test?"
+  },
+  {
+    "objectID": "week3/slides.html#ida-for-inferential-modeling",
+    "href": "week3/slides.html#ida-for-inferential-modeling",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "IDA for inferential modeling",
+    "text": "IDA for inferential modeling"
+  },
+  {
+    "objectID": "week3/slides.html#linear-models-13",
+    "href": "week3/slides.html#linear-models-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Linear models (1/3)",
+    "text": "Linear models (1/3)\n\n\n\n\n\nCode\nlibrary(tidyverse)\nlibrary(broom)\nggplot(cars, aes(speed, dist)) + \n  geom_point() + \n  geom_smooth(method = \"lm\", se = FALSE)\n\n\n\n\n\n\n\n\n\n\\[y_i = \\beta_0 + \\beta_1 x_i + e_i\\]\nAssumptions:\n\nForm is linear\nError is normally distributed around 0\n\n\n\nCheck using residual plots\n\n\n\nCode\ncars_model &lt;- lm(dist ~ speed, data = cars)\ncars_fit &lt;- augment(cars_model)\n\ncars_p1 &lt;- ggplot(cars_fit, aes(x=.fitted, \n                                y=.resid)) + \n  geom_hline(yintercept = 0, colour=\"grey70\") +\n  geom_point() \ncars_p2 &lt;- ggplot(cars_fit, aes(x=.resid)) +\n  geom_density()\ncars_p1 + cars_p2 + plot_layout(ncol=2)"
+  },
+  {
+    "objectID": "week3/slides.html#linear-models-23",
+    "href": "week3/slides.html#linear-models-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Linear models (2/3)",
+    "text": "Linear models (2/3)\n\n\n\nData and loess smoother\n\n\nCode\nggplot(diamonds, aes(carat, price)) + \n  geom_point(alpha = 0.2) + \n  geom_smooth(se=F)\n\n\n\n\n\n\n\n\n\n\nForm is not linear!\nAlso, insufficient data on large diamonds.\n\n\n\nFix 1: fit polynomial form\n\n\\[y_i = \\beta_0 + \\beta_1 x_i + \\beta_2 x_i^2 + e_i.\\]\n\n\nCode\ndiamonds_sub &lt;- diamonds |&gt;\n  filter(carat &lt; 3)\n\ndiamonds_model &lt;- lm(price ~ poly(carat, 2),\n                     data=diamonds_sub)\ndiamonds_fit &lt;- diamonds_sub |&gt;\n  mutate(.fitted = diamonds_model$fitted.values, \n         .resid = diamonds_model$residuals)\n\ndiamonds_p1 &lt;- ggplot(diamonds_fit) +\n  geom_point(aes(x=carat, y=price)) +\n  geom_point(aes(x=carat, y=.fitted),\n             colour=\"#D55E00\")\ndiamonds_p2 &lt;- ggplot(diamonds_fit, \n                      aes(x=.fitted, \n                          y=.resid)) + \n  geom_hline(yintercept = 0, colour=\"grey70\") +\n  geom_point() \ndiamonds_p1 + diamonds_p2 + plot_layout(ncol=2)\n\n\n\n\n\n\n\n\n\n\nForm is not quadratic, continue to explore additional polynomial terms."
+  },
+  {
+    "objectID": "week3/slides.html#linear-models-33",
+    "href": "week3/slides.html#linear-models-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Linear models (3/3)",
+    "text": "Linear models (3/3)\n\n\n\nData and loess smoother\n\n\nCode\nggplot(diamonds, aes(carat, price)) + \n  geom_point(alpha = 0.2) + \n  geom_smooth(se=F)\n\n\n\n\n\n\n\n\n\n\nForm is not linear!\nAlso, insufficient data on large diamonds.\n\n\n\nFix 2: linearise\n\nThe log transformation of both variables linearises the relationship, so that a simple linear model can be used, and can correct heteroskedasticity.\n\n\nCode\nggplot(diamonds_sub, aes(carat, price)) + \n  geom_point(alpha = 0.2) + \n  geom_smooth(method = lm) +\n  scale_x_log10() +\n  scale_y_log10()"
+  },
+  {
+    "objectID": "week3/slides.html#cautions",
+    "href": "week3/slides.html#cautions",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Cautions",
+    "text": "Cautions\n\nNotice that there was no formal statistical inference when trying to determine an appropriate model form.\n\n\nDiscarded models are hardly ever reported. Consequently, majority of reported statistics give a distorted view and it’s important to remind yourself what might not be reported."
+  },
+  {
+    "objectID": "week3/slides.html#summary",
+    "href": "week3/slides.html#summary",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Summary",
+    "text": "Summary\n\n\n\nIDA is a model-focused exploration to support a CDA with:\n\ndata description and collection\ndata quality checking, and\nchecking assumptions\nmodel fit without any formal statistical inference.\n\nIDA is part of EDA, even when no CDA is planned.\n\nIDA may never see the limelight BUT it forms the foundation that the main analysis is built upon. Document it! Do it well!\n\n\n\n\nThe Census Bureau tabulates same-sex couples in both the American Community Survey (ACS) and the Decennial Census. Two questions are used to identify same-sex couples: relationship and sex. The agency follows edit rules that are used to change data values for seemingly contradictory answers. The edit rules for combining information from relationship and sex have evolved since the category of unmarried partner was added in 1990. In that census, if a household consisted of a married couple and both spouses reported the same sex, the relationship category remained husband or wife, but the sex of the partner who reported being a spouse to the householder was changed. Humans all the way down\n\n\n\n\nHuman actions are ubiquitous in every part of data analysis! The most objective methods often have had subjective actions before and after."
+  },
+  {
+    "objectID": "week3/slides.html#further-reading",
+    "href": "week3/slides.html#further-reading",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Further reading",
+    "text": "Further reading\n\nHuebner et al (2018) A Contemporary Conceptual Framework for Initial Data Analysis\nHuebner et al (2020) Hidden analyses\nChatfield (1985) The Initial Examination of Data. Journal of the Royal Statistical Society. Series A (General) 148 \nCox & Snell (1981) Applied Statistics. London: Chapman and Hall.\nvan der Loo and de Jonge (2018). Statistical Data Cleaning with Applications in R. John Wiley and Sons Ltd.\nHyndman (2014) Explaining the ABS unemployment fluctuations"
+  },
+  {
+    "objectID": "week3/tutorial.html",
+    "href": "week3/tutorial.html",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week3/tutorial.html#objectives",
+    "href": "week3/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week3/tutorial.html#preparation",
+    "href": "week3/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 3",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is The initial examination of data. It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis. - Complete the weekly quiz, before the deadline! - Make sure you have this list of R packages installed:\n\nComplete the weekly quiz, before the deadline!\nMake sure you have this list of R packages installed:\n\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"nullabor\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week3/tutorial.html#exercises",
+    "href": "week3/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 3",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\n\nExercise 1: IDA on penguins data\n\nTake a glimpse of the penguins data. What types are variables are present in the data?\nHow was this data collected? You will need to read the documentation for the palmerpenguins package.\nUsing the visdat package make an overview plot to examine types of variables and for missing values.\nCheck the distributions of each species on each of the size variables, using a jittered dotplot, using the geom_quasirandom() function in the ggbeeswarm package. There seems to be some bimodality in some species on some variables eg bill_len. Why do you think this might be? Check your thinking by making a suitable plot.\nIs there any indication of outliers from the jittered dotplots of different variables?\nMake a scatterplot of body_mass_g vs flipper_length_mm for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?\nHow well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the \\(R^2\\), \\(\\sigma\\), and make a residual plot of residuals vs flipper_length_mm. From the residual plot, are there any concerns about the model fit?\n\n\n\nExercise 2: Can we believe what we see?\nThis question uses material from this week’s lecture, from a few hours ago.\n\nIn the previous question we made subjective statements about the residual plot to determine if the model was a good fit or not. We’ll use randomisation to check any observations we made from the residual plot. The code below makes a lineup of the true plot against plots made with rotation residuals (nulls/good). When you run the code you will get a line decrypt(\"....\"), which you can copy and paste back in to the console window to get the location of the true plot (in case you forgot which it is). Does the true plot look like the null plots? If not, describe how it differs.\n\n\nlibrary(nullabor)\nggplot(lineup(null_lm(body_mass~flipper_len, method=\"rotate\"),\n              penguins_m),\n       aes(x=flipper_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n\nPick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them\n\n\nto pick the plot that is most different.\nexplain why they picked that plot.\n\nUsing your decrypt() code locate the true plot. Is the true plot different from the nulls?\nDid you or your friend choose the data plot? Was it identifiable from the lineup or indistinguishable from the null plots?"
+  },
+  {
+    "objectID": "week3/tutorial.html#finishing-up",
+    "href": "week3/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 3",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week3/worksheet.html",
+    "href": "week3/worksheet.html",
+    "title": "ETC5521 Worksheet Week 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"visdat\"))"
+  },
+  {
+    "objectID": "week3/worksheet.html#objectives",
+    "href": "week3/worksheet.html#objectives",
+    "title": "ETC5521 Worksheet Week 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"visdat\"))"
+  },
+  {
+    "objectID": "week3/worksheet.html#tasks",
+    "href": "week3/worksheet.html#tasks",
+    "title": "ETC5521 Worksheet Week 3",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\n1. Take a glimpse of the penguins data. What types are variables are present in the data?\n\n\n2. How was this data collected? You will need to read the documentation for the palmerpenguins package, or see if AI knows.\n\n\n3. Using the visdat package make an overview plot to examine types of variables and for missing values.\n\n\n4. Check the distributions of each species on each of the size variables, using a jittered dotplot, using the geom_quasirandom() function in the ggbeeswarm package. There seems to be some bimodality in some species on some variables eg bill_len. Why do you think this might be? Check your thinking by making a suitable plot.\n\n\n5. Is there any indication of outliers from the jittered dotplots of different variables?\n\n\n6. Make a scatterplot of body_mass_g vs flipper_length_mm for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?\n\n\n7. How well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the \\(R^2\\), \\(\\sigma\\), and make a residual plot of residuals vs flipper_length_mm. From the residual plot, are there any concerns about the model fit?"
+  },
+  {
+    "objectID": "week3/index.html#worksheet",
+    "href": "week3/index.html#worksheet",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "Worksheet",
+    "text": "Worksheet\n\nqmd\nhtml"
+  },
+  {
+    "objectID": "week3/tutorialsol.html",
+    "href": "week3/tutorialsol.html",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#objectives",
+    "href": "week3/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#preparation",
+    "href": "week3/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 3",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is The initial examination of data. It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis.\n\nComplete the weekly quiz, before the deadline!\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#exercises",
+    "href": "week3/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 3",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nToday, you have sprint competition to discover as many problems as possible in this data, cafe.rda.\nA small cafe in the city of Melbourne is interested in determining whether the daily earnings depend on the weather. They compiled data for a period over 2000-2001 to study this question. The data has the following variables:\n\n\n\n \n  \n    var \n    description \n  \n \n\n  \n    dt \n    Date \n  \n  \n    wday \n    Day of the week \n  \n  \n    revenue \n    Daily revenue in hundreds, 11=1100 \n  \n  \n    expend \n    Daily expenses in hundreds \n  \n  \n    precip \n    Precipitation in mm \n  \n  \n    mint \n    Minimum temperature, Celsius \n  \n  \n    maxt \n    Maximum temperature, Celsius \n  \n  \n    source \n    Source of the weather data \n  \n\n\n\n\n\nGuidelines\n\nUse whatever R package or software or tool you’d like, and report how you found the error.\nFeel free to buddy up, and work with another student in your tutorial session.\nNo cheating! This time do the assignment without AI help, or searching for answers on the web.\nPlease don’t ruin the later tutorials by sharing your work!\n\nThe most complete list with best process for findings, as decided by your tutor, wins the prize! Your tutor’s decision is final!"
+  },
+  {
+    "objectID": "week3/tutorialsol.html#finishing-up",
+    "href": "week3/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 3",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week3/worksheetsol.html",
+    "href": "week3/worksheetsol.html",
+    "title": "ETC5521 Worksheet Week 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"visdat\"))"
+  },
+  {
+    "objectID": "week3/worksheetsol.html#objectives",
+    "href": "week3/worksheetsol.html#objectives",
+    "title": "ETC5521 Worksheet Week 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"visdat\"))"
+  },
+  {
+    "objectID": "week3/worksheetsol.html#tasks",
+    "href": "week3/worksheetsol.html#tasks",
+    "title": "ETC5521 Worksheet Week 3",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\n1. Take a glimpse of the penguins data. What types are variables are present in the data?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\nlibrary(tidyverse)\nglimpse(penguins)\n\n\nRows: 344\nColumns: 8\n$ species     &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Ad…\n$ island      &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgersen, Tor…\n$ bill_len    &lt;dbl&gt; 39, 40, 40, NA, 37, 39, 39, 39, 34, 42, 38, 38, 41, 39, 35…\n$ bill_dep    &lt;dbl&gt; 19, 17, 18, NA, 19, 21, 18, 20, 18, 20, 17, 17, 18, 21, 21…\n$ flipper_len &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186, 180,…\n$ body_mass   &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, 4250, …\n$ sex         &lt;fct&gt; male, female, female, NA, female, male, female, male, NA, …\n$ year        &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…\n\n\n\n\n\n\n\n\n2. How was this data collected? You will need to read the documentation for the palmerpenguins package, or see if AI knows.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nDetails are at https://allisonhorst.github.io/palmerpenguins/articles/intro.html, and you learn “These data were collected from 2007 - 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program, part of the US Long Term Ecological Research Network. The data were imported directly from the Environmental Data Initiative (EDI) Data Portal.” It is necessary to also read the original data collection article https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081 to obtain details of the sampling. Breeding pairs of penguins were included based on sampling of nests where pairs of adults were present, were chosen and marked, before onset of egg-laying.\n\n\n\n\n\n\n3. Using the visdat package make an overview plot to examine types of variables and for missing values.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThere are three factor variables - species, island, sex - and three integer variables - flipper_len, body_mass and year - and two numeric variables - bill_len and bill_dep.\nIt is interesting that flipper_len and body_mass are reported without decimal places, and thus are integers, whereas bill_len and bill_dep are reported with one decimal place, and thus are doubles. Both are numeric variables, though.\nFour variables have missing values: sex, bill_len, bill_dep, flipper_len, body_mass. There are more missings on sex. The other missings occur together, the penguins are missing on all five variables.\n\n\nCode\nlibrary(visdat)\nvis_dat(penguins)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n4. Check the distributions of each species on each of the size variables, using a jittered dotplot, using the geom_quasirandom() function in the ggbeeswarm package. There seems to be some bimodality in some species on some variables eg bill_len. Why do you think this might be? Check your thinking by making a suitable plot.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nParticularly on bill_len multimodality can be seen in the Chinstrap and Gentoo penguins. This corresponds to differences in the two species. Differences can be seen in the sexes for all of the variables and species, but it is only big enough in bill_len to be noticeable as bimodality.\n\n\nCode\nlibrary(ggbeeswarm)\nggplot(penguins, aes(x=species, \n                     y=bill_len)) +\n  geom_quasirandom() \n\n\n\n\n\n\n\n\n\nCode\nggplot(penguins, aes(x=species, \n                     y=bill_len, \n                     colour=sex)) +\n  geom_quasirandom() +\n  scale_color_brewer(\"\", palette=\"Dark2\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n5. Is there any indication of outliers from the jittered dotplots of different variables?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nOutliers can be seen on bill_len for Chinstrap and Gentoo. Interestingly, there is one female penguins with a really big bill, bigger than all the males even.\nAlso on flipper_len there is one female penguins with a much smaller value than others.\n\n\n\n\n\n\n6. Make a scatterplot of body_mass_g vs flipper_length_mm for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe striping corresponds to rounded values of flipper length, that have been reported to the nearest mm. It appears that it is done across all measuring as it is present for both sexes, for all species, for each island and each year. Otherwise there is nothing much to report as unusual.\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~island, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~sex, ncol=2, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~species, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~year, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\n⚠️ Note: That using na.omit() is VERY DANGEROUS. You should very rarely use it and only in very clear situations like this data.\n\n\n\n\n\n\n7. How well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the \\(R^2\\), \\(\\sigma\\), and make a residual plot of residuals vs flipper_length_mm. From the residual plot, are there any concerns about the model fit?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe model fit statistics suggest it is a reasonably good model, with flipper length explaining about 76% of body mass. From the estimated standard deviation of the error, \\(\\sigma=393\\), we could say that the estimated body mass is likely accurate to within 800g. (Assuming normal distribution and 95% of observations within two \\(\\sigma\\).)\nThe residual suggests no major problems. There is a little heteroskedasticity. Perhaps if you look carefully, though, it might indicate that different models should have been fitted for the smaller penguins and the bigger penguins, perhaps models separately for sex and species would be advised.\n\n\nCode\nlibrary(broom)\npenguins_nona &lt;- penguins |&gt;\n  na.omit()\npenguins_fit &lt;- lm(body_mass~flipper_len, data=penguins_nona)\ntidy(penguins_fit)\n\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic   p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;\n1 (Intercept)  -5872.     310.       -18.9 1.18e- 54\n2 flipper_len     50.2      1.54      32.6 3.13e-105\n\n\nCode\nglance(penguins_fit)\n\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.762         0.761  393.     1060. 3.13e-105     1 -2461. 4928. 4940.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;\n\n\nCode\npenguins_m &lt;- augment(penguins_fit)\nggplot(penguins_m, aes(x=flipper_len, y=.resid)) +\n  geom_hline(yintercept=1, colour=\"grey70\") +\n  geom_point() +\n  theme(aspect.ratio=1)"
+  },
+  {
+    "objectID": "week4/tutorialsol.html",
+    "href": "week4/tutorialsol.html",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week4/tutorialsol.html#objectives",
+    "href": "week4/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week4/tutorialsol.html#preparation",
+    "href": "week4/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 3",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is The initial examination of data. It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis. - Complete the weekly quiz, before the deadline! - Make sure you have this list of R packages installed:\n\nComplete the weekly quiz, before the deadline!\nMake sure you have this list of R packages installed:\n\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"nullabor\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week4/tutorialsol.html#exercises",
+    "href": "week4/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 3",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\n\nExercise 1: IDA on penguins data\n\nTake a glimpse of the penguins data. What types are variables are present in the data?\nHow was this data collected? You will need to read the documentation for the palmerpenguins package.\nUsing the visdat package make an overview plot to examine types of variables and for missing values.\nCheck the distributions of each species on each of the size variables, using a jittered dotplot, using the geom_quasirandom() function in the ggbeeswarm package. There seems to be some bimodality in some species on some variables eg bill_len. Why do you think this might be? Check your thinking by making a suitable plot.\nIs there any indication of outliers from the jittered dotplots of different variables?\nMake a scatterplot of body_mass_g vs flipper_length_mm for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?\nHow well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the \\(R^2\\), \\(\\sigma\\), and make a residual plot of residuals vs flipper_length_mm. From the residual plot, are there any concerns about the model fit?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\nlibrary(tidyverse)\nglimpse(penguins)\n\nRows: 344\nColumns: 8\n$ species     &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Ad…\n$ island      &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgersen, Tor…\n$ bill_len    &lt;dbl&gt; 39, 40, 40, NA, 37, 39, 39, 39, 34, 42, 38, 38, 41, 39, 35…\n$ bill_dep    &lt;dbl&gt; 19, 17, 18, NA, 19, 21, 18, 20, 18, 20, 17, 17, 18, 21, 21…\n$ flipper_len &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186, 180,…\n$ body_mass   &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, 4250, …\n$ sex         &lt;fct&gt; male, female, female, NA, female, male, female, male, NA, …\n$ year        &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…\n\n\n\nDetails are at https://allisonhorst.github.io/palmerpenguins/articles/intro.html, and you learn “These data were collected from 2007 - 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program, part of the US Long Term Ecological Research Network. The data were imported directly from the Environmental Data Initiative (EDI) Data Portal.” It is necessary to also read the original data collection article https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081 to obtain details of the sampling. Breeding pairs of penguins were included based on sampling of nests where pairs of adults were present, were chosen and marked, before onset of egg-laying.\nThere are three factor variables - species, island, sex - and three integer variables - flipper_len, body_mass and year - and two numeric variables - bill_len and bill_dep.\n\nIt is interesting that flipper_len and body_mass are reported without decimal places, and thus are integers, whereas bill_len and bill_dep are reported with one decimal place, and thus are doubles. Both are numeric variables, though.\nFour variables have missing values: sex, bill_len, bill_dep, flipper_len, body_mass. There are more missings on sex. The other missings occur together, the penguins are missing on all five variables.\n\nlibrary(visdat)\nvis_dat(penguins)\n\n\n\n\n\n\n\n\n\nParticularly on bill_len multimodality can be seen in the Chinstrap and Gentoo penguins. This corresponds to differences in the two species. Differences can be seen in the sexes for all of the variables and species, but it is only big enough in bill_len to be noticeable as bimodality.\n\n\nlibrary(ggbeeswarm)\nggplot(penguins, aes(x=species, \n                     y=bill_len)) +\n  geom_quasirandom() \n\n\n\n\n\n\n\nggplot(penguins, aes(x=species, \n                     y=bill_len, \n                     colour=sex)) +\n  geom_quasirandom() +\n  scale_color_brewer(\"\", palette=\"Dark2\")\n\n\n\n\n\n\n\n\n\nOutliers can be seen on bill_len for Chinstrap and Gentoo. Interestingly, there is one female penguins with a really big bill, bigger than all the males even.\n\nAlso on flipper_len there is one female penguins with a much smaller value than others.\n\nThe striping corresponds to rounded values of flipper length, that have been reported to the nearest mm. It appears that it is done across all measuring as it is present for both sexes, for all species, for each island and each year. Otherwise there is nothing much to report as unusual.\n\n\npenguins %&gt;%\n  na.omit() %&gt;%\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\npenguins %&gt;%\n  na.omit() %&gt;%\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~island, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\npenguins %&gt;%\n  na.omit() %&gt;%\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~sex, ncol=2, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\npenguins %&gt;%\n  na.omit() %&gt;%\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~species, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\npenguins %&gt;%\n  na.omit() %&gt;%\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~year, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nThe model fit statistics suggest it is a reasonably good model, with flipper length explaining about 76% of body mass. From the estimated standard deviation of the error, \\(\\sigma=393\\), we could say that the estimated body mass is likely accurate to within 800g. (Assuming normal distribution and 95% of observations within two \\(\\sigma\\).)\n\nThe residual suggests no major problems. There is a little heteroskedasticity. Perhaps if you look carefully, though, it might indicate that different models should have been fitted for the smaller penguins and the bigger penguins, perhaps models separately for sex and species would be advised.\n\nlibrary(broom)\npenguins_nona &lt;- penguins %&gt;%\n  na.omit()\npenguins_fit &lt;- lm(body_mass~flipper_len, data=penguins_nona)\ntidy(penguins_fit)\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic   p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;\n1 (Intercept)  -5872.     310.       -18.9 1.18e- 54\n2 flipper_len     50.2      1.54      32.6 3.13e-105\n\nglance(penguins_fit)\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.762         0.761  393.     1060. 3.13e-105     1 -2461. 4928. 4940.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;\n\npenguins_m &lt;- augment(penguins_fit)\nggplot(penguins_m, aes(x=flipper_len, y=.resid)) +\n  geom_hline(yintercept=1, colour=\"grey70\") +\n  geom_point() +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 2: Can we believe what we see?\nThis question uses material from this week’s lecture, from a few hours ago.\n\nIn the previous question we made subjective statements about the residual plot to determine if the model was a good fit or not. We’ll use randomisation to check any observations we made from the residual plot. The code below makes a lineup of the true plot against plots made with rotation residuals (nulls/good). When you run the code you will get a line decrypt(\"....\"), which you can copy and paste back in to the console window to get the location of the true plot (in case you forgot which it is). Does the true plot look like the null plots? If not, describe how it differs.\n\n\nlibrary(nullabor)\nggplot(lineup(null_lm(body_mass~flipper_len, method=\"rotate\"),\n              penguins_m),\n       aes(x=flipper_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n\nPick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them\n\n\nto pick the plot that is most different.\nexplain why they picked that plot.\n\nUsing your decrypt() code locate the true plot. Is the true plot different from the nulls?\nDid you or your friend choose the data plot? Was it identifiable from the lineup or indistinguishable from the null plots?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nThe true plot looks a little different from the nulls. It has more of a V shape, which might suggest that the model fits poorly, that the smaller penguins have a different relationship than the larger penguins. It is evidence to support fitting separate models to the sexes and species.\nSomething like the following\n\n\nlibrary(nullabor)\npenguins_f_adelie &lt;- penguins_nona %&gt;%\n  filter(species == \"Adelie\",\n         sex == \"female\")\npenguins_f_adelie_bl_bd_fit &lt;- \n  lm(bill_dep ~ bill_len,\n     data=penguins_f_adelie)\npenguins_f_adelie_bl_bd_m &lt;-\n  augment(penguins_f_adelie_bl_bd_fit)\nggplot(lineup(null_lm(bill_dep ~ \n                        bill_len,\n                      method=\"rotate\"),\n              penguins_f_adelie_bl_bd_m),\n       aes(x=bill_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n\n\n\n\n\n\n\nI would not be able to distinguish which is the true plot in this lineup."
+  },
+  {
+    "objectID": "week4/tutorialsol.html#finishing-up",
+    "href": "week4/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 3",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
   }
 ]
