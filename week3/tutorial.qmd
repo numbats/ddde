@@ -109,6 +109,10 @@ kbl(desc, table.attr = 'data-quarto-disable-processing="true"') |>
 
 The most complete list with best process for findings, as decided by your tutor, wins the prize! Your tutor's decision is final!
 
+::: unilur-solution
+Your tutor has the solution!
+:::
+
 ## 👌 Finishing up
 
 Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.
