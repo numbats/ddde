@@ -4,14 +4,14 @@
     "href": "week9/index.html",
     "title": "Week 9: Exploring data having a space and time context Part I",
     "section": "",
-    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
+    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
   },
   {
     "objectID": "week9/index.html#main-reference",
     "href": "week9/index.html#main-reference",
     "title": "Week 9: Exploring data having a space and time context Part I",
     "section": "",
-    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
+    "text": "brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R"
   },
   {
     "objectID": "week9/index.html#what-you-will-learn-this-week",
@@ -39,7 +39,7 @@
     "href": "week9/index.html#assignments",
     "title": "Week 9: Exploring data having a space and time context Part I",
     "section": "Assignments",
-    "text": "Assignments\n\nExercises 3 is due on Monday 22 September.\nQuiz 8 is due on Thursday 25 September.\nQuiz 9 is due on Thursday 09 October.\nProject Part 1 is due on Monday 13 October.\nQuiz 10 is due on Thursday 16 October.\nQuiz 11 is due on Thursday 23 October.\nProject Part 2 is due on Monday 03 November."
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
   },
   {
     "objectID": "week7/index.html",
@@ -81,7 +81,7 @@
     "href": "week7/index.html#assignments",
     "title": "Week 7: Making comparisons between groups and strata",
     "section": "Assignments",
-    "text": "Assignments\n\nQuiz 6 is due on Thursday 11 September.\nQuiz 7 is due on Thursday 18 September.\nExercises 3 is due on Monday 22 September.\nQuiz 8 is due on Thursday 25 September."
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
   },
   {
     "objectID": "week5/index.html",
@@ -123,7 +123,119 @@
     "href": "week5/index.html#assignments",
     "title": "Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics",
     "section": "Assignments",
-    "text": "Assignments\n\nQuiz 4 is due on Thursday 28 August.\nExercises 2 is due on Monday 01 September.\nQuiz 5 is due on Thursday 04 September.\nQuiz 6 is due on Thursday 11 September."
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
+  },
+  {
+    "objectID": "week4/index.html",
+    "href": "week4/index.html",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "",
+    "text": "Wickham et al. (2010) Graphical inference for Infovis"
+  },
+  {
+    "objectID": "week4/index.html#main-reference",
+    "href": "week4/index.html#main-reference",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "",
+    "text": "Wickham et al. (2010) Graphical inference for Infovis"
+  },
+  {
+    "objectID": "week4/index.html#what-you-will-learn-this-week",
+    "href": "week4/index.html#what-you-will-learn-this-week",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nrevision of statistical inference\nusing re-sampling methods to calibrate reading patterns\ngenerating lineups of plots\nhow to specify the null hypothesis\ncalculating p-value and power"
+  },
+  {
+    "objectID": "week4/index.html#lecture-slides",
+    "href": "week4/index.html#lecture-slides",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week4/index.html#tutorial-instructions",
+    "href": "week4/index.html#tutorial-instructions",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week4/index.html#assignments",
+    "href": "week4/index.html#assignments",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
+  },
+  {
+    "objectID": "week3/tutorial.html",
+    "href": "week3/tutorial.html",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week3/tutorial.html#objectives",
+    "href": "week3/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week3/tutorial.html#preparation",
+    "href": "week3/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 3",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is The initial examination of data. It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis.\n\nComplete the weekly quiz, before the deadline!\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week3/tutorial.html#exercises",
+    "href": "week3/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 3",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nToday, you have sprint competition to discover as many problems as possible in this data, cafe.rda.\nA small cafe in the city of Melbourne is interested in determining whether the daily earnings depend on the weather. They compiled data for a period over 2000-2001 to study this question. The data has the following variables:\n\n\n\n \n  \n    var \n    description \n  \n \n\n  \n    dt \n    Date \n  \n  \n    wday \n    Day of the week \n  \n  \n    revenue \n    Daily revenue in hundreds, 11=1100 \n  \n  \n    expend \n    Daily expenses in hundreds \n  \n  \n    precip \n    Precipitation in mm \n  \n  \n    mint \n    Minimum temperature, Celsius \n  \n  \n    maxt \n    Maximum temperature, Celsius \n  \n  \n    source \n    Source of the weather data \n  \n\n\n\n\n\nGuidelines\n\nUse whatever R package or software or tool you’d like, and report how you found the error.\nFeel free to buddy up, and work with another student in your tutorial session.\nNo cheating! This time do the assignment without AI help, or searching for answers on the web.\nPlease don’t ruin the later tutorials by sharing your work!\n\nThe most complete list with best process for findings, as decided by your tutor, wins the prize! Your tutor’s decision is final!"
+  },
+  {
+    "objectID": "week3/tutorial.html#finishing-up",
+    "href": "week3/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 3",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week3/tutorialsol.html",
+    "href": "week3/tutorialsol.html",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#objectives",
+    "href": "week3/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 3",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#preparation",
+    "href": "week3/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 3",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is The initial examination of data. It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis.\n\nComplete the weekly quiz, before the deadline!\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week3/tutorialsol.html#exercises",
+    "href": "week3/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 3",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nToday, you have sprint competition to discover as many problems as possible in this data, cafe.rda.\nA small cafe in the city of Melbourne is interested in determining whether the daily earnings depend on the weather. They compiled data for a period over 2000-2001 to study this question. The data has the following variables:\n\n\n\n \n  \n    var \n    description \n  \n \n\n  \n    dt \n    Date \n  \n  \n    wday \n    Day of the week \n  \n  \n    revenue \n    Daily revenue in hundreds, 11=1100 \n  \n  \n    expend \n    Daily expenses in hundreds \n  \n  \n    precip \n    Precipitation in mm \n  \n  \n    mint \n    Minimum temperature, Celsius \n  \n  \n    maxt \n    Maximum temperature, Celsius \n  \n  \n    source \n    Source of the weather data \n  \n\n\n\n\n\nGuidelines\n\nUse whatever R package or software or tool you’d like, and report how you found the error.\nFeel free to buddy up, and work with another student in your tutorial session.\nNo cheating! This time do the assignment without AI help, or searching for answers on the web.\nPlease don’t ruin the later tutorials by sharing your work!\n\nThe most complete list with best process for findings, as decided by your tutor, wins the prize! Your tutor’s decision is final!\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nYour tutor has the solution!"
+  },
+  {
+    "objectID": "week3/tutorialsol.html#finishing-up",
+    "href": "week3/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 3",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
   },
   {
     "objectID": "week3/index.html",
@@ -154,6 +266,13 @@
     "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
   },
   {
+    "objectID": "week3/index.html#worksheet",
+    "href": "week3/index.html#worksheet",
+    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
+    "section": "Worksheet",
+    "text": "Worksheet\n\nqmd\nhtml"
+  },
+  {
     "objectID": "week3/index.html#tutorial-instructions",
     "href": "week3/index.html#tutorial-instructions",
     "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
@@ -172,7 +291,7 @@
     "href": "week3/index.html#assignments-1",
     "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
     "section": "Assignments",
-    "text": "Assignments\n\nQuiz 2 is due on Thursday 14 August.\nExercises 1 is due on Monday 18 August.\nQuiz 3 is due on Thursday 21 August.\nQuiz 4 is due on Thursday 28 August."
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
   },
   {
     "objectID": "week2/tutorial.html",
@@ -529,7 +648,7 @@
     "href": "week12/index.html#assignments",
     "title": "Week 12: Long help session",
     "section": "Assignments",
-    "text": "Assignments\n\nQuiz 11 is due on Thursday 23 October.\nProject Part 2 is due on Monday 03 November."
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
   },
   {
     "objectID": "week10/index.html",
@@ -571,7 +690,7 @@
     "href": "week10/index.html#assignments",
     "title": "Week 10: Exploring data having a space and time context Part II",
     "section": "Assignments",
-    "text": "Assignments\n\nQuiz 9 is due on Thursday 09 October.\nProject Part 1 is due on Monday 13 October.\nQuiz 10 is due on Thursday 16 October.\nQuiz 11 is due on Thursday 23 October.\nProject Part 2 is due on Monday 03 November."
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
   },
   {
     "objectID": "week1/tutorial.html",
@@ -718,7 +837,7 @@
     "href": "week1/index.html#assignments",
     "title": "Week 1: Overview. Why this course? What is EDA?",
     "section": "Assignments",
-    "text": "Assignments\n\nQuiz 1 is due on Thursday 07 August.\nQuiz 2 is due on Thursday 14 August."
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
   },
   {
     "objectID": "index.html",
@@ -746,7 +865,7 @@
     "href": "index.html#weekly-schedule",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Weekly schedule",
-    "text": "Weekly schedule\n\nLecture+workshop: Tues 2-5pm on zoom (link in Moodle)\nTutorial: 1 hour\nWeekly learning quizzes due each Thursday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n29 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n05 Aug\nLearning from history\nEDA Case Study: Bay area blues\nQuiz 1\n\n\n12 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\nQuiz 2\n\n\n19 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\nExercises 1\n\n\n19 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\nQuiz 3\n\n\n26 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\nQuiz 4\n\n\n02 Sep\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nExercises 2\n\n\n02 Sep\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nQuiz 5\n\n\n09 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\nQuiz 6\n\n\n16 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\nQuiz 7\n\n\n23 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nExercises 3\n\n\n23 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nQuiz 8\n\n\n30 Sep\nMid-semester break\n\n\n\n\n07 Oct\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\nQuiz 9\n\n\n14 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nProject Part 1\n\n\n14 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nQuiz 10\n\n\n21 Oct\nHelp session\n\nQuiz 11\n\n\n04 Nov\n\n\nProject Part 2"
+    "text": "Weekly schedule\n\nLecture+workshop: Tues 2-5pm on zoom (link in Moodle)\nTutorial: 1 hour\nWeekly learning quizzes due each Thursday 9am, from week 2\n\n\n\n\nWeek\nTopic\nReference\nAssessments\n\n\n\n\n29 Jul\nOverview. Why this course? What is EDA?\nThe Landscape of R Packages for Automated Exploratory Data Analysis\n\n\n\n05 Aug\nLearning from history\nEDA Case Study: Bay area blues\nQuiz 1\n\n\n12 Aug\nInitial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA\nThe initial examination of data\nQuiz 2\n\n\n19 Aug\nUsing computational tools to determine whether what is seen in the data can be assumed to apply more broadly\nWickham et al. (2010) Graphical inference for Infovis\nExercises 1,Quiz 3\n\n\n26 Aug\nWorking with a single variable, making transformations, detecting outliers, using robust statistics\nWilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions\nQuiz 4\n\n\n02 Sep\nBivariate dependencies and relationships, transformations to linearise\nWilke (2019) Ch 12 Visualising associations\nExercises 2,Quiz 5\n\n\n09 Sep\nMaking comparisons between groups and strata\nWilke (2019) Ch 9, 10.2-4, 11.2\nQuiz 6\n\n\n16 Sep\nGoing beyond two variables, exploring high dimensions\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1\nQuiz 7\n\n\n23 Sep\nExploring data having a space and time context Part I\nbrolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R\nExercises 3,Quiz 8\n\n\n30 Sep\nMid-semester break\n\n\n\n\n07 Oct\nExploring data having a space and time context Part II\ncubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data\nQuiz 9\n\n\n14 Oct\nSculpting data using models, checking assumptions, co-dependency and performing diagnostics\nHow to use a tour to check if your model suffers from multicollinearity\nProject Part 1,Quiz 10\n\n\n21 Oct\nHelp session\n\nQuiz 11\n\n\n04 Nov\n\n\nProject Part 2"
   },
   {
     "objectID": "index.html#assessments",
@@ -1180,14 +1299,14 @@
     "href": "week11/index.html",
     "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
     "section": "",
-    "text": "How to use a tour to check if your model suffers from multicollinearity How to use a tour to check if your model suffers from multicollinearity"
+    "text": "How to use a tour to check if your model suffers from multicollinearity"
   },
   {
     "objectID": "week11/index.html#main-reference",
     "href": "week11/index.html#main-reference",
     "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
     "section": "",
-    "text": "How to use a tour to check if your model suffers from multicollinearity How to use a tour to check if your model suffers from multicollinearity"
+    "text": "How to use a tour to check if your model suffers from multicollinearity"
   },
   {
     "objectID": "week11/index.html#what-you-will-learn-this-week",
@@ -1222,7 +1341,7 @@
     "href": "week11/index.html#assignments-1",
     "title": "Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics",
     "section": "Assignments",
-    "text": "Assignments\n\nProject Part 1 is due on Monday 13 October.\nQuiz 10 is due on Thursday 16 October.\nQuiz 11 is due on Thursday 23 October.\nProject Part 2 is due on Monday 03 November."
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
   },
   {
     "objectID": "week2/index.html",
@@ -1271,7 +1390,7 @@
     "href": "week2/index.html#assignments",
     "title": "Week 2: Learning from history",
     "section": "Assignments",
-    "text": "Assignments\n\nQuiz 1 is due on Thursday 07 August.\nQuiz 2 is due on Thursday 14 August.\nExercises 1 is due on Monday 18 August.\nQuiz 3 is due on Thursday 21 August."
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
   },
   {
     "objectID": "week2/worksheetsol.html",
@@ -1314,132 +1433,6 @@
     "title": "ETC5521 Worksheet Week 2",
     "section": "🧩 Tasks",
     "text": "🧩 Tasks\n\n1. Use AI to obtain a list of packages that might be used for exploring data in R.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nHere is my list of prompts:\n\nDo you know the paper “The Landscape of R Packages for Automated Exploratory Data Analysis” ?\nWhat would you recommend for R packages for exploratory data analysis today? I’m not sure that the package list in that paper are reasonable 5 years into the future of today.\nWhat about databot? (Notice the botching of author: “Jennifer (Yihui) Cheng and others”)\nAre there any packages that are true to Tukey’s original book Exploratory Data Analysis from 1977?\nWhat about packages that can explore high-dimensional data?\n\n\n\n\n\n\n\n2. Pick one of the packages mentioned and give it a spin\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n3. Use AI to learn about some of Tukey’s most famous quotes, and also what methods he developed are still in common use today\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nMy prompts:\n\nWhat are some of Tukey’s most famous quotes?\nWhat are some methods that Tukey developed that are commonly used today?\nWhat are the R packages that have these methods?\nWhat about the letter value plot?\nI would love a “A one-page “Tukey contributions” teaching sheet for a lecture?” Can you provide it as a quarto document?\n\n\n\n\n\n\n\n4. For the gardenR example from week 1, ask for some Tukey-style summaries of this data\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nPrompt:\n\nFor the gardenR package data, could you make some code to do Tukey-like summaries of the data?"
-  },
-  {
-    "objectID": "week4/index.html",
-    "href": "week4/index.html",
-    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
-    "section": "",
-    "text": "Wickham et al. (2010) Graphical inference for Infovis Wickham et al. (2010) Graphical inference for Infovis"
-  },
-  {
-    "objectID": "week4/index.html#main-reference",
-    "href": "week4/index.html#main-reference",
-    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
-    "section": "",
-    "text": "Wickham et al. (2010) Graphical inference for Infovis Wickham et al. (2010) Graphical inference for Infovis"
-  },
-  {
-    "objectID": "week4/index.html#what-you-will-learn-this-week",
-    "href": "week4/index.html#what-you-will-learn-this-week",
-    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
-    "section": "What you will learn this week",
-    "text": "What you will learn this week\n\nrevision of statistical inference\nusing re-sampling methods to calibrate reading patterns\ngenerating lineups of plots\nhow to specify the null hypothesis\ncalculating p-value and power"
-  },
-  {
-    "objectID": "week4/index.html#lecture-slides",
-    "href": "week4/index.html#lecture-slides",
-    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
-    "section": "Lecture slides",
-    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
-  },
-  {
-    "objectID": "week4/index.html#tutorial-instructions",
-    "href": "week4/index.html#tutorial-instructions",
-    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
-    "section": "Tutorial instructions",
-    "text": "Tutorial instructions\n\nhtml\nqmd"
-  },
-  {
-    "objectID": "week4/index.html#assignments",
-    "href": "week4/index.html#assignments",
-    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
-    "section": "Assignments",
-    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 3 is due on Thursday 21 August.\nQuiz 4 is due on Thursday 28 August.\nExercises 2 is due on Monday 01 September.\nQuiz 5 is due on Thursday 04 September."
-  },
-  {
-    "objectID": "week6/index.html",
-    "href": "week6/index.html",
-    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
-    "section": "",
-    "text": "Wilke (2019) Ch 12 Visualising associations Wilke (2019) Ch 12 Visualising associations"
-  },
-  {
-    "objectID": "week6/index.html#main-reference",
-    "href": "week6/index.html#main-reference",
-    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
-    "section": "",
-    "text": "Wilke (2019) Ch 12 Visualising associations Wilke (2019) Ch 12 Visualising associations"
-  },
-  {
-    "objectID": "week6/index.html#what-you-will-learn-this-week",
-    "href": "week6/index.html#what-you-will-learn-this-week",
-    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
-    "section": "What you will learn this week",
-    "text": "What you will learn this week\n\nThe humble but powerful scatterplot\nAdditions and variations\nTransformations to linearity\n(Robust) numerical measures of association\nSimpson’s paradox\nMaking null samples to test for association\nImputing missing values"
-  },
-  {
-    "objectID": "week6/index.html#lecture-slides",
-    "href": "week6/index.html#lecture-slides",
-    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
-    "section": "Lecture slides",
-    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
-  },
-  {
-    "objectID": "week6/index.html#tutorial-instructions",
-    "href": "week6/index.html#tutorial-instructions",
-    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
-    "section": "Tutorial instructions",
-    "text": "Tutorial instructions\n\nhtml\nqmd"
-  },
-  {
-    "objectID": "week6/index.html#assignments",
-    "href": "week6/index.html#assignments",
-    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
-    "section": "Assignments",
-    "text": "Assignments\n\nExercises 2 is due on Monday 01 September.\nQuiz 5 is due on Thursday 04 September.\nQuiz 6 is due on Thursday 11 September.\nQuiz 7 is due on Thursday 18 September."
-  },
-  {
-    "objectID": "week8/index.html",
-    "href": "week8/index.html",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "",
-    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
-  },
-  {
-    "objectID": "week8/index.html#main-reference",
-    "href": "week8/index.html#main-reference",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "",
-    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
-  },
-  {
-    "objectID": "week8/index.html#what-you-will-learn-this-week",
-    "href": "week8/index.html#what-you-will-learn-this-week",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "What you will learn this week",
-    "text": "What you will learn this week\n\nWhat is high-dimensional data? (If all variables are quantitative)\nExploring relationships between more than two variables\n\nTours - scatterplots of combinations of variables\nMatrix of plots\nParallel coordinates\n\nWhat can be hidden\nAutomating the search for pairwise relationships using scagnostics\nLinking elements of multiple plots\nExploring multiple categorical variables"
-  },
-  {
-    "objectID": "week8/index.html#lecture-slides",
-    "href": "week8/index.html#lecture-slides",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "Lecture slides",
-    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
-  },
-  {
-    "objectID": "week8/index.html#tutorial-instructions",
-    "href": "week8/index.html#tutorial-instructions",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "Tutorial instructions",
-    "text": "Tutorial instructions\n\nhtml\nqmd"
-  },
-  {
-    "objectID": "week8/index.html#assignments",
-    "href": "week8/index.html#assignments",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "Assignments",
-    "text": "Assignments\n\nQuiz 7 is due on Thursday 18 September.\nExercises 3 is due on Monday 22 September.\nQuiz 8 is due on Thursday 25 September.\nQuiz 9 is due on Thursday 09 October."
   },
   {
     "objectID": "week3/slides.html#the-role-of-initial-data-analysis",
@@ -1558,7 +1551,7 @@
     "href": "week3/slides.html#data-cleaning-22",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Data cleaning (2/2)",
-    "text": "Data cleaning (2/2)\nIn addition, numerical or graphical summaries may reveal that there is unwanted structure in the data, for example,\n\n\n\nDoes the treatment group have different demographic characteristics to the control group?\nAre the distributions similar between the or training and test sets?\nAre there sufficient measurements for each level of categorical variable, or across the range of numerical variables?\n\n\n\n\nDoes the distribution of the data imply violations of assumptions for the CDA, such as\n\nnon-normality,\ndiscrete rather real-valued, or\ndifferent variance in different domains?\n\n\n\n\n\nData scrutinizing is a process that you get better at with practice and have familiarity with the domain area."
+    "text": "Data cleaning (2/2)\nIn addition, numerical or graphical summaries may reveal that there is unwanted structure in the data, for example,\n\n\n\nDoes the treatment group have different demographic characteristics to the control group?\nAre the distributions similar between the training and test sets?\nAre there sufficient measurements for each level of categorical variable, or across the range of numerical variables?\n\n\n\n\nDoes the distribution of the data imply violations of assumptions for the CDA, such as\n\nnon-normality,\ndiscrete rather real-valued, or\ndifferent variance in different domains?\n\n\n\n\n\nData scrutinizing is a process that you get better at with practice and have familiarity with the domain area."
   },
   {
     "objectID": "week3/slides.html#example-checking-the-data-quality",
@@ -1719,21 +1712,21 @@
     "href": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-13",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Case study: Dutch supermarket revenue and cost (1/3)",
-    "text": "Case study: Dutch supermarket revenue and cost (1/3)\n\nData contains the revenue and cost (in Euros) for 60 supermarkets\nData has been anonymised and distorted\n\n\ndata(\"SBS2000\", package = \"validate\")\ndplyr::glimpse(SBS2000)\n\nRows: 60\nColumns: 11\n$ id          &lt;fct&gt; RET01, RET02, RET03, RET04, …\n$ size        &lt;fct&gt; sc0, sc3, sc3, sc3, sc3, sc0…\n$ incl.prob   &lt;dbl&gt; 0.02, 0.14, 0.14, 0.14, 0.14…\n$ staff       &lt;int&gt; 75, 9, NA, NA, NA, 1, 5, 3, …\n$ turnover    &lt;int&gt; NA, 1607, 6886, 3861, NA, 25…\n$ other.rev   &lt;int&gt; NA, NA, -33, 13, 37, NA, NA,…\n$ total.rev   &lt;int&gt; 1130, 1607, 6919, 3874, 5602…\n$ staff.costs &lt;int&gt; NA, 131, 324, 290, 314, NA, …\n$ total.costs &lt;int&gt; 18915, 1544, 6493, 3600, 553…\n$ profit      &lt;int&gt; 20045, 63, 426, 274, 72, 3, …\n$ vat         &lt;int&gt; NA, NA, NA, NA, NA, NA, 1346…"
+    "text": "Case study: Dutch supermarket revenue and cost (1/3)\n\nData contains the revenue and cost (in Euros) for 60 supermarkets\nData has been anonymised and distorted\n\n\nlibrary(validate)\ndata(\"SBS2000\", package = \"validate\")\ndplyr::glimpse(SBS2000)\n\nRows: 60\nColumns: 11\n$ id          &lt;fct&gt; RET01, RET02, RET03, RET04, …\n$ size        &lt;fct&gt; sc0, sc3, sc3, sc3, sc3, sc0…\n$ incl.prob   &lt;dbl&gt; 0.02, 0.14, 0.14, 0.14, 0.14…\n$ staff       &lt;int&gt; 75, 9, NA, NA, NA, 1, 5, 3, …\n$ turnover    &lt;int&gt; NA, 1607, 6886, 3861, NA, 25…\n$ other.rev   &lt;int&gt; NA, NA, -33, 13, 37, NA, NA,…\n$ total.rev   &lt;int&gt; 1130, 1607, 6919, 3874, 5602…\n$ staff.costs &lt;int&gt; NA, 131, 324, 290, 314, NA, …\n$ total.costs &lt;int&gt; 18915, 1544, 6493, 3600, 553…\n$ profit      &lt;int&gt; 20045, 63, 426, 274, 72, 3, …\n$ vat         &lt;int&gt; NA, NA, NA, NA, NA, NA, 1346…"
   },
   {
     "objectID": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-23",
     "href": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-23",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Case study: Dutch supermarket revenue and cost (2/3)",
-    "text": "Case study: Dutch supermarket revenue and cost (2/3)\n\nChecking for completeness of records\n\n\nlibrary(validate)\nrules &lt;- validator(\n          is_complete(id),\n          is_complete(id, turnover),\n          is_complete(id, turnover, profit))\nout &lt;- confront(SBS2000, rules)\nsummary(out)\n\n  name items passes fails nNA error warning\n1   V1    60     60     0   0 FALSE   FALSE\n2   V2    60     56     4   0 FALSE   FALSE\n3   V3    60     52     8   0 FALSE   FALSE\n                         expression\n1                   is_complete(id)\n2         is_complete(id, turnover)\n3 is_complete(id, turnover, profit)"
+    "text": "Case study: Dutch supermarket revenue and cost (2/3)\n\nChecking for completeness of records\n\n\nrules &lt;- validator(\n          is_complete(id),\n          is_complete(id, turnover),\n          is_complete(id, turnover, profit))\nout &lt;- confront(SBS2000, rules)\nsummary(out)\n\n  name items passes fails nNA error warning\n1   V1    60     60     0   0 FALSE   FALSE\n2   V2    60     56     4   0 FALSE   FALSE\n3   V3    60     52     8   0 FALSE   FALSE\n                         expression\n1                   is_complete(id)\n2         is_complete(id, turnover)\n3 is_complete(id, turnover, profit)"
   },
   {
     "objectID": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-33",
     "href": "week3/slides.html#case-study-dutch-supermarket-revenue-and-cost-33",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Case study: Dutch supermarket revenue and cost (3/3)",
-    "text": "Case study: Dutch supermarket revenue and cost (3/3)\n\nSanity check derived variables\n\n\nlibrary(validate)\nrules &lt;- validator(\n    total.rev - profit == total.costs,\n    turnover + other.rev == total.rev,\n    profit &lt;= 0.6 * total.rev\n)\nout &lt;- confront(SBS2000, rules)\nsummary(out)\n\n  name items passes fails nNA error warning\n1   V1    60     39    14   7 FALSE   FALSE\n2   V2    60     19     4  37 FALSE   FALSE\n3   V3    60     49     6   5 FALSE   FALSE\n                                      expression\n1 abs(total.rev - profit - total.costs) &lt;= 1e-08\n2 abs(turnover + other.rev - total.rev) &lt;= 1e-08\n3              profit - 0.6 * total.rev &lt;= 1e-08"
+    "text": "Case study: Dutch supermarket revenue and cost (3/3)\n\nSanity check derived variables\n\n\nrules &lt;- validator(\n    total.rev - profit == total.costs,\n    turnover + other.rev == total.rev,\n    profit &lt;= 0.6 * total.rev\n)\nout &lt;- confront(SBS2000, rules)\nsummary(out)\n\n  name items passes fails nNA error warning\n1   V1    60     39    14   7 FALSE   FALSE\n2   V2    60     19     4  37 FALSE   FALSE\n3   V3    60     49     6   5 FALSE   FALSE\n                                      expression\n1 abs(total.rev - profit - total.costs) &lt;= 1e-08\n2 abs(turnover + other.rev - total.rev) &lt;= 1e-08\n3              profit - 0.6 * total.rev &lt;= 1e-08"
   },
   {
     "objectID": "week3/slides.html#ida-for-hypothesis-testing",
@@ -1813,39 +1806,25 @@
     "text": "Further reading\n\nHuebner et al (2018) A Contemporary Conceptual Framework for Initial Data Analysis\nHuebner et al (2020) Hidden analyses\nChatfield (1985) The Initial Examination of Data. Journal of the Royal Statistical Society. Series A (General) 148 \nCox & Snell (1981) Applied Statistics. London: Chapman and Hall.\nvan der Loo and de Jonge (2018). Statistical Data Cleaning with Applications in R. John Wiley and Sons Ltd.\nHyndman (2014) Explaining the ABS unemployment fluctuations"
   },
   {
-    "objectID": "week3/tutorial.html",
-    "href": "week3/tutorial.html",
-    "title": "ETC5521 Tutorial 3",
+    "objectID": "week3/worksheetsol.html",
+    "href": "week3/worksheetsol.html",
+    "title": "ETC5521 Worksheet Week 3",
     "section": "",
-    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"visdat\"))"
   },
   {
-    "objectID": "week3/tutorial.html#objectives",
-    "href": "week3/tutorial.html#objectives",
-    "title": "ETC5521 Tutorial 3",
+    "objectID": "week3/worksheetsol.html#objectives",
+    "href": "week3/worksheetsol.html#objectives",
+    "title": "ETC5521 Worksheet Week 3",
     "section": "",
-    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"visdat\"))"
   },
   {
-    "objectID": "week3/tutorial.html#preparation",
-    "href": "week3/tutorial.html#preparation",
-    "title": "ETC5521 Tutorial 3",
-    "section": "🔧 Preparation",
-    "text": "🔧 Preparation\nThe reading for this week is The initial examination of data. It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis.\n\nComplete the weekly quiz, before the deadline!\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
-  },
-  {
-    "objectID": "week3/tutorial.html#exercises",
-    "href": "week3/tutorial.html#exercises",
-    "title": "ETC5521 Tutorial 3",
-    "section": "📥 Exercises",
-    "text": "📥 Exercises\nToday, you have sprint competition to discover as many problems as possible in this data, cafe.rda.\nA small cafe in the city of Melbourne is interested in determining whether the daily earnings depend on the weather. They compiled data for a period over 2000-2001 to study this question. The data has the following variables:\n\n\n\n \n  \n    var \n    description \n  \n \n\n  \n    dt \n    Date \n  \n  \n    wday \n    Day of the week \n  \n  \n    revenue \n    Daily revenue in hundreds, 11=1100 \n  \n  \n    expend \n    Daily expenses in hundreds \n  \n  \n    precip \n    Precipitation in mm \n  \n  \n    mint \n    Minimum temperature, Celsius \n  \n  \n    maxt \n    Maximum temperature, Celsius \n  \n  \n    source \n    Source of the weather data \n  \n\n\n\n\n\nGuidelines\n\nUse whatever R package or software or tool you’d like, and report how you found the error.\nFeel free to buddy up, and work with another student in your tutorial session.\nNo cheating! This time do the assignment without AI help, or searching for answers on the web.\nPlease don’t ruin the later tutorials by sharing your work!\n\nThe most complete list with best process for findings, as decided by your tutor, wins the prize! Your tutor’s decision is final!"
-  },
-  {
-    "objectID": "week3/tutorial.html#finishing-up",
-    "href": "week3/tutorial.html#finishing-up",
-    "title": "ETC5521 Tutorial 3",
-    "section": "👌 Finishing up",
-    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+    "objectID": "week3/worksheetsol.html#tasks",
+    "href": "week3/worksheetsol.html#tasks",
+    "title": "ETC5521 Worksheet Week 3",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\n1. Take a glimpse of the penguins data. What types are variables are present in the data?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\nlibrary(tidyverse)\nglimpse(penguins)\n\n\nRows: 344\nColumns: 8\n$ species     &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Ad…\n$ island      &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgersen, Tor…\n$ bill_len    &lt;dbl&gt; 39, 40, 40, NA, 37, 39, 39, 39, 34, 42, 38, 38, 41, 39, 35…\n$ bill_dep    &lt;dbl&gt; 19, 17, 18, NA, 19, 21, 18, 20, 18, 20, 17, 17, 18, 21, 21…\n$ flipper_len &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186, 180,…\n$ body_mass   &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, 4250, …\n$ sex         &lt;fct&gt; male, female, female, NA, female, male, female, male, NA, …\n$ year        &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…\n\n\n\n\n\n\n\n\n2. How was this data collected? You will need to read the documentation for the palmerpenguins package, or see if AI knows.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nDetails are at https://allisonhorst.github.io/palmerpenguins/articles/intro.html, and you learn “These data were collected from 2007 - 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program, part of the US Long Term Ecological Research Network. The data were imported directly from the Environmental Data Initiative (EDI) Data Portal.” It is necessary to also read the original data collection article https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081 to obtain details of the sampling. Breeding pairs of penguins were included based on sampling of nests where pairs of adults were present, were chosen and marked, before onset of egg-laying.\n\n\n\n\n\n\n3. Using the visdat package make an overview plot to examine types of variables and for missing values.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThere are three factor variables - species, island, sex - and three integer variables - flipper_len, body_mass and year - and two numeric variables - bill_len and bill_dep.\nIt is interesting that flipper_len and body_mass are reported without decimal places, and thus are integers, whereas bill_len and bill_dep are reported with one decimal place, and thus are doubles. Both are numeric variables, though.\nFour variables have missing values: sex, bill_len, bill_dep, flipper_len, body_mass. There are more missings on sex. The other missings occur together, the penguins are missing on all five variables.\n\n\nCode\nlibrary(visdat)\nvis_dat(penguins)\n\n\n\n\n\n\n\n\n\nCode\np_nomiss &lt;- penguins |&gt;\n  select(species, bill_len, bill_dep, \n         flipper_len, body_mass) |&gt;\n  na.omit()\n\n\n\n\n\n\n\n\n4. Check the distributions of each species on each of the size variables, using a jittered dotplot, using the geom_quasirandom() function in the ggbeeswarm package. There seems to be some bimodality in some species on some variables eg bill_len. Why do you think this might be? Check your thinking by making a suitable plot.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nParticularly on bill_len multimodality can be seen in the Chinstrap and Gentoo penguins. This corresponds to differences in the two species. Differences can be seen in the sexes for all of the variables and species, but it is only big enough in bill_len to be noticeable as bimodality.\n\n\nCode\nlibrary(ggbeeswarm)\nggplot(penguins, aes(x=species, \n                     y=bill_len)) +\n  geom_quasirandom() \n\n\n\n\n\n\n\n\n\nCode\nggplot(penguins, aes(x=species, \n                     y=bill_len, \n                     colour=sex)) +\n  geom_quasirandom() +\n  scale_color_brewer(\"\", palette=\"Dark2\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n5. Is there any indication of outliers from the jittered dotplots of different variables?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nOutliers can be seen on bill_len for Chinstrap and Gentoo. Interestingly, there is one female penguins with a really big bill, bigger than all the males even.\nAlso on flipper_len there is one female penguins with a much smaller value than others.\n\n\n\n\n\n\n6. Make a scatterplot of body_mass_g vs flipper_length_mm for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe striping corresponds to rounded values of flipper length, that have been reported to the nearest mm. It appears that it is done across all measuring as it is present for both sexes, for all species, for each island and each year. Otherwise there is nothing much to report as unusual.\n\n\nCode\npenguins |&gt;\n  select(flipper_len, body_mass, species) |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass, \n             colour=species)) +\n  geom_point() +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~island, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~sex, ncol=2, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~species, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~year, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\n⚠️ Note: That using na.omit() is VERY DANGEROUS. You should very rarely use it and only in very clear situations like this data.\n\n\n\n\n\n\n7. How well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the \\(R^2\\), \\(\\sigma\\), and make a residual plot of residuals vs flipper_length_mm. From the residual plot, are there any concerns about the model fit?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe model fit statistics suggest it is a reasonably good model, with flipper length explaining about 76% of body mass. From the estimated standard deviation of the error, \\(\\sigma=393\\), we could say that the estimated body mass is likely accurate to within 800g. (Assuming normal distribution and 95% of observations within two \\(\\sigma\\).)\nThe residual suggests no major problems. There is a little heteroskedasticity. Perhaps if you look carefully, though, it might indicate that different models should have been fitted for the smaller penguins and the bigger penguins, perhaps models separately for sex and species would be advised.\n\n\nCode\nlibrary(broom)\npenguins_nona &lt;- penguins |&gt;\n  select(flipper_len, body_mass, species) |&gt;\n  na.omit()\npenguins_fit &lt;- lm(body_mass~flipper_len,\n                   data=penguins_nona)\ntidy(penguins_fit)\n\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic   p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;\n1 (Intercept)  -5781.     306.       -18.9 5.59e- 55\n2 flipper_len     49.7      1.52      32.7 4.37e-107\n\n\nCode\nglance(penguins_fit)\n\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.759         0.758  394.     1071. 4.37e-107     1 -2528. 5063. 5074.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;\n\n\nCode\npenguins_m &lt;- augment(penguins_fit)\nggplot(penguins_m, aes(x=flipper_len, y=.resid)) +\n  geom_hline(yintercept=1, colour=\"grey70\") +\n  geom_point() +\n  theme(aspect.ratio=1)"
   },
   {
     "objectID": "week3/worksheet.html",
@@ -1867,69 +1846,6 @@
     "title": "ETC5521 Worksheet Week 3",
     "section": "🧩 Tasks",
     "text": "🧩 Tasks\n\n1. Take a glimpse of the penguins data. What types are variables are present in the data?\n\n\n2. How was this data collected? You will need to read the documentation for the palmerpenguins package, or see if AI knows.\n\n\n3. Using the visdat package make an overview plot to examine types of variables and for missing values.\n\n\n4. Check the distributions of each species on each of the size variables, using a jittered dotplot, using the geom_quasirandom() function in the ggbeeswarm package. There seems to be some bimodality in some species on some variables eg bill_len. Why do you think this might be? Check your thinking by making a suitable plot.\n\n\n5. Is there any indication of outliers from the jittered dotplots of different variables?\n\n\n6. Make a scatterplot of body_mass_g vs flipper_length_mm for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?\n\n\n7. How well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the \\(R^2\\), \\(\\sigma\\), and make a residual plot of residuals vs flipper_length_mm. From the residual plot, are there any concerns about the model fit?"
-  },
-  {
-    "objectID": "week3/index.html#worksheet",
-    "href": "week3/index.html#worksheet",
-    "title": "Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA",
-    "section": "Worksheet",
-    "text": "Worksheet\n\nqmd\nhtml"
-  },
-  {
-    "objectID": "week3/tutorialsol.html",
-    "href": "week3/tutorialsol.html",
-    "title": "ETC5521 Tutorial 3",
-    "section": "",
-    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
-  },
-  {
-    "objectID": "week3/tutorialsol.html#objectives",
-    "href": "week3/tutorialsol.html#objectives",
-    "title": "ETC5521 Tutorial 3",
-    "section": "",
-    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
-  },
-  {
-    "objectID": "week3/tutorialsol.html#preparation",
-    "href": "week3/tutorialsol.html#preparation",
-    "title": "ETC5521 Tutorial 3",
-    "section": "🔧 Preparation",
-    "text": "🔧 Preparation\nThe reading for this week is The initial examination of data. It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis.\n\nComplete the weekly quiz, before the deadline!\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
-  },
-  {
-    "objectID": "week3/tutorialsol.html#exercises",
-    "href": "week3/tutorialsol.html#exercises",
-    "title": "ETC5521 Tutorial 3",
-    "section": "📥 Exercises",
-    "text": "📥 Exercises\nToday, you have sprint competition to discover as many problems as possible in this data, cafe.rda.\nA small cafe in the city of Melbourne is interested in determining whether the daily earnings depend on the weather. They compiled data for a period over 2000-2001 to study this question. The data has the following variables:\n\n\n\n \n  \n    var \n    description \n  \n \n\n  \n    dt \n    Date \n  \n  \n    wday \n    Day of the week \n  \n  \n    revenue \n    Daily revenue in hundreds, 11=1100 \n  \n  \n    expend \n    Daily expenses in hundreds \n  \n  \n    precip \n    Precipitation in mm \n  \n  \n    mint \n    Minimum temperature, Celsius \n  \n  \n    maxt \n    Maximum temperature, Celsius \n  \n  \n    source \n    Source of the weather data \n  \n\n\n\n\n\nGuidelines\n\nUse whatever R package or software or tool you’d like, and report how you found the error.\nFeel free to buddy up, and work with another student in your tutorial session.\nNo cheating! This time do the assignment without AI help, or searching for answers on the web.\nPlease don’t ruin the later tutorials by sharing your work!\n\nThe most complete list with best process for findings, as decided by your tutor, wins the prize! Your tutor’s decision is final!\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nYour tutor has the solution!"
-  },
-  {
-    "objectID": "week3/tutorialsol.html#finishing-up",
-    "href": "week3/tutorialsol.html#finishing-up",
-    "title": "ETC5521 Tutorial 3",
-    "section": "👌 Finishing up",
-    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
-  },
-  {
-    "objectID": "week3/worksheetsol.html",
-    "href": "week3/worksheetsol.html",
-    "title": "ETC5521 Worksheet Week 3",
-    "section": "",
-    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"visdat\"))"
-  },
-  {
-    "objectID": "week3/worksheetsol.html#objectives",
-    "href": "week3/worksheetsol.html#objectives",
-    "title": "ETC5521 Worksheet Week 3",
-    "section": "",
-    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"visdat\"))"
-  },
-  {
-    "objectID": "week3/worksheetsol.html#tasks",
-    "href": "week3/worksheetsol.html#tasks",
-    "title": "ETC5521 Worksheet Week 3",
-    "section": "🧩 Tasks",
-    "text": "🧩 Tasks\n\n1. Take a glimpse of the penguins data. What types are variables are present in the data?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\nlibrary(tidyverse)\nglimpse(penguins)\n\n\nRows: 344\nColumns: 8\n$ species     &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Ad…\n$ island      &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgersen, Tor…\n$ bill_len    &lt;dbl&gt; 39, 40, 40, NA, 37, 39, 39, 39, 34, 42, 38, 38, 41, 39, 35…\n$ bill_dep    &lt;dbl&gt; 19, 17, 18, NA, 19, 21, 18, 20, 18, 20, 17, 17, 18, 21, 21…\n$ flipper_len &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186, 180,…\n$ body_mass   &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, 4250, …\n$ sex         &lt;fct&gt; male, female, female, NA, female, male, female, male, NA, …\n$ year        &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…\n\n\n\n\n\n\n\n\n2. How was this data collected? You will need to read the documentation for the palmerpenguins package, or see if AI knows.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nDetails are at https://allisonhorst.github.io/palmerpenguins/articles/intro.html, and you learn “These data were collected from 2007 - 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program, part of the US Long Term Ecological Research Network. The data were imported directly from the Environmental Data Initiative (EDI) Data Portal.” It is necessary to also read the original data collection article https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081 to obtain details of the sampling. Breeding pairs of penguins were included based on sampling of nests where pairs of adults were present, were chosen and marked, before onset of egg-laying.\n\n\n\n\n\n\n3. Using the visdat package make an overview plot to examine types of variables and for missing values.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThere are three factor variables - species, island, sex - and three integer variables - flipper_len, body_mass and year - and two numeric variables - bill_len and bill_dep.\nIt is interesting that flipper_len and body_mass are reported without decimal places, and thus are integers, whereas bill_len and bill_dep are reported with one decimal place, and thus are doubles. Both are numeric variables, though.\nFour variables have missing values: sex, bill_len, bill_dep, flipper_len, body_mass. There are more missings on sex. The other missings occur together, the penguins are missing on all five variables.\n\n\nCode\nlibrary(visdat)\nvis_dat(penguins)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n4. Check the distributions of each species on each of the size variables, using a jittered dotplot, using the geom_quasirandom() function in the ggbeeswarm package. There seems to be some bimodality in some species on some variables eg bill_len. Why do you think this might be? Check your thinking by making a suitable plot.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nParticularly on bill_len multimodality can be seen in the Chinstrap and Gentoo penguins. This corresponds to differences in the two species. Differences can be seen in the sexes for all of the variables and species, but it is only big enough in bill_len to be noticeable as bimodality.\n\n\nCode\nlibrary(ggbeeswarm)\nggplot(penguins, aes(x=species, \n                     y=bill_len)) +\n  geom_quasirandom() \n\n\n\n\n\n\n\n\n\nCode\nggplot(penguins, aes(x=species, \n                     y=bill_len, \n                     colour=sex)) +\n  geom_quasirandom() +\n  scale_color_brewer(\"\", palette=\"Dark2\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n5. Is there any indication of outliers from the jittered dotplots of different variables?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nOutliers can be seen on bill_len for Chinstrap and Gentoo. Interestingly, there is one female penguins with a really big bill, bigger than all the males even.\nAlso on flipper_len there is one female penguins with a much smaller value than others.\n\n\n\n\n\n\n6. Make a scatterplot of body_mass_g vs flipper_length_mm for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe striping corresponds to rounded values of flipper length, that have been reported to the nearest mm. It appears that it is done across all measuring as it is present for both sexes, for all species, for each island and each year. Otherwise there is nothing much to report as unusual.\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~island, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~sex, ncol=2, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~species, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nCode\npenguins |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~year, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\n⚠️ Note: That using na.omit() is VERY DANGEROUS. You should very rarely use it and only in very clear situations like this data.\n\n\n\n\n\n\n7. How well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the \\(R^2\\), \\(\\sigma\\), and make a residual plot of residuals vs flipper_length_mm. From the residual plot, are there any concerns about the model fit?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe model fit statistics suggest it is a reasonably good model, with flipper length explaining about 76% of body mass. From the estimated standard deviation of the error, \\(\\sigma=393\\), we could say that the estimated body mass is likely accurate to within 800g. (Assuming normal distribution and 95% of observations within two \\(\\sigma\\).)\nThe residual suggests no major problems. There is a little heteroskedasticity. Perhaps if you look carefully, though, it might indicate that different models should have been fitted for the smaller penguins and the bigger penguins, perhaps models separately for sex and species would be advised.\n\n\nCode\nlibrary(broom)\npenguins_nona &lt;- penguins |&gt;\n  na.omit()\npenguins_fit &lt;- lm(body_mass~flipper_len, data=penguins_nona)\ntidy(penguins_fit)\n\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic   p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;\n1 (Intercept)  -5872.     310.       -18.9 1.18e- 54\n2 flipper_len     50.2      1.54      32.6 3.13e-105\n\n\nCode\nglance(penguins_fit)\n\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.762         0.761  393.     1060. 3.13e-105     1 -2461. 4928. 4940.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;\n\n\nCode\npenguins_m &lt;- augment(penguins_fit)\nggplot(penguins_m, aes(x=flipper_len, y=.resid)) +\n  geom_hline(yintercept=1, colour=\"grey70\") +\n  geom_point() +\n  theme(aspect.ratio=1)"
   },
   {
     "objectID": "week4/tutorialsol.html",
@@ -2000,5 +1916,89 @@
     "title": "ETC5521 Tutorial 3",
     "section": "👌 Finishing up",
     "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week6/index.html",
+    "href": "week6/index.html",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "",
+    "text": "Wilke (2019) Ch 12 Visualising associations"
+  },
+  {
+    "objectID": "week6/index.html#main-reference",
+    "href": "week6/index.html#main-reference",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "",
+    "text": "Wilke (2019) Ch 12 Visualising associations"
+  },
+  {
+    "objectID": "week6/index.html#what-you-will-learn-this-week",
+    "href": "week6/index.html#what-you-will-learn-this-week",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nThe humble but powerful scatterplot\nAdditions and variations\nTransformations to linearity\n(Robust) numerical measures of association\nSimpson’s paradox\nMaking null samples to test for association\nImputing missing values"
+  },
+  {
+    "objectID": "week6/index.html#lecture-slides",
+    "href": "week6/index.html#lecture-slides",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week6/index.html#tutorial-instructions",
+    "href": "week6/index.html#tutorial-instructions",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week6/index.html#assignments",
+    "href": "week6/index.html#assignments",
+    "title": "Week 6: Bivariate dependencies and relationships, transformations to linearise",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
+  },
+  {
+    "objectID": "week8/index.html",
+    "href": "week8/index.html",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "",
+    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
+  },
+  {
+    "objectID": "week8/index.html#main-reference",
+    "href": "week8/index.html#main-reference",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "",
+    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
+  },
+  {
+    "objectID": "week8/index.html#what-you-will-learn-this-week",
+    "href": "week8/index.html#what-you-will-learn-this-week",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nWhat is high-dimensional data? (If all variables are quantitative)\nExploring relationships between more than two variables\n\nTours - scatterplots of combinations of variables\nMatrix of plots\nParallel coordinates\n\nWhat can be hidden\nAutomating the search for pairwise relationships using scagnostics\nLinking elements of multiple plots\nExploring multiple categorical variables"
+  },
+  {
+    "objectID": "week8/index.html#lecture-slides",
+    "href": "week8/index.html#lecture-slides",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week8/index.html#tutorial-instructions",
+    "href": "week8/index.html#tutorial-instructions",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week8/index.html#assignments",
+    "href": "week8/index.html#assignments",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
   }
 ]

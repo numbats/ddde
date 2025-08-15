@@ -104,6 +104,12 @@ Four variables have missing values: sex, bill_len, bill_dep, flipper_len, body_m
 ```{r}
 library(visdat)
 vis_dat(penguins)
+
+p_nomiss <- penguins |>
+  select(species, bill_len, bill_dep, 
+         flipper_len, body_mass) |>
+  na.omit()
+
 ```
 
 :::
@@ -147,9 +153,11 @@ The striping corresponds to rounded values of flipper length, that have been rep
 
 ```{r}
 penguins |>
+  select(flipper_len, body_mass, species) |>
   na.omit() |>
   ggplot(aes(x=flipper_len,
-             y=body_mass)) +
+             y=body_mass, 
+             colour=species)) +
   geom_point() +
   theme(aspect.ratio=1)
 
@@ -200,8 +208,10 @@ The residual suggests no major problems. There is a little heteroskedasticity. P
 ```{r}
 library(broom)
 penguins_nona <- penguins |>
+  select(flipper_len, body_mass, species) |>
   na.omit()
-penguins_fit <- lm(body_mass~flipper_len, data=penguins_nona)
+penguins_fit <- lm(body_mass~flipper_len,
+                   data=penguins_nona)
 tidy(penguins_fit)
 glance(penguins_fit)
 penguins_m <- augment(penguins_fit)

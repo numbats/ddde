@@ -372,7 +372,7 @@ In addition, numerical or graphical summaries may reveal that there is unwanted 
 ::: {.fragment}
 
 * Does the treatment group have different demographic characteristics to the control group? 
-* Are the distributions similar between the or training and test sets?
+* Are the distributions similar between the training and test sets?
 * Are there sufficient measurements for each level of categorical variable, or across the range of numerical variables?
 
 :::
@@ -1096,6 +1096,7 @@ Automating some checks
 * Data has been anonymised and distorted
 
 ```{r}
+library(validate)
 data("SBS2000", package = "validate")
 dplyr::glimpse(SBS2000)
 ```
@@ -1107,7 +1108,6 @@ dplyr::glimpse(SBS2000)
 * Checking for completeness of records
 
 ```{r, echo = TRUE}
-library(validate)
 rules <- validator(
           is_complete(id),
           is_complete(id, turnover),
@@ -1123,7 +1123,6 @@ summary(out)
 * Sanity check derived variables
 
 ```{r, echo = TRUE}
-library(validate)
 rules <- validator(
     total.rev - profit == total.costs,
     turnover + other.rev == total.rev,

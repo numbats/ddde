@@ -87,18 +87,26 @@ assignments <- read_csv(here::here("assignments.csv")) |>
                        Due + days(1))
     )
 
+# Group multiple assignments by date
+assign_gpd <- assignments |>
+  mutate(ass = if_else(is.na(Assignment), Assignment, glue::glue("[{Assignment}]({Link})"))) |>
+  group_by(Date) |>
+  summarise(ass_date = paste(ass, collapse=","),
+            marks_date = paste(Marks, collapse=","))
+
 schedule <- schedule |>
-    full_join(assignments, by = "Date") |>
+    full_join(assign_gpd , by = "Date") |>
     mutate(Week = if_else(is.na(Week) & Date > "2025-10-27", 14, Week)) |>
     mutate(Topic = if_else(Date > "2025-10-27", " ", Topic),
            Reference = if_else(Date > "2025-10-27", " ", Reference)) |>
-    #mutate(Assignment = if_else(is.na(Assignment), " ", glue::glue("[{Assignment}]({Link})"))) |>
-    select(-Marks)
+    mutate(Assignment = ass_date) 
 
-show_assignments <- function(week) {
-    ass <- schedule |>
+show_assignments <- function() {
+    todays_date <- today()
+    ass <- assignments |>
         filter(
-            Week >= week & (week > Week - 3 | week > 8),
+            #Week >= week & (week > Week - 3 | week > 8),
+            (Date > todays_date - weeks(1) & Date < todays_date + weeks(1)),
             !is.na(Assignment),
         ) |>
         select(Assignment:Link)

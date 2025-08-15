@@ -38,5 +38,5 @@ schedule |>
 
 ```{r}
 #| output: asis
-show_assignments(week)
+show_assignments()
 ```
