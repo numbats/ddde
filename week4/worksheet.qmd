@@ -1,0 +1,155 @@
+---
+title: "ETC5521 Worksheet Week 4"
+subtitle: "Assessing significance of patterns"
+author: "Prof. Di Cook"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: worksheet.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: worksheetsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+code-fold: true
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  error = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+library(tidyverse)
+library(ggbeeswarm)
+library(nullabor)
+library(broom)
+library(conflicted)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+```
+
+## 🎯 Objectives
+
+Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns. 
+
+```{r}
+#| code-fold: true
+#| eval: false
+penguins_nona <- penguins |>
+  select(bill_len, bill_dep, 
+         flipper_len, body_mass, 
+         species, sex) |>
+  na.omit()
+penguins_fit <- lm(body_mass~flipper_len,
+                   data=penguins_nona)
+tidy(penguins_fit)
+glance(penguins_fit)
+penguins_m <- augment(penguins_fit)
+#ggplot(penguins_m, aes(x=flipper_len, y=.resid)) +
+#  geom_hline(yintercept=1, colour="grey70") +
+#  geom_point() +
+#  theme(aspect.ratio=1)
+```
+
+## 🧩 Tasks 
+
+#### Can we believe what we see?
+
+a. In the previous week's worksheet we subjectively evaluated the residual plot to determine if the model was a good fit or not. We'll use randomisation to check any observations we made from the residual plot. The code below makes a lineup of the true plot against plots made with rotation residuals (nulls/good). When you run the code you will get a line `decrypt("....")`, which you can copy and paste back in to the console window to get the location of the true plot (in case you forgot which it is). Does the true plot look like the null plots? If not, describe how it differs.
+
+```{r resid-check}
+#| eval: false
+ggplot(lineup(null_lm(body_mass~flipper_len, method="rotate"),
+              penguins_m),
+       aes(x=flipper_len, y=.resid)) +
+  geom_point() +
+  facet_wrap(~.sample, ncol=5) +
+  theme_void() +
+  theme(axis.text = element_blank(), 
+        panel.border = element_rect(fill=NA, colour="black"))
+
+# Alternatively, we can use permutation
+ggplot(lineup(null_permute("flipper_len"),
+              penguins_m),
+       aes(x=flipper_len, y=.resid)) +
+  geom_point() +
+  facet_wrap(~.sample, ncol=5) +
+  theme_void() +
+  theme(axis.text = element_blank(), 
+        panel.border = element_rect(fill=NA, colour="black"))
+```
+
+b. Pick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them 
+
+ - to pick the plot that is most different.
+ - explain why they picked that plot.
+ 
+Using your `decrypt()` code locate the true plot. Is the true plot different from the nulls?
+
+Did you or your friend choose the data plot? Was it identifiable from the lineup or indistinguishable from the null plots?
+
+::: unilur-solution
+a. The true plot looks a little different from the nulls. It has more of a V shape, which might suggest that the model fits poorly, that the smaller penguins have a different relationship than the larger penguins. It is evidence to support fitting separate models to the sexes and species.
+
+b. Something like the following
+
+```{r lineup-ex}
+#| eval: false
+penguins_f_adelie <- penguins_nona |>
+  filter(species == "Adelie",
+         sex == "female")
+penguins_f_adelie_bl_bd_fit <- 
+  lm(bill_dep ~ bill_len,
+     data=penguins_f_adelie)
+penguins_f_adelie_bl_bd_m <-
+  augment(penguins_f_adelie_bl_bd_fit)
+ggplot(lineup(null_lm(bill_dep ~ 
+                        bill_len,
+                      method="rotate"),
+              penguins_f_adelie_bl_bd_m),
+       aes(x=bill_len, y=.resid)) +
+  geom_point() +
+  facet_wrap(~.sample, ncol=5) +
+  theme_void() +
+  theme(axis.text = element_blank(), 
+        panel.border = element_rect(fill=NA, colour="black"))
+```
+
+I would not be able to distinguish which is the true plot in this lineup.
+
+:::
+

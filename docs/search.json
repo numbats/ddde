@@ -126,6 +126,76 @@
     "text": "Assignments\n\nExercises 1 is due on Monday 18 August.\nQuiz 2 is due on Thursday 14 August.\nQuiz 3 is due on Thursday 21 August."
   },
   {
+    "objectID": "week4/tutorial.html",
+    "href": "week4/tutorial.html",
+    "title": "ETC5521 Tutorial 4",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week4/tutorial.html#objectives",
+    "href": "week4/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 4",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week4/tutorial.html#preparation",
+    "href": "week4/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 4",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is Wickham et al. (2010) Graphical inference for Infovis.\n- Complete the weekly quiz, before the deadline! - Make sure you have this list of R packages installed:\n\ninstall.packages(c(\"tidyverse\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week4/tutorial.html#exercises",
+    "href": "week4/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 4",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nThis tutorial focuses on IDA for the gardenR data, with the goal to answer this question:\nWhich variety of tomato produces the most return on investment, as measured by weight?\n\nExercise 1\n\nHow many types of vegetables were grown in each year?\nHow many vegetables were grown in 2020 that were not grown in 2021?\nWhat are some of the data recording errors that can be seen by comparing vegetables grown in each year?\n\n\n\nExercise 2\n\nJoin the harvest, spending and planting data for the two years, after adding a new variable each, called year. Show your code.\nMake a subset containing just the tomatoes, for each set.\nAre the varieties of tomatoes grown each year the same?\nAre the tomato varieties grown in the same plots each year?\nWhen are tomatoes planted and harvested, in Lisa’s garden?\n\n\n\nExercise 3 Try to answer the original question.\n\nHow should you calibrate weight of harvest by amount of seeds planted?\nWhich variety produces the most return on investment?"
+  },
+  {
+    "objectID": "week4/tutorial.html#finishing-up",
+    "href": "week4/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 4",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week4/tutorialsol.html",
+    "href": "week4/tutorialsol.html",
+    "title": "ETC5521 Tutorial 4",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week4/tutorialsol.html#objectives",
+    "href": "week4/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 4",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+  },
+  {
+    "objectID": "week4/tutorialsol.html#preparation",
+    "href": "week4/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 4",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\nThe reading for this week is Wickham et al. (2010) Graphical inference for Infovis.\n- Complete the weekly quiz, before the deadline! - Make sure you have this list of R packages installed:\n\ninstall.packages(c(\"tidyverse\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week4/tutorialsol.html#exercises",
+    "href": "week4/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 4",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\nThis tutorial focuses on IDA for the gardenR data, with the goal to answer this question:\nWhich variety of tomato produces the most return on investment, as measured by weight?\n\nExercise 1\n\nHow many types of vegetables were grown in each year?\nHow many vegetables were grown in 2020 that were not grown in 2021?\nWhat are some of the data recording errors that can be seen by comparing vegetables grown in each year?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nlibrary(gardenR)\nlibrary(tidyverse)\nlibrary(ggbeeswarm)\n\ndata(\"garden_coords\")\ndata(\"garden_harvest\")\ndata(\"garden_planting\")\ndata(\"garden_spending\")\ndata(\"harvest_2021\")\ndata(\"planting_2021\")\ndata(\"spending_2021\")\n\n31 grown in 2020, and 33 grown in 2021.\n\nTo work out which differ between years, use the anti_join() function. Because there are multiple plots of vegetables use distinct() to remove duplicates, and then arrange alphabetically for ease of comparison.\n\n\nin20butnot21 &lt;- anti_join(select(garden_harvest, vegetable), select(harvest_2021, vegetable), by=\"vegetable\") |&gt; \n  distinct() |&gt; \n  arrange(vegetable)\nin21butnot20 &lt;- anti_join(select(harvest_2021, vegetable), select(garden_harvest, vegetable), by=\"vegetable\") |&gt; \n  distinct() |&gt; \n  arrange(vegetable)\nin20butnot21$vegetable\n\n[1] \"Swiss chard\" \"apple\"       \"broccoli\"    \"chives\"      \"hot peppers\"\n[6] \"jalapeño\"    \"kohlrabi\"    \"onions\"      \"pumpkins\"   \n\nin21butnot20$vegetable\n\n [1] \"apples\"       \"cabbage\"      \"dill\"         \"garlic\"       \"mint\"        \n [6] \"oregano\"      \"pumpkin\"      \"sweet potato\" \"swiss chard\"  \"tomatillos\"  \n[11] \"watermelon\"  \n\n\n\n\n\n\nswiss chard was grown in each year but capital “S” was used in 2020.\napples were grown in each year, but singular name was used in 2021.\nsimilarly for pumpkins but in reverse, singular used in 2020!\n\n\nharvest_2020 &lt;- garden_harvest |&gt;\n  mutate(vegetable = tolower(vegetable),\n         variety = tolower(variety)) |&gt;\n  mutate(vegetable = case_match(\n    vegetable,\n    \"apple\" ~ \"apples\",\n    .default = vegetable)\n  )\nharvest_2021 &lt;- harvest_2021 |&gt;\n  mutate(vegetable = case_match(\n    vegetable,\n    \"pumpkin\" ~ \"pumpkins\",\n    .default = vegetable)\n  )\n\nSo final answer for (b) is here are the vegetables not grown both years:\n\n\n[1] \"Swiss chard\" \"apple\"       \"broccoli\"    \"chives\"      \"hot peppers\"\n[6] \"jalapeño\"    \"kohlrabi\"    \"onions\"     \n\n\n [1] \"apples\"       \"cabbage\"      \"dill\"         \"garlic\"       \"mint\"        \n [6] \"oregano\"      \"sweet potato\" \"swiss chard\"  \"tomatillos\"   \"watermelon\"  \n\n\n\n\n\n\n\n\nExercise 2\n\nJoin the harvest, spending and planting data for the two years, after adding a new variable each, called year. Show your code.\nMake a subset containing just the tomatoes, for each set.\nAre the varieties of tomatoes grown each year the same?\nAre the tomato varieties grown in the same plots each year?\nWhen are tomatoes planted and harvested, in Lisa’s garden?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\nharvest_2020 &lt;- garden_harvest |&gt;\n  mutate(year = \"2020\")\nharvest_2021 &lt;- harvest_2021 |&gt;\n  mutate(year = \"2021\")\nharvest &lt;- bind_rows(harvest_2020, harvest_2021)\n\nspending_2020 &lt;- garden_spending |&gt;\n  mutate(year = \"2020\")\nspending_2021 &lt;- spending_2021 |&gt;\n  mutate(year = \"2021\")\nspending &lt;- bind_rows(spending_2020, spending_2021)\n\nplanting_2020 &lt;- garden_planting |&gt;\n  mutate(year = \"2020\")\nplanting_2021 &lt;- planting_2021 |&gt;\n  mutate(year = \"2021\")\nplanting &lt;- bind_rows(planting_2020, planting_2021)\n\n\n\n\n\nharvest_toms &lt;- harvest |&gt; filter(vegetable == \"tomatoes\")\nspending_toms &lt;- spending |&gt; filter(vegetable == \"tomatoes\")\nplanting_toms &lt;- planting |&gt; filter(vegetable == \"tomatoes\")\n\n\n\n\n\ntom_smry &lt;- harvest_toms |&gt; \n  count(variety, year) |&gt; \n  pivot_wider(names_from = year, values_from = n)\ntom_smry\n\n# A tibble: 19 × 3\n   variety          `2020` `2021`\n   &lt;chr&gt;             &lt;int&gt;  &lt;int&gt;\n 1 Amish Paste          30     19\n 2 Better Boy           23     NA\n 3 Big Beef             21     24\n 4 Black Krim           12     12\n 5 Bonny Best           27     15\n 6 Brandywine           16     NA\n 7 Bush Goliath         NA      6\n 8 Cherokee Purple      14     10\n 9 Early Girl           NA     29\n10 Jet Star             13     NA\n11 Mortgage Lifter      18     22\n12 Old German           19      4\n13 San Marzano          NA     19\n14 Striped German       NA      8\n15 Sweet 100 Cherry     NA     28\n16 grape                39     NA\n17 volunteer            NA     16\n18 volunteers           31     NA\n19 yellow               NA      4\n\nn_complete &lt;- tom_smry |&gt; mutate(m=`2020`+`2021`) |&gt; filter(!is.na(m)) |&gt; nrow()\n\nThere are a lot of varieties of tomatoes grown, only 7 are grown in both years.\n\nUse only the varieties grown in both years.\n\n\n\nCode\ntom_both_yrs &lt;- tom_smry |&gt; mutate(m=`2020`+`2021`) |&gt; filter(!is.na(m)) \nplanting_toms |&gt; \n  filter(variety %in% tom_both_yrs$variety) |&gt;\n  count(variety, plot, year) |&gt;\n  pivot_wider(names_from = plot, values_from = n)\n\n\n# A tibble: 14 × 6\n   variety         year      D     J     N     O\n   &lt;chr&gt;           &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;\n 1 Amish Paste     2021      1    NA     1    NA\n 2 Amish Paste     2020     NA     1     1    NA\n 3 Big Beef        2021      1    NA     1    NA\n 4 Big Beef        2020     NA    NA     1    NA\n 5 Black Krim      2020     NA    NA     1    NA\n 6 Black Krim      2021     NA    NA     1    NA\n 7 Bonny Best      2020     NA     1    NA    NA\n 8 Bonny Best      2021     NA    NA    NA     1\n 9 Cherokee Purple 2020     NA     1    NA    NA\n10 Cherokee Purple 2021     NA    NA     1     1\n11 Mortgage Lifter 2021      1    NA     1    NA\n12 Mortgage Lifter 2020     NA     1     1    NA\n13 Old German      2021      1    NA    NA    NA\n14 Old German      2020     NA     1    NA    NA\n\n\nNot a single variety is grown in the same plot each year. This might cause problems, if the plots are not equally good for growing tomatoes.\n\nAgain, just use the tomatoes that are grown in each year.\n\n\n\nCode\nplanting_toms_sub &lt;- planting_toms |&gt;\n  filter(variety %in% tom_both_yrs$variety) |&gt;\n  mutate(type = \"planting\") |&gt;\n  select(variety, date, type, year)\nharvest_toms_sub &lt;- harvest_toms |&gt;\n  filter(variety %in% tom_both_yrs$variety) |&gt;\n  mutate(type = \"harvest\") |&gt;\n  select(variety, date, type, year)\ntom_variety_order &lt;- harvest_toms_sub |&gt;\n  group_by(variety) |&gt;\n  summarise(date = min(date)) |&gt;\n  arrange(date)\np_h_tom &lt;- bind_rows(planting_toms_sub, harvest_toms_sub) |&gt;\n  mutate(day_yr = yday(date)) |&gt;\n  mutate(variety = factor(variety, tom_variety_order$variety))\nggplot(p_h_tom) +\n  geom_point(aes(x=day_yr, y=year, colour=type)) +\n  facet_wrap(~variety, ncol=4, scales=\"free_x\") +\n  scale_colour_brewer(\"\", palette=\"Dark2\") +\n  xlab(\"day of year\") + ylab(\"\") +\n  theme(legend.position=\"bottom\")\n\n\n\n\n\n\n\n\n\nPlanting is usually in late May, and it is consistent for all the varieties.\nHarvesting starts around 50 days after planting. 2020 had an earlier harvest than 2021 for all varieties. Big Beef tends to be harvested first, and Black Kim later. Old German had a poor harvest in 2021 relative to 2022.\n\n\n\n\n\n\nExercise 3 Try to answer the original question.\n\nHow should you calibrate weight of harvest by amount of seeds planted?\nWhich variety produces the most return on investment?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nWe’ll divide the weight by number of seeds planted. An interesting observation is that so few tomato seeds were planted! Packets of tomato seeds have lots of seeds.\n\n\n\nCode\nplanting_smry &lt;- planting_toms |&gt;\n  filter(variety %in% tom_both_yrs$variety) |&gt;\n  select(variety, date, year, number_seeds_planted, number_seeds_exact) |&gt;\n  group_by(variety, year) |&gt;\n  summarise(nseeds = sum(number_seeds_planted))\nharvest_smry &lt;- harvest_toms |&gt;\n  filter(variety %in% tom_both_yrs$variety) |&gt;\n  group_by(variety, year) |&gt;\n  summarise(weight = sum(weight))\ntom_weight &lt;- left_join(planting_smry, harvest_smry) |&gt;\n  mutate(wgt_ps = weight/nseeds)\n\nggplot(tom_weight, aes(\n  x = fct_reorder(variety, wgt_ps),\n  y = wgt_ps,\n  colour = year)) +\n  geom_point() + \n  coord_flip() +\n  xlab(\"\") + ylab(\"weight per seed\") +\n  scale_colour_brewer(\"\", palette=\"Dark2\")\n\n\n\n\n\n\n\n\n\n\n\n\nBig Beef is a consistently high performer, over these two years. Old German is the most varied, top by weight in 2020 but failed in 2021."
+  },
+  {
+    "objectID": "week4/tutorialsol.html#finishing-up",
+    "href": "week4/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 4",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
     "objectID": "week4/index.html",
     "href": "week4/index.html",
     "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
@@ -152,6 +222,13 @@
     "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
     "section": "Lecture slides",
     "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week4/index.html#worksheet",
+    "href": "week4/index.html#worksheet",
+    "title": "Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly",
+    "section": "Worksheet",
+    "text": "Worksheet\n\nqmd\nhtml"
   },
   {
     "objectID": "week4/index.html#tutorial-instructions",
@@ -1848,74 +1925,403 @@
     "text": "🧩 Tasks\n\n1. Take a glimpse of the penguins data. What types are variables are present in the data?\n\n\n2. How was this data collected? You will need to read the documentation for the palmerpenguins package, or see if AI knows.\n\n\n3. Using the visdat package make an overview plot to examine types of variables and for missing values.\n\n\n4. Check the distributions of each species on each of the size variables, using a jittered dotplot, using the geom_quasirandom() function in the ggbeeswarm package. There seems to be some bimodality in some species on some variables eg bill_len. Why do you think this might be? Check your thinking by making a suitable plot.\n\n\n5. Is there any indication of outliers from the jittered dotplots of different variables?\n\n\n6. Make a scatterplot of body_mass_g vs flipper_length_mm for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?\n\n\n7. How well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the \\(R^2\\), \\(\\sigma\\), and make a residual plot of residuals vs flipper_length_mm. From the residual plot, are there any concerns about the model fit?"
   },
   {
-    "objectID": "week4/tutorialsol.html",
-    "href": "week4/tutorialsol.html",
-    "title": "ETC5521 Tutorial 3",
+    "objectID": "week4/slides.html#what-this-class-is-about",
+    "href": "week4/slides.html#what-this-class-is-about",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What this class is about",
+    "text": "What this class is about"
+  },
+  {
+    "objectID": "week4/slides.html#revisiting-hypothesis-testing",
+    "href": "week4/slides.html#revisiting-hypothesis-testing",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Revisiting hypothesis testing",
+    "text": "Revisiting hypothesis testing"
+  },
+  {
+    "objectID": "week4/slides.html#frequentist-hypothesis-testing-framework",
+    "href": "week4/slides.html#frequentist-hypothesis-testing-framework",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "(Frequentist) hypothesis testing framework",
+    "text": "(Frequentist) hypothesis testing framework\n\n\nSuppose \\(X\\) is the number of heads out of \\(n\\) independent tosses.\nLet \\(p\\) be the probability of getting a  for this coin.\n\nHypotheses\n\\(H_0: p = 0.5\\) vs. \\(H_a: p &gt; 0.5\\). Note \\(p_0=0.5\\).  Alternative \\(H_a\\) is saying we believe that the coin is biased to heads. \nNOTE: Alternative needs to be decided before seeing data.\n\nAssumptions Each toss is independent with equal chance of getting a head.\n\n\nTest statistic\n\\(X \\sim B(n, p)\\). Recall \\(E(X\\mid H_0) = np_0\\). We observe \\(n, x, \\widehat{p}\\). Test statistic is \\(\\widehat{p} - p_0\\).\n\n\nP-value  (or critical value or confidence interval) \\(P(X ~ \\geq ~ x\\mid H_0)\\)\n\n\nConclusion Reject null hypothesis when the \\(p\\)-value is less than some significance level \\(\\alpha\\). Usually \\(\\alpha = 0.05\\)."
+  },
+  {
+    "objectID": "week4/slides.html#testing-coin-bias-14",
+    "href": "week4/slides.html#testing-coin-bias-14",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Testing coin bias (1/4)",
+    "text": "Testing coin bias (1/4)\n\nSuppose I have a coin that I’m going to flip  \nIf the coin is unbiased, what is the probability it will show heads?\n\n\n\nYup, the probability should be 0.5.\nSo how would I test if a coin is biased or unbiased?\nWe’ll collect some data."
+  },
+  {
+    "objectID": "week4/slides.html#testing-coin-bias-24",
+    "href": "week4/slides.html#testing-coin-bias-24",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Testing coin bias (2/4)",
+    "text": "Testing coin bias (2/4)\n\nExperiment 1: I flipped the coin 10 times and this is the result:\n\n\n\nset.seed(924)\nsamp10 &lt;- sample(rep(c(head, tail), c(7, 3)))\ncat(paste0(samp10, collapse = \"\"))\n\n\n\n\nThe result is 7 head and 3 tails. So 70% are heads.\nDo you believe the coin is biased based on this data?"
+  },
+  {
+    "objectID": "week4/slides.html#testing-coin-bias-34",
+    "href": "week4/slides.html#testing-coin-bias-34",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Testing coin bias (3/4)",
+    "text": "Testing coin bias (3/4)\n\nExperiment 2: Suppose now I flip the coin 100 times and this is the outcome:\n\n\nsamp100 &lt;- sample(rep(c(head, tail), c(70, 30)))\ncat(paste0(samp100, collapse = \"\"))\n\n\n\nWe observe 70 heads and 30 tails. So again 70% are heads.\nBased on this data, do you think the coin is biased?"
+  },
+  {
+    "objectID": "week4/slides.html#testing-coin-bias-44",
+    "href": "week4/slides.html#testing-coin-bias-44",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Testing coin bias (4/4)",
+    "text": "Testing coin bias (4/4)\nCalculate it\n\n\nExperiment 1 (n=10)\n\nWe observed \\(x=7\\), or \\(\\widehat{p} = 0.7\\).\nAssuming \\(H_0\\) is true, we expect \\(np=10\\times 0.5=5\\).\nCalculate the \\(P(X \\geq 7)\\)\n\n \n\n\nsum(dbinom(7:10, 10, 0.5))\n\n[1] 0.17\n\n\n\n\nExperiment 2 (n=100)\n\nWe observed \\(x=70\\), or \\(\\widehat{p} = 0.7\\).\nAssuming \\(H_0\\) is true, we expect \\(np=100\\times 0.5=50\\).\nCalculate the \\(P(X \\geq 70)\\)\n\n \n\n\nsum(dbinom(70:100, 100, 0.5))\n\n[1] 3.9e-05"
+  },
+  {
+    "objectID": "week4/slides.html#why-is-the-null-hypothesis-always-specific",
+    "href": "week4/slides.html#why-is-the-null-hypothesis-always-specific",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Why is the null hypothesis always specific?",
+    "text": "Why is the null hypothesis always specific?\nYou need to be able to calculate the probability of something happening, if the null was true."
+  },
+  {
+    "objectID": "week4/slides.html#judicial-system",
+    "href": "week4/slides.html#judicial-system",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Judicial system",
+    "text": "Judicial system\n\n\n\n\n\n\n\n\n\nEvidence by test statistic Judgement by \\(p\\)-value, critical value or confidence interval\n\n\nDoes the test statistic have to be numerical?"
+  },
+  {
+    "objectID": "week4/slides.html#visual-inference",
+    "href": "week4/slides.html#visual-inference",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Visual inference",
+    "text": "Visual inference"
+  },
+  {
+    "objectID": "week4/slides.html#visual-inference-1",
+    "href": "week4/slides.html#visual-inference-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Visual inference",
+    "text": "Visual inference\n\n\n\nHypothesis testing in a visual inference framework is where:\n\nthe test statistic is a plot and\njudgement is by human visual perception.\n\n\n\nWhy is the plot a test statistic? We’ll see why soon.\n\n\n\n\nYou, we, me actually do visual inference many times but generally in an informal fashion.\nThe problem with doing this is we are making an inference on whether the plot has any patterns based on a single data plot.\nThe single data plot needs to be examined in the context of what might this look like if different samples were shown."
+  },
+  {
+    "objectID": "week4/slides.html#reasons-to-use-visual-inference",
+    "href": "week4/slides.html#reasons-to-use-visual-inference",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Reasons to use visual inference",
+    "text": "Reasons to use visual inference\n\nData plots tend to be over-interpreted.\nReading data plots requires calibration."
+  },
+  {
+    "objectID": "week4/slides.html#visual-inference-more-formally",
+    "href": "week4/slides.html#visual-inference-more-formally",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Visual inference more formally",
+    "text": "Visual inference more formally\n\n\n\nState your null and alternate hypotheses.\nDefine a visual test statistic, \\(V(.)\\), i.e. a function of a sample to a plot.\nDefine a method to generate null data, \\(\\boldsymbol{y}_0\\).\n\\(V(\\boldsymbol{y})\\) maps the actual data, \\(\\boldsymbol{y}\\), to the plot. We call this the data plot.\n\\(V(\\boldsymbol{y}_0)\\) maps a null data to a plot of the same form. We call this the null plot. We repeat this \\(m - 1\\) times to generate \\(m-1\\) null plots.\nA lineup displays these \\(m\\) plots in a random order.\nAsk \\(n\\) human viewers to select a plot in the lineup that looks different to others without any context given."
+  },
+  {
+    "objectID": "week4/slides.html#visual-inference-more-formally-1",
+    "href": "week4/slides.html#visual-inference-more-formally-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Visual inference more formally",
+    "text": "Visual inference more formally\n\n\n\nState your null and alternate hypotheses.\nDefine a visual test statistic, \\(V(.)\\), i.e. a function of a sample to a plot.\nDefine a method to generate null data, \\(\\boldsymbol{y}_0\\).\n\\(V(\\boldsymbol{y})\\) maps the actual data, \\(\\boldsymbol{y}\\), to the plot. We call this the data plot.\n\\(V(\\boldsymbol{y}_0)\\) maps a null data to a plot of the same form. We call this the null plot. We repeat this \\(m - 1\\) times to generate \\(m-1\\) null plots.\nA lineup displays these \\(m\\) plots in a random order.\nAsk \\(n\\) human viewers to select a plot in the lineup that looks different to others without any context given.\n\n\n\nSuppose \\(x\\) out of \\(n\\) people detected the data plot from a lineup, then\n\nthe visual inference p-value is given as \\[P(X \\geq x)\\] where \\(X \\sim B(n, 1/m)\\), and\nthe power of a lineup is estimated as \\(x/n\\)."
+  },
+  {
+    "objectID": "week4/slides.html#two-residual-plots-examples-seen-last-week",
+    "href": "week4/slides.html#two-residual-plots-examples-seen-last-week",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Two residual plots examples seen last week",
+    "text": "Two residual plots examples seen last week"
+  },
+  {
+    "objectID": "week4/slides.html#lineup-which-plot-has-a-pattern-that-is-different-from-other-plots",
+    "href": "week4/slides.html#lineup-which-plot-has-a-pattern-that-is-different-from-other-plots",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Lineup: Which plot has a pattern that is different from other plots?",
+    "text": "Lineup: Which plot has a pattern that is different from other plots?\n\n\n\n\n\n\n\n\n\n\n\n\n\nResiduals from dist~speed using datasets::cars (week 3).\n\nlm(dist ~ speed, data = cars)\n\n\n\nThis is a lineup of the residual plot\nWhich plot (if any) looks different from the others?\nWhy do you think it looks different?\n\n\n\n\n&gt; decrypt(\"clZx bKhK oL 3OHohoOL 0B\")\n[1] \"True data in position  11\"\n  How do we calculate statistical significance from this?"
+  },
+  {
+    "objectID": "week4/slides.html#visual-inference-p-value-or-see-value",
+    "href": "week4/slides.html#visual-inference-p-value-or-see-value",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Visual inference \\(p\\)-value (or “see”-value)",
+    "text": "Visual inference \\(p\\)-value (or “see”-value)\n\n\n\nSo \\(x\\) out of \\(n\\) people chose the data plot.\nSo the visual inference \\(p\\)-value is \\(P(X \\geq x)\\) where \\(X \\sim B(n, 1/10)\\).\nIn R, this is\n\n1 - pbinom(x - 1, n, 1/20) \n# OR \nnullabor::pvisual(x, n, 20)\n\nThe calculation is made with the assumption that the chance of a single observer randomly chooses the true plot is 1/20.\n\n\nSuppose \\(x=2\\) out of \\(n=16\\) people chose plot 11 (previous slide).\nThe probability that this happens by random guessing (p-value) is\n\n1 - pbinom(2 - 1, 16, 1/20)\n\n[1] 0.19\n\nnullabor::pvisual(2, 16, 20)\n\n     x simulated binom\n[1,] 2       0.2  0.19"
+  },
+  {
+    "objectID": "week4/slides.html#lineup-which-plot-has-a-pattern-that-is-different-from-other-plots-1",
+    "href": "week4/slides.html#lineup-which-plot-has-a-pattern-that-is-different-from-other-plots-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Lineup: Which plot has a pattern that is different from other plots?",
+    "text": "Lineup: Which plot has a pattern that is different from other plots?\n\n\n\n\n\n\n\n\n\n\n\n\n\nResiduals from log-transformed price~carat ggplot2::diamonds (week 3).\n\nd_fit &lt;- lm(lprice ~ lcarat, data=diamonds)\n\n\n\nThis is a lineup of the residual plot for the model where both carat and price are log-transformed\nWhich plot (if any) looks different from the others?\nWhy do you think it looks different?\n\n\n\n\n&gt; decrypt(\"clZx bKhK oL 3OHohoOL 0Q\")\n[1] \"True data in position  15\""
+  },
+  {
+    "objectID": "week4/slides.html#visual-inference-p-value-or-see-value-1",
+    "href": "week4/slides.html#visual-inference-p-value-or-see-value-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Visual inference \\(p\\)-value (or “see”-value)",
+    "text": "Visual inference \\(p\\)-value (or “see”-value)\n\n\nSuppose \\(x=8\\) out of \\(n=12\\) people chose plot 15 (previous slide).\nThe probability that this happens by random guessing (p-value) is\n\n1 - pbinom(8 - 1, 12, 1/20)\n\n[1] 1.6e-08\n\nnullabor::pvisual(8, 12, 20)\n\n     x simulated   binom\n[1,] 8         0 1.6e-08\n\n\n\nThis is basically impossible to happen by chance.\n Next, how the residuals are different from “good” residuals has to be determined by the follow-up question: how did you decide your chosen plot was different?\n Plot 15 has a different variance pattern, it’s not the regular up-down pattern seen in the other plots. This suggests that there is some heteroskedasticity in the data that is not captured by the error distribution in the model."
+  },
+  {
+    "objectID": "week4/slides.html#new-residual-plot-examples",
+    "href": "week4/slides.html#new-residual-plot-examples",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "New residual plot examples",
+    "text": "New residual plot examples"
+  },
+  {
+    "objectID": "week4/slides.html#residual-plot-13",
+    "href": "week4/slides.html#residual-plot-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Residual plot (1/3)",
+    "text": "Residual plot (1/3)\n\n\n Is there a problem with the model?"
+  },
+  {
+    "objectID": "week4/slides.html#residual-plot-23",
+    "href": "week4/slides.html#residual-plot-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Residual plot (2/3)",
+    "text": "Residual plot (2/3)\n\n\n Is there a problem with the model?"
+  },
+  {
+    "objectID": "week4/slides.html#residual-plot-33",
+    "href": "week4/slides.html#residual-plot-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Residual plot (3/3)",
+    "text": "Residual plot (3/3)\n\n\n Is there a problem with the model?"
+  },
+  {
+    "objectID": "week4/slides.html#residual-plots-need-context",
+    "href": "week4/slides.html#residual-plots-need-context",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Residual plots need context",
+    "text": "Residual plots need context\n You are asked to decide IF THERE IS NO PATTERN. This is hard!  \nResidual plots are better when viewed in the context of good residual plots, where we know the assumptions of the model are satisfied."
+  },
+  {
+    "objectID": "week4/slides.html#which-is-the-worst-residual-plot",
+    "href": "week4/slides.html#which-is-the-worst-residual-plot",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Which is the worst residual plot?",
+    "text": "Which is the worst residual plot?\n\n\n\n\n\n\n\n\n\n\n\n\n19 of these plots are good residual (null) plots."
+  },
+  {
+    "objectID": "week4/slides.html#section",
+    "href": "week4/slides.html#section",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
-    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+    "text": "All of the residual plots shown slides 22-24 were NULL plots."
   },
   {
-    "objectID": "week4/tutorialsol.html#objectives",
-    "href": "week4/tutorialsol.html#objectives",
-    "title": "ETC5521 Tutorial 3",
+    "objectID": "week4/slides.html#section-1",
+    "href": "week4/slides.html#section-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
-    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+    "text": "The actual residual plot is"
   },
   {
-    "objectID": "week4/tutorialsol.html#preparation",
-    "href": "week4/tutorialsol.html#preparation",
-    "title": "ETC5521 Tutorial 3",
-    "section": "🔧 Preparation",
-    "text": "🔧 Preparation\nThe reading for this week is The initial examination of data. It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis. - Complete the weekly quiz, before the deadline! - Make sure you have this list of R packages installed:\n\nComplete the weekly quiz, before the deadline!\nMake sure you have this list of R packages installed:\n\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"nullabor\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+    "objectID": "week4/slides.html#its-not-only-for-residual-plots",
+    "href": "week4/slides.html#its-not-only-for-residual-plots",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "It’s not only for residual plots",
+    "text": "It’s not only for residual plots"
   },
   {
-    "objectID": "week4/tutorialsol.html#exercises",
-    "href": "week4/tutorialsol.html#exercises",
-    "title": "ETC5521 Tutorial 3",
-    "section": "📥 Exercises",
-    "text": "📥 Exercises\n\nExercise 1: IDA on penguins data\n\nTake a glimpse of the penguins data. What types are variables are present in the data?\nHow was this data collected? You will need to read the documentation for the palmerpenguins package.\nUsing the visdat package make an overview plot to examine types of variables and for missing values.\nCheck the distributions of each species on each of the size variables, using a jittered dotplot, using the geom_quasirandom() function in the ggbeeswarm package. There seems to be some bimodality in some species on some variables eg bill_len. Why do you think this might be? Check your thinking by making a suitable plot.\nIs there any indication of outliers from the jittered dotplots of different variables?\nMake a scatterplot of body_mass_g vs flipper_length_mm for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?\nHow well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the \\(R^2\\), \\(\\sigma\\), and make a residual plot of residuals vs flipper_length_mm. From the residual plot, are there any concerns about the model fit?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n\n\nlibrary(tidyverse)\nglimpse(penguins)\n\nRows: 344\nColumns: 8\n$ species     &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Ad…\n$ island      &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgersen, Tor…\n$ bill_len    &lt;dbl&gt; 39, 40, 40, NA, 37, 39, 39, 39, 34, 42, 38, 38, 41, 39, 35…\n$ bill_dep    &lt;dbl&gt; 19, 17, 18, NA, 19, 21, 18, 20, 18, 20, 17, 17, 18, 21, 21…\n$ flipper_len &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186, 180,…\n$ body_mass   &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, 4250, …\n$ sex         &lt;fct&gt; male, female, female, NA, female, male, female, male, NA, …\n$ year        &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…\n\n\n\nDetails are at https://allisonhorst.github.io/palmerpenguins/articles/intro.html, and you learn “These data were collected from 2007 - 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program, part of the US Long Term Ecological Research Network. The data were imported directly from the Environmental Data Initiative (EDI) Data Portal.” It is necessary to also read the original data collection article https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081 to obtain details of the sampling. Breeding pairs of penguins were included based on sampling of nests where pairs of adults were present, were chosen and marked, before onset of egg-laying.\nThere are three factor variables - species, island, sex - and three integer variables - flipper_len, body_mass and year - and two numeric variables - bill_len and bill_dep.\n\nIt is interesting that flipper_len and body_mass are reported without decimal places, and thus are integers, whereas bill_len and bill_dep are reported with one decimal place, and thus are doubles. Both are numeric variables, though.\nFour variables have missing values: sex, bill_len, bill_dep, flipper_len, body_mass. There are more missings on sex. The other missings occur together, the penguins are missing on all five variables.\n\nlibrary(visdat)\nvis_dat(penguins)\n\n\n\n\n\n\n\n\n\nParticularly on bill_len multimodality can be seen in the Chinstrap and Gentoo penguins. This corresponds to differences in the two species. Differences can be seen in the sexes for all of the variables and species, but it is only big enough in bill_len to be noticeable as bimodality.\n\n\nlibrary(ggbeeswarm)\nggplot(penguins, aes(x=species, \n                     y=bill_len)) +\n  geom_quasirandom() \n\n\n\n\n\n\n\nggplot(penguins, aes(x=species, \n                     y=bill_len, \n                     colour=sex)) +\n  geom_quasirandom() +\n  scale_color_brewer(\"\", palette=\"Dark2\")\n\n\n\n\n\n\n\n\n\nOutliers can be seen on bill_len for Chinstrap and Gentoo. Interestingly, there is one female penguins with a really big bill, bigger than all the males even.\n\nAlso on flipper_len there is one female penguins with a much smaller value than others.\n\nThe striping corresponds to rounded values of flipper length, that have been reported to the nearest mm. It appears that it is done across all measuring as it is present for both sexes, for all species, for each island and each year. Otherwise there is nothing much to report as unusual.\n\n\npenguins %&gt;%\n  na.omit() %&gt;%\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\npenguins %&gt;%\n  na.omit() %&gt;%\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~island, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\npenguins %&gt;%\n  na.omit() %&gt;%\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~sex, ncol=2, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\npenguins %&gt;%\n  na.omit() %&gt;%\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~species, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\npenguins %&gt;%\n  na.omit() %&gt;%\n  ggplot(aes(x=flipper_len,\n             y=body_mass)) +\n  geom_point() +\n  facet_wrap(~year, ncol=3, scales = \"free\") +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\nThe model fit statistics suggest it is a reasonably good model, with flipper length explaining about 76% of body mass. From the estimated standard deviation of the error, \\(\\sigma=393\\), we could say that the estimated body mass is likely accurate to within 800g. (Assuming normal distribution and 95% of observations within two \\(\\sigma\\).)\n\nThe residual suggests no major problems. There is a little heteroskedasticity. Perhaps if you look carefully, though, it might indicate that different models should have been fitted for the smaller penguins and the bigger penguins, perhaps models separately for sex and species would be advised.\n\nlibrary(broom)\npenguins_nona &lt;- penguins %&gt;%\n  na.omit()\npenguins_fit &lt;- lm(body_mass~flipper_len, data=penguins_nona)\ntidy(penguins_fit)\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic   p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;\n1 (Intercept)  -5872.     310.       -18.9 1.18e- 54\n2 flipper_len     50.2      1.54      32.6 3.13e-105\n\nglance(penguins_fit)\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.762         0.761  393.     1060. 3.13e-105     1 -2461. 4928. 4940.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;\n\npenguins_m &lt;- augment(penguins_fit)\nggplot(penguins_m, aes(x=flipper_len, y=.resid)) +\n  geom_hline(yintercept=1, colour=\"grey70\") +\n  geom_point() +\n  theme(aspect.ratio=1)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 2: Can we believe what we see?\nThis question uses material from this week’s lecture, from a few hours ago.\n\nIn the previous question we made subjective statements about the residual plot to determine if the model was a good fit or not. We’ll use randomisation to check any observations we made from the residual plot. The code below makes a lineup of the true plot against plots made with rotation residuals (nulls/good). When you run the code you will get a line decrypt(\"....\"), which you can copy and paste back in to the console window to get the location of the true plot (in case you forgot which it is). Does the true plot look like the null plots? If not, describe how it differs.\n\n\nlibrary(nullabor)\nggplot(lineup(null_lm(body_mass~flipper_len, method=\"rotate\"),\n              penguins_m),\n       aes(x=flipper_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n\nPick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them\n\n\nto pick the plot that is most different.\nexplain why they picked that plot.\n\nUsing your decrypt() code locate the true plot. Is the true plot different from the nulls?\nDid you or your friend choose the data plot? Was it identifiable from the lineup or indistinguishable from the null plots?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nThe true plot looks a little different from the nulls. It has more of a V shape, which might suggest that the model fits poorly, that the smaller penguins have a different relationship than the larger penguins. It is evidence to support fitting separate models to the sexes and species.\nSomething like the following\n\n\nlibrary(nullabor)\npenguins_f_adelie &lt;- penguins_nona %&gt;%\n  filter(species == \"Adelie\",\n         sex == \"female\")\npenguins_f_adelie_bl_bd_fit &lt;- \n  lm(bill_dep ~ bill_len,\n     data=penguins_f_adelie)\npenguins_f_adelie_bl_bd_m &lt;-\n  augment(penguins_f_adelie_bl_bd_fit)\nggplot(lineup(null_lm(bill_dep ~ \n                        bill_len,\n                      method=\"rotate\"),\n              penguins_f_adelie_bl_bd_m),\n       aes(x=bill_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n\n\n\n\n\n\n\nI would not be able to distinguish which is the true plot in this lineup."
+    "objectID": "week4/slides.html#sports-analytics-basketball",
+    "href": "week4/slides.html#sports-analytics-basketball",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Sports analytics: basketball",
+    "text": "Sports analytics: basketball\n\n\n Which plot is most different?"
   },
   {
-    "objectID": "week4/tutorialsol.html#finishing-up",
-    "href": "week4/tutorialsol.html#finishing-up",
-    "title": "ETC5521 Tutorial 3",
-    "section": "👌 Finishing up",
-    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+    "objectID": "week4/slides.html#time-series-cross-currency-rates",
+    "href": "week4/slides.html#time-series-cross-currency-rates",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Time series: cross-currency rates",
+    "text": "Time series: cross-currency rates\n\n\n Which plot is most different?"
   },
   {
-    "objectID": "week4/tutorial.html",
-    "href": "week4/tutorial.html",
-    "title": "ETC5521 Tutorial 3",
+    "objectID": "week4/slides.html#association-cars",
+    "href": "week4/slides.html#association-cars",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Association: cars",
+    "text": "Association: cars\n\n\n Which plot is most different?"
+  },
+  {
+    "objectID": "week4/slides.html#spatial-analysis-cancer-incidence",
+    "href": "week4/slides.html#spatial-analysis-cancer-incidence",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Spatial analysis: cancer incidence",
+    "text": "Spatial analysis: cancer incidence\n\n\n Which plot is most different?\n From Steff Kobakian’s Master’s thesis"
+  },
+  {
+    "objectID": "week4/slides.html#reading-any-plot-is-easier-in-the-context-of-null-plots",
+    "href": "week4/slides.html#reading-any-plot-is-easier-in-the-context-of-null-plots",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Reading any plot is easier in the context of null plots",
+    "text": "Reading any plot is easier in the context of null plots"
+  },
+  {
+    "objectID": "week4/slides.html#why-is-a-data-plot-a-statistic",
+    "href": "week4/slides.html#why-is-a-data-plot-a-statistic",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Why is a data plot a statistic?",
+    "text": "Why is a data plot a statistic?"
+  },
+  {
+    "objectID": "week4/slides.html#why-is-a-data-plot-a-statistic-12",
+    "href": "week4/slides.html#why-is-a-data-plot-a-statistic-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Why is a data plot a statistic? (1/2)",
+    "text": "Why is a data plot a statistic? (1/2)\n\nThe concept of tidy data matches elementary statistics\nTabular form puts variables in columns and observations in rows\n\n\\[X = \\left[ \\begin{array}{rrrr}\n           X_1 & X_2 & ... & X_p\n           \\end{array} \\right] \\\\\n  = \\left[ \\begin{array}{rrrr}\n           X_{11} & X_{12} & ... & X_{1p} \\\\\n           X_{21} & X_{22} & ... & X_{2p} \\\\\n           \\vdots & \\vdots & \\ddots& \\vdots \\\\\n           X_{n1} & X_{n2} & ... & X_{np}\n           \\end{array} \\right]\\]\n\nVariables can have distributions, e.g. \\(X_1 \\sim N(0,1), ~~X_2 \\sim \\text{Exp}(1) ...\\)"
+  },
+  {
+    "objectID": "week4/slides.html#why-is-a-data-plot-a-statistic-22",
+    "href": "week4/slides.html#why-is-a-data-plot-a-statistic-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Why is a data plot a statistic? (2/2)",
+    "text": "Why is a data plot a statistic? (2/2)\n\n\nA statistic is a function on the values of items in a sample, e.g. for \\(n\\) iid random variates \\(\\bar{X}_1=\\sum_{i=1}^n X_{i1}\\), \\(s_1^2=\\frac{1}{n-1}\\sum_{i=1}^n(X_{i1}-\\bar{X}_1)^2\\)\nWe study the behaviour of the statistic over all possible samples of size \\(n\\).\nThe grammar of graphics is the mapping of (random) variables to graphical elements, making plots of data into statistics\n\n\n\n\n\nExample 1:\n\nggplot(threept_sub, \n       aes(x=angle, y=r)) + \n  geom_point(alpha=0.3)\n\n\n\nangle is mapped to the x axis\nr is mapped to the y axis\n\n\n\n\nExample 2:\n\nggplot(penguins, \n      aes(x=bl, \n          y=fl, \n          colour=species)) +\n  geom_point()\n\n\n\nbl is mapped to the x axis\nfl is mapped to the y axis\nspecies is mapped to colour\n\n\n\n\nExample 3:\n\nggplot(aud, aes(x=date, y=rate)) + \n  geom_line() \n\n\n\ndate is mapped to the x axis\nrate is mapped to the y axis\ndisplayed as a line geom"
+  },
+  {
+    "objectID": "week4/slides.html#determining-the-null-hypothesis",
+    "href": "week4/slides.html#determining-the-null-hypothesis",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Determining the null hypothesis",
+    "text": "Determining the null hypothesis"
+  },
+  {
+    "objectID": "week4/slides.html#what-is-the-null-hypothesis-12",
+    "href": "week4/slides.html#what-is-the-null-hypothesis-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What is the null hypothesis? (1/2)",
+    "text": "What is the null hypothesis? (1/2)\nTo determine the null hypothesis, you need to think about what pattern would NOT be interesting.\n\n\nA\nggplot(data) + \n  geom_point(aes(x=x1, y=x2))\n\nB\nggplot(data) + \n  geom_point(aes(x=x1, \n    y=x2, colour=cl))\n\nC\nggplot(data) + \n  geom_histogram(aes(x=x1))\n\nD\nggplot(data) + \n  geom_boxplot(aes(x=cl, y=x1))\n\n\n\n🤔 Which of these plot definitions would most match to a null hypothesis stating there is no difference in the distribution between the groups?"
+  },
+  {
+    "objectID": "week4/slides.html#what-is-the-null-hypothesis-22",
+    "href": "week4/slides.html#what-is-the-null-hypothesis-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What is the null hypothesis? (2/2)",
+    "text": "What is the null hypothesis? (2/2)\n\n\n\nA\n\\(H_o:\\) no association between x1 and x2\n \nB\n\\(H_o:\\) no difference in association of between x1 and x2 between levels of cl\n\nC\n\\(H_o:\\) the distribution of x1 is XXX\n \nD\n\\(H_o:\\) no difference in the distribution of x1 between levels of cl"
+  },
+  {
+    "objectID": "week4/slides.html#how-do-you-generate-null-samples",
+    "href": "week4/slides.html#how-do-you-generate-null-samples",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "How do you generate null samples",
+    "text": "How do you generate null samples"
+  },
+  {
+    "objectID": "week4/slides.html#primary-null-generating-mechanisms",
+    "href": "week4/slides.html#primary-null-generating-mechanisms",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Primary null-generating mechanisms",
+    "text": "Primary null-generating mechanisms\n\nNull samples can be generated using two basic approaches:\n\nPermutation: randomizing the order of one of the variables breaks association, but keeps marginal distributions the same.\nSimulation: from a given distribution, or model. Assumption is that the data comes from that model.\n\napplied to subsets, or conditioning on other variables. Simulation may require computing summary statistics from the data to use as parameter estimates."
+  },
+  {
+    "objectID": "week4/slides.html#association-cars-1",
+    "href": "week4/slides.html#association-cars-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Association: cars",
+    "text": "Association: cars\n\n\n\n\n\n\n\n\n\n\n\n\n\nNull plots generated by permuting x variable."
+  },
+  {
+    "objectID": "week4/slides.html#time-series-cross-currency-rates-1",
+    "href": "week4/slides.html#time-series-cross-currency-rates-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Time series: cross-currency rates",
+    "text": "Time series: cross-currency rates\n\n\n\n\n\n\n\n\n\n\n\n\n Nulls generated by simulating from an ARIMA model."
+  },
+  {
+    "objectID": "week4/slides.html#beyond-p-value-to-power",
+    "href": "week4/slides.html#beyond-p-value-to-power",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Beyond \\(p\\)-value to power",
+    "text": "Beyond \\(p\\)-value to power"
+  },
+  {
+    "objectID": "week4/slides.html#what-is-power",
+    "href": "week4/slides.html#what-is-power",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What is power?",
+    "text": "What is power?\n\n\n\nA statistic is said to be more powerful than another statistic if it has a higher probability of correctly rejecting the null hypothesis when the alternative hypothesis is true.\nThe effectiveness of two plots designs for the same data can be compared by computing power from a lineup.\nThe power of a lineup is calculated as \\(x/n\\) where \\(x\\) is the number of people who detected the data plot out of \\(n\\) people."
+  },
+  {
+    "objectID": "week4/slides.html#which-of-these-plots-is-more-effective-for-assessing-difference-between-groups",
+    "href": "week4/slides.html#which-of-these-plots-is-more-effective-for-assessing-difference-between-groups",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Which of these plots is more effective for assessing difference between groups?",
+    "text": "Which of these plots is more effective for assessing difference between groups?"
+  },
+  {
+    "objectID": "week4/slides.html#computing-the-power",
+    "href": "week4/slides.html#computing-the-power",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Computing the power",
+    "text": "Computing the power\nNote: Different people evaluated each lineup.\n\n\n\n\n\n\n\n\n\nPlot type\n\\(x\\)\n\\(n\\)\nPower\n\n\n\n\ngeom_point\n\\(x_1=4\\)\n\\(n_1=23\\)\n\\(x_1 / n_1=0.174\\)\n\n\ngeom_boxplot\n\\(x_2=5\\)\n\\(n_2=25\\)\n\\(x_2 / n_2=0.185\\)\n\n\ngeom_violin\n\\(x_3=6\\)\n\\(n_3=29\\)\n\\(x_3 / n_3=0.206\\)\n\n\nggbeeswarm::geom_quasirandom\n\\(x_4=8\\)\n\\(n_4=24\\)\n\\(x_4 / n_4=0.333\\)\n\n\n\n\n\n\nThe plot type with a higher power is preferable\nYou can use this framework to find the optimal plot design"
+  },
+  {
+    "objectID": "week4/slides.html#using-the-nullabor",
+    "href": "week4/slides.html#using-the-nullabor",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Using the nullabor 📦",
+    "text": "Using the nullabor 📦"
+  },
+  {
+    "objectID": "week4/slides.html#section-2",
+    "href": "week4/slides.html#section-2",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
-    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+    "text": "When you run the example yourself, you get a decrypt code line, that you run after deciding on a plot to print the location of the data plot amongst the nulls.\n\nplot is a scatterplot, null hypothesis is there is no association between the two variables mapped to the x, y axes\nnull generating mechanism: permutation\n\n\n\nset.seed(20190709)\nggplot(lineup(null_permute('mpg'), mtcars), \n  aes(x=mpg, y=wt)) +\n  geom_point() +\n  facet_wrap(~ .sample) +\n  theme(axis.text=element_blank(),\n        axis.title=element_blank())"
   },
   {
-    "objectID": "week4/tutorial.html#objectives",
-    "href": "week4/tutorial.html#objectives",
-    "title": "ETC5521 Tutorial 3",
+    "objectID": "week4/slides.html#some-considerations-in-visual-inference",
+    "href": "week4/slides.html#some-considerations-in-visual-inference",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Some considerations in visual inference",
+    "text": "Some considerations in visual inference\n\nIn practice you don’t want to bias the judgement of the human viewers so for a proper visual inference:\n\nyou should not show the data plot before the lineup\nyou should not give the context of the data\nyou should remove labels and other identifying information from plots\n\nThese methods can be used whenever formal inference is not possible/available, for EDA or IDA or diagnosing models.\nThe data collection is vital for good inference: bad data leads to bad inference.\nDetermining how to generate null samples can be complicated. We’ll see more examples throughout the next few weeks."
+  },
+  {
+    "objectID": "week4/slides.html#resources",
+    "href": "week4/slides.html#resources",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Resources",
+    "text": "Resources\n\nBuja, Andreas, Dianne Cook, Heike Hofmann, Michael Lawrence, Eun-Kyung Lee, Deborah F. Swayne, and Hadley Wickham. 2009. “Statistical Inference for Exploratory Data Analysis and Model Diagnostics.” Philosophical Transactions. Series A, Mathematical, Physical, and Engineering Sciences 367 (1906): 4361–83.\nWickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2010. “Graphical Inference for Infovis.” IEEE Transactions on Visualization and Computer Graphics 16 (6): 973–79.\nHofmann, H., L. Follett, M. Majumder, and D. Cook. 2012. “Graphical Tests for Power Comparison of Competing Designs.” IEEE Transactions on Visualization and Computer Graphics 18 (12): 2441–48.\nMajumder, M., Heiki Hofmann, and Dianne Cook. 2013. “Validation of Visual Statistical Inference, Applied to Linear Models.” Journal of the American Statistical Association 108 (503): 942–56."
+  },
+  {
+    "objectID": "week4/worksheetsol.html",
+    "href": "week4/worksheetsol.html",
+    "title": "ETC5521 Worksheet Week 4",
     "section": "",
-    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns."
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\n\nCode\npenguins_nona &lt;- penguins |&gt;\n  select(bill_len, bill_dep, \n         flipper_len, body_mass, \n         species, sex) |&gt;\n  na.omit()\npenguins_fit &lt;- lm(body_mass~flipper_len,\n                   data=penguins_nona)\ntidy(penguins_fit)\nglance(penguins_fit)\npenguins_m &lt;- augment(penguins_fit)\n#ggplot(penguins_m, aes(x=flipper_len, y=.resid)) +\n#  geom_hline(yintercept=1, colour=\"grey70\") +\n#  geom_point() +\n#  theme(aspect.ratio=1)"
   },
   {
-    "objectID": "week4/tutorial.html#preparation",
-    "href": "week4/tutorial.html#preparation",
-    "title": "ETC5521 Tutorial 3",
-    "section": "🔧 Preparation",
-    "text": "🔧 Preparation\nThe reading for this week is The initial examination of data. It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis. - Complete the weekly quiz, before the deadline! - Make sure you have this list of R packages installed:\n\nComplete the weekly quiz, before the deadline!\nMake sure you have this list of R packages installed:\n\n\ninstall.packages(c(\"tidyverse\", \"ggbeeswarm\", \"broom\", \"nullabor\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+    "objectID": "week4/worksheetsol.html#objectives",
+    "href": "week4/worksheetsol.html#objectives",
+    "title": "ETC5521 Worksheet Week 4",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\n\nCode\npenguins_nona &lt;- penguins |&gt;\n  select(bill_len, bill_dep, \n         flipper_len, body_mass, \n         species, sex) |&gt;\n  na.omit()\npenguins_fit &lt;- lm(body_mass~flipper_len,\n                   data=penguins_nona)\ntidy(penguins_fit)\nglance(penguins_fit)\npenguins_m &lt;- augment(penguins_fit)\n#ggplot(penguins_m, aes(x=flipper_len, y=.resid)) +\n#  geom_hline(yintercept=1, colour=\"grey70\") +\n#  geom_point() +\n#  theme(aspect.ratio=1)"
   },
   {
-    "objectID": "week4/tutorial.html#exercises",
-    "href": "week4/tutorial.html#exercises",
-    "title": "ETC5521 Tutorial 3",
-    "section": "📥 Exercises",
-    "text": "📥 Exercises\n\nExercise 1: IDA on penguins data\n\nTake a glimpse of the penguins data. What types are variables are present in the data?\nHow was this data collected? You will need to read the documentation for the palmerpenguins package.\nUsing the visdat package make an overview plot to examine types of variables and for missing values.\nCheck the distributions of each species on each of the size variables, using a jittered dotplot, using the geom_quasirandom() function in the ggbeeswarm package. There seems to be some bimodality in some species on some variables eg bill_len. Why do you think this might be? Check your thinking by making a suitable plot.\nIs there any indication of outliers from the jittered dotplots of different variables?\nMake a scatterplot of body_mass_g vs flipper_length_mm for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?\nHow well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the \\(R^2\\), \\(\\sigma\\), and make a residual plot of residuals vs flipper_length_mm. From the residual plot, are there any concerns about the model fit?\n\n\n\nExercise 2: Can we believe what we see?\nThis question uses material from this week’s lecture, from a few hours ago.\n\nIn the previous question we made subjective statements about the residual plot to determine if the model was a good fit or not. We’ll use randomisation to check any observations we made from the residual plot. The code below makes a lineup of the true plot against plots made with rotation residuals (nulls/good). When you run the code you will get a line decrypt(\"....\"), which you can copy and paste back in to the console window to get the location of the true plot (in case you forgot which it is). Does the true plot look like the null plots? If not, describe how it differs.\n\n\nlibrary(nullabor)\nggplot(lineup(null_lm(body_mass~flipper_len, method=\"rotate\"),\n              penguins_m),\n       aes(x=flipper_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n\nPick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them\n\n\nto pick the plot that is most different.\nexplain why they picked that plot.\n\nUsing your decrypt() code locate the true plot. Is the true plot different from the nulls?\nDid you or your friend choose the data plot? Was it identifiable from the lineup or indistinguishable from the null plots?"
+    "objectID": "week4/worksheetsol.html#tasks",
+    "href": "week4/worksheetsol.html#tasks",
+    "title": "ETC5521 Worksheet Week 4",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\nCan we believe what we see?\n\nIn the previous week’s worksheet we subjectively evaluated the residual plot to determine if the model was a good fit or not. We’ll use randomisation to check any observations we made from the residual plot. The code below makes a lineup of the true plot against plots made with rotation residuals (nulls/good). When you run the code you will get a line decrypt(\"....\"), which you can copy and paste back in to the console window to get the location of the true plot (in case you forgot which it is). Does the true plot look like the null plots? If not, describe how it differs.\n\n\n\nCode\nggplot(lineup(null_lm(body_mass~flipper_len, method=\"rotate\"),\n              penguins_m),\n       aes(x=flipper_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n# Alternatively, we can use permutation\nggplot(lineup(null_permute(\"flipper_len\"),\n              penguins_m),\n       aes(x=flipper_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n\n\nPick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them\n\n\nto pick the plot that is most different.\nexplain why they picked that plot.\n\nUsing your decrypt() code locate the true plot. Is the true plot different from the nulls?\nDid you or your friend choose the data plot? Was it identifiable from the lineup or indistinguishable from the null plots?\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nThe true plot looks a little different from the nulls. It has more of a V shape, which might suggest that the model fits poorly, that the smaller penguins have a different relationship than the larger penguins. It is evidence to support fitting separate models to the sexes and species.\nSomething like the following\n\n\n\nCode\npenguins_f_adelie &lt;- penguins_nona |&gt;\n  filter(species == \"Adelie\",\n         sex == \"female\")\npenguins_f_adelie_bl_bd_fit &lt;- \n  lm(bill_dep ~ bill_len,\n     data=penguins_f_adelie)\npenguins_f_adelie_bl_bd_m &lt;-\n  augment(penguins_f_adelie_bl_bd_fit)\nggplot(lineup(null_lm(bill_dep ~ \n                        bill_len,\n                      method=\"rotate\"),\n              penguins_f_adelie_bl_bd_m),\n       aes(x=bill_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n\nI would not be able to distinguish which is the true plot in this lineup."
   },
   {
-    "objectID": "week4/tutorial.html#finishing-up",
-    "href": "week4/tutorial.html#finishing-up",
-    "title": "ETC5521 Tutorial 3",
-    "section": "👌 Finishing up",
-    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+    "objectID": "week4/worksheet.html",
+    "href": "week4/worksheet.html",
+    "title": "ETC5521 Worksheet Week 4",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\n\nCode\npenguins_nona &lt;- penguins |&gt;\n  select(bill_len, bill_dep, \n         flipper_len, body_mass, \n         species, sex) |&gt;\n  na.omit()\npenguins_fit &lt;- lm(body_mass~flipper_len,\n                   data=penguins_nona)\ntidy(penguins_fit)\nglance(penguins_fit)\npenguins_m &lt;- augment(penguins_fit)\n#ggplot(penguins_m, aes(x=flipper_len, y=.resid)) +\n#  geom_hline(yintercept=1, colour=\"grey70\") +\n#  geom_point() +\n#  theme(aspect.ratio=1)"
+  },
+  {
+    "objectID": "week4/worksheet.html#objectives",
+    "href": "week4/worksheet.html#objectives",
+    "title": "ETC5521 Worksheet Week 4",
+    "section": "",
+    "text": "Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.\n\n\nCode\npenguins_nona &lt;- penguins |&gt;\n  select(bill_len, bill_dep, \n         flipper_len, body_mass, \n         species, sex) |&gt;\n  na.omit()\npenguins_fit &lt;- lm(body_mass~flipper_len,\n                   data=penguins_nona)\ntidy(penguins_fit)\nglance(penguins_fit)\npenguins_m &lt;- augment(penguins_fit)\n#ggplot(penguins_m, aes(x=flipper_len, y=.resid)) +\n#  geom_hline(yintercept=1, colour=\"grey70\") +\n#  geom_point() +\n#  theme(aspect.ratio=1)"
+  },
+  {
+    "objectID": "week4/worksheet.html#tasks",
+    "href": "week4/worksheet.html#tasks",
+    "title": "ETC5521 Worksheet Week 4",
+    "section": "🧩 Tasks",
+    "text": "🧩 Tasks\n\nCan we believe what we see?\n\nIn the previous week’s worksheet we subjectively evaluated the residual plot to determine if the model was a good fit or not. We’ll use randomisation to check any observations we made from the residual plot. The code below makes a lineup of the true plot against plots made with rotation residuals (nulls/good). When you run the code you will get a line decrypt(\"....\"), which you can copy and paste back in to the console window to get the location of the true plot (in case you forgot which it is). Does the true plot look like the null plots? If not, describe how it differs.\n\n\n\nCode\nggplot(lineup(null_lm(body_mass~flipper_len, method=\"rotate\"),\n              penguins_m),\n       aes(x=flipper_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n# Alternatively, we can use permutation\nggplot(lineup(null_permute(\"flipper_len\"),\n              penguins_m),\n       aes(x=flipper_len, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=5) +\n  theme_void() +\n  theme(axis.text = element_blank(), \n        panel.border = element_rect(fill=NA, colour=\"black\"))\n\n\n\nPick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them\n\n\nto pick the plot that is most different.\nexplain why they picked that plot.\n\nUsing your decrypt() code locate the true plot. Is the true plot different from the nulls?\nDid you or your friend choose the data plot? Was it identifiable from the lineup or indistinguishable from the null plots?"
   },
   {
     "objectID": "week6/index.html",

@@ -1,5 +1,5 @@
 ---
-title: "ETC5521 Tutorial 3"
+title: "ETC5521 Tutorial 4"
 subtitle: "Initial data analysis"
 author: "Prof. Di Cook"
 quarto-required: ">=1.3.0"
@@ -19,9 +19,6 @@ format:
 ```{r include=FALSE}
 #| echo: false
 library(tidyverse)
-library(ggbeeswarm)
-library(nullabor)
-library(broom)
 library(conflicted)
 
 # Set up chunk for all slides
@@ -70,17 +67,14 @@ Practice conducting initial data analyses, and make a start on learning how to a
 
 ## 🔧 Preparation 
 
-The reading for this week is [The initial examination of data](https://www.jstor.org/stable/28c1953a-8130-3c31-bd91-3ca6ce1d96d8?seq=7). It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis. 
-- Complete the weekly quiz, before the deadline!
-- Make sure you have this list of R packages installed: 
-
+The reading for this week is [Wickham et al. (2010) Graphical inference for Infovis](https://vita.had.co.nz/papers/inference-infovis.pdf).  
 - Complete the weekly quiz, before the deadline!
 - Make sure you have this list of R packages installed: 
 
 ```{r}
 #| eval: false
 #| code-fold: false
-install.packages(c("tidyverse", "ggbeeswarm", "broom", "nullabor"))
+install.packages(c("tidyverse"))
 ```
 
 - Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
@@ -88,183 +82,219 @@ install.packages(c("tidyverse", "ggbeeswarm", "broom", "nullabor"))
 
 ## 📥 Exercises
 
-### Exercise 1: IDA on `penguins` data
+This tutorial focuses on IDA for the `gardenR` data, with the goal to answer this question:
 
-a. Take a `glimpse` of the `penguins` data. What types are variables are present in the data?
+**Which variety of tomato produces the most return on investment, as measured by weight?**
 
-b. How was this data collected? You will need to read the documentation for the `palmerpenguins` package.
+### Exercise 1
 
-c. Using the `visdat` package make an overview plot to examine types of variables and for missing values. 
-
-d. Check the distributions of each species on each of the size variables, using a jittered dotplot, using the `geom_quasirandom()` function in the `ggbeeswarm` package. There seems to be some bimodality in some species on some variables eg `bill_len`. Why do you think this might be? Check your thinking by making a suitable plot.
-
-e. Is there any indication of outliers from the jittered dotplots of different variables?
-
-f. Make a scatterplot of `body_mass_g` vs `flipper_length_mm` for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?
-
-g. How well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the $R^2$, $\sigma$, and make a residual plot of residuals vs `flipper_length_mm`. From the residual plot, are there any concerns about the model fit?
+a. How many types of vegetables were grown in each year?
+b. How many vegetables were grown in 2020 that were not grown in 2021? 
+c. What are some of the data recording errors that can be seen by comparing vegetables grown in each year?
 
 ::: unilur-solution
 
-a.
 ```{r}
-#| message: false
+library(gardenR)
 library(tidyverse)
-glimpse(penguins)
-```
-b. Details are at https://allisonhorst.github.io/palmerpenguins/articles/intro.html, and you learn "These data were collected from 2007 - 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program, part of the US Long Term Ecological Research Network. The data were imported directly from the Environmental Data Initiative (EDI) Data Portal." It is necessary to also read the original data collection article https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081 to obtain details of the sampling. Breeding pairs of penguins were included based on sampling of nests where pairs of adults were present, were chosen and marked, before onset of egg-laying.
-
-c. There are three factor variables - species, island, sex - and three integer variables - flipper_len, body_mass and year - and two numeric variables - bill_len and bill_dep.
-
-It is interesting that flipper_len and body_mass are reported without decimal places, and thus are integers, whereas bill_len and bill_dep are reported with one decimal place, and thus are doubles. Both are numeric variables, though.
-
-Four variables have missing values: sex, bill_len, bill_dep, flipper_len, body_mass. There are more missings on sex. The other missings occur together, the penguins are missing on all five variables.
-
-```{r}
-library(visdat)
-vis_dat(penguins)
-```
-
-d. Particularly on `bill_len` multimodality can be seen in the Chinstrap and Gentoo penguins. This corresponds to differences in the two species. Differences can be seen in the sexes for all of the variables and species, but it is only big enough in `bill_len` to be noticeable as bimodality.
-
-```{r}
 library(ggbeeswarm)
-ggplot(penguins, aes(x=species, 
-                     y=bill_len)) +
-  geom_quasirandom() 
-ggplot(penguins, aes(x=species, 
-                     y=bill_len, 
-                     colour=sex)) +
-  geom_quasirandom() +
-  scale_color_brewer("", palette="Dark2")
 
+data("garden_coords")
+data("garden_harvest")
+data("garden_planting")
+data("garden_spending")
+data("harvest_2021")
+data("planting_2021")
+data("spending_2021")
 ```
 
-e. Outliers can be seen on `bill_len` for Chinstrap and Gentoo. Interestingly, there is one female penguins with a really big bill, bigger than all the males even.
+`r garden_harvest |> count(vegetable, sort=TRUE) |> nrow()` grown in 2020, and `r harvest_2021 |> count(vegetable, sort=TRUE) |> nrow()` grown in 2021.
 
-Also on `flipper_len` there is one female penguins with a much smaller value than others.
-
-f. The striping corresponds to rounded values of flipper length, that have been reported to the nearest mm. It appears that it is done across all measuring as it is present for both sexes, for all species, for each island and each year. Otherwise there is nothing much to report as unusual. 
+b. To work out which differ between years, use the `anti_join()` function. Because there are multiple plots of vegetables use `distinct()` to remove duplicates, and then arrange alphabetically for ease of comparison. 
 
 ```{r}
-penguins %>%
-  na.omit() %>%
-  ggplot(aes(x=flipper_len,
-             y=body_mass)) +
-  geom_point() +
-  theme(aspect.ratio=1)
-
-penguins %>%
-  na.omit() %>%
-  ggplot(aes(x=flipper_len,
-             y=body_mass)) +
-  geom_point() +
-  facet_wrap(~island, ncol=3, scales = "free") +
-  theme(aspect.ratio=1)
-
-penguins %>%
-  na.omit() %>%
-  ggplot(aes(x=flipper_len,
-             y=body_mass)) +
-  geom_point() +
-  facet_wrap(~sex, ncol=2, scales = "free") +
-  theme(aspect.ratio=1)
-
-penguins %>%
-  na.omit() %>%
-  ggplot(aes(x=flipper_len,
-             y=body_mass)) +
-  geom_point() +
-  facet_wrap(~species, ncol=3, scales = "free") +
-  theme(aspect.ratio=1)
-
-penguins %>%
-  na.omit() %>%
-  ggplot(aes(x=flipper_len,
-             y=body_mass)) +
-  geom_point() +
-  facet_wrap(~year, ncol=3, scales = "free") +
-  theme(aspect.ratio=1)
+#| label: mismatches
+in20butnot21 <- anti_join(select(garden_harvest, vegetable), select(harvest_2021, vegetable), by="vegetable") |> 
+  distinct() |> 
+  arrange(vegetable)
+in21butnot20 <- anti_join(select(harvest_2021, vegetable), select(garden_harvest, vegetable), by="vegetable") |> 
+  distinct() |> 
+  arrange(vegetable)
+in20butnot21$vegetable
+in21butnot20$vegetable
 ```
 
-g. The model fit statistics suggest it is a reasonably good model, with flipper length explaining about 76% of body mass. From the estimated standard deviation of the error, $\sigma=393$, we could say that the estimated body mass is likely accurate to within 800g. (Assuming normal distribution and 95% of observations within two $\sigma$.)
+c. 
 
-The residual suggests no major problems. There is a little heteroskedasticity. Perhaps if you look carefully, though, it might indicate that different models should have been fitted for the smaller penguins and the bigger penguins, perhaps models separately for sex and species would be advised.
+- `swiss chard` was grown in each year but capital "S" was used in 2020. 
+- `apples` were grown in each year, but singular name was used in 2021.
+- similarly for `pumpkins` but in reverse, singular used in 2020!
 
 ```{r}
-library(broom)
-penguins_nona <- penguins %>%
-  na.omit()
-penguins_fit <- lm(body_mass~flipper_len, data=penguins_nona)
-tidy(penguins_fit)
-glance(penguins_fit)
-penguins_m <- augment(penguins_fit)
-ggplot(penguins_m, aes(x=flipper_len, y=.resid)) +
-  geom_hline(yintercept=1, colour="grey70") +
-  geom_point() +
-  theme(aspect.ratio=1)
+harvest_2020 <- garden_harvest |>
+  mutate(vegetable = tolower(vegetable),
+         variety = tolower(variety)) |>
+  mutate(vegetable = case_match(
+    vegetable,
+    "apple" ~ "apples",
+    .default = vegetable)
+  )
+harvest_2021 <- harvest_2021 |>
+  mutate(vegetable = case_match(
+    vegetable,
+    "pumpkin" ~ "pumpkins",
+    .default = vegetable)
+  )
+```
+
+So final answer for (b) is here are the vegetables not grown both years:
+
+```{r}
+#| label: mismatches
+#| echo: false
 ```
 
 
 :::
 
+### Exercise 2
 
-### Exercise 2: Can we believe what we see?
-
-This question uses material from this week's lecture, from a few hours ago.
-
-a. In the previous question we made subjective statements about the residual plot to determine if the model was a good fit or not. We'll use randomisation to check any observations we made from the residual plot. The code below makes a lineup of the true plot against plots made with rotation residuals (nulls/good). When you run the code you will get a line `decrypt("....")`, which you can copy and paste back in to the console window to get the location of the true plot (in case you forgot which it is). Does the true plot look like the null plots? If not, describe how it differs.
-
-```{r resid-check}
-#| eval: false
-library(nullabor)
-ggplot(lineup(null_lm(body_mass~flipper_len, method="rotate"),
-              penguins_m),
-       aes(x=flipper_len, y=.resid)) +
-  geom_point() +
-  facet_wrap(~.sample, ncol=5) +
-  theme_void() +
-  theme(axis.text = element_blank(), 
-        panel.border = element_rect(fill=NA, colour="black"))
-```
-
-b. Pick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them 
-
- - to pick the plot that is most different.
- - explain why they picked that plot.
- 
-Using your `decrypt()` code locate the true plot. Is the true plot different from the nulls?
-
-Did you or your friend choose the data plot? Was it identifiable from the lineup or indistinguishable from the null plots?
+a. Join the harvest, spending and planting data for the two years, after adding a new variable each, called `year`. Show your code.
+b. Make a subset containing just the tomatoes, for each set.
+c. Are the varieties of tomatoes grown each year the same?
+d. Are the tomato varieties grown in the same plots each year?
+e. When are tomatoes planted and harvested, in Lisa's garden?
 
 ::: unilur-solution
-a. The true plot looks a little different from the nulls. It has more of a V shape, which might suggest that the model fits poorly, that the smaller penguins have a different relationship than the larger penguins. It is evidence to support fitting separate models to the sexes and species.
 
-b. Something like the following
+a.
 
-```{r lineup-ex}
-library(nullabor)
-penguins_f_adelie <- penguins_nona %>%
-  filter(species == "Adelie",
-         sex == "female")
-penguins_f_adelie_bl_bd_fit <- 
-  lm(bill_dep ~ bill_len,
-     data=penguins_f_adelie)
-penguins_f_adelie_bl_bd_m <-
-  augment(penguins_f_adelie_bl_bd_fit)
-ggplot(lineup(null_lm(bill_dep ~ 
-                        bill_len,
-                      method="rotate"),
-              penguins_f_adelie_bl_bd_m),
-       aes(x=bill_len, y=.resid)) +
-  geom_point() +
-  facet_wrap(~.sample, ncol=5) +
-  theme_void() +
-  theme(axis.text = element_blank(), 
-        panel.border = element_rect(fill=NA, colour="black"))
+```{r}
+harvest_2020 <- garden_harvest |>
+  mutate(year = "2020")
+harvest_2021 <- harvest_2021 |>
+  mutate(year = "2021")
+harvest <- bind_rows(harvest_2020, harvest_2021)
+
+spending_2020 <- garden_spending |>
+  mutate(year = "2020")
+spending_2021 <- spending_2021 |>
+  mutate(year = "2021")
+spending <- bind_rows(spending_2020, spending_2021)
+
+planting_2020 <- garden_planting |>
+  mutate(year = "2020")
+planting_2021 <- planting_2021 |>
+  mutate(year = "2021")
+planting <- bind_rows(planting_2020, planting_2021)
 ```
 
-I would not be able to distinguish which is the true plot in this lineup.
+b.
+
+```{r}
+harvest_toms <- harvest |> filter(vegetable == "tomatoes")
+spending_toms <- spending |> filter(vegetable == "tomatoes")
+planting_toms <- planting |> filter(vegetable == "tomatoes")
+```
+
+c. 
+
+```{r}
+tom_smry <- harvest_toms |> 
+  count(variety, year) |> 
+  pivot_wider(names_from = year, values_from = n)
+tom_smry
+n_complete <- tom_smry |> mutate(m=`2020`+`2021`) |> filter(!is.na(m)) |> nrow()
+```
+
+There are a lot of varieties of tomatoes grown, only `r n_complete` are grown in both years.
+
+d. Use only the varieties grown in both years. 
+
+```{r}
+#| code-fold: true
+tom_both_yrs <- tom_smry |> mutate(m=`2020`+`2021`) |> filter(!is.na(m)) 
+planting_toms |> 
+  filter(variety %in% tom_both_yrs$variety) |>
+  count(variety, plot, year) |>
+  pivot_wider(names_from = plot, values_from = n)
+```
+
+Not a single variety is grown in the same plot each year. This might cause problems, if the plots are not equally good for growing tomatoes.
+
+e. Again, just use the tomatoes that are grown in each year. 
+
+```{r}
+#| code-fold: true
+planting_toms_sub <- planting_toms |>
+  filter(variety %in% tom_both_yrs$variety) |>
+  mutate(type = "planting") |>
+  select(variety, date, type, year)
+harvest_toms_sub <- harvest_toms |>
+  filter(variety %in% tom_both_yrs$variety) |>
+  mutate(type = "harvest") |>
+  select(variety, date, type, year)
+tom_variety_order <- harvest_toms_sub |>
+  group_by(variety) |>
+  summarise(date = min(date)) |>
+  arrange(date)
+p_h_tom <- bind_rows(planting_toms_sub, harvest_toms_sub) |>
+  mutate(day_yr = yday(date)) |>
+  mutate(variety = factor(variety, tom_variety_order$variety))
+ggplot(p_h_tom) +
+  geom_point(aes(x=day_yr, y=year, colour=type)) +
+  facet_wrap(~variety, ncol=4, scales="free_x") +
+  scale_colour_brewer("", palette="Dark2") +
+  xlab("day of year") + ylab("") +
+  theme(legend.position="bottom")
+```
+
+Planting is usually in late May, and it is consistent for all the varieties. 
+
+Harvesting starts around 50 days after planting. 2020 had an earlier harvest than 2021 for all varieties. Big Beef tends to be harvested first, and Black Kim later. Old German had a poor harvest in 2021 relative to 2022.
+
+:::
+
+### Exercise 3 Try to answer the original question. 
+
+a. How should you calibrate weight of harvest by amount of seeds planted?
+
+b. Which variety produces the most return on investment?
+
+::: unilur-solution
+
+a. We'll divide the weight by number of seeds planted. An interesting observation is that so few tomato seeds were planted! Packets of tomato seeds have lots of seeds.
+
+```{r}
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 6
+#| out-width: 100%
+planting_smry <- planting_toms |>
+  filter(variety %in% tom_both_yrs$variety) |>
+  select(variety, date, year, number_seeds_planted, number_seeds_exact) |>
+  group_by(variety, year) |>
+  summarise(nseeds = sum(number_seeds_planted))
+harvest_smry <- harvest_toms |>
+  filter(variety %in% tom_both_yrs$variety) |>
+  group_by(variety, year) |>
+  summarise(weight = sum(weight))
+tom_weight <- left_join(planting_smry, harvest_smry) |>
+  mutate(wgt_ps = weight/nseeds)
+
+ggplot(tom_weight, aes(
+  x = fct_reorder(variety, wgt_ps),
+  y = wgt_ps,
+  colour = year)) +
+  geom_point() + 
+  coord_flip() +
+  xlab("") + ylab("weight per seed") +
+  scale_colour_brewer("", palette="Dark2")
+```
+
+b. 
+
+Big Beef is a consistently high performer, over these two years. Old German is the most varied, top by weight in 2020 but failed in 2021.
 
 :::
 
