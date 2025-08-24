@@ -101,12 +101,12 @@ schedule <- schedule |>
            Reference = if_else(Date > "2025-10-27", " ", Reference)) |>
     mutate(Assignment = ass_date) 
 
-show_assignments <- function() {
-    todays_date <- today()
+show_assignments <- function(wk) {
+    todays_date <- ymd(start_semester) + weeks(wk-1)
     ass <- assignments |>
         filter(
             #Week >= week & (week > Week - 3 | week > 8),
-            (Date > todays_date - weeks(1) & Date < todays_date + weeks(1)),
+            ((Date > todays_date - days(3)) & (Date < todays_date + weeks(2))),
             !is.na(Assignment),
         ) |>
         select(Assignment:Link)
