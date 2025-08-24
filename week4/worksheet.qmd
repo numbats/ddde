@@ -78,7 +78,7 @@ penguins_fit <- lm(body_mass~flipper_len,
                    data=penguins_nona)
 tidy(penguins_fit)
 glance(penguins_fit)
-penguins_m <- augment(penguins_fit)
+penguins_m <- augment(penguins_fit, penguins_nona)
 #ggplot(penguins_m, aes(x=flipper_len, y=.resid)) +
 #  geom_hline(yintercept=1, colour="grey70") +
 #  geom_point() +
@@ -111,6 +111,12 @@ ggplot(lineup(null_permute("flipper_len"),
   theme_void() +
   theme(axis.text = element_blank(), 
         panel.border = element_rect(fill=NA, colour="black"))
+
+ggplot(penguins_m, aes(x=flipper_len, y=.resid, colour=species)) +
+  geom_hline(yintercept=1, colour="grey70") +
+  geom_point() +
+  theme(aspect.ratio=1)
+
 ```
 
 b. Pick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them 

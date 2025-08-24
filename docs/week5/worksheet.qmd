@@ -1,0 +1,288 @@
+---
+title: "ETC5521 Worksheet Week 5"
+subtitle: "Working with a single variable"
+author: "Prof. Di Cook"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: worksheet.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: worksheetsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+code-fold: true
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  error = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+library(tidyverse)
+library(ggbeeswarm)
+library(nullabor)
+library(broom)
+library(lvplot)
+library(patchwork)
+library(MASS)
+library(conflicted)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+```
+
+### 1. Understanding the velocity of galaxies
+
+Load the `galaxies` data in the `MASS` package and answer the following questions based on this dataset.
+
+```{r}
+data(galaxies, package = "MASS")
+```
+
+You can access documentation of the data (if available) using the `help` function specifying the package name in the argument. 
+
+```{r, eval = FALSE}
+help(galaxies, package = "MASS")
+```
+
+(a) What does the data contain? And what is the data source?
+
+::: unilur-solution
+
+```{r}
+#| label: q1data
+data(galaxies, package = "MASS")
+glimpse(galaxies)
+```
+
+The data contains velocities in km/sec of `r length(galaxies)` galaxies from 6 well-separated conic sections of an unfilled survey of the Corona Borealis region. The original data is from Postman et al. (1986) and this data is from Roeder with 83rd observation removed from the original data as well as typo for the 78th observation.
+
+* Postman, M., Huchra, J. P. and Geller, M. J. (1986) Probes of large-scale structures in the Corona Borealis region. Astronomical Journal 92, 1238–1247
+* Roeder, K. (1990) Density estimation with confidence sets exemplified by superclusters and voids in galaxies. Journal of the American Statistical Association 85, 617–624.
+:::
+
+(b) Based on the description in the R Help for the data, what would be an appropriate null distribution of this data?
+
+::: unilur-solution
+
+The description in the R help for the data says *Multimodality in such surveys is evidence for voids and superclusters in the far universe.*
+
+Deciding on an appropriate null hypothesis is always tricky. If we wanted to test the statement that the data is multimodal, we could compare against a unimodal distribution, either a normal or an exponential depending on what shape we might expect. 
+
+However, the published work has already made a claim that the data is multimodal, so it would be interesting to determine if we can generate samples from a multimodal distribution that are indistinguishable from the data.
+
+$H_0:$ The distribution is multimodal. 
+$H_a:$ The distribution is something other than multimodal.
+
+:::
+
+(c) How many observations are there?
+
+::: unilur-solution
+There are `r length(galaxies)` observations.
+:::
+
+(d) If the data is multimodal, which of the following displays do you think would be the best? Which would not be at all useful?
+
+- histogram 
+- boxplot 
+- density plot 
+- violin plot
+- jittered dot plot 
+- letter value plot
+
+::: unilur-solution
+If you said a density plot, jittered dot plot, or a histogram, you're on the right track, because each can give a fine resolution for showing modes. (The violin plot is not any different from a density plot, when only looking at one variable.)
+:::
+
+(e) Make these plots for the data. Experiment with different binwidths for the histogram and different bandwiths for the density plot. Were you right in your thinking about which would be the best?
+
+::: unilur-solution
+```{r}
+#| label: q1plot
+g <- ggplot(tibble(galaxies), aes(galaxies)) +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+g1 <- g + geom_histogram(binwidth = 1000, color = "white") 
+g2 <- g + geom_boxplot() 
+g3 <- g + geom_density() 
+g4 <- g + geom_violin(aes(x=galaxies, y=1), draw_quantiles = c(0.25, 0.5, 0.75))
+g5 <- g + geom_quasirandom(aes(x=1, y=galaxies)) + coord_flip() 
+g6 <- g + geom_lv(aes(x=1, y=galaxies)) + coord_flip() 
+
+g1 + g2 + g3 + g4 + g5 + g6 + plot_layout(ncol = 2)
+```
+:::
+
+(f) Fit your best mixture model to the data, and simulate 19 nulls to make a lineup. Did you do a good job in matching the distribution, ie does the data plot stand out or not? (Extra bonus: What is the model that you have created? Can you make a plot to show how it looks relative to the observed data?)
+
+This code might be helpful to get you started. This code generates a jittered dotplot, but you can use your preferred type from part e.
+
+
+```{r}
+#| label: fit-mixture
+#| echo: true
+#| eval: false
+# Fit a mixture model
+library(mixtools)
+galaxies_fit <- normalmixEM(galaxies, k=3)
+
+set.seed(1138)
+galaxies_sim1 <- rnormmix(n=length(galaxies), 
+              lambda=galaxies_fit$lambda, 
+              mu=galaxies_fit$mu,
+              sigma=galaxies_fit$sigma)
+```
+
+```{r}
+#| label: plot-data
+#| echo: true
+#| eval: false
+# Plot your data
+ggplot(tibble(galaxies_sim1), aes(x=galaxies_sim1)) +
+  geom_quasirandom(aes(x=1, y=galaxies_sim1)) + 
+  coord_flip() +
+  theme(
+    aspect.ratio = 0.7,
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+```
+
+```{r}
+#| label: gen-nulls
+#| echo: true
+#| eval: false
+# Generate null plots and make a lineup
+galaxies_null <- tibble(.sample=1, galaxies=galaxies_sim1)
+for (i in 2:19) {
+  gsim <- rnormmix(n=length(galaxies), 
+              lambda=galaxies_fit$lambda, 
+              mu=galaxies_fit$mu,
+              sigma=galaxies_fit$sigma)
+  galaxies_null <- bind_rows(galaxies_null,
+                             tibble(.sample=i, galaxies=gsim))
+}
+galaxies_null <- bind_rows(galaxies_null,
+                             tibble(.sample=20,
+                                    galaxies=galaxies))
+# Randomise .sample  to hide data plot
+galaxies_null$.sample <- rep(sample(1:20, 20), rep(82, 20))
+ggplot(tibble(galaxies_null), aes(x=galaxies)) +
+  geom_quasirandom(aes(x=1, y=galaxies)) + 
+  facet_wrap(~.sample, ncol=5) +
+  coord_flip() +
+  theme(
+    aspect.ratio = 0.7,
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+```
+
+::: unilur-solution
+
+```{r}
+#| label: fit-mixture
+#| echo: false
+#| eval: true 
+```
+
+```{r}
+#| label: gen-nulls
+#| echo: false
+#| eval: true 
+#| fig-height: 8
+#| fig-width: 10
+#| out-width: 100%
+```
+
+```{r}
+#| echo: true
+# To make a rough plot of your model
+plot(galaxies_fit, whichplots=2)
+```
+
+The `lambda` value provides the proportion of mixing, from three normal samples. The `mu` and `sigma` give the mean and standard deviations for each of the distributions.
+
+:::
+
+### 2. What is the best transformation to make?
+
+For each of the variables in the data, `which-transform.csv`, decide on an appropriate transformation to make the distribution more symmetric for five of the variables and remove discreteness on one variable.
+
+```{r}
+#| eval: false
+#| echo: false
+n <- 502
+set.seed(205)
+std <- function(x) (x-mean(x))/sd(x)
+d <- tibble(x1 = rexp(n), 
+            x2 = rf(n, 3, 20),
+            x3 = rgamma(n, 2),
+            x4 = rpois(n, 3),
+            x5 = rlnorm(n),
+            x6 = c(rnorm(n/2, -3), rnorm(n/2, 3)))
+d <- d |>
+  mutate_all(std)
+d$x2 <- -d$x2
+write_csv(d, file="data/which-transform.csv")
+```
+
+```{r}
+#| label: data-to-transform
+#| echo: false
+#| fig-width: 8
+#| fig-height: 6
+d <- read_csv("https://raw.githubusercontent.com/numbats/ddde/main/data/which-transform.csv")
+p1 <- ggplot(d, aes(x=x1, y=1)) + geom_quasirandom(alpha=0.5)
+p2 <- ggplot(d, aes(x=x2, y=1)) + geom_quasirandom(alpha=0.5)
+p3 <- ggplot(d, aes(x=x3, y=1)) + geom_quasirandom(alpha=0.5)
+p4 <- ggplot(d, aes(x=x4, y=1)) + geom_quasirandom(alpha=0.5)
+p5 <- ggplot(d, aes(x=x5, y=1)) + geom_quasirandom(alpha=0.5)
+p6 <- ggplot(d, aes(x=x6, y=1)) + geom_quasirandom(alpha=0.5)
+p1+p2+p3+p4+p5+p6+plot_layout(ncol=3)
+```
+
+::: unilur-solution
+Remember the power ladder, go down to fix right-skew, and up to fix left-skew. For multi-modal find an explanatory variable, or do a severe quantile transformation.
+:::
+

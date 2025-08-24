@@ -31,6 +31,11 @@ schedule |>
 - [qmd](https://ddde.numbat.space/week5/slides.qmd)
 - [R](https://ddde.numbat.space/week5/slides.R)
 
+## Worksheet
+
+- [qmd](https://ddde.numbat.space/week5/worksheet.qmd)
+- [html](https://ddde.numbat.space/week5/worksheet.html)
+
 ## Tutorial instructions
 
 - [html](https://ddde.numbat.space/week5/tutorial.html)
