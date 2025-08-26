@@ -1319,6 +1319,10 @@ df2 |>
 
 Is missingness more likely for expensive houses?
 
+* Check with a [lineup]{.monash-blue2}
+
+::: {.fragment}
+
 ```{r}
 #| label: melb-house-plot-room-miss
 #| echo: false
@@ -1342,10 +1346,12 @@ df2 |>
 ```
 
 
-* Check with a [lineup]{.monash-blue2}
 * To impute missings other variables will need to be used.
 
 [Note: Houses with more than 8 rooms removed. Why?]{.smaller}
+
+:::
+
 :::
 ::::
 
