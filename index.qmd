@@ -25,7 +25,7 @@ week <- as.integer(1 + ((Sys.Date() - as_date(start_semester))/7))
 
 * Krisanat Anukarnsakulchularp
     - Tutorials: Thu 9am (CL_LTB_188), 10am (CL_LTB_188), 3pm (CL_LTB_387)
-    - Consultation: Thursdays 4-6pm Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 232A
+    - Consultation: Mondays 9-10am, Thursdays 4-5pm Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 232A
 
 ## Weekly schedule
 
