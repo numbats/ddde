@@ -26,6 +26,7 @@ schedule |>
 - Simpson's paradox
 - Making null samples to test for association
 - Imputing missing values
+- Associations as networks
 
 ## Lecture slides
 
@@ -33,6 +34,11 @@ schedule |>
 - [pdf](https://ddde.numbat.space/week6/slides.pdf)
 - [qmd](https://ddde.numbat.space/week6/slides.qmd)
 - [R](https://ddde.numbat.space/week6/slides.R)
+
+## Worksheet
+
+- [qmd](https://ddde.numbat.space/week6/worksheet.qmd)
+- [html](https://ddde.numbat.space/week6/worksheet.html)
 
 ## Tutorial instructions
 
