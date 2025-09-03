@@ -26,6 +26,7 @@ library(tidygraph)
 library(ggraph)
 library(plotly)
 library(conflicted)
+library(ggiraph)
 
 # Set up chunk for all slides
 knitr::opts_chunk$set(
@@ -349,6 +350,28 @@ bikes_graph |>
         panel.background = element_rect(fill=NA, 
                                         colour="black"),
         legend.position = "none")
+
+# interactive graph
+interactive_graph <- bikes_graph |> 
+  ggraph(x = stations$long, y = stations$lat) +
+  geom_edge_link(aes(edge_alpha = n)) +
+  geom_point_interactive(aes(x = x, y = y,
+                             size = nbDocks,
+                             tooltip = name,
+                             data_id = name)) +
+  theme(aspect.ratio=1,
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        panel.background = element_rect(fill=NA, 
+                                        colour="black"),
+        legend.position = "none")
+
+girafe(ggobj = interactive_graph,
+       options = list(
+         opts_hover(css = "fill:lightblue;stroke:grey;stroke-width:0.5px"),
+         opts_zoom(min = 0.5, max = 3)
+       ))
 
 # p2 <- ggplot() +
 #   geom_point(data=bikes_nodes, 
