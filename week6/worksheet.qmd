@@ -219,11 +219,14 @@ b. Make all the pairwise scatterplots of Senior, Exper and Age. What do you lear
 #| fig.width: 10 
 #| fig.height: 4
 p1 <- ggplot(case1202, aes(x = Age, y = Senior)) +
-  geom_point() 
+  geom_point() +
+  theme(aspect.ratio = 1)
 p2 <- ggplot(case1202, aes(x = Exper, y = Senior)) +
-  geom_point() 
+  geom_point() +
+  theme(aspect.ratio = 1)
 p3 <- ggplot(case1202, aes(x = Age, y = Exper)) +
-  geom_point() 
+  geom_point() +
+  theme(aspect.ratio = 1)
 p1 + p2 + p3 + plot_layout(ncol = 3)
 ```
 
@@ -255,15 +258,15 @@ c. Colour the observations by Sex. What do you learn?
 p1 <- ggplot(case1202, aes(x = Age, y = Senior, colour = Sex)) +
   geom_point() +
   scale_colour_brewer("", palette = "Dark2") +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom", aspect.ratio = 1) 
 p2 <- ggplot(case1202, aes(x = Exper, y = Senior, colour = Sex)) +
   geom_point() +
   scale_colour_brewer("", palette = "Dark2") +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom", aspect.ratio = 1)
 p3 <- ggplot(case1202, aes(x = Age, y = Exper, colour = Sex)) +
   geom_point() +
   scale_colour_brewer("", palette = "Dark2") +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom", aspect.ratio = 1)
 p1 + p2 + p3 + plot_layout(ncol = 3)
 ```
 
@@ -300,13 +303,13 @@ d. Instead of scatterplots, make faceted histograms of the three variables by Se
 #| fig.height: 6
 p1 <- ggplot(case1202, aes(x = Senior)) +
   geom_histogram(binwidth = 5, colour = "white") +
-  facet_wrap(~Sex, ncol = 1, scales="free")
+  facet_wrap(~Sex, ncol = 1, scales="free_y")
 p2 <- ggplot(case1202, aes(x = Age)) +
   geom_histogram(binwidth = 50, colour = "white") +
-  facet_wrap(~Sex, ncol = 1, scales="free")
+  facet_wrap(~Sex, ncol = 1, scales="free_y")
 p3 <- ggplot(case1202, aes(x = Exper)) +
   geom_histogram(binwidth = 50, colour = "white") +
-  facet_wrap(~Sex, ncol = 1, scales="free")
+  facet_wrap(~Sex, ncol = 1, scales="free_y")
 p1 + p2 + p3 + plot_layout(ncol = 3)
 ```
 
