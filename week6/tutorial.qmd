@@ -13,6 +13,8 @@ format:
         embed-resources: true
         css: "../assets/tutorial.css"
         show-solution: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -268,7 +270,8 @@ You can generate a layout based on the number of trips, or you can use the geogr
 
 ```{r}
 #| code-fold: true
-load("../data/bikes.rda")
+load(here::here("data/bikes.rda"))
+
 ggplot(bikes$stations, 
        aes(x=long, y=lat)) +
   geom_point()
@@ -279,99 +282,51 @@ ggplot(bikes$stations,
   xlab("") +
   coord_flip()
 
-# Check start and end the same
-starts <- bikes$trips |>
-  count(Start.station) |>
-  rename(station = Start.station,
-         nstart = n)
-ends <- bikes$trips |>
-  count(End.station) |>
-  rename(station = End.station,
-         nend = n)
-s_e <- full_join(starts, ends)
-# Not the same so need to fill
-miss1 <- s_e |>
-  filter(is.na(nstart)) |>
-  pull(station)
-miss2 <- s_e |>
-  filter(is.na(nend)) |>
-  pull(station)
-b_fill1 <- bikes$trips |>
-    filter(Start.station %in% miss2) |>
-    rename(Start.station = End.station,
-         End.station = Start.station) |>
-  mutate(n = 0, minlength = 0) |>
-  select(Start.station, End.station, n, minlength)
-b_fill2 <- bikes$trips |>
-    filter(End.station %in% miss1) |>
-    rename(Start.station = End.station,
-         End.station = Start.station) |>
-  mutate(n = 0, minlength = 0) |>
-  select(Start.station, End.station, n, minlength)
+trips <- bikes$trips |> 
+  tibble()
 
-bikes$trips <- bind_rows(bikes$trips, b_fill1, b_fill2)
-bikes_trips_full <- bikes$trips |>
-  select(Start.station, End.station, n) |>
-  mutate(Start.station = as.character(Start.station),
-         End.station = as.character(End.station)) |>
-  complete(Start.station, End.station, fill = list(n = 0))
+full_list <- expand_grid(Start.station = unique(trips$Start.station), 
+                         End.station = unique(trips$End.station)) |> 
+  left_join(trips,
+            by = c("Start.station" = "Start.station",
+                   "End.station" = "End.station")) |> 
+  mutate(n = replace_na(n, 0),
+         minlength = replace_na(n, 0))
 
-bike_order <- bikes_trips_full |>
-  group_by(Start.station) |>
-  summarise(n = sum(n)) |>
-  arrange(desc(n))
-  
-p <- bikes_trips_full |>
-  mutate(Start.station = factor(Start.station,
-              levels=bike_order$Start.station),
-         End.station = factor(End.station,
-              levels=bike_order$Start.station)) |>
+bike_level <- full_list |> 
+  group_by(Start.station) |> 
+  summarise(n = sum(n)) |> 
+  arrange(desc(n)) |> 
+  pull(Start.station)
+
+p <- full_list |> 
+  mutate(Start.station = factor(Start.station, levels = bike_level),
+         End.station = factor(End.station, levels = bike_level)) |> 
   ggplot( 
-       aes(x=Start.station,
-           y=End.station, fill=n)) +
+    aes(x = Start.station,
+        y = End.station, fill = n)) +
   geom_tile() +
-  scale_fill_continuous_sequential(palette="YlGnBu") +
-  theme(aspect.ratio=1,
-        axis.text = element_blank(),
+  scale_fill_continuous_sequential(palette = "YlGnBu") +
+  theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
         legend.position = "none")
-ggplotly(p, width=600, height=600)
 
-bikes_connect <- bikes_trips_full |> 
-  filter(n > 0) |>
-  mutate(Start.station = factor(Start.station,
-              levels=bike_order$Start.station),
-         End.station = factor(End.station,
-              levels=bike_order$Start.station)) |>
-  rename(from = Start.station, to = End.station) 
-bikes_graph <- bikes_connect |> as_tbl_graph() 
+ggplotly(p, width = 600, height = 600)
 
-bikes_g_plt <- ggraph(bikes_graph, layout = 'tree', circular=TRUE) + 
-  geom_edge_link() +
-  geom_node_point() 
+stations <- bikes$stations |> 
+  tibble() |> 
+  select(-id)
+  
+# graph data structure
+bikes_graph <- tbl_graph(nodes = stations, edges = trips)
 
-bikes_nodes <- tibble(
-  x = bikes_g_plt$data$x,
-  y = bikes_g_plt$data$y,
-  name = levels(bikes_connect$from))
-bikes_connect <- bikes_connect |>
-  mutate(from_num = as.numeric(from),
-         to_num = as.numeric(to))
-bikes_edges <- tibble(
-  x = bikes_g_plt$data$x[bikes_connect$from_num],
-  y = bikes_g_plt$data$y[bikes_connect$from_num],
-  xend = bikes_g_plt$data$x[bikes_connect$to_num],
-  yend = bikes_g_plt$data$y[bikes_connect$to_num],
-  n = bikes_connect$n
-)
-
-p2 <- ggplot() +
-  geom_point(data=bikes_nodes, 
-             aes(x=x, y=y, label=name)) +
-  geom_segment(data=bikes_edges, 
-               aes(x=x, y=y, xend=xend, yend=yend),
-               linewidth = 0.3) +
-  scale_color_viridis_c() +
+# kk layout
+bikes_graph |> 
+  ggraph(layout = "kk") +
+  geom_edge_link(aes(edge_alpha = n)) +
+  geom_node_point(aes(size = nbDocks)) +
+  geom_node_label(aes(label = name), size = 1.5, repel = TRUE,
+                  label.padding = 0.15) +
   theme(aspect.ratio=1,
         axis.text = element_blank(),
         axis.title = element_blank(),
@@ -379,7 +334,37 @@ p2 <- ggplot() +
         panel.background = element_rect(fill=NA, 
                                         colour="black"),
         legend.position = "none")
-ggplotly(p2, tooltip = "label", width=900, height=600)
+
+# Spatial layout
+bikes_graph |> 
+  ggraph(x = stations$long, y = stations$lat) +
+  geom_edge_link(aes(edge_alpha = n)) +
+  geom_node_point(aes(size = nbDocks)) +
+  geom_node_label(aes(label = name), size = 1.5, repel = TRUE,
+                  label.padding = 0.15) +
+  theme(aspect.ratio=1,
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        panel.background = element_rect(fill=NA, 
+                                        colour="black"),
+        legend.position = "none")
+
+# p2 <- ggplot() +
+#   geom_point(data=bikes_nodes, 
+#              aes(x=x, y=y, label=name)) +
+#   geom_segment(data=bikes_edges, 
+#                aes(x=x, y=y, xend=xend, yend=yend),
+#                linewidth = 0.3) +
+#   scale_color_viridis_c() +
+#   theme(aspect.ratio=1,
+#         axis.text = element_blank(),
+#         axis.title = element_blank(),
+#         axis.ticks = element_blank(),
+#         panel.background = element_rect(fill=NA, 
+#                                         colour="black"),
+#         legend.position = "none")
+# ggplotly(p2, tooltip = "label", width=900, height=600)
 ```
 :::
 
