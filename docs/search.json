@@ -3337,5 +3337,306 @@
     "title": "Week 8: Going beyond two variables, exploring high dimensions",
     "section": "Assignments",
     "text": "Assignments\n\nExercises 3 is due on Monday 22 September.\nQuiz 7 is due on Thursday 18 September.\nQuiz 8 is due on Thursday 25 September."
+  },
+  {
+    "objectID": "week7/slides.html#at-the-heart-of-quantitative-reasoning-is-a-single-question-compared-to-what",
+    "href": "week7/slides.html#at-the-heart-of-quantitative-reasoning-is-a-single-question-compared-to-what",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "At the heart of quantitative reasoning is a single question: Compared to what?",
+    "text": "At the heart of quantitative reasoning is a single question: Compared to what?\n -Edward Tufte"
+  },
+  {
+    "objectID": "week7/slides.html#making-comparisons",
+    "href": "week7/slides.html#making-comparisons",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Making comparisons",
+    "text": "Making comparisons\n\nGroups defined by strata labelled in categorical variables\nObservations in strata, same or different?\nIs there a baseline, or normal value?\nWhat are the dependencies in the way the data was collected?\nAre multiple samples recorded for the same individual, or recorded on different individuals?"
+  },
+  {
+    "objectID": "week7/slides.html#how-would-you-answer-these-questions",
+    "href": "week7/slides.html#how-would-you-answer-these-questions",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "How would you answer these questions?",
+    "text": "How would you answer these questions?\n\nAre housing prices increasing more in Sydney or Melbourne?\n\n\n\nIs the quoted price of the unit/apartment I might buy reasonable, or is it too high?\n\n\n\n\nAre you more at risk of MPox in Australia or Germany?\n\n\n\n\nIs the Alfred or Epworth hospital better for giving birth?\n\n\n\n\nIt’s hot and dry today, is the risk of bushfires too high to go hiking?"
+  },
+  {
+    "objectID": "week7/slides.html#comparing-strata",
+    "href": "week7/slides.html#comparing-strata",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Comparing strata",
+    "text": "Comparing strata"
+  },
+  {
+    "objectID": "week7/slides.html#case-study-melbournes-daily-maximum-temperature-12",
+    "href": "week7/slides.html#case-study-melbournes-daily-maximum-temperature-12",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Melbourne’s daily maximum temperature (1/2)",
+    "text": "Case study: Melbourne’s daily maximum temperature (1/2)\n\n📊dataR\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMelbourne’s daily maximum temperature from 1970 to 2020.\nWhat are the strata in temporal data?\n\n\nHow are the temperatures different across months?\nWhat about the temperature within a month?\n\n\n\n\n\n\ndf9 &lt;- read_csv(here::here(\"data\", \"melb_temp.csv\")) |&gt;\n  janitor::clean_names() |&gt;\n  rename(temp = maximum_temperature_degree_c) |&gt;\n  filter(!is.na(temp)) |&gt;\n  dplyr::select(year, month, day, temp)\nskimr::skim(df9)\n\n── Data Summary ────────────────────────\n                           Values\nName                       df9   \nNumber of rows             18310 \nNumber of columns          4     \n_______________________          \nColumn type frequency:           \n  character                2     \n  numeric                  2     \n________________________         \nGroup variables            None  \n\n── Variable type: character ────────────────────────────────\n  skim_variable n_missing complete_rate min max empty\n1 month                 0             1   2   2     0\n2 day                   0             1   2   2     0\n  n_unique whitespace\n1       12          0\n2       31          0\n\n── Variable type: numeric ──────────────────────────────────\n  skim_variable n_missing complete_rate   mean    sd     p0\n1 year                  0             1 1995.  14.5  1970  \n2 temp                  0             1   19.9  6.48    5.7\n     p25    p50    p75   p100 hist \n1 1983   1995   2008   2020   ▇▇▇▇▇\n2   14.8   18.6   23.6   46.8 ▃▇▃▁▁\n\n\n\n\n\nggplot(df9, aes(x=month, y=temp)) +\n  geom_violin(draw_quantiles=c(0.25, 0.5, 0.75), fill= \"#56B4E9\") +\n  labs(x = \"month\", y = \"max daily temp (°C)\") +\n  theme(aspect.ratio=0.5)"
+  },
+  {
+    "objectID": "week7/slides.html#case-study-melbournes-daily-maximum-temperature-22",
+    "href": "week7/slides.html#case-study-melbournes-daily-maximum-temperature-22",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: Melbourne’s daily maximum temperature (2/2)",
+    "text": "Case study: Melbourne’s daily maximum temperature (2/2)\n\n\n Why can we make the comparison across months?\n\nBecause it is the same location, and same years, for each month subset.\n\n\n Is some variation in temperature each month due to changing climate?\nHow would you check this?\n\n\n\n\n\nCode\ndf9 |&gt;\n  group_by(year, month) |&gt;\n  summarise(temp = mean(temp)) |&gt;\n  ggplot(aes(x=year, y=temp)) +\n  geom_point(alpha=0.5) +\n  geom_smooth(se=F) + \n  facet_wrap(~month, ncol=4, scales=\"free_y\") +\n  scale_x_continuous(\"year\", breaks=seq(1970, 2020, 20)) +\n  ylab(\"max daily temp (°C)\") +\n  theme(aspect.ratio=0.7)\n\n\n\n\n\n\n\n\n\nWhat is scales=\"free_y\" for?"
+  },
+  {
+    "objectID": "week7/slides.html#case-study-olive-oils-14",
+    "href": "week7/slides.html#case-study-olive-oils-14",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: olive oils (1/4)",
+    "text": "Case study: olive oils (1/4)\n\n📊dataR\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe olive oil data consists of the percentage composition of 8 fatty acids (palmitic, palmitoleic, stearic, oleic, linoleic, linolenic, arachidic, eicosenoic) found in the lipid fraction of 572 Italian olive oils.\nThere are 9 collection areas, 4 from southern Italy (North and South Apulia, Calabria, Sicily), two from Sardinia (Inland and Coastal) and 3 from northern Italy (Umbria, East and West Liguria).\n\n\n\n\n\ndata(olives, package = \"classifly\")\ndf2 &lt;- olives |&gt;\n  mutate(Region = factor(Region, labels = c(\"South\", \"Sardinia\", \"North\")))\n\nskimr::skim(df2)\n\n── Data Summary ────────────────────────\n                           Values\nName                       df2   \nNumber of rows             572   \nNumber of columns          10    \n_______________________          \nColumn type frequency:           \n  factor                   2     \n  numeric                  8     \n________________________         \nGroup variables            None  \n\n── Variable type: factor ───────────────────────────────────\n  skim_variable n_missing complete_rate ordered n_unique\n1 Region                0             1 FALSE          3\n2 Area                  0             1 FALSE          9\n  top_counts                         \n1 Sou: 323, Nor: 151, Sar: 98        \n2 Sou: 206, Inl: 65, Cal: 56, Umb: 51\n\n── Variable type: numeric ──────────────────────────────────\n  skim_variable n_missing complete_rate   mean    sd   p0\n1 palmitic              0             1 1232.  169.   610\n2 palmitoleic           0             1  126.   52.5   15\n3 stearic               0             1  229.   36.7  152\n4 oleic                 0             1 7312.  406.  6300\n5 linoleic              0             1  981.  243.   448\n6 linolenic             0             1   31.9  13.0    0\n7 arachidic             0             1   58.1  22.0    0\n8 eicosenoic            0             1   16.3  14.1    1\n     p25   p50    p75 p100 hist \n1 1095   1201  1360   1753 ▁▂▇▆▁\n2   87.8  110   169.   280 ▂▇▅▃▁\n3  205    223   249    375 ▂▇▃▁▁\n4 7000   7302. 7680   8410 ▁▇▇▇▁\n5  771.  1030  1181.  1470 ▃▅▃▇▃\n6   26     33    40.2   74 ▂▅▇▂▁\n7   50     61    70    105 ▂▁▇▇▂\n8    2     17    28     58 ▇▃▅▂▁\n\n\n\n\n\ng1 &lt;-\n  df2 |&gt;\n  mutate(Area = fct_reorder(Area, palmitic)) |&gt;\n  ggplot(aes(Area, palmitic, color = Region)) +\n  geom_boxplot() +\n  scale_color_discrete_divergingx(palette=\"Zissou 1\") +\n  guides(color = FALSE, x = guide_axis(n.dodge = 2)) +\n  theme(aspect.ratio=0.5)\n\ng2 &lt;- ggplot(df2, aes(Region, palmitic, color = Region)) +\n  geom_boxplot() +\n  scale_color_discrete_divergingx(palette=\"Zissou 1\") +\n  guides(color = FALSE) +\n  theme(axis.text = element_blank())\n\ng3 &lt;- ggplot(df2, aes(palmitic, color = Region)) +\n  geom_density() +\n  scale_color_discrete_divergingx(palette=\"Zissou 1\") +\n  guides(color = FALSE) +\n  theme(axis.text = element_blank())\n\ng4 &lt;- ggplot(df2, aes(palmitic, color = Region)) +\n  stat_ecdf() +\n  scale_color_discrete_divergingx(palette=\"Zissou 1\") +\n  guides(color = FALSE) +\n  theme(axis.text = element_blank())\n\ng5 &lt;- g2 + g3 + g4 + plot_layout(ncol=3)\n  \ng1 + g5 + plot_layout(ncol=1, heights=c(2,1),\n  guides = \"collect\")"
+  },
+  {
+    "objectID": "week7/slides.html#case-study-olive-oils-24",
+    "href": "week7/slides.html#case-study-olive-oils-24",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: olive oils (2/4)",
+    "text": "Case study: olive oils (2/4)\n\n📊R\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nColour is generally good to differentiate strata but if there are too many categories then it becomes hard to compare.\n\n\n\n\nggplot(olives, aes(palmitoleic, palmitic, color = Area)) +\n  geom_point() +\n  scale_color_discrete_divergingx(palette=\"Zissou 1\")"
+  },
+  {
+    "objectID": "week7/slides.html#case-study-olive-oils-34",
+    "href": "week7/slides.html#case-study-olive-oils-34",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: olive oils (3/4)",
+    "text": "Case study: olive oils (3/4)\n\n📊R\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nIt can be hard to compare across plots, because we need to remember what the previous pattern was when focusing on the new cell.\n\n\n\n\nggplot(olives, aes(palmitoleic, palmitic, color = Area)) +\n  geom_point() +\n  facet_wrap(~Area) +\n  scale_color_discrete_divergingx(palette=\"Zissou 1\") +\n  guides(color = FALSE)"
+  },
+  {
+    "objectID": "week7/slides.html#case-study-olive-oils-44",
+    "href": "week7/slides.html#case-study-olive-oils-44",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: olive oils (4/4)",
+    "text": "Case study: olive oils (4/4)\n\n📊R\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nComparison to all, by putting a shadow of all the data underneath the subset in each cell.\n\n\n\n\nggplot(olives, aes(palmitoleic, palmitic)) +\n  geom_point(data = dplyr::select(olives, -Area), color = \"gray\") +\n  geom_point(aes(color = Area), size=2) +\n  facet_wrap(~Area) +\n  scale_color_discrete_divergingx(palette=\"Zissou 1\") +\n  guides(color = FALSE)"
+  },
+  {
+    "objectID": "week7/slides.html#strata-from-quantitative-variable",
+    "href": "week7/slides.html#strata-from-quantitative-variable",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Strata from quantitative variable",
+    "text": "Strata from quantitative variable\n\n\nThe coplot divides the numerical variable into chunks, and facets by these. The chunks traditionally we overlapping.\n Becker, Cleveland and Shyu, (1996); Cleveland (1993)\n\n\n\nCode\n# Sizing of figure is difficult, so save it\nlibrary(ggcleveland)\nolives_sard &lt;- df2 |&gt;\n  filter(Region == \"Sardinia\")\np &lt;- gg_coplot(olives_sard,\n  x=arachidic, y=oleic, \n  faceting = linoleic,\n  number_bins = 6, \n  overlap = 1/4) +\n  theme(aspect.ratio=0.5)"
+  },
+  {
+    "objectID": "week7/slides.html#famous-example-trade",
+    "href": "week7/slides.html#famous-example-trade",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Famous example: trade",
+    "text": "Famous example: trade\n\n📊dataR\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe export from England to the East Indies and the import to England from the East Indies in millions of pounds (A).\nImport and export figures are easier to compare by plotting the difference like in (B).\nRelative difference may be more of an interest: (C) plots the relative difference with respect to the average of export and import values.\nThe red area correspond to War of the Spanish Succession (1701-14), Seven Years’ War (1756-63) and the American Revolutionary War (1775-83).\n\n\n\n\n\ndata(EastIndiesTrade, package = \"GDAdata\")\nskimr::skim(EastIndiesTrade)\n\n── Data Summary ────────────────────────\n                           Values         \nName                       EastIndiesTrade\nNumber of rows             81             \nNumber of columns          3              \n_______________________                   \nColumn type frequency:                    \n  numeric                  3              \n________________________                  \nGroup variables            None           \n\n── Variable type: numeric ──────────────────────────────────\n  skim_variable n_missing complete_rate  mean    sd   p0\n1 Year                  0             1 1740   23.5 1700\n2 Exports               0             1  518. 421.   100\n3 Imports               0             1 1005. 320.   460\n   p25  p50  p75 p100 hist \n1 1720 1740 1760 1780 ▇▇▇▇▇\n2  145  370  840 1395 ▇▂▃▂▂\n3  835  975 1000 1550 ▃▃▇▁▅\n\n\n\n\n\ng1 &lt;- ggplot(EastIndiesTrade, aes(Year, Exports)) +\n  annotate(\"rect\",\n    xmin = 1701, xmax = 1714,\n    ymin = -Inf, ymax = Inf,\n    fill = \"red\", alpha = 0.3\n  ) +\n  annotate(\"rect\",\n    xmin = 1756, xmax = 1763,\n    ymin = -Inf, ymax = Inf,\n    fill = \"red\", alpha = 0.3\n  ) +\n  annotate(\"rect\",\n    xmin = 1775, xmax = 1780,\n    ymin = -Inf, ymax = Inf,\n    fill = \"red\", alpha = 0.3\n  ) +\n  geom_line(color = \"#339933\", size = 2) +\n  geom_line(aes(Year, Imports), color = \"red\", size = 2) +\n  geom_ribbon(aes(ymin = Exports, ymax = Imports), fill = \"gray\") +\n  labs(y = \"&lt;span style='color:#339933'&gt;Export&lt;/span&gt;/&lt;span style='color:red'&gt;Import&lt;/span&gt;\", tag = \"(A)\") +\n  theme(aspect.ratio=0.7, axis.title.y = ggtext::element_markdown())\n\ng2 &lt;- ggplot(EastIndiesTrade, aes(Year, Imports - Exports)) +\n  annotate(\"rect\",\n    xmin = 1701, xmax = 1714,\n    ymin = -Inf, ymax = Inf,\n    fill = \"red\", alpha = 0.3\n  ) +\n  annotate(\"rect\",\n    xmin = 1756, xmax = 1763,\n    ymin = -Inf, ymax = Inf,\n    fill = \"red\", alpha = 0.3\n  ) +\n  annotate(\"rect\",\n    xmin = 1775, xmax = 1780,\n    ymin = -Inf, ymax = Inf,\n    fill = \"red\", alpha = 0.3\n  ) +\n  geom_line(size = 2) +\n  labs(tag = \"(B)\") +\n  theme(aspect.ratio=0.7)\n\ng3 &lt;- ggplot(EastIndiesTrade, aes(Year, (Imports - Exports) / (Exports + Imports) * 2)) +\n  annotate(\"rect\",\n    xmin = 1701, xmax = 1714,\n    ymin = -Inf, ymax = Inf,\n    fill = \"red\", alpha = 0.3\n  ) +\n  annotate(\"rect\",\n    xmin = 1756, xmax = 1763,\n    ymin = -Inf, ymax = Inf,\n    fill = \"red\", alpha = 0.3\n  ) +\n  annotate(\"rect\",\n    xmin = 1775, xmax = 1780,\n    ymin = -Inf, ymax = Inf,\n    fill = \"red\", alpha = 0.3\n  ) +\n  geom_line(color = \"#001a66\", size = 2) +\n  labs(y = \"Relative difference\", tag = \"(C)\") +\n  theme(aspect.ratio=0.7)\n\ng1 + g1 + g2 + g3 + plot_layout(ncol=2)"
+  },
+  {
+    "objectID": "week7/slides.html#paired-samples",
+    "href": "week7/slides.html#paired-samples",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Paired samples",
+    "text": "Paired samples"
+  },
+  {
+    "objectID": "week7/slides.html#pairing-adjusts-for-individual-differences",
+    "href": "week7/slides.html#pairing-adjusts-for-individual-differences",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Pairing adjusts for individual differences",
+    "text": "Pairing adjusts for individual differences\nIf we were wanting to measure the effect of incorporating a data analytics competition on student learning which is the best design?\n\n\nMETHOD A\n\nDivide students into two groups. Make sure that each group has similar types of students, so both groups are as similar as possible.\nOne group gets an extra traditional assignment, and the other group participates in a data competition.\nEach student takes an exam on the content being taught.\nThe scores are compared using side-by-side boxplots and a two-sample permutation test\n\n\nMETHOD B\n\nEach student takes an exam on the content being taught. We’ll call this their BEFORE score.\nDivide students into two groups. Make sure that each group has similar types of students, so both groups are as similar as possible.\nOne group gets an extra traditional assignment, and the other group participates in a data competition.\nEach student takes an exam on the content being taught. We’ll call this their AFTER score.\nThe difference between the before and after scores are compared using side-by-side boxplots and a two-sample permutation test\n\n\n\nWhat other modifications to the design can you think of?"
+  },
+  {
+    "objectID": "week7/slides.html#case-study-choropleth-vs-hexagon-tile-13",
+    "href": "week7/slides.html#case-study-choropleth-vs-hexagon-tile-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: choropleth vs hexagon tile (1/3)",
+    "text": "Case study: choropleth vs hexagon tile (1/3)\nThe goal is to demonstrate that the hexagon tile map is better than the choropleth for communicating disease incidence across Australia.\n\n\n\n\n\n\n\n\n\n\n\nThe choropleth fills geographic regions (LGAs, SA2s, …) with colour corresponding to the thyroid cancer relative difference from the overall mean. The hexagons, are also filled this way.\n\nKobakian et al"
+  },
+  {
+    "objectID": "week7/slides.html#case-study-choropleth-vs-hexagon-tile-23",
+    "href": "week7/slides.html#case-study-choropleth-vs-hexagon-tile-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: choropleth vs hexagon tile (2/3)",
+    "text": "Case study: choropleth vs hexagon tile (2/3)\n\n\n\nEach participant can only see the (same) data once.\nNeed to test for different types of spatial patterns.\nNeed to repeat measure each type of pattern, and each participant.\n\nPairing is done on the data set. Four different data sets used for each pattern.\n\nTrial 1\nParticipant 1\n\nParticipant 2\n\n\n\nTrial 2\nParticipant 1\n\nParticipant 2"
+  },
+  {
+    "objectID": "week7/slides.html#case-study-choropleth-vs-hexagon-tile-33",
+    "href": "week7/slides.html#case-study-choropleth-vs-hexagon-tile-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: choropleth vs hexagon tile (3/3)",
+    "text": "Case study: choropleth vs hexagon tile (3/3)\n\n\nIgnore the pairing\n\n\nCode\nhstudy &lt;- read_csv(\"https://raw.githubusercontent.com/srkobakian/experiment/master/data/DAT_HexmapPilotData_V1_20191115.csv\")\nhstudy |&gt;\n  filter(trend == \"three cities\") |&gt;\n  ggplot(aes(x=detect)) + geom_bar() + facet_wrap(~type, ncol=2)\n\n\n\n\n\n\n\n\n\nLooks like detection rate about 50-50 for hexagon tile map, which is better than almost zero for choropleth map.\n\n\nAccount for the pairing\n\n\nCode\nhstudy |&gt;\n  filter(trend == \"three cities\") |&gt;\n  select(type, replicate, detect) |&gt;\n  group_by(type, replicate) |&gt;\n  summarise(pdetect = length(detect[detect == 1])/length(detect)) |&gt;\n  ggplot(aes(x=type, y=pdetect)) +\n    geom_point() +\n    geom_line(aes(group=replicate)) +\n    ylim(c(0,1)) +\n    xlab(\"\") +\n    ylab(\"Proportion detected\")\n\n\n\n\n\n\n\n\n\nFor each data set, the hexagon tile map performed better."
+  },
+  {
+    "objectID": "week7/slides.html#normalising",
+    "href": "week7/slides.html#normalising",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Normalising",
+    "text": "Normalising"
+  },
+  {
+    "objectID": "week7/slides.html#am-i-short",
+    "href": "week7/slides.html#am-i-short",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Am I short?",
+    "text": "Am I short?\n\n\nI am 165 cms tall.\n\n\n\nCode\nggplot(df22, aes(x=height)) +\n  geom_histogram(breaks = seq(132.5, 205, 5),\n    colour=\"white\") +\n  geom_vline(xintercept = 165, colour=\"#D55E00\",\n    linewidth=2)\n\n\n\n\n\n\n\n\n\n\n\n\nBut, there are strata in humans, so compared to what would be better?\n\n\n\n\nCode\nggplot(df22, aes(x=height)) +\n  geom_histogram(breaks = seq(137.5, 205, 5),\n    colour=\"white\") +\n  geom_vline(xintercept = 165, colour=\"#D55E00\",\n    linewidth=2) +\n  facet_wrap(~sex, ncol=3, scales=\"free_y\")\n\n\n\n\n\n\n\n\n\n\n\nNope, I’m average height."
+  },
+  {
+    "objectID": "week7/slides.html#normalising-1",
+    "href": "week7/slides.html#normalising-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Normalising",
+    "text": "Normalising\n\n\nWithin each strata convert values to a z-score.\n\\[ z = \\frac{x-\\bar{x}}{s} \\]\n\ndf22 &lt;- df22 |&gt;\n  group_by(sex) |&gt;\n  mutate(zscore = (height -\n    mean(height))/sd(height))\n\n\n\n\n\n\n\n\n\n\n\n\nfemales: \\(\\bar{x}=\\) 164.43, \\(s=\\) 6.41\nmales: \\(\\bar{x}=\\) 174.23, \\(s=\\) 8.71\nunknown: \\(\\bar{x}=\\) 165.74, \\(s=\\) 18.15\n\nMy z-score is 0.09.\n\n\nRob’s height is 170 cms. His z-score is -0.49.\nI am relatively TALLER than Rob."
+  },
+  {
+    "objectID": "week7/slides.html#baselines",
+    "href": "week7/slides.html#baselines",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Baselines",
+    "text": "Baselines"
+  },
+  {
+    "objectID": "week7/slides.html#relative-to-a-baseline",
+    "href": "week7/slides.html#relative-to-a-baseline",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Relative to a baseline",
+    "text": "Relative to a baseline\n\n\n\n\nCode\ndata(anorexia, package=\"MASS\")\nggplot(data=anorexia, \n aes(x=Prewt, y=Postwt, \n    colour=Treat)) + \n coord_equal() +\n xlim(c(70, 110)) + ylim(c(70, 110)) +\n xlab(\"Pre-treatment weight (lbs)\") +  \n ylab(\"Post-treatment weight (lbs)\") +\n geom_abline(intercept=0, slope=1,  \n   colour=\"grey80\", linewidth=1.25) + \n geom_density2d() + \n geom_point(size=3) +\n facet_grid(.~Treat) +\n theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\n\n\nPrimary comparison is before treatment weight, and after treatment weight.\nThree different treatments.\n\nUnwin, Hofmann and Cook (2013)\n\n\n\nCode\nggplot(data=anorexia, \n  aes(x=Prewt, colour=Treat,\n    y=(Postwt-Prewt)/Prewt*100)) + \n  xlab(\"Pre-treatment weight (lbs)\") +  \n  ylab(\"Percent increase in weight\") +\n  geom_hline(yintercept=0, linewidth=1.25, \n    colour=\"grey80\") + \n  geom_point(size=3) +   \n  facet_grid(.~Treat) +\n theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\n\n\nCompute the difference\nCompare difference relative to before weight\nBefore weight is used as the baseline"
+  },
+  {
+    "objectID": "week7/slides.html#proportions",
+    "href": "week7/slides.html#proportions",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Proportions",
+    "text": "Proportions"
+  },
+  {
+    "objectID": "week7/slides.html#case-study-tuberculosis-13",
+    "href": "week7/slides.html#case-study-tuberculosis-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: tuberculosis (1/3)",
+    "text": "Case study: tuberculosis (1/3)\n\n\n\nCode\ntb_oz |&gt;\n  ggplot(aes(x=year, y=count, fill=sex)) +\n    geom_col(position=\"fill\") +\n    scale_fill_discrete_divergingx(palette = \"Zissou 1\") +\n    facet_wrap(~age, ncol=6) +\n    xlab(\"\") + ylab(\"proportion\")\n\n\n\n\n\n\n\n\n\n\nPrimary comparison is sex, relative to yearly trend."
+  },
+  {
+    "objectID": "week7/slides.html#case-study-tuberculosis-23",
+    "href": "week7/slides.html#case-study-tuberculosis-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: tuberculosis (2/3)",
+    "text": "Case study: tuberculosis (2/3)\n\n\n\nCode\ntb_oz |&gt;\n  ggplot(aes(x=year, y=count, fill=age)) +\n    geom_col(position=\"fill\") +\n    scale_fill_discrete_divergingx(palette = \"Zissou 1\") +\n    facet_wrap(~sex, ncol=2) +\n    xlab(\"\") + ylab(\"proportion\")\n\n\n\n\n\n\n\n\n\n\nPrimary comparison is age, relative to yearly trend."
+  },
+  {
+    "objectID": "week7/slides.html#case-study-tuberculosis-33",
+    "href": "week7/slides.html#case-study-tuberculosis-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Case study: tuberculosis (3/3)",
+    "text": "Case study: tuberculosis (3/3)\n\n\n\nCode\ntb_oz |&gt;\n  ggplot(aes(x=year, y=count, fill=age)) +\n    geom_col() +\n    scale_fill_discrete_divergingx(palette = \"Zissou 1\") +\n    facet_grid(sex~age, scales=\"free\") +\n    xlab(\"\") + ylab(\"count\") +\n    theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\n\n\nPrimary comparison is year trend, separately for age and sex."
+  },
+  {
+    "objectID": "week7/slides.html#inference",
+    "href": "week7/slides.html#inference",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Inference",
+    "text": "Inference"
+  },
+  {
+    "objectID": "week7/slides.html#bootstrap-confidence-intervals",
+    "href": "week7/slides.html#bootstrap-confidence-intervals",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Bootstrap confidence intervals",
+    "text": "Bootstrap confidence intervals\n\n📊dataR\n\n\n\n\n\nConfidence intervals show what might happen to estimates with different samples,\nwith the same dependence structure.\nSample the current sample, but don’t change anything else.\nReason for sampling with replacement, is to keep sample size the same - we know that variance decreases with smaller sample size.\n\n For choropleth vs hexagon tiles, sample participants with replacement.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nhstudy |&gt; filter(trend == \"three cities\") |&gt; count(type, replicate)\n\n# A tibble: 8 × 3\n  type      replicate     n\n  &lt;chr&gt;         &lt;dbl&gt; &lt;int&gt;\n1 Geography         9    10\n2 Geography        10    10\n3 Geography        11    11\n4 Geography        12    11\n5 Hexagons          9    11\n6 Hexagons         10    11\n7 Hexagons         11    10\n8 Hexagons         12    10\n\n\n\n\n\nhstudy_sub &lt;- hstudy |&gt;\n  filter(trend == \"three cities\") |&gt;\n  select(id, type, replicate, detect) \n\n# Function to compute proportions\nprop_func &lt;- function(df) {\n  df_smry &lt;- df |&gt;\n    group_by(type, replicate) |&gt;\n    summarise(pdetect = length(detect[detect == 1])/length(detect)) |&gt; \n    ungroup() |&gt;\n    pivot_wider(names_from = c(type, replicate),\n               values_from = pdetect)\n  df_smry\n}\n\nnboots &lt;- 100\nset.seed(1023)\nbsamps &lt;- tibble(samp=\"0\", prop_func(hstudy_sub))\nfor (i in 1:nboots) {\n  samp_id &lt;- sort(sample(unique(hstudy_sub$id),\n    replace=TRUE))\n  hs_b &lt;- NULL\n  for (j in samp_id) {\n    x &lt;- hstudy_sub |&gt;\n      filter(id == j)\n    hs_b &lt;- bind_rows(hs_b, x)\n  }\n  bsamps &lt;- bind_rows(bsamps,\n    tibble(samp=as.character(i), prop_func(hs_b)))\n}\n\nbsamps_long &lt;- bsamps |&gt;\n  pivot_longer(Geography_9:Hexagons_12, \n    names_to = \"treatments\", \n    values_to = \"pdetect\") |&gt; \n  separate(treatments, into=c(\"type\", \"replicate\"))\n\nggplot() +\n    geom_line(data=filter(bsamps_long, samp != \"0\"),\n      aes(x=type, \n          y=pdetect, \n          group=samp),\n     linewidth=0.5, alpha=0.6, colour=\"grey70\") +\n    geom_line(data=filter(bsamps_long, \n                     samp == \"0\"),\n      aes(x=type, \n          y=pdetect, \n          group=samp),\n     linewidth=2) +\n    facet_wrap(~replicate) +\n    ylim(c(0,1)) +\n    xlab(\"\") +\n    ylab(\"Proportion detected\")"
+  },
+  {
+    "objectID": "week7/slides.html#lineups",
+    "href": "week7/slides.html#lineups",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Lineups",
+    "text": "Lineups\n\n\n\nLineups show what might happen to estimates with null samples, where (by construction) there is no relationship.\nThus you need to break dependence structure.\n\n For choropleth vs hexagon tiles, randomise the type of plot each participant received. This breaks any dependence between type and detection rate.\n\n\n\nCode\nn_nulls &lt;- 11\nset.seed(1110)\nlsamps &lt;- tibble(samp=\"0\", prop_func(hstudy_sub))\nfor (i in 1:n_nulls) {\n\n  hs_b &lt;- hstudy_sub |&gt;\n    group_by(id) |&gt;\n    mutate(type = sample(type)) |&gt;\n    ungroup()\n  lsamps &lt;- bind_rows(lsamps,\n    tibble(samp=as.character(i), prop_func(hs_b)))\n}\n\nlsamps_long &lt;- lsamps |&gt;\n  pivot_longer(Geography_9:Hexagons_12, \n    names_to = \"treatments\", \n    values_to = \"pdetect\") |&gt; \n  separate(treatments, into=c(\"type\", \"replicate\"))\n\nlsamps_long |&gt; ggplot() +\n    geom_line(aes(x=type, \n          y=pdetect, \n          group=replicate)) +\n    facet_wrap(~samp, ncol=4) +\n    ylim(c(0,1)) +\n    xlab(\"\") +\n    ylab(\"Proportion detected\")"
+  },
+  {
+    "objectID": "week7/slides.html#take-aways",
+    "href": "week7/slides.html#take-aways",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Take-aways",
+    "text": "Take-aways\n\nIn comparison to what is especially important for exploring observational data.\nAvoid reporting spurious associations by accounting for dependencies correctly.\nAdjust for individual variation, by\n\npairing (or multiple repeated measures)\nrelative to a baseline\non a standard scale\n\nDetermining in comparison to what can be hard."
+  },
+  {
+    "objectID": "week7/slides.html#resources",
+    "href": "week7/slides.html#resources",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Resources",
+    "text": "Resources\n\nWilke (2019) Fundamentals of Data Visualization Chapters 9, 10, 11\nUnwin (2015) Graphical Data Analysis with R Chapter 10"
+  },
+  {
+    "objectID": "week7/tutorial.html",
+    "href": "week7/tutorial.html",
+    "title": "ETC5521 Tutorial 7",
+    "section": "",
+    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
+  },
+  {
+    "objectID": "week7/tutorial.html#objectives",
+    "href": "week7/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 7",
+    "section": "",
+    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
+  },
+  {
+    "objectID": "week7/tutorial.html#preparation",
+    "href": "week7/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 7",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nThe reading for this week is Wilke (2019) Chapters 9, 10.2-4, 11.2.\nComplete the weekly quiz, before the deadline!\nInstall the following R-packages if you do not have them already:\n\n\ninstall.packages(c(\"colorspace\", \"lvplot\", \"patchwork\", \"janitor\", \"lubridate\", \"vcd\", \"ggbeeswarm\", \"kableExtra\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week7/tutorial.html#exercises",
+    "href": "week7/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 7",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\n\nExercise 1: Melbourne daily maximum temperature\nThe csv file melb_temp_2023-09-08.csv contains data on the daily maximum temperature from 1970 to 2023 collected from the weather station at Melbourne Airport. Use this to answer the following questions, with the additional information that in Australia:\n\nSummer is from the beginning of December to the end of February,\nAutumn is from the beginning of March to the end of May,\nWinter is from the beginning of June to the end of August, and\nSpring is from the beginning of September to the end of November.\n\n\nThere are four plots below. Write the code to make them yourself. Then think about the three questions (i), (ii) or (iii) below.\n\n\n\nAre there any winters where the daily maximum temperature is different to winter in other years?\n\n\nWhat is the general pattern of maximum daily temperatures in winter?\n\n\nIs there evidence that winters in Melbourne are getting warmer?\n\n\nWhich plot best matches each question? If none of them work, for any particular question, make an alternative plot. Also, if any of the plots don’t help answer any of the questions, think about a question that they might answer.\n\nMake a transformation of the data and a new plot with this variable, that will allow a more direct comparison to answer question (iii).\n\nThe data can be read and processed using this code:\n\nmelb_df &lt;- read_csv(\"https://raw.githubusercontent.com/numbats/ddde/main/data/melb_temp_2023-09-08.csv\") |&gt;\n  clean_names() |&gt;\n  rename(temp = maximum_temperature_degree_c) |&gt;\n  dplyr::filter(!is.na(temp)) |&gt;\n  dplyr::select(year, month, day, temp) |&gt;\n  mutate(\n    date = as.Date(paste(year, month, day, sep = \"-\")))\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 2: Evidence of Simpson’s paradox?\nCheck the following data set for evidence of Simpsons Paradox, in the sense that if group2 == \"X\" the pass rate is higher.\n\ndf &lt;- tribble(\n  ~group1, ~group2, ~result, ~count,\n  \"A\", \"X\", \"pass\", 100,\n  \"B\", \"X\", \"pass\", 50,\n  \"C\", \"X\", \"pass\", 25,\n  \"A\", \"X\", \"fail\", 10,\n  \"B\", \"X\", \"fail\", 20,\n  \"C\", \"X\", \"fail\", 20,\n  \"A\", \"Y\", \"pass\", 10,\n  \"B\", \"Y\", \"pass\", 70,\n  \"C\", \"Y\", \"pass\", 15,\n  \"A\", \"Y\", \"fail\", 20,\n  \"B\", \"Y\", \"fail\", 40,\n  \"C\", \"Y\", \"fail\", 30)"
+  },
+  {
+    "objectID": "week7/tutorial.html#finishing-up",
+    "href": "week7/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 7",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week7/tutorialsol.html",
+    "href": "week7/tutorialsol.html",
+    "title": "ETC5521 Tutorial 7",
+    "section": "",
+    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
+  },
+  {
+    "objectID": "week7/tutorialsol.html#objectives",
+    "href": "week7/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 7",
+    "section": "",
+    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
+  },
+  {
+    "objectID": "week7/tutorialsol.html#preparation",
+    "href": "week7/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 7",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nThe reading for this week is Wilke (2019) Chapters 9, 10.2-4, 11.2.\nComplete the weekly quiz, before the deadline!\nInstall the following R-packages if you do not have them already:\n\n\ninstall.packages(c(\"colorspace\", \"lvplot\", \"patchwork\", \"janitor\", \"lubridate\", \"vcd\", \"ggbeeswarm\", \"kableExtra\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week7/tutorialsol.html#exercises",
+    "href": "week7/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 7",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\n\nExercise 1: Melbourne daily maximum temperature\nThe csv file melb_temp_2023-09-08.csv contains data on the daily maximum temperature from 1970 to 2023 collected from the weather station at Melbourne Airport. Use this to answer the following questions, with the additional information that in Australia:\n\nSummer is from the beginning of December to the end of February,\nAutumn is from the beginning of March to the end of May,\nWinter is from the beginning of June to the end of August, and\nSpring is from the beginning of September to the end of November.\n\n\nThere are four plots below. Write the code to make them yourself. Then think about the three questions (i), (ii) or (iii) below.\n\n\n\nAre there any winters where the daily maximum temperature is different to winter in other years?\n\n\nWhat is the general pattern of maximum daily temperatures in winter?\n\n\nIs there evidence that winters in Melbourne are getting warmer?\n\n\nWhich plot best matches each question? If none of them work, for any particular question, make an alternative plot. Also, if any of the plots don’t help answer any of the questions, think about a question that they might answer.\n\nMake a transformation of the data and a new plot with this variable, that will allow a more direct comparison to answer question (iii).\n\nThe data can be read and processed using this code:\n\nmelb_df &lt;- read_csv(\"https://raw.githubusercontent.com/numbats/ddde/main/data/melb_temp_2023-09-08.csv\") |&gt;\n  clean_names() |&gt;\n  rename(temp = maximum_temperature_degree_c) |&gt;\n  dplyr::filter(!is.na(temp)) |&gt;\n  dplyr::select(year, month, day, temp) |&gt;\n  mutate(\n    date = as.Date(paste(year, month, day, sep = \"-\")))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nCode for the plots is:\n\n\n# Plot (A)\nwinter_df &lt;- melb_df |&gt;\n  dplyr::filter(month %in% c(\"06\", \"07\", \"08\")) |&gt;\n  mutate(winter_day = as.numeric(\n    difftime(date, \n             ymd(paste0(year, \"-06\", \"-01\")), \n             units=\"days\")))\np_a &lt;- ggplot(winter_df, aes(x=winter_day, y=temp)) +\n  geom_point(\n    data = dplyr::select(winter_df, -year),\n    color = \"gray\", size = 0.1\n  ) +\n  geom_line() +\n  facet_wrap(~year) +\n  labs(\n    tag = \"(A)\", x = \"\",\n    y = \"Temperature (°C)\"\n  ) + \n  scale_x_continuous(\"\", breaks = c(0, 31, 62, 92), labels=c(\"J\", \"J\", \"A\", \"S\"))\n\n# Plot (B)\np_b &lt;- ggplot(winter_df, aes(x=year, y=temp)) +\n  #geom_boxplot() +\n  geom_jitter(width=0.1, height=0, alpha=0.2) +\n  stat_summary(fun=\"mean\", geom=\"point\", colour=\"orangered\", size=3) +\n  geom_smooth(colour=\"red\") +\n  labs(\n    tag = \"(B)\", x = \"Year\",\n    y = \"Temperature (°C)\"\n  ) \n\n# Plot (C)\np_c &lt;- winter_df |&gt;\n  mutate(year = fct_reorder(as.factor(year), temp)) |&gt;\n  ggplot(aes(temp, year)) +\n  # geom_boxplot(aes(color = as.numeric(as.character(year)))) +\n  geom_quasirandom(aes(x=as.factor(year), y=temp,\n                       colour = as.numeric(as.character(year)))) +\n  labs(\n    tag = \"(C)\", x = \"Year\",\n    y = \"Temperature (°C)\",\n    color = \"Year\"\n  ) +\n  scale_color_continuous_divergingx(mid = 1995) +\n  coord_flip()\n\n# Plot (D)\np_d &lt;- winter_df |&gt;\n  mutate(pre1995 = ifelse(year &lt; 1995, \"&lt; 1995\", \"&gt; 1995\")) |&gt;\n  ggplot(aes(x=pre1995, y=temp)) +\n  geom_lv(aes(fill=after_stat(LV))) +\n  labs(\n    tag = \"(D)\", y = \"Temperature (°C)\",\n    x = \"Time Period\"\n  ) +\n  scale_fill_discrete_divergingx(palette = \"Fall\")\n\np_a + p_b + p_c + p_d + \n  plot_layout(ncol=1, heights=c(5,3,5,3))\n\nPlot A is the only one that allows examining the pattern for winter each year, which helps to address questions (i) and (ii).\nIn answer to (i) I don’t see any year that is especially different from any other year.\nThere is a lot of variability in the patterns for winter. For most years it appears to be fairly flat with an increase in August. However, some years temperature remain cool in August.\nTo better study the winter pattern it might be better to use a smoother model instead of connecting the day-to-day measurements with a line.\n\nggplot(winter_df, aes(x=winter_day, y=temp)) +\n  geom_point(\n    data = dplyr::select(winter_df, -year),\n    color = \"gray\", size = 0.1\n  ) +\n  geom_smooth(se=F, colour=\"black\") +\n  facet_wrap(~year) +\n  labs(\n    tag = \"(E)\", x = \"\",\n    y = \"Temperature (°C)\"\n  ) + \n  scale_x_continuous(\"\", breaks = c(0, 31, 62, 92), labels=c(\"J\", \"J\", \"A\", \"S\"))\n\n\n\n\n\n\n\n\nFrom plot E, it’s a bit easier to see that overall the years (grey points) there is the expected pattern of a dip to the coolest part of winter and then a warmup. However, this pattern is very rare in any year. Variability is more typical, some years the temperature is flat across June, July, August, and in some years there is a dramatic warming in August. Some years it is even warmer in July than August.\nBoth plots C, D address question (iii). Plot C is a bit awkward! Reading the colour trend is easy. The top of the diagram is more red, and the bottom more green. To understand what this means, and how it relates to the question requires thinking about the colour mapping, in relation to the sorting of the y axis. If there was no relationship between median temperature and year, the colouring would be very mixed. That’s not what is seen - the later years (more orange) occur with higher medians. Thus this plot would help us answer question (iii), with there is evidence that winters have been warmer in recent years.\nPlot D is much more compact and simple to interpret. The colder winter temperatures seen before 1995 have not been observed after 1995. Also the median is higher in the after 1995 years. It gives evidence for “winters are warmer in recent years” too, but it is too coarse a view with only these two subsets of years. Interestingly, the maximums of the maximum temperatures don’t appear to have changed.\n\nUsing the median or a median of an early period of measurements as a baseline, compute the relative change in temperature. Plot these against year, using yearly median as points with a smoother, or possibly using bars (above and below zero) to display the yearly median.\n\n\nwinter_df &lt;- winter_df |&gt;\n  mutate(rel_change = (temp - median(temp))/median(temp))\n\nwinter_df |&gt;\n  ggplot(aes(x=year, y=rel_change)) +\n  geom_hline(yintercept=0, linewidth=3, colour=\"grey90\") +\n  stat_summary(fun=\"mean\", geom=\"point\") +\n  geom_smooth(colour=\"red\", se=F) +\n  labs(\n    tag = \"(F)\", x = \"Year\",\n    y = \"Change in temperature\",\n    color = \"Year\"\n  ) \n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 2: Evidence of Simpson’s paradox?\nCheck the following data set for evidence of Simpsons Paradox, in the sense that if group2 == \"X\" the pass rate is higher.\n\ndf &lt;- tribble(\n  ~group1, ~group2, ~result, ~count,\n  \"A\", \"X\", \"pass\", 100,\n  \"B\", \"X\", \"pass\", 50,\n  \"C\", \"X\", \"pass\", 25,\n  \"A\", \"X\", \"fail\", 10,\n  \"B\", \"X\", \"fail\", 20,\n  \"C\", \"X\", \"fail\", 20,\n  \"A\", \"Y\", \"pass\", 10,\n  \"B\", \"Y\", \"pass\", 70,\n  \"C\", \"Y\", \"pass\", 15,\n  \"A\", \"Y\", \"fail\", 20,\n  \"B\", \"Y\", \"fail\", 40,\n  \"C\", \"Y\", \"fail\", 30)\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nOverall, if group2 is “X” the pass rate is higher. This is true if the data is also examined separately for each of A, B, C of group1. The rates are slightly different though, with A having a big difference in pass rate, and B having a small difference. So there is evidence of Simpsons Paradox because the proportions differ.\n\ndf |&gt; group_by(group1) |&gt; summarise(sum(count))\n\n# A tibble: 3 × 2\n  group1 `sum(count)`\n  &lt;chr&gt;         &lt;dbl&gt;\n1 A               140\n2 B               180\n3 C                90\n\ndf |&gt; group_by(group2) |&gt; summarise(sum(count))\n\n# A tibble: 2 × 2\n  group2 `sum(count)`\n  &lt;chr&gt;         &lt;dbl&gt;\n1 X               225\n2 Y               185\n\nggplot(df, aes(x=group2, y=count, fill=result)) +\n  geom_col(position=\"fill\") +\n  scale_fill_discrete_divergingx()\n\n\n\n\n\n\n\ndoubledecker(xtabs(count ~ group1 + group2 + result, data = df),\n  gp = gpar(fill = c(\"grey90\", \"orangered\"))\n)"
+  },
+  {
+    "objectID": "week7/tutorialsol.html#finishing-up",
+    "href": "week7/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 7",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week7/worksheet.html",
+    "href": "week7/worksheet.html",
+    "title": "ETC5521 Worksheet Week 7",
+    "section": "",
+    "text": "Exercise 1: Discussion\nThe Women’s Weekly published a story about famous Australian model, Elle McPherson’s breast cancer story. Diagnosed 7 years ago, she is in remission after choosing alternative therapies as treatment. The original diagnosis was accompanied by lumpectomy removing the cancerous tissue.\nWhat does data say relative to this statement?\n\nAlternative therapies assisted Elle’s being considered cleared of cancer today.\n\n\n\nExercise 2: Hate Crime\n\nPossibly uncomfortable?Continue\n\n\nIf this topic is upsetting for you, please feel free to take yourself out of the discussion, and exit the workshop.\n\n\nA certain person made the following statement about this data and used the graph below to illustrate his point.\n\nThe post-9/11 upsurge in hate crimes against Muslims was real and unforgivable, but the horrible truth is that it didn’t loom that large compared with what Blacks face year in and year out.\n\n\n\nCode\ndf &lt;- tribble(\n  ~year, ~offense, ~count,\n  2000, \"Anti-Black\", 3535,\n  2000, \"Sexual Orientation\", 1558,\n  2000, \"Anti-Islamic\", 36,\n  2001, \"Anti-Black\", 3700,\n  2001, \"Sexual Orientation\", 1664,\n  2001, \"Anti-Islamic\", 554,\n  2002, \"Anti-Black\", 3076,\n  2002, \"Sexual Orientation\", 1513,\n  2002, \"Anti-Islamic\", 174\n) |&gt;\n  mutate(offense = fct_reorder(offense, -count))\n\npop_df &lt;- tribble(\n  ~pop, ~size,\n  \"Anti-Black\", 36.4e6,\n  \"Sexual Orientation\", 28.2e6,\n  \"Anti-Islamic\", 3.4e6\n)\n\ncrime_df &lt;- left_join(df, pop_df, by = c(\"offense\" = \"pop\")) |&gt;\n  mutate(prop = count / size)\n\n\n\n\n\n\n\nVictims of hate crime in USA in years 2000-2002.\n\n\n\n\nDiscuss whether the plot supports his statement or not. Is his comparison of the number of crimes against Muslim and Blacks fair? What graph would you suggest to make to support/disprove his statement? The data and additional information is provided below.\nThis uses the data from the USA hate crime statistics found here. The number of victims by three particular hate crime is shown in the table below.\n\n\n\n\nThe number of victims by hate crime in the USA. Data sourced from https://ucr.fbi.gov/hate-crime.\n\n\nYear\nOffense\nVictims\n\n\n\n\n2000\nAnti-Black\n3535\n\n\n2000\nSexual Orientation\n1558\n\n\n2000\nAnti-Islamic\n36\n\n\n2001\nAnti-Black\n3700\n\n\n2001\nSexual Orientation\n1664\n\n\n2001\nAnti-Islamic\n554\n\n\n2002\nAnti-Black\n3076\n\n\n2002\nSexual Orientation\n1513\n\n\n2002\nAnti-Islamic\n174\n\n\n\n\n\nThe 2000 USA Census reports that there were a total of 36.4 million people who reported themselves as Black or African American. Weeks (2003) estimated there are 3.4 million Muslims in the USA. The LGBT population is harder to estimate but reports indicate 2-10% of the population so likely below 28.2 million people in the USA."
+  },
+  {
+    "objectID": "week7/worksheetsol.html",
+    "href": "week7/worksheetsol.html",
+    "title": "ETC5521 Worksheet Week 7",
+    "section": "",
+    "text": "Exercise 1: Discussion\nThe Women’s Weekly published a story about famous Australian model, Elle McPherson’s breast cancer story. Diagnosed 7 years ago, she is in remission after choosing alternative therapies as treatment. The original diagnosis was accompanied by lumpectomy removing the cancerous tissue.\nWhat does data say relative to this statement?\n\nAlternative therapies assisted Elle’s being considered cleared of cancer today.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThis article has good explanations that clarify missing pieces from the Women’s Weekly article.\nElle was diagnosed with HER2 positive oestrogen receptive intraductal carcinoma. What was not reported was that her cancer was non-invasive.\nIf you read this information you will see the survival rate for localised (non-invasive) is 99%.\n\n\n\n\n\n\nExercise 2: Hate Crime\n\nPossibly uncomfortable?Continue\n\n\nIf this topic is upsetting for you, please feel free to take yourself out of the discussion, and exit the workshop.\n\n\nA certain person made the following statement about this data and used the graph below to illustrate his point.\n\nThe post-9/11 upsurge in hate crimes against Muslims was real and unforgivable, but the horrible truth is that it didn’t loom that large compared with what Blacks face year in and year out.\n\n\n\nCode\ndf &lt;- tribble(\n  ~year, ~offense, ~count,\n  2000, \"Anti-Black\", 3535,\n  2000, \"Sexual Orientation\", 1558,\n  2000, \"Anti-Islamic\", 36,\n  2001, \"Anti-Black\", 3700,\n  2001, \"Sexual Orientation\", 1664,\n  2001, \"Anti-Islamic\", 554,\n  2002, \"Anti-Black\", 3076,\n  2002, \"Sexual Orientation\", 1513,\n  2002, \"Anti-Islamic\", 174\n) |&gt;\n  mutate(offense = fct_reorder(offense, -count))\n\npop_df &lt;- tribble(\n  ~pop, ~size,\n  \"Anti-Black\", 36.4e6,\n  \"Sexual Orientation\", 28.2e6,\n  \"Anti-Islamic\", 3.4e6\n)\n\ncrime_df &lt;- left_join(df, pop_df, by = c(\"offense\" = \"pop\")) |&gt;\n  mutate(prop = count / size)\n\n\n\n\n\n\n\nVictims of hate crime in USA in years 2000-2002.\n\n\n\n\nDiscuss whether the plot supports his statement or not. Is his comparison of the number of crimes against Muslim and Blacks fair? What graph would you suggest to make to support/disprove his statement? The data and additional information is provided below.\nThis uses the data from the USA hate crime statistics found here. The number of victims by three particular hate crime is shown in the table below.\n\n\n\n\nThe number of victims by hate crime in the USA. Data sourced from https://ucr.fbi.gov/hate-crime.\n\n\nYear\nOffense\nVictims\n\n\n\n\n2000\nAnti-Black\n3535\n\n\n2000\nSexual Orientation\n1558\n\n\n2000\nAnti-Islamic\n36\n\n\n2001\nAnti-Black\n3700\n\n\n2001\nSexual Orientation\n1664\n\n\n2001\nAnti-Islamic\n554\n\n\n2002\nAnti-Black\n3076\n\n\n2002\nSexual Orientation\n1513\n\n\n2002\nAnti-Islamic\n174\n\n\n\n\n\nThe 2000 USA Census reports that there were a total of 36.4 million people who reported themselves as Black or African American. Weeks (2003) estimated there are 3.4 million Muslims in the USA. The LGBT population is harder to estimate but reports indicate 2-10% of the population so likely below 28.2 million people in the USA.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nThe use of a line plot rather than bar plot makes it easier to compare the trend across years.\nThe second sentence compares the number of victims of anti-Black hate crimes and of anti-Islamic hate crimes.\nThe problem with this comparison is that the population size is vastly different for the two comparisons.\nWhile the number of anti-Black victims are far larger than anti-Islamic victims as shown in Plot (A) below, the Muslim community is roughly 10% of the size of the Black community.\nAssuming the population size is roughly the same across 2000-2002, a rough estimate of the proportions of hate crime victims for each population is compared in Plot (B).\n\nThe significant surge in anti-Islamic crimes in 2001 is more apparent in Plot (B).\nPlot (C) shows the odds ratio with respect to year 2000. This shows that the anti-Islamic crime in 2001 was nearly 15 times higher than in 2000 lowering to about 4.8 in 2001. This however is higher than that of the incidences related to anti-Black and sexual orientation hate crimes which remain somewhat stable from 2000-2002 (odds ratio is close to 1 or slightly lower).\n\nOnce again, these plots show that the answer to the question (is the quote true), depends on how one interprets the quote. Is the person saying that the number of victims of anti-Black hate crimes is always higher than anti-Islamic hate crimes? Then the answer is likely yes. However, per capita, the rate of anti-Islamic hate crimes far exceeded anything else in 2001, which goes against the quote.\n\n\nCode\nggplot(crime_df, aes(as.factor(year), count, color = offense)) +\n  geom_point() +\n  geom_line(aes(group = offense)) +\n  scale_color_discrete_qualitative() +\n  labs(\n    x = \"Year\", y = \"The number of victims\",\n    color = \"Offense\", tag = \"(A)\"\n  )\n\n\n\n\n\n\n\n\n\nCode\nggplot(crime_df, aes(as.factor(year), prop * 10000, color = offense)) +\n  geom_point() +\n  geom_line(aes(group = offense)) +\n  scale_color_discrete_qualitative() +\n  labs(\n    x = \"Year\", y = \"Incidence estimate per 10,000 people\",\n    color = \"Offense\", tag = \"(B)\"\n  )\n\n\n\n\n\n\n\n\n\nCode\nyear2000dict &lt;- crime_df |&gt;\n  dplyr::filter(year == 2000) |&gt;\n  dplyr::select(offense, prop) |&gt;\n  deframe()\n\ncrime_df |&gt;\n  mutate(rel2000 = prop / year2000dict[offense]) |&gt;\n  dplyr::filter(year != 2000) |&gt;\n  ggplot(aes(as.factor(year), rel2000, color = offense)) +\n  geom_point() +\n  geom_line(aes(group = offense)) +\n  scale_color_discrete_qualitative() +\n  scale_y_continuous(breaks = c(1, 4, 5, 15, 16)) +\n  labs(\n    x = \"Year\", y = \"Odds ratio with respect to year 2000\",\n    color = \"Offense\", tag = \"(C)\"\n  )"
   }
 ]

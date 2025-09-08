@@ -33,6 +33,11 @@ schedule |>
 - [qmd](https://ddde.numbat.space/week7/slides.qmd)
 - [R](https://ddde.numbat.space/week7/slides.R)
 
+## Worksheet instructions
+
+- [html](https://ddde.numbat.space/week7/worksheet.html)
+- [qmd](https://ddde.numbat.space/week7/worksheet.qmd)
+
 ## Tutorial instructions
 
 - [html](https://ddde.numbat.space/week7/tutorial.html)
