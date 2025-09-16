@@ -1,0 +1,266 @@
+---
+title: "ETC5521 Tutorial 8"
+subtitle: "Going beyond two variables, exploring high dimensions"
+author: "Prof. Di Cook"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: tutorial.html
+        embed-resources: false
+        keep-md: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: tutorialsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+---
+
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(patchwork)
+library(janitor)
+library(colorspace)
+library(GGally)
+library(plotly)
+library(mulgar)
+library(tourr)
+library(naniar)
+library(simputation)
+library(conflicted)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+```
+
+## 🎯 Objectives
+
+These are exercises in plots to make to explore relationships between multiple variables. You will use interactive scatterplot matrices, interactive parallel coordinate plots and tours to explore the world beyond 2D.
+
+## 🔧 Preparation 
+
+- The reading for this week is [Cook and Laa (2023) "Interactively exploring high-dimensional data and models in R" Chapter 1](https://dicook.github.io/mulgar_book/1-intro.html). 
+- Complete the weekly quiz, before the deadline!
+- Install the following R-packages if you do not have them already:
+
+```{r}
+#| eval: false
+#| code-fold: false
+install.packages(c("tidyverse", "cassowaryr", "tourr", "GGally", "plotly", "colorspace", "mulgar"))
+```
+
+- Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
+
+## 📥 Exercises
+
+### Exercise 1: Melbourne housing
+
+a. Read in a copy of the Melbourne housing data from  [Nick Tierney's github repo](https://github.com/njtierney/melb-housing-data) which is a collation from the version at [kaggle](https://www.kaggle.com/anthonypino/melbourne-housing-market/version/21). Its fairly large, so let's start simply, and choose two suburbs to focus on. I recommend "South Yarra" and "Brighton". 
+
+```{r}
+#| label: read-houses
+#| message: false
+mel_houses <- read_csv("https://raw.githubusercontent.com/njtierney/melb-housing-data/master/data/housing.csv") |>
+  dplyr::filter(suburb %in% c("South Yarra", "Brighton")) 
+```
+
+b. There are a substantial number of missing values. These need to be handled first because examining multiple variables, with almost every method, requires complete data.
+
+::: unilur-solution
+
+```{r}
+#| label: fig-miss1
+#| fig-cap: "Plots of missing by variable and case."
+#| eval: false
+m1 <- gg_miss_var(mel_houses, show_pct = TRUE)
+m2 <- gg_miss_case(mel_houses, show_pct = TRUE)
+m3 <- vis_miss(mel_houses, cluster = TRUE, sort_miss = TRUE)
+m1 + m2 + plot_layout(ncol=2)
+```
+
+```{r}
+#| label: fig-miss2
+#| fig-cap: "Overall summary of missing values, with variables and cases grouped."
+#| eval: false
+m3
+```
+
+```{r}
+#| label: impute-miss
+#| eval: false
+mel_houses <- mel_houses |>
+  mutate(year = lubridate::year(date),
+         # month = lubridate::month(date),
+         quarter = lubridate::quarter(date)) |>
+  mutate_at(vars(car, bathroom, bedroom2), as.integer)
+
+mel_houses_knn <- mel_houses |> 
+  nabular() |>
+  as.data.frame() |> 
+  # longitude
+  impute_knn(longitude ~ type + quarter + year + rooms + price) |>
+  # latitude
+  impute_knn(latitude ~ type + quarter + year + rooms + price) |>
+  # bedroom2
+  impute_knn(bedroom2 ~ type + quarter + year + rooms + price) |>
+  # bathroom
+  impute_knn(bathroom ~ type + quarter + year + rooms + price) |>
+  # car
+  impute_knn(car ~ type + quarter + year + rooms + price) |>
+  # landsize
+  impute_knn(landsize ~ type + quarter + year + rooms + price + distance) |>
+  # price
+  impute_knn(price ~ type + quarter + year + bedroom2 + bathroom + latitude + longitude) |>
+  add_label_shadow()
+```
+
+```{r}
+#| label: check-impute
+#| eval: false
+ggplot(mel_houses_knn, aes(x=bedroom2, y=price, colour=price_NA)) +
+         geom_point() +
+         facet_wrap(~suburb, ncol=2) +
+  scale_colour_discrete_divergingx(palette="Zissou 1")
+```
+
+:::
+
+c. Make a scatterplot matrix of price, rooms, bedroom2, bathroom, suburb, type. The order of variables can affect the readability. I advise that the plot will be easier to read if you order them with the numerical variables first, and then the categorical variables. Think about what associations can be seen?
+
+::: unilur-solution
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| message: false
+#| eval: false
+ggpairs(mel_houses_knn, columns=c(4,2,10,11,1,3))
+```
+
+- Except for price the continuous variables are all discrete. We can still examine the associations. It could be useful to use a jittered scatterplot, but that would require making a special plot function to use in the ggpairs function. 
+- There is positive linear association between price, rooms, bedroom2, bathroom, which indicates the bigger the house the higher the price
+- From the boxplots: houses in Brighton tend to be higher priced and bigger than South Yarra, and houses tend to be worth more than apartments or units.
+- From the fluctuation diagram, Brighton tends to have more houses, and South Yarra has more apartments.
+- From the density plot, price has a skewed distribution.
+- There is one big outlier, one house sold for a much higher price. There are a few bivariate outliers, houses with a large number of bathrooms but relatively low price.
+
+```{r}
+#| eval: false
+#| message: false
+# To add jitter
+ggpairs(mel_houses_knn, columns=c(4,2,10,11,1,3),
+        lower=list(continuous=wrap("points",
+                  position=position_jitter(height=0.3, width=0.3))))
+```
+:::
+
+d. Subset the data to Brighton only. Make an interactive scatterplot matrix of rooms, bedroom2, bathroom and price, coloured by type of property. There are some high price properties. Select these cases, and determine what's special about them -- if anything. 
+
+::: unilur-solution
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| message: false
+#| eval: false
+brighton <- mel_houses_knn |> 
+  dplyr::filter(suburb=="Brighton") 
+highlight_key(brighton) |>
+  ggpairs(aes(shape = price_NA, colour=type), 
+          columns = c(4,2,10,11,17,18,13),
+                  upper=list(continuous="points")) |>
+  ggplotly(900, 900) |>
+  highlight("plotly_selected")
+```
+
+
+```{r}
+#| eval: false
+# To add jittering
+# Don't recommend this
+highlight_key(brighton) |>
+  ggpairs(aes(shape = price_NA, colour=type), 
+          columns = c(4,2,10,11,17,18,13),
+          lower=list(continuous=wrap("points",
+                  position=position_jitter(height=0.3, width=0.3))),
+          upper=list(continuous=wrap("points",
+                  position=position_jitter(height=0.3, width=0.3)))) |>
+  ggplotly(900, 900) |>
+  highlight("plotly_selected") 
+
+```
+:::
+
+
+### Exercise 2: Challenges
+
+For each of the data sets, `c1`, …, `c7` from the `mulgar` package, use the grand tour to view and try to identify structure (outliers, clusters, non-linear relationships).
+
+::: unilur-solution
+
+```{r}
+#| eval: false
+library(mulgar)
+animate_xy(c1)
+# four small clusters, two big clusters
+# linear dependence
+animate_xy(c2) 
+# Six spherical clusters
+animate_xy(c3)
+# tetrahedron with lots of smaller triangles,
+# barriers, linear dependence
+animate_xy(c4) 
+# Four linear connected pieces
+animate_xy(c5)
+# Spiral in lower dimensional space
+# Non-linear and linear dependence
+animate_xy(c6)
+# Two curved clusters
+animate_xy(c7)
+# spherical cluster, curve cluster and a lot of noise points
+```
+
+:::
+
+
+## 👌 Finishing up
+
+Make sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult.

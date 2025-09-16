@@ -42,6 +42,195 @@
     "text": "Assignments\n\nExercises 3 is due on Monday 22 September.\nQuiz 8 is due on Thursday 25 September."
   },
   {
+    "objectID": "week8/tutorial.html",
+    "href": "week8/tutorial.html",
+    "title": "ETC5521 Tutorial 8",
+    "section": "",
+    "text": "These are exercises in plots to make to explore relationships between multiple variables. You will use interactive scatterplot matrices, interactive parallel coordinate plots and tours to explore the world beyond 2D."
+  },
+  {
+    "objectID": "week8/tutorial.html#objectives",
+    "href": "week8/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 8",
+    "section": "",
+    "text": "These are exercises in plots to make to explore relationships between multiple variables. You will use interactive scatterplot matrices, interactive parallel coordinate plots and tours to explore the world beyond 2D."
+  },
+  {
+    "objectID": "week8/tutorial.html#preparation",
+    "href": "week8/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 8",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nThe reading for this week is Cook and Laa (2023) “Interactively exploring high-dimensional data and models in R” Chapter 1.\nComplete the weekly quiz, before the deadline!\nInstall the following R-packages if you do not have them already:\n\n\ninstall.packages(c(\"tidyverse\", \"cassowaryr\", \"tourr\", \"GGally\", \"plotly\", \"colorspace\", \"mulgar\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week8/tutorial.html#exercises",
+    "href": "week8/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 8",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\n\nExercise 1: Melbourne housing\n\nRead in a copy of the Melbourne housing data from Nick Tierney’s github repo which is a collation from the version at kaggle. Its fairly large, so let’s start simply, and choose two suburbs to focus on. I recommend “South Yarra” and “Brighton”.\n\n\nmel_houses &lt;- read_csv(\"https://raw.githubusercontent.com/njtierney/melb-housing-data/master/data/housing.csv\") |&gt;\n  dplyr::filter(suburb %in% c(\"South Yarra\", \"Brighton\")) \n\n\nThere are a substantial number of missing values. These need to be handled first because examining multiple variables, with almost every method, requires complete data.\n\n\nMake a scatterplot matrix of price, rooms, bedroom2, bathroom, suburb, type. The order of variables can affect the readability. I advise that the plot will be easier to read if you order them with the numerical variables first, and then the categorical variables. Think about what associations can be seen?\n\n\nSubset the data to Brighton only. Make an interactive scatterplot matrix of rooms, bedroom2, bathroom and price, coloured by type of property. There are some high price properties. Select these cases, and determine what’s special about them – if anything.\n\n\n\nExercise 2: Challenges\nFor each of the data sets, c1, …, c7 from the mulgar package, use the grand tour to view and try to identify structure (outliers, clusters, non-linear relationships)."
+  },
+  {
+    "objectID": "week8/tutorial.html#finishing-up",
+    "href": "week8/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 8",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week8/tutorialsol.html",
+    "href": "week8/tutorialsol.html",
+    "title": "ETC5521 Tutorial 8",
+    "section": "",
+    "text": "These are exercises in plots to make to explore relationships between multiple variables. You will use interactive scatterplot matrices, interactive parallel coordinate plots and tours to explore the world beyond 2D."
+  },
+  {
+    "objectID": "week8/tutorialsol.html#objectives",
+    "href": "week8/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 8",
+    "section": "",
+    "text": "These are exercises in plots to make to explore relationships between multiple variables. You will use interactive scatterplot matrices, interactive parallel coordinate plots and tours to explore the world beyond 2D."
+  },
+  {
+    "objectID": "week8/tutorialsol.html#preparation",
+    "href": "week8/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 8",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nThe reading for this week is Cook and Laa (2023) “Interactively exploring high-dimensional data and models in R” Chapter 1.\nComplete the weekly quiz, before the deadline!\nInstall the following R-packages if you do not have them already:\n\n\ninstall.packages(c(\"tidyverse\", \"cassowaryr\", \"tourr\", \"GGally\", \"plotly\", \"colorspace\", \"mulgar\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week8/tutorialsol.html#exercises",
+    "href": "week8/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 8",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\n\nExercise 1: Melbourne housing\n\nRead in a copy of the Melbourne housing data from Nick Tierney’s github repo which is a collation from the version at kaggle. Its fairly large, so let’s start simply, and choose two suburbs to focus on. I recommend “South Yarra” and “Brighton”.\n\n\nmel_houses &lt;- read_csv(\"https://raw.githubusercontent.com/njtierney/melb-housing-data/master/data/housing.csv\") |&gt;\n  dplyr::filter(suburb %in% c(\"South Yarra\", \"Brighton\")) \n\n\nThere are a substantial number of missing values. These need to be handled first because examining multiple variables, with almost every method, requires complete data.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nm1 &lt;- gg_miss_var(mel_houses, show_pct = TRUE)\nm2 &lt;- gg_miss_case(mel_houses, show_pct = TRUE)\nm3 &lt;- vis_miss(mel_houses, cluster = TRUE, sort_miss = TRUE)\nm1 + m2 + plot_layout(ncol=2)\n\n\nm3\n\n\nmel_houses &lt;- mel_houses |&gt;\n  mutate(year = lubridate::year(date),\n         # month = lubridate::month(date),\n         quarter = lubridate::quarter(date)) |&gt;\n  mutate_at(vars(car, bathroom, bedroom2), as.integer)\n\nmel_houses_knn &lt;- mel_houses |&gt; \n  nabular() |&gt;\n  as.data.frame() |&gt; \n  # longitude\n  impute_knn(longitude ~ type + quarter + year + rooms + price) |&gt;\n  # latitude\n  impute_knn(latitude ~ type + quarter + year + rooms + price) |&gt;\n  # bedroom2\n  impute_knn(bedroom2 ~ type + quarter + year + rooms + price) |&gt;\n  # bathroom\n  impute_knn(bathroom ~ type + quarter + year + rooms + price) |&gt;\n  # car\n  impute_knn(car ~ type + quarter + year + rooms + price) |&gt;\n  # landsize\n  impute_knn(landsize ~ type + quarter + year + rooms + price + distance) |&gt;\n  # price\n  impute_knn(price ~ type + quarter + year + bedroom2 + bathroom + latitude + longitude) |&gt;\n  add_label_shadow()\n\n\nggplot(mel_houses_knn, aes(x=bedroom2, y=price, colour=price_NA)) +\n         geom_point() +\n         facet_wrap(~suburb, ncol=2) +\n  scale_colour_discrete_divergingx(palette=\"Zissou 1\")\n\n\n\n\n\n\nMake a scatterplot matrix of price, rooms, bedroom2, bathroom, suburb, type. The order of variables can affect the readability. I advise that the plot will be easier to read if you order them with the numerical variables first, and then the categorical variables. Think about what associations can be seen?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nggpairs(mel_houses_knn, columns=c(4,2,10,11,1,3))\n\n\nExcept for price the continuous variables are all discrete. We can still examine the associations. It could be useful to use a jittered scatterplot, but that would require making a special plot function to use in the ggpairs function.\nThere is positive linear association between price, rooms, bedroom2, bathroom, which indicates the bigger the house the higher the price\nFrom the boxplots: houses in Brighton tend to be higher priced and bigger than South Yarra, and houses tend to be worth more than apartments or units.\nFrom the fluctuation diagram, Brighton tends to have more houses, and South Yarra has more apartments.\nFrom the density plot, price has a skewed distribution.\nThere is one big outlier, one house sold for a much higher price. There are a few bivariate outliers, houses with a large number of bathrooms but relatively low price.\n\n\n# To add jitter\nggpairs(mel_houses_knn, columns=c(4,2,10,11,1,3),\n        lower=list(continuous=wrap(\"points\",\n                  position=position_jitter(height=0.3, width=0.3))))\n\n\n\n\n\n\nSubset the data to Brighton only. Make an interactive scatterplot matrix of rooms, bedroom2, bathroom and price, coloured by type of property. There are some high price properties. Select these cases, and determine what’s special about them – if anything.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nbrighton &lt;- mel_houses_knn |&gt; \n  dplyr::filter(suburb==\"Brighton\") \nhighlight_key(brighton) |&gt;\n  ggpairs(aes(shape = price_NA, colour=type), \n          columns = c(4,2,10,11,17,18,13),\n                  upper=list(continuous=\"points\")) |&gt;\n  ggplotly(900, 900) |&gt;\n  highlight(\"plotly_selected\")\n\n\n# To add jittering\n# Don't recommend this\nhighlight_key(brighton) |&gt;\n  ggpairs(aes(shape = price_NA, colour=type), \n          columns = c(4,2,10,11,17,18,13),\n          lower=list(continuous=wrap(\"points\",\n                  position=position_jitter(height=0.3, width=0.3))),\n          upper=list(continuous=wrap(\"points\",\n                  position=position_jitter(height=0.3, width=0.3)))) |&gt;\n  ggplotly(900, 900) |&gt;\n  highlight(\"plotly_selected\") \n\n\n\n\n\n\n\nExercise 2: Challenges\nFor each of the data sets, c1, …, c7 from the mulgar package, use the grand tour to view and try to identify structure (outliers, clusters, non-linear relationships).\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nlibrary(mulgar)\nanimate_xy(c1)\n# four small clusters, two big clusters\n# linear dependence\nanimate_xy(c2) \n# Six spherical clusters\nanimate_xy(c3)\n# tetrahedron with lots of smaller triangles,\n# barriers, linear dependence\nanimate_xy(c4) \n# Four linear connected pieces\nanimate_xy(c5)\n# Spiral in lower dimensional space\n# Non-linear and linear dependence\nanimate_xy(c6)\n# Two curved clusters\nanimate_xy(c7)\n# spherical cluster, curve cluster and a lot of noise points"
+  },
+  {
+    "objectID": "week8/tutorialsol.html#finishing-up",
+    "href": "week8/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 8",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week8/index.html",
+    "href": "week8/index.html",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "",
+    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
+  },
+  {
+    "objectID": "week8/index.html#main-reference",
+    "href": "week8/index.html#main-reference",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "",
+    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
+  },
+  {
+    "objectID": "week8/index.html#what-you-will-learn-this-week",
+    "href": "week8/index.html#what-you-will-learn-this-week",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "What you will learn this week",
+    "text": "What you will learn this week\n\nWhat is high-dimensional data? (If all variables are quantitative)\nExploring relationships between more than two variables\n\nTours - scatterplots of combinations of variables\nMatrix of plots\nParallel coordinates\n\nWhat can be hidden\nAutomating the search for pairwise relationships using scagnostics\nLinking elements of multiple plots\nExploring multiple categorical variables"
+  },
+  {
+    "objectID": "week8/index.html#lecture-slides",
+    "href": "week8/index.html#lecture-slides",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Lecture slides",
+    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week8/index.html#worksheet-instructions",
+    "href": "week8/index.html#worksheet-instructions",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Worksheet instructions",
+    "text": "Worksheet instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week8/index.html#tutorial-instructions",
+    "href": "week8/index.html#tutorial-instructions",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Tutorial instructions",
+    "text": "Tutorial instructions\n\nhtml\nqmd"
+  },
+  {
+    "objectID": "week8/index.html#assignments",
+    "href": "week8/index.html#assignments",
+    "title": "Week 8: Going beyond two variables, exploring high dimensions",
+    "section": "Assignments",
+    "text": "Assignments\n\nExercises 3 is due on Monday 22 September.\nQuiz 7 is due on Thursday 18 September.\nQuiz 8 is due on Thursday 25 September."
+  },
+  {
+    "objectID": "week7/tutorial.html",
+    "href": "week7/tutorial.html",
+    "title": "ETC5521 Tutorial 7",
+    "section": "",
+    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
+  },
+  {
+    "objectID": "week7/tutorial.html#objectives",
+    "href": "week7/tutorial.html#objectives",
+    "title": "ETC5521 Tutorial 7",
+    "section": "",
+    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
+  },
+  {
+    "objectID": "week7/tutorial.html#preparation",
+    "href": "week7/tutorial.html#preparation",
+    "title": "ETC5521 Tutorial 7",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nThe reading for this week is Wilke (2019) Chapters 9, 10.2-4, 11.2.\nComplete the weekly quiz, before the deadline!\nInstall the following R-packages if you do not have them already:\n\n\ninstall.packages(c(\"colorspace\", \"lvplot\", \"patchwork\", \"janitor\", \"lubridate\", \"vcd\", \"ggbeeswarm\", \"kableExtra\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week7/tutorial.html#exercises",
+    "href": "week7/tutorial.html#exercises",
+    "title": "ETC5521 Tutorial 7",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\n\nExercise 1: Melbourne daily maximum temperature\nThe csv file melb_temp_2023-09-08.csv contains data on the daily maximum temperature from 1970 to 2023 collected from the weather station at Melbourne Airport. Use this to answer the following questions, with the additional information that in Australia:\n\nSummer is from the beginning of December to the end of February,\nAutumn is from the beginning of March to the end of May,\nWinter is from the beginning of June to the end of August, and\nSpring is from the beginning of September to the end of November.\n\n\nThere are four plots below. Write the code to make them yourself. Then think about the three questions (i), (ii) or (iii) below.\n\n\n\nAre there any winters where the daily maximum temperature is different to winter in other years?\n\n\nWhat is the general pattern of maximum daily temperatures in winter?\n\n\nIs there evidence that winters in Melbourne are getting warmer?\n\n\nWhich plot best matches each question? If none of them work, for any particular question, make an alternative plot. Also, if any of the plots don’t help answer any of the questions, think about a question that they might answer.\n\nMake a transformation of the data and a new plot with this variable, that will allow a more direct comparison to answer question (iii).\n\nThe data can be read and processed using this code:\n\nmelb_df &lt;- read_csv(\"https://raw.githubusercontent.com/numbats/ddde/main/data/melb_temp_2023-09-08.csv\") |&gt;\n  clean_names() |&gt;\n  rename(temp = maximum_temperature_degree_c) |&gt;\n  dplyr::filter(!is.na(temp)) |&gt;\n  dplyr::select(year, month, day, temp) |&gt;\n  mutate(\n    date = as.Date(paste(year, month, day, sep = \"-\")))\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 2: Evidence of Simpson’s paradox?\nCheck the following data set for evidence of Simpsons Paradox, in the sense that if group2 == \"X\" the pass rate is higher.\n\ndf &lt;- tribble(\n  ~group1, ~group2, ~result, ~count,\n  \"A\", \"X\", \"pass\", 100,\n  \"B\", \"X\", \"pass\", 50,\n  \"C\", \"X\", \"pass\", 25,\n  \"A\", \"X\", \"fail\", 10,\n  \"B\", \"X\", \"fail\", 20,\n  \"C\", \"X\", \"fail\", 20,\n  \"A\", \"Y\", \"pass\", 10,\n  \"B\", \"Y\", \"pass\", 70,\n  \"C\", \"Y\", \"pass\", 15,\n  \"A\", \"Y\", \"fail\", 20,\n  \"B\", \"Y\", \"fail\", 40,\n  \"C\", \"Y\", \"fail\", 30)"
+  },
+  {
+    "objectID": "week7/tutorial.html#finishing-up",
+    "href": "week7/tutorial.html#finishing-up",
+    "title": "ETC5521 Tutorial 7",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
+    "objectID": "week7/tutorialsol.html",
+    "href": "week7/tutorialsol.html",
+    "title": "ETC5521 Tutorial 7",
+    "section": "",
+    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
+  },
+  {
+    "objectID": "week7/tutorialsol.html#objectives",
+    "href": "week7/tutorialsol.html#objectives",
+    "title": "ETC5521 Tutorial 7",
+    "section": "",
+    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
+  },
+  {
+    "objectID": "week7/tutorialsol.html#preparation",
+    "href": "week7/tutorialsol.html#preparation",
+    "title": "ETC5521 Tutorial 7",
+    "section": "🔧 Preparation",
+    "text": "🔧 Preparation\n\nThe reading for this week is Wilke (2019) Chapters 9, 10.2-4, 11.2.\nComplete the weekly quiz, before the deadline!\nInstall the following R-packages if you do not have them already:\n\n\ninstall.packages(c(\"colorspace\", \"lvplot\", \"patchwork\", \"janitor\", \"lubridate\", \"vcd\", \"ggbeeswarm\", \"kableExtra\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+  },
+  {
+    "objectID": "week7/tutorialsol.html#exercises",
+    "href": "week7/tutorialsol.html#exercises",
+    "title": "ETC5521 Tutorial 7",
+    "section": "📥 Exercises",
+    "text": "📥 Exercises\n\nExercise 1: Melbourne daily maximum temperature\nThe csv file melb_temp_2023-09-08.csv contains data on the daily maximum temperature from 1970 to 2023 collected from the weather station at Melbourne Airport. Use this to answer the following questions, with the additional information that in Australia:\n\nSummer is from the beginning of December to the end of February,\nAutumn is from the beginning of March to the end of May,\nWinter is from the beginning of June to the end of August, and\nSpring is from the beginning of September to the end of November.\n\n\nThere are four plots below. Write the code to make them yourself. Then think about the three questions (i), (ii) or (iii) below.\n\n\n\nAre there any winters where the daily maximum temperature is different to winter in other years?\n\n\nWhat is the general pattern of maximum daily temperatures in winter?\n\n\nIs there evidence that winters in Melbourne are getting warmer?\n\n\nWhich plot best matches each question? If none of them work, for any particular question, make an alternative plot. Also, if any of the plots don’t help answer any of the questions, think about a question that they might answer.\n\nMake a transformation of the data and a new plot with this variable, that will allow a more direct comparison to answer question (iii).\n\nThe data can be read and processed using this code:\n\nmelb_df &lt;- read_csv(\"https://raw.githubusercontent.com/numbats/ddde/main/data/melb_temp_2023-09-08.csv\") |&gt;\n  clean_names() |&gt;\n  rename(temp = maximum_temperature_degree_c) |&gt;\n  dplyr::filter(!is.na(temp)) |&gt;\n  dplyr::select(year, month, day, temp) |&gt;\n  mutate(\n    date = as.Date(paste(year, month, day, sep = \"-\")))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nCode for the plots is:\n\n\n# Plot (A)\nwinter_df &lt;- melb_df |&gt;\n  dplyr::filter(month %in% c(\"06\", \"07\", \"08\")) |&gt;\n  mutate(winter_day = as.numeric(\n    difftime(date, \n             ymd(paste0(year, \"-06\", \"-01\")), \n             units=\"days\")))\np_a &lt;- ggplot(winter_df, aes(x=winter_day, y=temp)) +\n  geom_point(\n    data = dplyr::select(winter_df, -year),\n    color = \"gray\", size = 0.1\n  ) +\n  geom_line() +\n  facet_wrap(~year) +\n  labs(\n    tag = \"(A)\", x = \"\",\n    y = \"Temperature (°C)\"\n  ) + \n  scale_x_continuous(\"\", breaks = c(0, 31, 62, 92), labels=c(\"J\", \"J\", \"A\", \"S\"))\n\n# Plot (B)\np_b &lt;- ggplot(winter_df, aes(x=year, y=temp)) +\n  #geom_boxplot() +\n  geom_jitter(width=0.1, height=0, alpha=0.2) +\n  stat_summary(fun=\"mean\", geom=\"point\", colour=\"orangered\", size=3) +\n  geom_smooth(colour=\"red\") +\n  labs(\n    tag = \"(B)\", x = \"Year\",\n    y = \"Temperature (°C)\"\n  ) \n\n# Plot (C)\np_c &lt;- winter_df |&gt;\n  mutate(year = fct_reorder(as.factor(year), temp)) |&gt;\n  ggplot(aes(temp, year)) +\n  # geom_boxplot(aes(color = as.numeric(as.character(year)))) +\n  geom_quasirandom(aes(x=as.factor(year), y=temp,\n                       colour = as.numeric(as.character(year)))) +\n  labs(\n    tag = \"(C)\", x = \"Year\",\n    y = \"Temperature (°C)\",\n    color = \"Year\"\n  ) +\n  scale_color_continuous_divergingx(mid = 1995) +\n  coord_flip()\n\n# Plot (D)\np_d &lt;- winter_df |&gt;\n  mutate(pre1995 = ifelse(year &lt; 1995, \"&lt; 1995\", \"&gt; 1995\")) |&gt;\n  ggplot(aes(x=pre1995, y=temp)) +\n  geom_lv(aes(fill=after_stat(LV))) +\n  labs(\n    tag = \"(D)\", y = \"Temperature (°C)\",\n    x = \"Time Period\"\n  ) +\n  scale_fill_discrete_divergingx(palette = \"Fall\")\n\np_a + p_b + p_c + p_d + \n  plot_layout(ncol=1, heights=c(5,3,5,3))\n\nPlot A is the only one that allows examining the pattern for winter each year, which helps to address questions (i) and (ii).\nIn answer to (i) I don’t see any year that is especially different from any other year.\nThere is a lot of variability in the patterns for winter. For most years it appears to be fairly flat with an increase in August. However, some years temperature remain cool in August.\nTo better study the winter pattern it might be better to use a smoother model instead of connecting the day-to-day measurements with a line.\n\nggplot(winter_df, aes(x=winter_day, y=temp)) +\n  geom_point(\n    data = dplyr::select(winter_df, -year),\n    color = \"gray\", size = 0.1\n  ) +\n  geom_smooth(se=F, colour=\"black\") +\n  facet_wrap(~year) +\n  labs(\n    tag = \"(E)\", x = \"\",\n    y = \"Temperature (°C)\"\n  ) + \n  scale_x_continuous(\"\", breaks = c(0, 31, 62, 92), labels=c(\"J\", \"J\", \"A\", \"S\"))\n\n\n\n\n\n\n\n\nFrom plot E, it’s a bit easier to see that overall the years (grey points) there is the expected pattern of a dip to the coolest part of winter and then a warmup. However, this pattern is very rare in any year. Variability is more typical, some years the temperature is flat across June, July, August, and in some years there is a dramatic warming in August. Some years it is even warmer in July than August.\nBoth plots C, D address question (iii). Plot C is a bit awkward! Reading the colour trend is easy. The top of the diagram is more red, and the bottom more green. To understand what this means, and how it relates to the question requires thinking about the colour mapping, in relation to the sorting of the y axis. If there was no relationship between median temperature and year, the colouring would be very mixed. That’s not what is seen - the later years (more orange) occur with higher medians. Thus this plot would help us answer question (iii), with there is evidence that winters have been warmer in recent years.\nPlot D is much more compact and simple to interpret. The colder winter temperatures seen before 1995 have not been observed after 1995. Also the median is higher in the after 1995 years. It gives evidence for “winters are warmer in recent years” too, but it is too coarse a view with only these two subsets of years. Interestingly, the maximums of the maximum temperatures don’t appear to have changed.\n\nUsing the median or a median of an early period of measurements as a baseline, compute the relative change in temperature. Plot these against year, using yearly median as points with a smoother, or possibly using bars (above and below zero) to display the yearly median.\n\n\nwinter_df &lt;- winter_df |&gt;\n  mutate(rel_change = (temp - median(temp))/median(temp))\n\nwinter_df |&gt;\n  ggplot(aes(x=year, y=rel_change)) +\n  geom_hline(yintercept=0, linewidth=3, colour=\"grey90\") +\n  stat_summary(fun=\"mean\", geom=\"point\") +\n  geom_smooth(colour=\"red\", se=F) +\n  labs(\n    tag = \"(F)\", x = \"Year\",\n    y = \"Change in temperature\",\n    color = \"Year\"\n  ) \n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 2: Evidence of Simpson’s paradox?\nCheck the following data set for evidence of Simpsons Paradox, in the sense that if group2 == \"X\" the pass rate is higher.\n\ndf &lt;- tribble(\n  ~group1, ~group2, ~result, ~count,\n  \"A\", \"X\", \"pass\", 100,\n  \"B\", \"X\", \"pass\", 50,\n  \"C\", \"X\", \"pass\", 25,\n  \"A\", \"X\", \"fail\", 10,\n  \"B\", \"X\", \"fail\", 20,\n  \"C\", \"X\", \"fail\", 20,\n  \"A\", \"Y\", \"pass\", 10,\n  \"B\", \"Y\", \"pass\", 70,\n  \"C\", \"Y\", \"pass\", 15,\n  \"A\", \"Y\", \"fail\", 20,\n  \"B\", \"Y\", \"fail\", 40,\n  \"C\", \"Y\", \"fail\", 30)\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nOverall, if group2 is “X” the pass rate is higher. This is true if the data is also examined separately for each of A, B, C of group1. The rates are slightly different though, with A having a big difference in pass rate, and B having a small difference. So there is evidence of Simpsons Paradox because the proportions differ.\n\ndf |&gt; group_by(group1) |&gt; summarise(sum(count))\n\n# A tibble: 3 × 2\n  group1 `sum(count)`\n  &lt;chr&gt;         &lt;dbl&gt;\n1 A               140\n2 B               180\n3 C                90\n\ndf |&gt; group_by(group2) |&gt; summarise(sum(count))\n\n# A tibble: 2 × 2\n  group2 `sum(count)`\n  &lt;chr&gt;         &lt;dbl&gt;\n1 X               225\n2 Y               185\n\nggplot(df, aes(x=group2, y=count, fill=result)) +\n  geom_col(position=\"fill\") +\n  scale_fill_discrete_divergingx()\n\n\n\n\n\n\n\ndoubledecker(xtabs(count ~ group1 + group2 + result, data = df),\n  gp = gpar(fill = c(\"grey90\", \"orangered\"))\n)"
+  },
+  {
+    "objectID": "week7/tutorialsol.html#finishing-up",
+    "href": "week7/tutorialsol.html#finishing-up",
+    "title": "ETC5521 Tutorial 7",
+    "section": "👌 Finishing up",
+    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+  },
+  {
     "objectID": "week7/index.html",
     "href": "week7/index.html",
     "title": "Week 7: Making comparisons between groups and strata",
@@ -68,6 +257,13 @@
     "title": "Week 7: Making comparisons between groups and strata",
     "section": "Lecture slides",
     "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
+  },
+  {
+    "objectID": "week7/index.html#worksheet-instructions",
+    "href": "week7/index.html#worksheet-instructions",
+    "title": "Week 7: Making comparisons between groups and strata",
+    "section": "Worksheet instructions",
+    "text": "Worksheet instructions\n\nhtml\nqmd"
   },
   {
     "objectID": "week7/index.html#tutorial-instructions",
@@ -2853,7 +3049,7 @@
     "href": "week5/worksheetsol.html",
     "title": "ETC5521 Worksheet Week 5",
     "section": "",
-    "text": "1. Understanding the velocity of galaxies\nLoad the galaxies data in the MASS package and answer the following questions based on this dataset.\n\n\nCode\ndata(galaxies, package = \"MASS\")\n\n\nYou can access documentation of the data (if available) using the help function specifying the package name in the argument.\n\n\nCode\nhelp(galaxies, package = \"MASS\")\n\n\n\nWhat does the data contain? And what is the data source?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\ndata(galaxies, package = \"MASS\")\nglimpse(galaxies)\n\n\n num [1:82] 9172 9350 9483 9558 9775 ...\n\n\nThe data contains velocities in km/sec of 82 galaxies from 6 well-separated conic sections of an unfilled survey of the Corona Borealis region. The original data is from Postman et al. (1986) and this data is from Roeder with 83rd observation removed from the original data as well as typo for the 78th observation.\n\nPostman, M., Huchra, J. P. and Geller, M. J. (1986) Probes of large-scale structures in the Corona Borealis region. Astronomical Journal 92, 1238–1247\nRoeder, K. (1990) Density estimation with confidence sets exemplified by superclusters and voids in galaxies. Journal of the American Statistical Association 85, 617–624.\n\n\n\n\n\n\nBased on the description in the R Help for the data, what would be an appropriate null distribution of this data?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe description in the R help for the data says Multimodality in such surveys is evidence for voids and superclusters in the far universe.\nDeciding on an appropriate null hypothesis is always tricky. If we wanted to test the statement that the data is multimodal, we could compare against a unimodal distribution, either a normal or an exponential depending on what shape we might expect.\nHowever, the published work has already made a claim that the data is multimodal, so it would be interesting to determine if we can generate samples from a multimodal distribution that are indistinguishable from the data.\n\\(H_0:\\) The distribution is multimodal. \\(H_a:\\) The distribution is something other than multimodal.\n\n\n\n\n\nHow many observations are there?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThere are 82 observations.\n\n\n\n\n\nIf the data is multimodal, which of the following displays do you think would be the best? Which would not be at all useful?\n\n\nhistogram\nboxplot\ndensity plot\nviolin plot\njittered dot plot\nletter value plot\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nIf you said a density plot, jittered dot plot, or a histogram, you’re on the right track, because each can give a fine resolution for showing modes. (The violin plot is not any different from a density plot, when only looking at one variable.)\n\n\n\n\n\nMake these plots for the data. Experiment with different binwidths for the histogram and different bandwiths for the density plot. Were you right in your thinking about which would be the best?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\ng &lt;- ggplot(tibble(galaxies), aes(galaxies)) +\n  theme(\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\ng1 &lt;- g + geom_histogram(binwidth = 1000, color = \"white\") \ng2 &lt;- g + geom_boxplot() \ng3 &lt;- g + geom_density() \ng4 &lt;- g + geom_violin(aes(x=galaxies, y=1), draw_quantiles = c(0.25, 0.5, 0.75))\ng5 &lt;- g + geom_quasirandom(aes(x=1, y=galaxies)) + coord_flip() \ng6 &lt;- g + geom_lv(aes(x=1, y=galaxies)) + coord_flip() \n\ng1 + g2 + g3 + g4 + g5 + g6 + plot_layout(ncol = 2)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFit your best mixture model to the data, and simulate 19 nulls to make a lineup. Did you do a good job in matching the distribution, ie does the data plot stand out or not? (Extra bonus: What is the model that you have created? Can you make a plot to show how it looks relative to the observed data?)\n\nThis code might be helpful to get you started. This code generates a jittered dotplot, but you can use your preferred type from part e.\n\n\nCode\n# Fit a mixture model\nlibrary(mixtools)\ngalaxies_fit &lt;- normalmixEM(galaxies, k=3)\n\nset.seed(1138)\ngalaxies_sim1 &lt;- rnormmix(n=length(galaxies), \n              lambda=galaxies_fit$lambda, \n              mu=galaxies_fit$mu,\n              sigma=galaxies_fit$sigma)\n\n\n\n\nCode\n# Plot your data\nggplot(tibble(galaxies_sim1), aes(x=galaxies_sim1)) +\n  geom_quasirandom(aes(x=1, y=galaxies_sim1)) + \n  coord_flip() +\n  theme(\n    aspect.ratio = 0.7,\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\n\n\n\n\nCode\n# Generate null plots and make a lineup\ngalaxies_null &lt;- tibble(.sample=1, galaxies=galaxies_sim1)\nfor (i in 2:19) {\n  gsim &lt;- rnormmix(n=length(galaxies), \n              lambda=galaxies_fit$lambda, \n              mu=galaxies_fit$mu,\n              sigma=galaxies_fit$sigma)\n  galaxies_null &lt;- bind_rows(galaxies_null,\n                             tibble(.sample=i, galaxies=gsim))\n}\ngalaxies_null &lt;- bind_rows(galaxies_null,\n                             tibble(.sample=20,\n                                    galaxies=galaxies))\n# Randomise .sample  to hide data plot\ngalaxies_null$.sample &lt;- rep(sample(1:20, 20), rep(82, 20))\nggplot(tibble(galaxies_null), aes(x=galaxies)) +\n  geom_quasirandom(aes(x=1, y=galaxies)) + \n  facet_wrap(~.sample, ncol=5) +\n  coord_flip() +\n  theme(\n    aspect.ratio = 0.7,\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nnumber of iterations= 65 \n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\n# To make a rough plot of your model\nplot(galaxies_fit, whichplots=2)\n\n\n\n\n\n\n\n\n\nThe lambda value provides the proportion of mixing, from three normal samples. The mu and sigma give the mean and standard deviations for each of the distributions.\n\n\n\n\n\n\n2. What is the best transformation to make?\nFor each of the variables in the data, which-transform.csv, decide on an appropriate transformation to make the distribution more symmetric for five of the variables and remove discreteness on one variable.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nRemember the power ladder, go down to fix right-skew, and up to fix left-skew. For multi-modal find an explanatory variable, or do a severe quantile transformation."
+    "text": "1. Understanding the velocity of galaxies\nLoad the galaxies data in the MASS package and answer the following questions based on this dataset.\n\n\nCode\ndata(galaxies, package = \"MASS\")\n\n\nYou can access documentation of the data (if available) using the help function specifying the package name in the argument.\n\n\nCode\nhelp(galaxies, package = \"MASS\")\n\n\n\nWhat does the data contain? And what is the data source?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\ndata(galaxies, package = \"MASS\")\nglimpse(galaxies)\n\n\n num [1:82] 9172 9350 9483 9558 9775 ...\n\n\nThe data contains velocities in km/sec of 82 galaxies from 6 well-separated conic sections of an unfilled survey of the Corona Borealis region. The original data is from Postman et al. (1986) and this data is from Roeder with 83rd observation removed from the original data as well as typo for the 78th observation.\n\nPostman, M., Huchra, J. P. and Geller, M. J. (1986) Probes of large-scale structures in the Corona Borealis region. Astronomical Journal 92, 1238–1247\nRoeder, K. (1990) Density estimation with confidence sets exemplified by superclusters and voids in galaxies. Journal of the American Statistical Association 85, 617–624.\n\n\n\n\n\n\nBased on the description in the R Help for the data, what would be an appropriate null distribution of this data?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThe description in the R help for the data says Multimodality in such surveys is evidence for voids and superclusters in the far universe.\nDeciding on an appropriate null hypothesis is always tricky. If we wanted to test the statement that the data is multimodal, we could compare against a unimodal distribution, either a normal or an exponential depending on what shape we might expect.\nHowever, the published work has already made a claim that the data is multimodal, so it would be interesting to determine if we can generate samples from a multimodal distribution that are indistinguishable from the data.\n\\(H_0:\\) The distribution is multimodal. \\(H_a:\\) The distribution is something other than multimodal.\n\n\n\n\n\nHow many observations are there?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThere are 82 observations.\n\n\n\n\n\nIf the data is multimodal, which of the following displays do you think would be the best? Which would not be at all useful?\n\n\nhistogram\nboxplot\ndensity plot\nviolin plot\njittered dot plot\nletter value plot\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nIf you said a density plot, jittered dot plot, or a histogram, you’re on the right track, because each can give a fine resolution for showing modes. (The violin plot is not any different from a density plot, when only looking at one variable.)\n\n\n\n\n\nMake these plots for the data. Experiment with different binwidths for the histogram and different bandwiths for the density plot. Were you right in your thinking about which would be the best?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\ng &lt;- ggplot(tibble(galaxies), aes(galaxies)) +\n  theme(\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\ng1 &lt;- g + geom_histogram(binwidth = 1000, color = \"white\") \ng2 &lt;- g + geom_boxplot() \ng3 &lt;- g + geom_density() \ng4 &lt;- g + geom_violin(aes(x=galaxies, y=1), draw_quantiles = c(0.25, 0.5, 0.75))\ng5 &lt;- g + geom_quasirandom(aes(x=1, y=galaxies)) + coord_flip() \ng6 &lt;- g + geom_lv(aes(x=1, y=galaxies)) + coord_flip() \n\ng1 + g2 + g3 + g4 + g5 + g6 + plot_layout(ncol = 2)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFit your best mixture model to the data, and simulate 19 nulls to make a lineup. Did you do a good job in matching the distribution, ie does the data plot stand out or not? (Extra bonus: What is the model that you have created? Can you make a plot to show how it looks relative to the observed data?)\n\nThis code might be helpful to get you started. This code generates a jittered dotplot, but you can use your preferred type from part e.\n\n\nCode\n# Fit a mixture model\nlibrary(mixtools)\ngalaxies_fit &lt;- normalmixEM(galaxies, k=3)\n\nset.seed(1138)\ngalaxies_sim1 &lt;- rnormmix(n=length(galaxies), \n              lambda=galaxies_fit$lambda, \n              mu=galaxies_fit$mu,\n              sigma=galaxies_fit$sigma)\n\n\n\n\nCode\n# Plot your data\nggplot(tibble(galaxies_sim1), aes(x=galaxies_sim1)) +\n  geom_quasirandom(aes(x=1, y=galaxies_sim1)) + \n  coord_flip() +\n  theme(\n    aspect.ratio = 0.7,\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\n\n\n\n\nCode\n# Generate null plots and make a lineup\ngalaxies_null &lt;- tibble(.sample=1, galaxies=galaxies_sim1)\nfor (i in 2:19) {\n  gsim &lt;- rnormmix(n=length(galaxies), \n              lambda=galaxies_fit$lambda, \n              mu=galaxies_fit$mu,\n              sigma=galaxies_fit$sigma)\n  galaxies_null &lt;- bind_rows(galaxies_null,\n                             tibble(.sample=i, galaxies=gsim))\n}\ngalaxies_null &lt;- bind_rows(galaxies_null,\n                             tibble(.sample=20,\n                                    galaxies=galaxies))\n# Randomise .sample  to hide data plot\ngalaxies_null$.sample &lt;- rep(sample(1:20, 20), rep(82, 20))\nggplot(tibble(galaxies_null), aes(x=galaxies)) +\n  geom_quasirandom(aes(x=1, y=galaxies)) + \n  facet_wrap(~.sample, ncol=5) +\n  coord_flip() +\n  theme(\n    aspect.ratio = 0.7,\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nnumber of iterations= 72 \n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\n# To make a rough plot of your model\nplot(galaxies_fit, whichplots=2)\n\n\n\n\n\n\n\n\n\nThe lambda value provides the proportion of mixing, from three normal samples. The mu and sigma give the mean and standard deviations for each of the distributions.\n\n\n\n\n\n\n2. What is the best transformation to make?\nFor each of the variables in the data, which-transform.csv, decide on an appropriate transformation to make the distribution more symmetric for five of the variables and remove discreteness on one variable.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nRemember the power ladder, go down to fix right-skew, and up to fix left-skew. For multi-modal find an explanatory variable, or do a severe quantile transformation."
   },
   {
     "objectID": "week5/worksheet.html",
@@ -3297,48 +3493,6 @@
     "text": "Exercise 1: Fisherman’s Reach crabs\nMud crabs are delicious to eat! Prof Cook’s father started a crab farm at Fisherman’s Reach, NSW, when he retired. He caught small crabs (with a special license) and nurtured and fed the crabs until they were marketable size. They were then sent to market, like Queen Victoria Market in Melbourne, for people to buy to eat. Mud crabs have a strong and nutty flavour, and a good to eat simply after steaming or boiling.\nEarly in the farming setup, he collected the measurements of 62 crabs of different sizes, because he wanted to learn when was the best time to send the crab to market. Crabs re-shell from time to time. They grow too big for their shell, and need to discard it. Ideally, the crabs should be sent to market just before they re-shell, because they will be crab will be fuller in the shell, less air, less juice and more crab meat.\nNote: In NSW it is legal to sell female mud crabs, as long as they are not carrying eggs. In Queensland, it is illegal to keep and sell female mud crabs. Focusing only on males could be worthwhile.\n\n\n\nCode\nfr_crabs &lt;- read_csv(\"https://ddde.numbat.space/data/fr-crab.csv\") %&gt;%\n  mutate(Sex = factor(Sex, levels=c(1,2),\n                      labels=c(\"m\", \"f\")))\n\n\n\nWhere is Fisherman’s Reach? What would you expect the relationship between Length and Weight of a crab to be?\n\n\nMake a scatterplot of Weight by NSW Length. Describe the relationship. It might be even better if you can add marginal density plots to the sides of the scatterplot. (Aside: Should one variable be considered a dependent variable? If so, make sure this is on the \\(y\\) axis.)\n\n\nExamine transformations to linearise the relationship. (Think about why the relationship between Length and Weight is nonlinear.)\n\n\nIs there possibly a lurking variable? Examine the variables in the data, and use colour in the plot to check for another variable explaining some of the relationship.\n\n\nIf you have determined that the is a lurking variable, make changes in the plots to find the best model of the relationship between Weight and Length.\n\n\nHow would you select the crabs that were close to re-shelling based on this data?\n\n\n\nExercise 2: Bank discrimination\n\n\nCode\ndata(case1202, package = \"Sleuth2\")\n\n\n\nLook at the help page for the case1202 from the Sleuth2 package. What does the variable “Senior” measure? “Exper”? Age?\n\n\nMake all the pairwise scatterplots of Senior, Exper and Age. What do you learn about the relationship between these three pairs of variables? How can the age be 600? Are there some wizards or witches or vampires in the data?\n\n\nColour the observations by Sex. What do you learn?\n\n\nInstead of scatterplots, make faceted histograms of the three variables by Sex. What do you learn about the difference in distribution of these three variables between the sexes.\n\n\nThe data also has 1975 salary and annual salary. Plot these two variables, in two ways: (1) coloured by Sex, and (2) faceted by Sex. Explain the relationships.\n\n\nExamine the annual salary against Age, Senior and Exper, separately by Sex, by adding a fitted linear model to the scatterplot where Sex is mapped to colour. What is the relationship and what do you learn?\n\n\nWhen you use geom_smooth(method=\"lm\") to add a fitted model to the scatterplot, is it adding a model with interactions?\n\n\nThere is danger of misinterpreting differences when only examining marginal plots. What we need to know is: for a person with the same age, same experience, same seniority, is the salary different for men and women. How would you make plots to try to examine this?\n\n\nWould you say that this data provides evidence of sex discrimination?"
   },
   {
-    "objectID": "week8/index.html",
-    "href": "week8/index.html",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "",
-    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
-  },
-  {
-    "objectID": "week8/index.html#main-reference",
-    "href": "week8/index.html#main-reference",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "",
-    "text": "Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1"
-  },
-  {
-    "objectID": "week8/index.html#what-you-will-learn-this-week",
-    "href": "week8/index.html#what-you-will-learn-this-week",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "What you will learn this week",
-    "text": "What you will learn this week\n\nWhat is high-dimensional data? (If all variables are quantitative)\nExploring relationships between more than two variables\n\nTours - scatterplots of combinations of variables\nMatrix of plots\nParallel coordinates\n\nWhat can be hidden\nAutomating the search for pairwise relationships using scagnostics\nLinking elements of multiple plots\nExploring multiple categorical variables"
-  },
-  {
-    "objectID": "week8/index.html#lecture-slides",
-    "href": "week8/index.html#lecture-slides",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "Lecture slides",
-    "text": "Lecture slides\n\nhtml\npdf\nqmd\nR"
-  },
-  {
-    "objectID": "week8/index.html#tutorial-instructions",
-    "href": "week8/index.html#tutorial-instructions",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "Tutorial instructions",
-    "text": "Tutorial instructions\n\nhtml\nqmd"
-  },
-  {
-    "objectID": "week8/index.html#assignments",
-    "href": "week8/index.html#assignments",
-    "title": "Week 8: Going beyond two variables, exploring high dimensions",
-    "section": "Assignments",
-    "text": "Assignments\n\nExercises 3 is due on Monday 22 September.\nQuiz 7 is due on Thursday 18 September.\nQuiz 8 is due on Thursday 25 September."
-  },
-  {
     "objectID": "week7/slides.html#at-the-heart-of-quantitative-reasoning-is-a-single-question-compared-to-what",
     "href": "week7/slides.html#at-the-heart-of-quantitative-reasoning-is-a-single-question-compared-to-what",
     "title": "ETC5521: Diving Deeply into Data Exploration",
@@ -3556,74 +3710,11 @@
     "text": "Resources\n\nWilke (2019) Fundamentals of Data Visualization Chapters 9, 10, 11\nUnwin (2015) Graphical Data Analysis with R Chapter 10"
   },
   {
-    "objectID": "week7/tutorial.html",
-    "href": "week7/tutorial.html",
-    "title": "ETC5521 Tutorial 7",
+    "objectID": "week7/worksheetsol.html",
+    "href": "week7/worksheetsol.html",
+    "title": "ETC5521 Worksheet Week 7",
     "section": "",
-    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
-  },
-  {
-    "objectID": "week7/tutorial.html#objectives",
-    "href": "week7/tutorial.html#objectives",
-    "title": "ETC5521 Tutorial 7",
-    "section": "",
-    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
-  },
-  {
-    "objectID": "week7/tutorial.html#preparation",
-    "href": "week7/tutorial.html#preparation",
-    "title": "ETC5521 Tutorial 7",
-    "section": "🔧 Preparation",
-    "text": "🔧 Preparation\n\nThe reading for this week is Wilke (2019) Chapters 9, 10.2-4, 11.2.\nComplete the weekly quiz, before the deadline!\nInstall the following R-packages if you do not have them already:\n\n\ninstall.packages(c(\"colorspace\", \"lvplot\", \"patchwork\", \"janitor\", \"lubridate\", \"vcd\", \"ggbeeswarm\", \"kableExtra\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
-  },
-  {
-    "objectID": "week7/tutorial.html#exercises",
-    "href": "week7/tutorial.html#exercises",
-    "title": "ETC5521 Tutorial 7",
-    "section": "📥 Exercises",
-    "text": "📥 Exercises\n\nExercise 1: Melbourne daily maximum temperature\nThe csv file melb_temp_2023-09-08.csv contains data on the daily maximum temperature from 1970 to 2023 collected from the weather station at Melbourne Airport. Use this to answer the following questions, with the additional information that in Australia:\n\nSummer is from the beginning of December to the end of February,\nAutumn is from the beginning of March to the end of May,\nWinter is from the beginning of June to the end of August, and\nSpring is from the beginning of September to the end of November.\n\n\nThere are four plots below. Write the code to make them yourself. Then think about the three questions (i), (ii) or (iii) below.\n\n\n\nAre there any winters where the daily maximum temperature is different to winter in other years?\n\n\nWhat is the general pattern of maximum daily temperatures in winter?\n\n\nIs there evidence that winters in Melbourne are getting warmer?\n\n\nWhich plot best matches each question? If none of them work, for any particular question, make an alternative plot. Also, if any of the plots don’t help answer any of the questions, think about a question that they might answer.\n\nMake a transformation of the data and a new plot with this variable, that will allow a more direct comparison to answer question (iii).\n\nThe data can be read and processed using this code:\n\nmelb_df &lt;- read_csv(\"https://raw.githubusercontent.com/numbats/ddde/main/data/melb_temp_2023-09-08.csv\") |&gt;\n  clean_names() |&gt;\n  rename(temp = maximum_temperature_degree_c) |&gt;\n  dplyr::filter(!is.na(temp)) |&gt;\n  dplyr::select(year, month, day, temp) |&gt;\n  mutate(\n    date = as.Date(paste(year, month, day, sep = \"-\")))\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 2: Evidence of Simpson’s paradox?\nCheck the following data set for evidence of Simpsons Paradox, in the sense that if group2 == \"X\" the pass rate is higher.\n\ndf &lt;- tribble(\n  ~group1, ~group2, ~result, ~count,\n  \"A\", \"X\", \"pass\", 100,\n  \"B\", \"X\", \"pass\", 50,\n  \"C\", \"X\", \"pass\", 25,\n  \"A\", \"X\", \"fail\", 10,\n  \"B\", \"X\", \"fail\", 20,\n  \"C\", \"X\", \"fail\", 20,\n  \"A\", \"Y\", \"pass\", 10,\n  \"B\", \"Y\", \"pass\", 70,\n  \"C\", \"Y\", \"pass\", 15,\n  \"A\", \"Y\", \"fail\", 20,\n  \"B\", \"Y\", \"fail\", 40,\n  \"C\", \"Y\", \"fail\", 30)"
-  },
-  {
-    "objectID": "week7/tutorial.html#finishing-up",
-    "href": "week7/tutorial.html#finishing-up",
-    "title": "ETC5521 Tutorial 7",
-    "section": "👌 Finishing up",
-    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
-  },
-  {
-    "objectID": "week7/tutorialsol.html",
-    "href": "week7/tutorialsol.html",
-    "title": "ETC5521 Tutorial 7",
-    "section": "",
-    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
-  },
-  {
-    "objectID": "week7/tutorialsol.html#objectives",
-    "href": "week7/tutorialsol.html#objectives",
-    "title": "ETC5521 Tutorial 7",
-    "section": "",
-    "text": "These are exercises so that you can make some numerical and graphical comparisons for various datasets and help to think about the comparisons being made."
-  },
-  {
-    "objectID": "week7/tutorialsol.html#preparation",
-    "href": "week7/tutorialsol.html#preparation",
-    "title": "ETC5521 Tutorial 7",
-    "section": "🔧 Preparation",
-    "text": "🔧 Preparation\n\nThe reading for this week is Wilke (2019) Chapters 9, 10.2-4, 11.2.\nComplete the weekly quiz, before the deadline!\nInstall the following R-packages if you do not have them already:\n\n\ninstall.packages(c(\"colorspace\", \"lvplot\", \"patchwork\", \"janitor\", \"lubridate\", \"vcd\", \"ggbeeswarm\", \"kableExtra\"))\n\n\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
-  },
-  {
-    "objectID": "week7/tutorialsol.html#exercises",
-    "href": "week7/tutorialsol.html#exercises",
-    "title": "ETC5521 Tutorial 7",
-    "section": "📥 Exercises",
-    "text": "📥 Exercises\n\nExercise 1: Melbourne daily maximum temperature\nThe csv file melb_temp_2023-09-08.csv contains data on the daily maximum temperature from 1970 to 2023 collected from the weather station at Melbourne Airport. Use this to answer the following questions, with the additional information that in Australia:\n\nSummer is from the beginning of December to the end of February,\nAutumn is from the beginning of March to the end of May,\nWinter is from the beginning of June to the end of August, and\nSpring is from the beginning of September to the end of November.\n\n\nThere are four plots below. Write the code to make them yourself. Then think about the three questions (i), (ii) or (iii) below.\n\n\n\nAre there any winters where the daily maximum temperature is different to winter in other years?\n\n\nWhat is the general pattern of maximum daily temperatures in winter?\n\n\nIs there evidence that winters in Melbourne are getting warmer?\n\n\nWhich plot best matches each question? If none of them work, for any particular question, make an alternative plot. Also, if any of the plots don’t help answer any of the questions, think about a question that they might answer.\n\nMake a transformation of the data and a new plot with this variable, that will allow a more direct comparison to answer question (iii).\n\nThe data can be read and processed using this code:\n\nmelb_df &lt;- read_csv(\"https://raw.githubusercontent.com/numbats/ddde/main/data/melb_temp_2023-09-08.csv\") |&gt;\n  clean_names() |&gt;\n  rename(temp = maximum_temperature_degree_c) |&gt;\n  dplyr::filter(!is.na(temp)) |&gt;\n  dplyr::select(year, month, day, temp) |&gt;\n  mutate(\n    date = as.Date(paste(year, month, day, sep = \"-\")))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nCode for the plots is:\n\n\n# Plot (A)\nwinter_df &lt;- melb_df |&gt;\n  dplyr::filter(month %in% c(\"06\", \"07\", \"08\")) |&gt;\n  mutate(winter_day = as.numeric(\n    difftime(date, \n             ymd(paste0(year, \"-06\", \"-01\")), \n             units=\"days\")))\np_a &lt;- ggplot(winter_df, aes(x=winter_day, y=temp)) +\n  geom_point(\n    data = dplyr::select(winter_df, -year),\n    color = \"gray\", size = 0.1\n  ) +\n  geom_line() +\n  facet_wrap(~year) +\n  labs(\n    tag = \"(A)\", x = \"\",\n    y = \"Temperature (°C)\"\n  ) + \n  scale_x_continuous(\"\", breaks = c(0, 31, 62, 92), labels=c(\"J\", \"J\", \"A\", \"S\"))\n\n# Plot (B)\np_b &lt;- ggplot(winter_df, aes(x=year, y=temp)) +\n  #geom_boxplot() +\n  geom_jitter(width=0.1, height=0, alpha=0.2) +\n  stat_summary(fun=\"mean\", geom=\"point\", colour=\"orangered\", size=3) +\n  geom_smooth(colour=\"red\") +\n  labs(\n    tag = \"(B)\", x = \"Year\",\n    y = \"Temperature (°C)\"\n  ) \n\n# Plot (C)\np_c &lt;- winter_df |&gt;\n  mutate(year = fct_reorder(as.factor(year), temp)) |&gt;\n  ggplot(aes(temp, year)) +\n  # geom_boxplot(aes(color = as.numeric(as.character(year)))) +\n  geom_quasirandom(aes(x=as.factor(year), y=temp,\n                       colour = as.numeric(as.character(year)))) +\n  labs(\n    tag = \"(C)\", x = \"Year\",\n    y = \"Temperature (°C)\",\n    color = \"Year\"\n  ) +\n  scale_color_continuous_divergingx(mid = 1995) +\n  coord_flip()\n\n# Plot (D)\np_d &lt;- winter_df |&gt;\n  mutate(pre1995 = ifelse(year &lt; 1995, \"&lt; 1995\", \"&gt; 1995\")) |&gt;\n  ggplot(aes(x=pre1995, y=temp)) +\n  geom_lv(aes(fill=after_stat(LV))) +\n  labs(\n    tag = \"(D)\", y = \"Temperature (°C)\",\n    x = \"Time Period\"\n  ) +\n  scale_fill_discrete_divergingx(palette = \"Fall\")\n\np_a + p_b + p_c + p_d + \n  plot_layout(ncol=1, heights=c(5,3,5,3))\n\nPlot A is the only one that allows examining the pattern for winter each year, which helps to address questions (i) and (ii).\nIn answer to (i) I don’t see any year that is especially different from any other year.\nThere is a lot of variability in the patterns for winter. For most years it appears to be fairly flat with an increase in August. However, some years temperature remain cool in August.\nTo better study the winter pattern it might be better to use a smoother model instead of connecting the day-to-day measurements with a line.\n\nggplot(winter_df, aes(x=winter_day, y=temp)) +\n  geom_point(\n    data = dplyr::select(winter_df, -year),\n    color = \"gray\", size = 0.1\n  ) +\n  geom_smooth(se=F, colour=\"black\") +\n  facet_wrap(~year) +\n  labs(\n    tag = \"(E)\", x = \"\",\n    y = \"Temperature (°C)\"\n  ) + \n  scale_x_continuous(\"\", breaks = c(0, 31, 62, 92), labels=c(\"J\", \"J\", \"A\", \"S\"))\n\n\n\n\n\n\n\n\nFrom plot E, it’s a bit easier to see that overall the years (grey points) there is the expected pattern of a dip to the coolest part of winter and then a warmup. However, this pattern is very rare in any year. Variability is more typical, some years the temperature is flat across June, July, August, and in some years there is a dramatic warming in August. Some years it is even warmer in July than August.\nBoth plots C, D address question (iii). Plot C is a bit awkward! Reading the colour trend is easy. The top of the diagram is more red, and the bottom more green. To understand what this means, and how it relates to the question requires thinking about the colour mapping, in relation to the sorting of the y axis. If there was no relationship between median temperature and year, the colouring would be very mixed. That’s not what is seen - the later years (more orange) occur with higher medians. Thus this plot would help us answer question (iii), with there is evidence that winters have been warmer in recent years.\nPlot D is much more compact and simple to interpret. The colder winter temperatures seen before 1995 have not been observed after 1995. Also the median is higher in the after 1995 years. It gives evidence for “winters are warmer in recent years” too, but it is too coarse a view with only these two subsets of years. Interestingly, the maximums of the maximum temperatures don’t appear to have changed.\n\nUsing the median or a median of an early period of measurements as a baseline, compute the relative change in temperature. Plot these against year, using yearly median as points with a smoother, or possibly using bars (above and below zero) to display the yearly median.\n\n\nwinter_df &lt;- winter_df |&gt;\n  mutate(rel_change = (temp - median(temp))/median(temp))\n\nwinter_df |&gt;\n  ggplot(aes(x=year, y=rel_change)) +\n  geom_hline(yintercept=0, linewidth=3, colour=\"grey90\") +\n  stat_summary(fun=\"mean\", geom=\"point\") +\n  geom_smooth(colour=\"red\", se=F) +\n  labs(\n    tag = \"(F)\", x = \"Year\",\n    y = \"Change in temperature\",\n    color = \"Year\"\n  ) \n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise 2: Evidence of Simpson’s paradox?\nCheck the following data set for evidence of Simpsons Paradox, in the sense that if group2 == \"X\" the pass rate is higher.\n\ndf &lt;- tribble(\n  ~group1, ~group2, ~result, ~count,\n  \"A\", \"X\", \"pass\", 100,\n  \"B\", \"X\", \"pass\", 50,\n  \"C\", \"X\", \"pass\", 25,\n  \"A\", \"X\", \"fail\", 10,\n  \"B\", \"X\", \"fail\", 20,\n  \"C\", \"X\", \"fail\", 20,\n  \"A\", \"Y\", \"pass\", 10,\n  \"B\", \"Y\", \"pass\", 70,\n  \"C\", \"Y\", \"pass\", 15,\n  \"A\", \"Y\", \"fail\", 20,\n  \"B\", \"Y\", \"fail\", 40,\n  \"C\", \"Y\", \"fail\", 30)\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nOverall, if group2 is “X” the pass rate is higher. This is true if the data is also examined separately for each of A, B, C of group1. The rates are slightly different though, with A having a big difference in pass rate, and B having a small difference. So there is evidence of Simpsons Paradox because the proportions differ.\n\ndf |&gt; group_by(group1) |&gt; summarise(sum(count))\n\n# A tibble: 3 × 2\n  group1 `sum(count)`\n  &lt;chr&gt;         &lt;dbl&gt;\n1 A               140\n2 B               180\n3 C                90\n\ndf |&gt; group_by(group2) |&gt; summarise(sum(count))\n\n# A tibble: 2 × 2\n  group2 `sum(count)`\n  &lt;chr&gt;         &lt;dbl&gt;\n1 X               225\n2 Y               185\n\nggplot(df, aes(x=group2, y=count, fill=result)) +\n  geom_col(position=\"fill\") +\n  scale_fill_discrete_divergingx()\n\n\n\n\n\n\n\ndoubledecker(xtabs(count ~ group1 + group2 + result, data = df),\n  gp = gpar(fill = c(\"grey90\", \"orangered\"))\n)"
-  },
-  {
-    "objectID": "week7/tutorialsol.html#finishing-up",
-    "href": "week7/tutorialsol.html#finishing-up",
-    "title": "ETC5521 Tutorial 7",
-    "section": "👌 Finishing up",
-    "text": "👌 Finishing up\nMake sure you say thanks and good-bye to your tutor. This is a time to also report what you enjoyed and what you found difficult."
+    "text": "Exercise 1: Discussion\nThe Women’s Weekly published a story about famous Australian model, Elle McPherson’s breast cancer story. Diagnosed 7 years ago, she is in remission after choosing alternative therapies as treatment. The original diagnosis was accompanied by lumpectomy removing the cancerous tissue.\nWhat does data say relative to this statement?\n\nAlternative therapies assisted Elle’s being considered cleared of cancer today.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThis article has good explanations that clarify missing pieces from the Women’s Weekly article.\nElle was diagnosed with HER2 positive oestrogen receptive intraductal carcinoma. What was not reported was that her cancer was non-invasive.\nIf you read this information you will see the survival rate for localised (non-invasive) is 99%.\n\n\n\n\n\n\nExercise 2: Hate Crime\n\nPossibly uncomfortable?Continue\n\n\nIf this topic is upsetting for you, please feel free to take yourself out of the discussion, and exit the workshop.\n\n\nA certain person made the following statement about this data and used the graph below to illustrate his point.\n\nThe post-9/11 upsurge in hate crimes against Muslims was real and unforgivable, but the horrible truth is that it didn’t loom that large compared with what Blacks face year in and year out.\n\n\n\nCode\ndf &lt;- tribble(\n  ~year, ~offense, ~count,\n  2000, \"Anti-Black\", 3535,\n  2000, \"Sexual Orientation\", 1558,\n  2000, \"Anti-Islamic\", 36,\n  2001, \"Anti-Black\", 3700,\n  2001, \"Sexual Orientation\", 1664,\n  2001, \"Anti-Islamic\", 554,\n  2002, \"Anti-Black\", 3076,\n  2002, \"Sexual Orientation\", 1513,\n  2002, \"Anti-Islamic\", 174\n) |&gt;\n  mutate(offense = fct_reorder(offense, -count))\n\npop_df &lt;- tribble(\n  ~pop, ~size,\n  \"Anti-Black\", 36.4e6,\n  \"Sexual Orientation\", 28.2e6,\n  \"Anti-Islamic\", 3.4e6\n)\n\ncrime_df &lt;- left_join(df, pop_df, by = c(\"offense\" = \"pop\")) |&gt;\n  mutate(prop = count / size)\n\n\n\n\n\n\n\nVictims of hate crime in USA in years 2000-2002.\n\n\n\n\nDiscuss whether the plot supports his statement or not. Is his comparison of the number of crimes against Muslim and Blacks fair? What graph would you suggest to make to support/disprove his statement? The data and additional information is provided below.\nThis uses the data from the USA hate crime statistics found here. The number of victims by three particular hate crime is shown in the table below.\n\n\n\n\nThe number of victims by hate crime in the USA. Data sourced from https://ucr.fbi.gov/hate-crime.\n\n\nYear\nOffense\nVictims\n\n\n\n\n2000\nAnti-Black\n3535\n\n\n2000\nSexual Orientation\n1558\n\n\n2000\nAnti-Islamic\n36\n\n\n2001\nAnti-Black\n3700\n\n\n2001\nSexual Orientation\n1664\n\n\n2001\nAnti-Islamic\n554\n\n\n2002\nAnti-Black\n3076\n\n\n2002\nSexual Orientation\n1513\n\n\n2002\nAnti-Islamic\n174\n\n\n\n\n\nThe 2000 USA Census reports that there were a total of 36.4 million people who reported themselves as Black or African American. Weeks (2003) estimated there are 3.4 million Muslims in the USA. The LGBT population is harder to estimate but reports indicate 2-10% of the population so likely below 28.2 million people in the USA.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nThe use of a line plot rather than bar plot makes it easier to compare the trend across years.\nThe second sentence compares the number of victims of anti-Black hate crimes and of anti-Islamic hate crimes.\nThe problem with this comparison is that the population size is vastly different for the two comparisons.\nWhile the number of anti-Black victims are far larger than anti-Islamic victims as shown in Plot (A) below, the Muslim community is roughly 10% of the size of the Black community.\nAssuming the population size is roughly the same across 2000-2002, a rough estimate of the proportions of hate crime victims for each population is compared in Plot (B).\n\nThe significant surge in anti-Islamic crimes in 2001 is more apparent in Plot (B).\nPlot (C) shows the odds ratio with respect to year 2000. This shows that the anti-Islamic crime in 2001 was nearly 15 times higher than in 2000 lowering to about 4.8 in 2001. This however is higher than that of the incidences related to anti-Black and sexual orientation hate crimes which remain somewhat stable from 2000-2002 (odds ratio is close to 1 or slightly lower).\n\nOnce again, these plots show that the answer to the question (is the quote true), depends on how one interprets the quote. Is the person saying that the number of victims of anti-Black hate crimes is always higher than anti-Islamic hate crimes? Then the answer is likely yes. However, per capita, the rate of anti-Islamic hate crimes far exceeded anything else in 2001, which goes against the quote.\n\n\nCode\nggplot(crime_df, aes(as.factor(year), count, color = offense)) +\n  geom_point() +\n  geom_line(aes(group = offense)) +\n  scale_color_discrete_qualitative() +\n  labs(\n    x = \"Year\", y = \"The number of victims\",\n    color = \"Offense\", tag = \"(A)\"\n  )\n\n\n\n\n\n\n\n\n\nCode\nggplot(crime_df, aes(as.factor(year), prop * 10000, color = offense)) +\n  geom_point() +\n  geom_line(aes(group = offense)) +\n  scale_color_discrete_qualitative() +\n  labs(\n    x = \"Year\", y = \"Incidence estimate per 10,000 people\",\n    color = \"Offense\", tag = \"(B)\"\n  )\n\n\n\n\n\n\n\n\n\nCode\nyear2000dict &lt;- crime_df |&gt;\n  dplyr::filter(year == 2000) |&gt;\n  dplyr::select(offense, prop) |&gt;\n  deframe()\n\ncrime_df |&gt;\n  mutate(rel2000 = prop / year2000dict[offense]) |&gt;\n  dplyr::filter(year != 2000) |&gt;\n  ggplot(aes(as.factor(year), rel2000, color = offense)) +\n  geom_point() +\n  geom_line(aes(group = offense)) +\n  scale_color_discrete_qualitative() +\n  scale_y_continuous(breaks = c(1, 4, 5, 15, 16)) +\n  labs(\n    x = \"Year\", y = \"Odds ratio with respect to year 2000\",\n    color = \"Offense\", tag = \"(C)\"\n  )"
   },
   {
     "objectID": "week7/worksheet.html",
@@ -3633,10 +3724,269 @@
     "text": "Exercise 1: Discussion\nThe Women’s Weekly published a story about famous Australian model, Elle McPherson’s breast cancer story. Diagnosed 7 years ago, she is in remission after choosing alternative therapies as treatment. The original diagnosis was accompanied by lumpectomy removing the cancerous tissue.\nWhat does data say relative to this statement?\n\nAlternative therapies assisted Elle’s being considered cleared of cancer today.\n\n\n\nExercise 2: Hate Crime\n\nPossibly uncomfortable?Continue\n\n\nIf this topic is upsetting for you, please feel free to take yourself out of the discussion, and exit the workshop.\n\n\nA certain person made the following statement about this data and used the graph below to illustrate his point.\n\nThe post-9/11 upsurge in hate crimes against Muslims was real and unforgivable, but the horrible truth is that it didn’t loom that large compared with what Blacks face year in and year out.\n\n\n\nCode\ndf &lt;- tribble(\n  ~year, ~offense, ~count,\n  2000, \"Anti-Black\", 3535,\n  2000, \"Sexual Orientation\", 1558,\n  2000, \"Anti-Islamic\", 36,\n  2001, \"Anti-Black\", 3700,\n  2001, \"Sexual Orientation\", 1664,\n  2001, \"Anti-Islamic\", 554,\n  2002, \"Anti-Black\", 3076,\n  2002, \"Sexual Orientation\", 1513,\n  2002, \"Anti-Islamic\", 174\n) |&gt;\n  mutate(offense = fct_reorder(offense, -count))\n\npop_df &lt;- tribble(\n  ~pop, ~size,\n  \"Anti-Black\", 36.4e6,\n  \"Sexual Orientation\", 28.2e6,\n  \"Anti-Islamic\", 3.4e6\n)\n\ncrime_df &lt;- left_join(df, pop_df, by = c(\"offense\" = \"pop\")) |&gt;\n  mutate(prop = count / size)\n\n\n\n\n\n\n\nVictims of hate crime in USA in years 2000-2002.\n\n\n\n\nDiscuss whether the plot supports his statement or not. Is his comparison of the number of crimes against Muslim and Blacks fair? What graph would you suggest to make to support/disprove his statement? The data and additional information is provided below.\nThis uses the data from the USA hate crime statistics found here. The number of victims by three particular hate crime is shown in the table below.\n\n\n\n\nThe number of victims by hate crime in the USA. Data sourced from https://ucr.fbi.gov/hate-crime.\n\n\nYear\nOffense\nVictims\n\n\n\n\n2000\nAnti-Black\n3535\n\n\n2000\nSexual Orientation\n1558\n\n\n2000\nAnti-Islamic\n36\n\n\n2001\nAnti-Black\n3700\n\n\n2001\nSexual Orientation\n1664\n\n\n2001\nAnti-Islamic\n554\n\n\n2002\nAnti-Black\n3076\n\n\n2002\nSexual Orientation\n1513\n\n\n2002\nAnti-Islamic\n174\n\n\n\n\n\nThe 2000 USA Census reports that there were a total of 36.4 million people who reported themselves as Black or African American. Weeks (2003) estimated there are 3.4 million Muslims in the USA. The LGBT population is harder to estimate but reports indicate 2-10% of the population so likely below 28.2 million people in the USA."
   },
   {
-    "objectID": "week7/worksheetsol.html",
-    "href": "week7/worksheetsol.html",
-    "title": "ETC5521 Worksheet Week 7",
+    "objectID": "week8/slides.html#outline",
+    "href": "week8/slides.html#outline",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Outline",
+    "text": "Outline\n\nWhat is high-dimensional data? (If all variables are quantitative)\nExploring relationships between more than two variables\n\nTours - scatterplots of combinations of variables\nMatrix of plots\nParallel coordinates\n\nWhat can be hidden\nAutomating the search for pairwise relationships using scagnostics\nLinking elements of multiple plots\nExploring multiple categorical variables"
+  },
+  {
+    "objectID": "week8/slides.html#flatland",
+    "href": "week8/slides.html#flatland",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Flatland",
+    "text": "Flatland\n Click here to watch video \nTrailer for “FLATLAND 2: SPHERELAND”. Original book, and movie information at wikipedia"
+  },
+  {
+    "objectID": "week8/slides.html#high-dimensional-shapes-shadows-and-slices",
+    "href": "week8/slides.html#high-dimensional-shapes-shadows-and-slices",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "High-dimensional shapes: shadows and slices",
+    "text": "High-dimensional shapes: shadows and slices"
+  },
+  {
+    "objectID": "week8/slides.html#low-dimensional-shapes-in-high-dimensions",
+    "href": "week8/slides.html#low-dimensional-shapes-in-high-dimensions",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Low-dimensional shapes in high-dimensions",
+    "text": "Low-dimensional shapes in high-dimensions"
+  },
+  {
+    "objectID": "week8/slides.html#what-is-high-dimensions",
+    "href": "week8/slides.html#what-is-high-dimensions",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What is high-dimensions?",
+    "text": "What is high-dimensions?\n\n\n\nWhen all variables are quantitative, an extra variable adds an extra orthogonal axis. It has a name, Euclidean space which dates back to the ancient Greeks."
+  },
+  {
+    "objectID": "week8/slides.html#features-to-find",
+    "href": "week8/slides.html#features-to-find",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Features to find",
+    "text": "Features to find\n\n\n\n\n\n\n\nFeature\nExample\nDescription\n\n\n\n\nlinear form\n\nThe shape is linear\n\n\nnonlinear form\n\nThe shape is more of a curve\n\n\noutliers\n\nThere are one or more points that do not fit the pattern on the others\n\n\nclusters\n\nThe observations group into multiple clumps\n\n\ngaps\n\nThere is a gap, or gaps, but its not clumped\n\n\nbarrier\n\nThere is combination of the variables which appears impossible\n\n\nl-shape\n\nWhen one variable changes the other is approximately constant\n\n\ndiscreteness\n\nRelationship between two variables is different from the overall, and observations are in a striped pattern\n\n\n\n\n\n\nAny of the features from 2D are patterns to find in higher dimensions."
+  },
+  {
+    "objectID": "week8/slides.html#a-movie-of-linear-combinations-tour",
+    "href": "week8/slides.html#a-movie-of-linear-combinations-tour",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "A movie of linear combinations: tour",
+    "text": "A movie of linear combinations: tour"
+  },
+  {
+    "objectID": "week8/slides.html#grand-tour",
+    "href": "week8/slides.html#grand-tour",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Grand tour",
+    "text": "Grand tour\n\n\n\n\ndata-processing\n#library(palmerpenguins)\nf_std &lt;- function(x) (x-mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)\np_std &lt;- penguins |&gt;\n  select(bill_len:body_mass, species) |&gt;\n  dplyr::rename(bl = bill_len,\n         bd = bill_dep,\n         fl = flipper_len,\n         bm = body_mass) |&gt;\n  na.omit() |&gt;\n  dplyr::mutate(bl = f_std(bl),\n         bd = f_std(bd),\n         fl = f_std(fl),\n         bm = f_std(bm))\n\n\n\n\nCode\nanimate_xy(p_std[,1:4], axes=\"off\")\nrender_gif(p_std[,1:4], grand_tour(), display_xy(axes=\"off\"),\n           gif_file = \"images/penguins_grand.gif\",\n           frames = 50,\n           start = basis_random(4,2))\n\n\n\nHow many clusters?\n\n\n\n\nCode\nanimate_xy(p_std[,1:4], axes=\"off\", col=p_std$species)\nrender_gif(p_std[,1:4], grand_tour(),\n           display_xy(col=p_std$species, axes=\"off\"),\n           gif_file = \"images/penguins_grand_sp.gif\",\n           frames = 50,\n           start = basis_random(4,2))\n\n\n\nThe clusters correspond the three species."
+  },
+  {
+    "objectID": "week8/slides.html#what-does-linear-combination-of-variables-mean",
+    "href": "week8/slides.html#what-does-linear-combination-of-variables-mean",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What does linear combination of variables mean?",
+    "text": "What does linear combination of variables mean?\n Click to see demo \n If your data values are -0.88, 0.78, -1.42, -0.56 and the coefficients are 0.23, -0.63, 0.67, -0.31 then the projected data value is -1.47. It’s like a regression equation.\n To make a scatterplot, two linear combinations are used. With special care: (1) the sum of square of each equals 1, and (2) the sum of the product of the two linear combinations equals 0."
+  },
+  {
+    "objectID": "week8/slides.html#guided-tour",
+    "href": "week8/slides.html#guided-tour",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Guided tour",
+    "text": "Guided tour\n\n\n\n\nCode\nset.seed(815)\nproj &lt;- animate_xy(p_std[,1:4], \n           guided_tour(lda_pp(p_std$species)),\n           start = basis_random(4,2),\n           axes=\"bottomleft\", col=p_std$species)\nbest_proj &lt;- proj$basis[314][[1]]\ncolnames(best_proj) &lt;- c(\"PP1\", \"PP2\")\nrownames(best_proj) &lt;- colnames(p_std[,1:4])\nset.seed(815)\nrender_gif(p_std[,1:4], \n           guided_tour(lda_pp(p_std$species)),\n           display_xy(col=p_std$species, axes=\"bottomleft\"),\n           gif_file = \"images/penguins_guided.gif\",\n           frames = 50,\n           start = basis_random(4,2),\n           loop = FALSE)\n\n\n\n\n Define what structure is interesting, numerically, calculated by a function. Use an optimiser to choose linear combinations that maximise this function. \nMore on creating functions defining interesting structure soon!"
+  },
+  {
+    "objectID": "week8/slides.html#manualradial-tour",
+    "href": "week8/slides.html#manualradial-tour",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Manual/radial tour",
+    "text": "Manual/radial tour\n\n\n\n\nCode\nset.seed(829)\nanimate_xy(p_std[,1:4], \n           radial_tour(best_proj, mvar=3),\n           axes=\"bottomleft\", col=p_std$species)\n# Generate a path that shows multiple variables being rotated ou\nset.seed(829)\np_rad_fl &lt;- save_history(p_std[,1:4], \n                      radial_tour(best_proj, mvar=3),\n                      max_bases = 3)\np_rad_bd &lt;- save_history(p_std[,1:4], \n                      radial_tour(best_proj, mvar=2),\n                      max_bases = 3)\np_rad_bl &lt;- save_history(p_std[,1:4], \n                      radial_tour(best_proj, mvar=1),\n                      max_bases = 3)\np_rad &lt;- array(dim = c(4, 2, 7))\np_rad[,,1:3] &lt;- p_rad_fl\np_rad[,,4:5] &lt;- p_rad_bd[,,2:3]\np_rad[,,6:7] &lt;- p_rad_bl[,,2:3]\nclass(p_rad) &lt;- \"history_array\"\nanimate_xy(p_std[,1:4], \n           planned_tour(p_rad),\n           axes=\"bottomleft\", col=p_std$species)\n\nrender_gif(p_std[,1:4], \n           planned_tour(p_rad),\n           display_xy(col=p_std$species, axes=\"bottomleft\"),\n           gif_file = \"images/penguins_radial.gif\",\n           frames = 100)\n\n\n\n\n Remove a variable to see what the change to the pattern is. \nUse this to assess whether a variable is important for a pattern, and hence the relationship between multiple variables."
+  },
+  {
+    "objectID": "week8/slides.html#scale-your-data",
+    "href": "week8/slides.html#scale-your-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Scale your data!",
+    "text": "Scale your data!\n\n\n\nThe scale of the variables can affect how you see the relationships between multiple variables.\n\n\n Generally, each variable should be scaled to have mean 0, standard deviation 1. (Or min -1 and max 1.)\n If different scales on different variables is meaningful, and they are in the same units, you can scale with global mean and standard deviation (or minimum and maximum)."
+  },
+  {
+    "objectID": "week8/slides.html#static-plots-of-multivariate-data",
+    "href": "week8/slides.html#static-plots-of-multivariate-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Static plots of multivariate data",
+    "text": "Static plots of multivariate data"
+  },
+  {
+    "objectID": "week8/slides.html#simpler-scatterplot-matrix",
+    "href": "week8/slides.html#simpler-scatterplot-matrix",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Simpler: scatterplot matrix",
+    "text": "Simpler: scatterplot matrix\n\n\n\n\nCode\nggscatmat(p_std, columns=1:4, col=\"species\", alpha=0.5) +\n  scale_color_discrete_divergingx(palette=\"Zissou 1\") +\n  theme(axis.text = element_blank())\n\n\n\n\n\n\n\n\n\n\n Plot\n\nall the pairs of variables.\nunivariate distributions.\nmaybe show correlations, too."
+  },
+  {
+    "objectID": "week8/slides.html#parallel-coordinate-plot",
+    "href": "week8/slides.html#parallel-coordinate-plot",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Parallel coordinate plot",
+    "text": "Parallel coordinate plot\n\n\n\n\nCode\np_std |&gt;\n  pcp_select(1:5) |&gt;  # select everything\n  pcp_arrange() |&gt;\n  ggplot(aes_pcp(colour=species)) +\n    geom_pcp() + \n    scale_color_discrete_divergingx(palette = \"Zissou 1\") +\n    theme_pcp()\n\n\n\n\n\n\n\n\n\n\nLike side-by-side dot plots, where points are connected.\nLook for patterns in the lines, such as\n\ngrouped together indicating clustering.\nsome lines going in different directions, indicating outliers.\nparallel or crossing lines, indicating linear positive and negative association."
+  },
+  {
+    "objectID": "week8/slides.html#what-you-might-miss-without-a-tour",
+    "href": "week8/slides.html#what-you-might-miss-without-a-tour",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What you might miss without a tour",
+    "text": "What you might miss without a tour"
+  },
+  {
+    "objectID": "week8/slides.html#hidden-structure-13",
+    "href": "week8/slides.html#hidden-structure-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Hidden structure (1/3)",
+    "text": "Hidden structure (1/3)\n\n\nMany relationships can only be seen when multiple variables are combined:\n\noutlier(s)\nclustering\nnon-linearity\n\n\n\nExample from my experience with early experiments in laser equipment construction."
+  },
+  {
+    "objectID": "week8/slides.html#hidden-structure-23",
+    "href": "week8/slides.html#hidden-structure-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Hidden structure (2/3)",
+    "text": "Hidden structure (2/3)\n\n\n\n\n\n\n\n\n\n\n\nCan you see an anomaly?\n\n\n\n\nCan you see it now?"
+  },
+  {
+    "objectID": "week8/slides.html#hidden-structure-33",
+    "href": "week8/slides.html#hidden-structure-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Hidden structure (3/3)",
+    "text": "Hidden structure (3/3)\n\n\n\n\n\n\n\n\n\n\n\nHow many clusters?\n\n\n\n\nHow many can you see now?"
+  },
+  {
+    "objectID": "week8/slides.html#famous-example-randu",
+    "href": "week8/slides.html#famous-example-randu",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Famous example: RANDU",
+    "text": "Famous example: RANDU\n\n\nRANDU[1] is a linear congruential pseudorandom number generator (LCG) used primarily in the 1960s and 1970s. Using RANDU for sampling a unit cube will only sample 15 parallel planes. As a result of the wide use of RANDU in the early 1970s, many results from that time are seen as suspicious.\nRead more on wikipedia\n\n\n\nCode\nset.seed(1031)\ndata(randu)\nrandu_std &lt;- as.data.frame(apply(randu, 2, function(x) (x-mean(x))/sd(x)))\nanimate_xy(randu_std, axes=\"off\")\nrender_gif(randu_std, grand_tour(),\n           display_xy(axes=\"bottomleft\"),\n           gif_file = \"images/randu.gif\",\n           frames = 50,\n           start = basis_random(3,2))"
+  },
+  {
+    "objectID": "week8/slides.html#automating-the-search-with-scagnostics",
+    "href": "week8/slides.html#automating-the-search-with-scagnostics",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Automating the search with scagnostics",
+    "text": "Automating the search with scagnostics"
+  },
+  {
+    "objectID": "week8/slides.html#scagnostics",
+    "href": "week8/slides.html#scagnostics",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Scagnostics",
+    "text": "Scagnostics\n\n\n\n\nCode\ns &lt;- df |&gt;\n  group_by(set) |&gt;\n  summarise(calc_scags(x, y, \n    scags = c(\"outlying\", \"stringy\", \"striated\",\n              \"clumpy\", \"sparse\", \n              \"monotonic\", \"dcor\"))) |&gt;\n  mutate(plot = \"\") |&gt;\n  select(plot, set, outlying, stringy, striated,\n         clumpy, sparse, monotonic, dcor)\n\n\n\n\n\n\n\nplot\nset\noutlying\nstringy\nstriated\nclumpy\nsparse\nmonotonic\ndcor\n\n\n\n\n\nline\n0.000\n1.00\n0.60\n0.37\n0.157\n0.997\n0.99\n\n\n\nnorm\n0.190\n0.79\n0.33\n0.60\n0.095\n0.013\n0.16\n\n\n\ncircle\n0.000\n1.00\n0.98\n0.97\n0.065\n0.009\n0.25\n\n\n\nstripes\n0.129\n0.70\n0.34\n0.98\n0.094\n0.665\n0.63\n\n\n\nclumps\n0.038\n0.61\n0.23\n0.99\n0.107\n0.375\n0.50\n\n\n\n\n\n\n\nclumpy\nconvex\ndcor\nmonotonic\noutlying\nskewed\nskinny\nsparse\nsplines\nstriated\nstringy\nstriped"
+  },
+  {
+    "objectID": "week8/slides.html#how-are-scagnostics-calculated-13",
+    "href": "week8/slides.html#how-are-scagnostics-calculated-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "How are scagnostics calculated? (1/3)",
+    "text": "How are scagnostics calculated? (1/3)\nThe building blocks are: convex hull, alpha hull, and minimal spanning tree\n\n\n\nSketches made by Harriet Mason"
+  },
+  {
+    "objectID": "week8/slides.html#how-are-scagnostics-calculated-23",
+    "href": "week8/slides.html#how-are-scagnostics-calculated-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "How are scagnostics calculated? (2/3)",
+    "text": "How are scagnostics calculated? (2/3)\n\n\nConvex: Measure of how convex the shape of the data is. Computed as the ratio between the area of the alpha hull (A) and convex hull (C).\n\n\nSkinny: A measure of how “thin” the shape of the data is. It is calculated as the ratio between the area and perimeter of the alpha hull (A) with some normalisation such that 0 correspond to a perfect circle and values close to 1 indicate a skinny polygon.\n\n\nSketches made by Harriet Mason"
+  },
+  {
+    "objectID": "week8/slides.html#how-are-scagnostics-calculated-33",
+    "href": "week8/slides.html#how-are-scagnostics-calculated-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "How are scagnostics calculated? (3/3)",
+    "text": "How are scagnostics calculated? (3/3)\n\n\nOutlying: A measure of proportion and severity of outliers in dataset. Calculated by comparing the edge lengths of the outlying points in the MST with the length of the entire MST.\n\n\nStringy: This measure identifies a “stringy” shape with no branches, such as a thin line of data. It is calculated by comparing the number of vertices of degree two \\((V^{(2)})\\) with the total number of vertices \\((V)\\), dropping those of degree one \\((V^{(1)})\\).\n\n\nSketches made by Harriet Mason"
+  },
+  {
+    "objectID": "week8/slides.html#scagnostics-from-familiar-measures",
+    "href": "week8/slides.html#scagnostics-from-familiar-measures",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Scagnostics from familiar measures",
+    "text": "Scagnostics from familiar measures\nThere are many more ways to numerically characterise association that can be used as scagnostics too:\n\nWe used those available in the cassowaryr R package\nSlope, intercept, error, \\(R^2\\) from a simple linear model\nAlso beyond scatterplots there are:\n\ntignostics for time series (feasts R package)\nlongnostics for longitudinal data (brolgar R package)"
+  },
+  {
+    "objectID": "week8/slides.html#linking-elements-of-multiple-plots",
+    "href": "week8/slides.html#linking-elements-of-multiple-plots",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Linking elements of multiple plots",
+    "text": "Linking elements of multiple plots"
+  },
+  {
+    "objectID": "week8/slides.html#brushing-in-a-scatterplot-matrix",
+    "href": "week8/slides.html#brushing-in-a-scatterplot-matrix",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Brushing in a scatterplot matrix",
+    "text": "Brushing in a scatterplot matrix\n\n\n Selecting points using a square “brush”, using plotly, allows you to see where observations lie in the other plots (pairs of variables).\n\n\n\nCode\nhighlight_key(p_std) |&gt;\n  ggpairs(columns = 1:4) |&gt;\n  ggplotly(width=600, height=600) |&gt;\n  highlight(\"plotly_selected\")"
+  },
+  {
+    "objectID": "week8/slides.html#linking-between-a-tour-and-a-scatterplot",
+    "href": "week8/slides.html#linking-between-a-tour-and-a-scatterplot",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Linking between a tour and a scatterplot",
+    "text": "Linking between a tour and a scatterplot\n\n\nDemo\nlibrary(detourr)\nlibrary(dplyr)\nlibrary(crosstalk)\nlibrary(plotly)\np_all &lt;- penguins |&gt;\n  rename(bl = bill_len,\n         bd = bill_dep,\n         fl = flipper_len,\n         bm = body_mass) |&gt;\n  filter(!is.na(bl)) |&gt;\n  mutate(bl = f_std(bl),\n         bd = f_std(bd),\n         fl = f_std(fl),\n         bm = f_std(bm)) |&gt;\n  mutate(island_i = as.integer(island),\n         sex_i = as.integer(sex)) |&gt;\n  mutate(island_i = jitter(island_i),\n         sex_i = jitter(sex_i)) |&gt;\n  select(bl:bm, species, island_i, sex_i, island, sex)\nshared_p_all &lt;- SharedData$new(p_all)\n\ndetour_plot &lt;- detour(shared_p_all, \n  tour_aes(projection = bl:bm, \n           colour = species)) |&gt;\n    tour_path(grand_tour(2), \n                    max_bases=50, fps = 60) |&gt;\n       show_scatter(alpha = 0.7, axes = FALSE,\n                    width = \"100%\", height = \"450px\",\n                    palette = pal_brewer(type = \"qual\",\n                                         palette = \"Dark2\"))\n\ndemog_plot &lt;- plot_ly(shared_p_all,\n                    x = ~island_i, \n                    y = ~sex_i,\n                    color = ~species,\n                    text = ~island,\n                    colors = \"Dark2\",\n                    height = 450) |&gt;\n    highlight(on = \"plotly_selected\", \n              off = \"plotly_doubleclick\") |&gt;\n    add_trace(type = \"scatter\", \n              mode = \"markers\",\n              hoverinfo = 'text')\n\nbscols(\n     detour_plot, demog_plot,\n     widths = c(5, 6)\n )\n\n\nLinking between plots allows some queries to be made interactively. The penguins data has variables, sex and island which provide more information.\nThis demo code is setup to learn more the penguins: a (jittered) scatterplot shows island and sex, and a tour shows the four size measurements.\n\nWhat can you learn in response to these questions?\n\nIs the size of the penguins different between the sexes?\nHow does the size differ between penguins recorded at different locations?\nWhich island did the outlier come from?"
+  },
+  {
+    "objectID": "week8/slides.html#exploring-multiple-categorical-variables",
+    "href": "week8/slides.html#exploring-multiple-categorical-variables",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Exploring multiple categorical variables",
+    "text": "Exploring multiple categorical variables"
+  },
+  {
+    "objectID": "week8/slides.html#facetted-plots",
+    "href": "week8/slides.html#facetted-plots",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Facetted plots",
+    "text": "Facetted plots\n\n\n\n\n\n\n\n\n\n\n\n\nAdditional variables can be folded in to horizontal and vertical facets.\nOrdering could be important to change, and scales on the axes need care.\nSwitching to proportions may allow direct comparison."
+  },
+  {
+    "objectID": "week8/slides.html#tabulation",
+    "href": "week8/slides.html#tabulation",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Tabulation",
+    "text": "Tabulation\n\n\nOverall counts\n\n\n\n\n\nage\nf\nm\n\n\n\n\n1524\n314\n395\n\n\n2534\n432\n469\n\n\n3544\n216\n345\n\n\n4554\n126\n332\n\n\n5564\n103\n244\n\n\n65\n269\n575\n\n\nTotal\n1460\n2360\n\n\n\n\n\n\n\n\n\n\n\n\n\nage\nf\nm\n\n\n\n\n1524\n0.44\n0.56\n\n\n2534\n0.48\n0.52\n\n\n3544\n0.39\n0.61\n\n\n4554\n0.28\n0.72\n\n\n5564\n0.30\n0.70\n\n\n65\n0.32\n0.68\n\n\nTotal\n0.38\n0.62\n\n\n\n\n\nWhat percentage was taken? What is the comparison? What other percentages could be useful?\nThe way percentages are calculated corresponds to conditional distributions, e.g. if age is 15-24 what is the distribution of tuberculosis between the sexes."
+  },
+  {
+    "objectID": "week8/slides.html#famous-example-titanic",
+    "href": "week8/slides.html#famous-example-titanic",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Famous example: titanic",
+    "text": "Famous example: titanic\nThis data set provides information on the fate of passengers on the fatal maiden voyage of the ocean liner “Titanic”, summarized according to economic status (class), sex, age and survival."
+  },
+  {
+    "objectID": "week8/slides.html#mosaic-plots-conditional-distributions",
+    "href": "week8/slides.html#mosaic-plots-conditional-distributions",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Mosaic plots: conditional distributions",
+    "text": "Mosaic plots: conditional distributions\n\n\n\n\nCode\ndoubledecker(Survived ~ ., data = Titanic)\n\n\n\n\n\n\n\n\n\n\nOrder in which variables are entered can affect the conditioning."
+  },
+  {
+    "objectID": "week8/slides.html#fluctuation-diagrams-joint-distributions",
+    "href": "week8/slides.html#fluctuation-diagrams-joint-distributions",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Fluctuation diagrams: joint distributions",
+    "text": "Fluctuation diagrams: joint distributions\n\n\n\n\nCode\nggplot(as_tibble(Titanic), aes(x=interaction(Sex, Age),\n                               y=interaction(Class, Survived), \n                               fill=n)) +\n  geom_tile() +\n  xlab(\"Sex, Age\") +\n  ylab(\"Class, Survived\") +\n  scale_fill_continuous_sequential(palette = \"Terrain\", trans=\"sqrt\")\n\n\n\n\n\n\n\n\n\n\n\n\nCode\nggplot(as_tibble(Titanic), aes(x=interaction(Sex, Age),\n                               y=interaction(Class, Survived), \n                               size=n)) +\n  geom_point(shape=15) +\n  xlab(\"Sex, Age\") +\n  ylab(\"Class, Survived\") +\n  scale_size(transform = \"sqrt\", range=c(1,15))\n\n\n\n\n\n\n\n\n\n\nOverall counts mapped to tiling colour or size. Big counts completely dominate."
+  },
+  {
+    "objectID": "week8/slides.html#resources",
+    "href": "week8/slides.html#resources",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Resources",
+    "text": "Resources\n\nCook and Laa (2023) Interactively exploring high-dimensional data and models in R\nWickham et al (2011). tourr: An R Package for Exploring Multivariate Data with Projections\nSievert (2019) Interactive web-based data visualization with R, plotly, and shiny\nMason, Lee, Laa, and Cook (2022). cassowaryr: Compute Scagnostics on Pairs of Numeric Variables in a Data Set"
+  },
+  {
+    "objectID": "week8/worksheetsol.html",
+    "href": "week8/worksheetsol.html",
+    "title": "ETC5521 Worksheet Week 8",
     "section": "",
-    "text": "Exercise 1: Discussion\nThe Women’s Weekly published a story about famous Australian model, Elle McPherson’s breast cancer story. Diagnosed 7 years ago, she is in remission after choosing alternative therapies as treatment. The original diagnosis was accompanied by lumpectomy removing the cancerous tissue.\nWhat does data say relative to this statement?\n\nAlternative therapies assisted Elle’s being considered cleared of cancer today.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThis article has good explanations that clarify missing pieces from the Women’s Weekly article.\nElle was diagnosed with HER2 positive oestrogen receptive intraductal carcinoma. What was not reported was that her cancer was non-invasive.\nIf you read this information you will see the survival rate for localised (non-invasive) is 99%.\n\n\n\n\n\n\nExercise 2: Hate Crime\n\nPossibly uncomfortable?Continue\n\n\nIf this topic is upsetting for you, please feel free to take yourself out of the discussion, and exit the workshop.\n\n\nA certain person made the following statement about this data and used the graph below to illustrate his point.\n\nThe post-9/11 upsurge in hate crimes against Muslims was real and unforgivable, but the horrible truth is that it didn’t loom that large compared with what Blacks face year in and year out.\n\n\n\nCode\ndf &lt;- tribble(\n  ~year, ~offense, ~count,\n  2000, \"Anti-Black\", 3535,\n  2000, \"Sexual Orientation\", 1558,\n  2000, \"Anti-Islamic\", 36,\n  2001, \"Anti-Black\", 3700,\n  2001, \"Sexual Orientation\", 1664,\n  2001, \"Anti-Islamic\", 554,\n  2002, \"Anti-Black\", 3076,\n  2002, \"Sexual Orientation\", 1513,\n  2002, \"Anti-Islamic\", 174\n) |&gt;\n  mutate(offense = fct_reorder(offense, -count))\n\npop_df &lt;- tribble(\n  ~pop, ~size,\n  \"Anti-Black\", 36.4e6,\n  \"Sexual Orientation\", 28.2e6,\n  \"Anti-Islamic\", 3.4e6\n)\n\ncrime_df &lt;- left_join(df, pop_df, by = c(\"offense\" = \"pop\")) |&gt;\n  mutate(prop = count / size)\n\n\n\n\n\n\n\nVictims of hate crime in USA in years 2000-2002.\n\n\n\n\nDiscuss whether the plot supports his statement or not. Is his comparison of the number of crimes against Muslim and Blacks fair? What graph would you suggest to make to support/disprove his statement? The data and additional information is provided below.\nThis uses the data from the USA hate crime statistics found here. The number of victims by three particular hate crime is shown in the table below.\n\n\n\n\nThe number of victims by hate crime in the USA. Data sourced from https://ucr.fbi.gov/hate-crime.\n\n\nYear\nOffense\nVictims\n\n\n\n\n2000\nAnti-Black\n3535\n\n\n2000\nSexual Orientation\n1558\n\n\n2000\nAnti-Islamic\n36\n\n\n2001\nAnti-Black\n3700\n\n\n2001\nSexual Orientation\n1664\n\n\n2001\nAnti-Islamic\n554\n\n\n2002\nAnti-Black\n3076\n\n\n2002\nSexual Orientation\n1513\n\n\n2002\nAnti-Islamic\n174\n\n\n\n\n\nThe 2000 USA Census reports that there were a total of 36.4 million people who reported themselves as Black or African American. Weeks (2003) estimated there are 3.4 million Muslims in the USA. The LGBT population is harder to estimate but reports indicate 2-10% of the population so likely below 28.2 million people in the USA.\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\nThe use of a line plot rather than bar plot makes it easier to compare the trend across years.\nThe second sentence compares the number of victims of anti-Black hate crimes and of anti-Islamic hate crimes.\nThe problem with this comparison is that the population size is vastly different for the two comparisons.\nWhile the number of anti-Black victims are far larger than anti-Islamic victims as shown in Plot (A) below, the Muslim community is roughly 10% of the size of the Black community.\nAssuming the population size is roughly the same across 2000-2002, a rough estimate of the proportions of hate crime victims for each population is compared in Plot (B).\n\nThe significant surge in anti-Islamic crimes in 2001 is more apparent in Plot (B).\nPlot (C) shows the odds ratio with respect to year 2000. This shows that the anti-Islamic crime in 2001 was nearly 15 times higher than in 2000 lowering to about 4.8 in 2001. This however is higher than that of the incidences related to anti-Black and sexual orientation hate crimes which remain somewhat stable from 2000-2002 (odds ratio is close to 1 or slightly lower).\n\nOnce again, these plots show that the answer to the question (is the quote true), depends on how one interprets the quote. Is the person saying that the number of victims of anti-Black hate crimes is always higher than anti-Islamic hate crimes? Then the answer is likely yes. However, per capita, the rate of anti-Islamic hate crimes far exceeded anything else in 2001, which goes against the quote.\n\n\nCode\nggplot(crime_df, aes(as.factor(year), count, color = offense)) +\n  geom_point() +\n  geom_line(aes(group = offense)) +\n  scale_color_discrete_qualitative() +\n  labs(\n    x = \"Year\", y = \"The number of victims\",\n    color = \"Offense\", tag = \"(A)\"\n  )\n\n\n\n\n\n\n\n\n\nCode\nggplot(crime_df, aes(as.factor(year), prop * 10000, color = offense)) +\n  geom_point() +\n  geom_line(aes(group = offense)) +\n  scale_color_discrete_qualitative() +\n  labs(\n    x = \"Year\", y = \"Incidence estimate per 10,000 people\",\n    color = \"Offense\", tag = \"(B)\"\n  )\n\n\n\n\n\n\n\n\n\nCode\nyear2000dict &lt;- crime_df |&gt;\n  dplyr::filter(year == 2000) |&gt;\n  dplyr::select(offense, prop) |&gt;\n  deframe()\n\ncrime_df |&gt;\n  mutate(rel2000 = prop / year2000dict[offense]) |&gt;\n  dplyr::filter(year != 2000) |&gt;\n  ggplot(aes(as.factor(year), rel2000, color = offense)) +\n  geom_point() +\n  geom_line(aes(group = offense)) +\n  scale_color_discrete_qualitative() +\n  scale_y_continuous(breaks = c(1, 4, 5, 15, 16)) +\n  labs(\n    x = \"Year\", y = \"Odds ratio with respect to year 2000\",\n    color = \"Offense\", tag = \"(C)\"\n  )"
+    "text": "Exercise 1: Parkinsons\nThis dataset is composed of a range of biomedical voice measurements from 31 people, 23 with Parkinson’s disease (PD). Each column in the table is a particular voice measure, and each row corresponds one of 195 voice recording from these individuals (“name” column). The main aim of the data is to discriminate healthy people from those with PD, according to “status” column which is set to 0 for healthy and 1 for PD.\nThe data is available at The UCI Machine Learning Repository in ASCII CSV format. The rows of the CSV file contain an instance corresponding to one voice recording. There are around six recordings per patient, the name of the patient is identified in the first column. There are 24 variables in the file, including the persons name in column 1.\nThe data are originally analysed in: Max A. Little, Patrick E. McSharry, Eric J. Hunter, Lorraine O. Ramig (2008), ‘Suitability of dysphonia measurements for telemonitoring of Parkinson’s disease’, IEEE Transactions on Biomedical Engineering (to appear).\n\n\nCode\nlibrary(cassowaryr)\n# Load the data\ndata(pk)\n\n\n\nHow many pairwise plots would you need to look at, to look at all of them?\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\nThere are 23 numeric variables in the data set, which would require 253 pairwise plots to be made.\n\n\n\n\n\nCompute several of the scagnostics (monotonic, outlying, clumpy2) for the first five variables of variables, except for name. (Note: We are using just five for computing speed, but the scagnostics could be calculated on all variables.)\n\n\n\nCode\n# Compute the scagnostics on the relevant variables\ns &lt;- calc_scags_wide(pk[,2:5],\n                scags=c(\"outlying\",\"monotonic\",\n                        \"clumpy2\"))\ns\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\n# A tibble: 6 × 5\n  Var1           Var2         outlying clumpy2 monotonic\n  &lt;fct&gt;          &lt;fct&gt;           &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;\n1 MDVP:Fhi(Hz)   MDVP:Fo(Hz)     0.412   0.756    0.796 \n2 MDVP:Flo(Hz)   MDVP:Fo(Hz)     0.172   0.541    0.324 \n3 MDVP:Flo(Hz)   MDVP:Fhi(Hz)    0.336   0.671    0.0956\n4 MDVP:Jitter(%) MDVP:Fo(Hz)     0.289   0        0.270 \n5 MDVP:Jitter(%) MDVP:Fhi(Hz)    0.541   0.764    0.0978\n6 MDVP:Jitter(%) MDVP:Flo(Hz)    0.430   0        0.407 \n\n\n\n\n\n\n\nSort the scagnostics, separately by the values on (i) monotonic (ii) outlying (iii) clumpy2, and plot the pair of variables with the highest values on each.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\n# Check the results for monotonic\ns %&gt;% \n  select(Var1, Var2, monotonic) %&gt;% \n  arrange(desc(monotonic)) \n\n\n# A tibble: 6 × 3\n  Var1           Var2         monotonic\n  &lt;fct&gt;          &lt;fct&gt;            &lt;dbl&gt;\n1 MDVP:Fhi(Hz)   MDVP:Fo(Hz)     0.796 \n2 MDVP:Jitter(%) MDVP:Flo(Hz)    0.407 \n3 MDVP:Flo(Hz)   MDVP:Fo(Hz)     0.324 \n4 MDVP:Jitter(%) MDVP:Fo(Hz)     0.270 \n5 MDVP:Jitter(%) MDVP:Fhi(Hz)    0.0978\n6 MDVP:Flo(Hz)   MDVP:Fhi(Hz)    0.0956\n\n\nCode\nggplot(data=pk, \n       aes(x=`MDVP:Fhi(Hz)`, y=`MDVP:Fo(Hz)`)) + \n  geom_point() + theme(aspect.ratio = 1)\n\n\n\n\n\n\n\n\n\nThe top pair of variables on monotonic has a strong positive association with the majority of points, and a few outliers. The top pair of variables on outlying, is also the top pair on clumpy2, and has outliers with some clumpiness in the mass of points with low values.\n\n\n\n\n\nMake an interactive scatterplot matrix. Browse over it to choose other interesting pairs of variables and make the plots.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\n# Create an interactive splom\ns &lt;- s %&gt;%\n  mutate(vars = paste(Var1, Var2))\nhighlight_key(s) %&gt;%\n  GGally::ggpairs(columns = 3:5, mapping = aes(label = vars)) %&gt;%\n  ggplotly(tooltip = \"all\", \n           width=500, \n           height=500) %&gt;%\n  highlight(\"plotly_selected\") \n\n\n\n\n\n\n\n\n\n\n\nThe scagnostics help us to find interesting associations between pairs of variables. However, the problem here is to detect differences between Parkinsons’ patients and normal patients. How would you go about that? Think about some ideas long the line of scagnostics but look for differences between the two groups.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\n# One way to examine difference between Parkinsons and healthy\npk_med &lt;- pk %&gt;% \n  select(-name) %&gt;% \n  group_by(status) %&gt;%\n  summarise_all(list(median, sd)) %&gt;%\n  pivot_longer(\n    cols=`MDVP:Fo(Hz)_fn1`:`PPE_fn2`,\n    names_to=\"var\", \n    values_to=\"value\") %&gt;%\n  separate(var, c(\"var\",\"stat\"), \"_\") %&gt;%\n  mutate(stat = fct_recode(stat,\n                           \"m\"=\"fn1\",\n                           \"s\"=\"fn2\")) %&gt;%\n  pivot_wider(names_from=stat,\n              values_from=value) %&gt;%\n  group_by(var) %&gt;%\n  summarise(\n    d = (m[status==0]-m[status==1])/sqrt(s[status==0]^2+s[status==1]^2))\npk_med %&gt;% arrange(desc(d)) %&gt;% head()\n\n\n# A tibble: 6 × 2\n  var               d\n  &lt;chr&gt;         &lt;dbl&gt;\n1 MDVP:Fo(Hz)   0.870\n2 HNR           0.647\n3 MDVP:Fhi(Hz)  0.518\n4 MDVP:Flo(Hz)  0.211\n5 NHR          -0.243\n6 MDVP:RAP     -0.356\n\n\nCode\nggplot(pk, aes(x=factor(status), y=`MDVP:Fo(Hz)`)) + \n  geom_boxplot()\n\n\n\n\n\n\n\n\n\nGenerally we are looking for variables where the differences between the Parkinsons and normal patients are big. You need to measure big, relative to the variance of each group. Doing a two sample t-test for each variable is one approach. Here, I’ve computed the median for each group of patients and compared the difference in medians relative to the pooled standard deviation in each group.\n\n\n\n\n\nNow try to do this using the scagnistics.\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\n\n\n\nCode\n# Check the pair of variables already examined\nggplot(data=pk, \n       aes(x=`MDVP:Fhi(Hz)`, \n           y=`MDVP:Fo(Hz)`, \n           colour=factor(status))) + \n  geom_point(alpha=0.5) + \n  scale_colour_discrete_divergingx(palette=\"Zissou 1\") +\n  theme(aspect.ratio = 1,\n        legend.title = element_blank())\n\n\n\n\n\n\n\n\n\n\n\nCode\n# Compute scagnostics separately for each group and compare differences\npk_0 &lt;- pk |&gt;\n  filter(status == 0)\npk_1 &lt;- pk |&gt;\n  filter(status == 1)\ns_0 &lt;- calc_scags_wide(pk_0[,2:5],\n                scags=c(\"outlying\",\"monotonic\",\n                        \"clumpy2\"))\ns_1 &lt;- calc_scags_wide(pk_1[,2:5],\n                scags=c(\"outlying\",\"monotonic\",\n                        \"clumpy2\"))\ns_0 &lt;- s_0 |&gt;\n  mutate(status = 0)\ns_1 &lt;- s_1 |&gt;\n  mutate(status = 1)\ns &lt;- bind_rows(s_0, s_1)  \ns_wide &lt;- s |&gt;\n  pivot_longer(outlying:monotonic, names_to=\"scag\", values_to=\"value\") |&gt;\n  pivot_wider(names_from = status, values_from = \"value\") |&gt;\n  mutate(d = abs(`1`-`0`)) |&gt;\n  arrange(desc(d))\n\n\n\n\nCode\n# Plot top pair\nggplot(data=pk, \n       aes(x=`MDVP:Jitter(%)`, \n           y=`MDVP:Fo(Hz)`, \n           colour=factor(status))) + \n  geom_point(alpha=0.5) + \n  scale_colour_discrete_divergingx(palette=\"Zissou 1\") +\n  theme(aspect.ratio = 1,\n        legend.title = element_blank())"
+  },
+  {
+    "objectID": "week8/worksheet.html",
+    "href": "week8/worksheet.html",
+    "title": "ETC5521 Worksheet Week 8",
+    "section": "",
+    "text": "Exercise 1: Parkinsons\nThis dataset is composed of a range of biomedical voice measurements from 31 people, 23 with Parkinson’s disease (PD). Each column in the table is a particular voice measure, and each row corresponds one of 195 voice recording from these individuals (“name” column). The main aim of the data is to discriminate healthy people from those with PD, according to “status” column which is set to 0 for healthy and 1 for PD.\nThe data is available at The UCI Machine Learning Repository in ASCII CSV format. The rows of the CSV file contain an instance corresponding to one voice recording. There are around six recordings per patient, the name of the patient is identified in the first column. There are 24 variables in the file, including the persons name in column 1.\nThe data are originally analysed in: Max A. Little, Patrick E. McSharry, Eric J. Hunter, Lorraine O. Ramig (2008), ‘Suitability of dysphonia measurements for telemonitoring of Parkinson’s disease’, IEEE Transactions on Biomedical Engineering (to appear).\n\n\nCode\nlibrary(cassowaryr)\n# Load the data\ndata(pk)\n\n\n\nHow many pairwise plots would you need to look at, to look at all of them?\n\n\nCompute several of the scagnostics (monotonic, outlying, clumpy2) for the first five variables of variables, except for name. (Note: We are using just five for computing speed, but the scagnostics could be calculated on all variables.)\n\n\n\nCode\n# Compute the scagnostics on the relevant variables\ns &lt;- calc_scags_wide(pk[,2:5],\n                scags=c(\"outlying\",\"monotonic\",\n                        \"clumpy2\"))\ns\n\n\n\nSort the scagnostics, separately by the values on (i) monotonic (ii) outlying (iii) clumpy2, and plot the pair of variables with the highest values on each.\n\n\nMake an interactive scatterplot matrix. Browse over it to choose other interesting pairs of variables and make the plots.\n\n\nThe scagnostics help us to find interesting associations between pairs of variables. However, the problem here is to detect differences between Parkinsons’ patients and normal patients. How would you go about that? Think about some ideas long the line of scagnostics but look for differences between the two groups.\n\n\nNow try to do this using the scagnistics."
   }
 ]
