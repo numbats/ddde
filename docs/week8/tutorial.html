@@ -104,6 +104,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../site_libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="../site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="../site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<link href="../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="../site_libs/bootstrap-grid-3.4.1/bootstrap-grid.min.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="../assets/tutorial.css">
@@ -263,10 +274,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Install the following R-packages if you do not have them already:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"tidyverse"</span>, <span class="st">"cassowaryr"</span>, <span class="st">"tourr"</span>, <span class="st">"GGally"</span>, <span class="st">"plotly"</span>, <span class="st">"colorspace"</span>, <span class="st">"mulgar"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"tidyverse"</span>, <span class="st">"tourr"</span>, <span class="st">"GGally"</span>, <span class="st">"plotly"</span>, <span class="st">"colorspace"</span>, <span class="st">"mulgar"</span>, <span class="st">"simputation"</span>, <span class="st">"naniar"</span>, <span class="st">"crosstalk"</span>, <span class="st">"sf"</span>, <span class="st">"ozmaps"</span>, <span class="st">"ggthemes"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li>Open your RStudio Project for this unit, (the one you created in week 1, <code>ETC5521</code>). Create a <code>.qmd</code> document for this weeks activities.</li>
+<li>Open your RStudio Project for this unit (the one you created in week 1, <code>ETC5521</code>). Create a <code>.qmd</code> document for this weeks activities.</li>
 </ul>
 </section>
 <section id="exercises" class="level2">
@@ -274,20 +285,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="exercise-1-melbourne-housing" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-1-melbourne-housing">Exercise 1: Melbourne housing</h3>
 <ol type="a">
-<li>Read in a copy of the Melbourne housing data from <a href="https://github.com/njtierney/melb-housing-data">Nick Tierney’s github repo</a> which is a collation from the version at <a href="https://www.kaggle.com/anthonypino/melbourne-housing-market/version/21">kaggle</a>. Its fairly large, so let’s start simply, and choose two suburbs to focus on. I recommend “South Yarra” and “Brighton”.</li>
+<li>Read in a copy of the Melbourne housing data from <a href="https://github.com/njtierney/melb-housing-data">Nick Tierney’s github repo</a> which is a collation from the version at <a href="https://www.kaggle.com/anthonypino/melbourne-housing-market/version/21">kaggle</a>. It’s fairly large, so let’s start simply, and choose two suburbs to focus on. I recommend “South Yarra” and “Brighton”.</li>
 </ol>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mel_houses <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/njtierney/melb-housing-data/master/data/housing.csv"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(suburb <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"South Yarra"</span>, <span class="st">"Brighton"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="2" type="a">
-<li>There are a substantial number of missing values. These need to be handled first because examining multiple variables, with almost every method, requires complete data.</li>
+<li>There are a substantial number of missing values. These need to be handled first because examining multiple variables, with almost every method, requires complete data. Examine the missing value distribution using <code>naniar</code>, and strategise on how to handle the missings.</li>
 </ol>
 <ol start="3" type="a">
-<li>Make a scatterplot matrix of price, rooms, bedroom2, bathroom, suburb, type. The order of variables can affect the readability. I advise that the plot will be easier to read if you order them with the numerical variables first, and then the categorical variables. Think about what associations can be seen?</li>
+<li>Now implement your strategy for removing, and imputing missing values, until you have a complete data set. This can involve some iteration on the strategy, as we find that some other approach is needed.</li>
 </ol>
 <ol start="4" type="a">
-<li>Subset the data to Brighton only. Make an interactive scatterplot matrix of rooms, bedroom2, bathroom and price, coloured by type of property. There are some high price properties. Select these cases, and determine what’s special about them – if anything.</li>
+<li>Make a scatterplot matrix of price, rooms, bedroom2, bathroom, landsize, latitude and longitude, suburb. The order of variables can affect the readability. I advise that the plot will be easier to read if you order the variables a little, at least put price first. Think about what associations can be seen?</li>
+</ol>
+<ol start="5" type="a">
+<li>Here’s where we will start using interactive plots to explore the multivariate relationships. Subset the data to Brighton only. This will make the analysis easier. Make an interactive scatterplot matrix of price, rooms, bedroom2, bathroom and landsize, coloured by type of property. There are some high price properties. Select these cases, and determine what’s special about them – if anything.</li>
+</ol>
+<ol start="6" type="a">
+<li>The realtors mantra is location, location, location! Next check the location of properties relative to price and size, using two linked plots. One should have the longitude and latitude, and the other price by rooms. Ideally, you can make a map underneath the spatial coordinates, to better put these in context.</li>
 </ol>
 </section>
 <section id="exercise-2-challenges" class="level3">

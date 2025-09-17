@@ -187,7 +187,7 @@ Generally we are looking for variables where the differences between the Parkins
 
 :::
 
-f. Now try to do this using the scagnistics.
+f. Now try to do this using the scagnostics.
 
 ::: unilur-solution
 

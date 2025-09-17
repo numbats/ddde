@@ -21,7 +21,6 @@ format:
 #| echo: false
 library(tidyverse)
 library(patchwork)
-library(janitor)
 library(colorspace)
 library(GGally)
 library(plotly)
@@ -29,6 +28,10 @@ library(mulgar)
 library(tourr)
 library(naniar)
 library(simputation)
+library(sf)
+library(ozmaps)
+library(ggthemes)
+library(crosstalk)
 library(conflicted)
 
 conflicts_prefer(dplyr::filter)
@@ -84,16 +87,16 @@ These are exercises in plots to make to explore relationships between multiple v
 ```{r}
 #| eval: false
 #| code-fold: false
-install.packages(c("tidyverse", "cassowaryr", "tourr", "GGally", "plotly", "colorspace", "mulgar"))
+install.packages(c("tidyverse", "tourr", "GGally", "plotly", "colorspace", "mulgar", "simputation", "naniar", "crosstalk", "sf", "ozmaps", "ggthemes"))
 ```
 
-- Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
+- Open your RStudio Project for this unit (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
 
 ## 📥 Exercises
 
 ### Exercise 1: Melbourne housing
 
-a. Read in a copy of the Melbourne housing data from  [Nick Tierney's github repo](https://github.com/njtierney/melb-housing-data) which is a collation from the version at [kaggle](https://www.kaggle.com/anthonypino/melbourne-housing-market/version/21). Its fairly large, so let's start simply, and choose two suburbs to focus on. I recommend "South Yarra" and "Brighton". 
+a. Read in a copy of the Melbourne housing data from  [Nick Tierney's github repo](https://github.com/njtierney/melb-housing-data) which is a collation from the version at [kaggle](https://www.kaggle.com/anthonypino/melbourne-housing-market/version/21). It's fairly large, so let's start simply, and choose two suburbs to focus on. I recommend "South Yarra" and "Brighton". 
 
 ```{r}
 #| label: read-houses
@@ -102,68 +105,209 @@ mel_houses <- read_csv("https://raw.githubusercontent.com/njtierney/melb-housing
   dplyr::filter(suburb %in% c("South Yarra", "Brighton")) 
 ```
 
-b. There are a substantial number of missing values. These need to be handled first because examining multiple variables, with almost every method, requires complete data.
+b. There are a substantial number of missing values. These need to be handled first because examining multiple variables, with almost every method, requires complete data. Examine the missing value distribution using `naniar`, and strategise on how to handle the missings.
 
 ::: unilur-solution
+
+This is an awful data set to wrangle into a form that can be analysed! First step is to get a sense of the missing values in each of the suburbs chosen. It is always a good idea to break it into these groups, if there aren't too many, in case there is a difference in data handling between locations.
+
 
 ```{r}
 #| label: fig-miss1
 #| fig-cap: "Plots of missing by variable and case."
-#| eval: false
-m1 <- gg_miss_var(mel_houses, show_pct = TRUE)
-m2 <- gg_miss_case(mel_houses, show_pct = TRUE)
-m3 <- vis_miss(mel_houses, cluster = TRUE, sort_miss = TRUE)
-m1 + m2 + plot_layout(ncol=2)
+m1_sy <- mel_houses |> filter(suburb == "South Yarra") |> gg_miss_var(show_pct = TRUE) + ggtitle("South Yarra")
+m1_b <- mel_houses |> filter(suburb == "Brighton") |> gg_miss_var(show_pct = TRUE) + ggtitle("Brighton")
+m2_sy <- mel_houses |> filter(suburb == "South Yarra") |> gg_miss_case(show_pct = TRUE) + ggtitle("South Yarra")
+m2_b <- mel_houses |> filter(suburb == "Brighton") |> gg_miss_case(show_pct = TRUE) + ggtitle("Brighton")
+m1_sy + m1_b + m2_sy + m2_b + plot_layout(ncol=2)
 ```
+
+**Summary**: 
+
+- Similar missingness in both suburbs. Although there are some slight differences, the same variables have missings and a similar number of cases have substantial missings. 
+- The main information about variables to note is that `building_area` and `year_built` both have more than 50% missing. 
 
 ```{r}
 #| label: fig-miss2
 #| fig-cap: "Overall summary of missing values, with variables and cases grouped."
-#| eval: false
+m3 <- vis_miss(mel_houses, cluster = TRUE, sort_miss = TRUE)
 m3
 ```
 
+**Summary**: 
+
+There are co-occurring missings. 
+
+- If `bedroom2` is missing then likely `bathroom`, `landsize`, `car`, `latitude` and `longitude` are missing. 
+- When `price` is missing, most other variables are available - this is good! 
+- But often `price` and `landsize` are both missing. 
+- There is a small amount of sporadic missing values other than these.
+
+**Strategy**:
+
+- remove/ignore the two worst variables, `building_area` and `year_built` which have more missings than present data.
+- remove observations that have missings on all of these variables: `landsize`, `car`, `bathroom`, `bedroom2`, `bathroom`, `latitude`, `longitude`. There is not enough information in the remaining variables to be able to impute the missing values. 
+
+To impute missing values the choice is to fit a regression model on complete records. (We have previously noted in lecture that to impute price we need to take into account other variables because missingness appears to depend on other variables.) This will be done in pieces, to impute price when observations on all other variables are available, we will use these. 
+:::
+
+
+c. Now implement your strategy for removing, and imputing missing values, until you have a complete data set. This can involve some iteration on the strategy, as we find that some other approach is needed. 
+
+::: unilur-solution
+
+We will separate date into year and quarter, as these might be useful for the imputation - prices will change from year to year, and, from experience, we know that there are some seasonal differences in property prices.
+
+Notice that, the filtering and imputation should be done in small steps, checking the resulting data after each.
+
 ```{r}
 #| label: impute-miss
-#| eval: false
-mel_houses <- mel_houses |>
+mel_houses_na <- mel_houses |>
   mutate(year = lubridate::year(date),
-         # month = lubridate::month(date),
          quarter = lubridate::quarter(date)) |>
-  mutate_at(vars(car, bathroom, bedroom2), as.integer)
+  select(-building_area, -year_built) |>
+  filter(!(is.na(car) & 
+             is.na(bathroom) &
+             is.na(bedroom2) &
+             is.na(latitude) &
+             is.na(longitude) &
+             is.na(landsize)))
 
-mel_houses_knn <- mel_houses |> 
+# check data again
+(nrow(mel_houses) - nrow(mel_houses_na))/nrow(mel_houses)
+# 21% of observations removed - that's a lot but 
+# realistically it is not possible to impute 
+# price without information on 
+# bedrooms, baths, landsize and location
+vis_miss(mel_houses_na, cluster = TRUE, sort_miss = TRUE)
+```
+
+Notice that 21% of observations removed - that's a lot but realistically it is not possible to impute price without information on bedrooms, baths, landsize and location.
+
+Next, handling landsize might be done better with some logic. Check landsize and price and type of unit. It may be that landsize is missing for units, which would be ok, and then we would use 0 as the imputed value.
+
+```{r}
+ggplot(mel_houses_na, aes(x=landsize, y=price)) +
+  geom_miss_point() +
+  facet_wrap(~type, ncol=3, scales="free") +
+  theme(aspect.ratio = 1)
+```
+
+Hmm, no but maybe for units and townhouses 
+it is reasonable to set landsize missings to be 0,
+because technically there is little land owned
+by owners of units and townhouses.
+
+```{r}
+mel_houses_na <- mel_houses_na |>
+  mutate(landsize = if_else(type %in% c("u", "t") & is.na(landsize), 0, landsize))
+vis_miss(mel_houses_na, cluster = TRUE, sort_miss = TRUE)
+```
+
+Now remove observations missing on both landsize
+and price, because houses can't really be priced without knowing landsize.
+
+```{r}
+mel_houses_na <- mel_houses_na |>
+  filter(!(is.na(landsize) & is.na(price)))
+vis_miss(mel_houses_na, cluster = TRUE, sort_miss = TRUE)
+```
+
+Here is the imputation using regression, and the `simputation` function `impute_lm` made available from `naniar`. I recommend running each part of the pipe, and making a couple of plots to examine the result. I've put the piped code together after doing this, to make it more readable, but it took some work checking the results, and fixing a few things each time, to confidently be able to make it all one big imputation.
+
+Note also, that imputed values for `bedroom2`, `bathroom` and `car` have been rounded to integer. The regression model will impute these with decimal places, which is not realistic in the later analysis. This is one place, where I iterated in the handling os missings after noticing that bedrooms and bathrooms looked odd.
+
+```{r}
+# Conduct imputation, carefully!
+mel_houses_imputed <- mel_houses_na |> 
   nabular() |>
   as.data.frame() |> 
-  # longitude
-  impute_knn(longitude ~ type + quarter + year + rooms + price) |>
-  # latitude
-  impute_knn(latitude ~ type + quarter + year + rooms + price) |>
   # bedroom2
-  impute_knn(bedroom2 ~ type + quarter + year + rooms + price) |>
+  impute_lm(bedroom2 ~ type + quarter + year +  
+              latitude + longitude +
+              postcode + distance) |>
+  mutate(bedroom2 = round(bedroom2, 0)) |>
   # bathroom
-  impute_knn(bathroom ~ type + quarter + year + rooms + price) |>
+  impute_lm(bathroom ~ type + quarter + year + 
+              latitude + longitude +
+              postcode + distance) |>
+  mutate(bathroom = round(bathroom, 0)) |>
   # car
-  impute_knn(car ~ type + quarter + year + rooms + price) |>
+  impute_lm(car ~ type + quarter + year +  
+              bedroom2 + bathroom + latitude +
+              longitude + postcode + distance) |>
+  mutate(car = round(car, 0)) |>
   # landsize
-  impute_knn(landsize ~ type + quarter + year + rooms + price + distance) |>
-  # price
-  impute_knn(price ~ type + quarter + year + bedroom2 + bathroom + latitude + longitude) |>
+  impute_lm(landsize ~ type + quarter + year + 
+              bedroom2 + bathroom + 
+              latitude + longitude +
+              postcode + distance)
+
+# check again
+vis_miss(mel_houses_imputed, cluster = TRUE,
+         sort_miss = TRUE)
+
+ggplot(mel_houses_na, aes(x=landsize, y=price)) +
+  geom_miss_point() +
+  facet_wrap(~type, ncol=3, scales="free") +
+  theme(aspect.ratio = 1)
+
+ggplot(mel_houses_imputed, aes(x=landsize, y=price)) +
+  geom_miss_point() +
+  facet_wrap(~type, ncol=3, scales="free") +
+  theme(aspect.ratio = 1)
+# Also check bedroom2, bathroom and car
+
+# price
+mel_houses_imputed <- mel_houses_imputed |>
+  impute_lm(price ~ type + quarter + year + landsize + 
+              bedroom2 + bathroom + latitude +
+              longitude + postcode + distance) 
+# check again
+vis_miss(mel_houses_imputed, cluster = TRUE, sort_miss = TRUE)
+
+ggplot(mel_houses_imputed, aes(x=landsize, y=price)) +
+  geom_point() +
+  facet_wrap(~type, ncol=3, scales="free") +
+  theme(aspect.ratio = 1)
+
+ggplot(mel_houses_imputed, aes(x=bedroom2, y=price)) +
+  geom_point() +
+  facet_wrap(~type, ncol=3, scales="free") +
+  theme(aspect.ratio = 1)
+
+ggplot(mel_houses_imputed, aes(x=bathroom, y=price)) +
+  geom_point() +
+  facet_wrap(~type, ncol=3, scales="free") +
+  theme(aspect.ratio = 1)
+
+# Now add label
+mel_houses_imputed <- mel_houses_imputed |>
   add_label_shadow()
+# Note: method not used because it causes problems with missing factor levels. Ideally it is included.
 ```
+
+One more check of resulting data.
 
 ```{r}
 #| label: check-impute
-#| eval: false
-ggplot(mel_houses_knn, aes(x=bedroom2, y=price, colour=price_NA)) +
+ggplot(mel_houses, aes(x=bedroom2, y=price)) +
+         geom_miss_point() +
+         facet_grid(type~suburb)
+
+
+ggplot(mel_houses_imputed, aes(x=bedroom2, y=price, colour=price_NA)) +
          geom_point() +
-         facet_wrap(~suburb, ncol=2) +
+         facet_grid(type~suburb) +
   scale_colour_discrete_divergingx(palette="Zissou 1")
 ```
 
+Ok, quite confident now that we have a reasonable  set of data to work with. There are some odd values in the data still that will need handling at some point, like *negative* `landsize`. But for now these can be part of the analysis, as is.
+
+Having the additional variables `_NA` will allow identifying observations that have been imputed as we work through the analysis.
 :::
 
-c. Make a scatterplot matrix of price, rooms, bedroom2, bathroom, suburb, type. The order of variables can affect the readability. I advise that the plot will be easier to read if you order them with the numerical variables first, and then the categorical variables. Think about what associations can be seen?
+d. Make a scatterplot matrix of price, rooms, bedroom2, bathroom, landsize, latitude and longitude, suburb. The order of variables can affect the readability. I advise that the plot will be easier to read if you order the variables a little, at least put price first. Think about what associations can be seen?
 
 ::: unilur-solution
 
@@ -171,28 +315,26 @@ c. Make a scatterplot matrix of price, rooms, bedroom2, bathroom, suburb, type. 
 #| fig-width: 8
 #| fig-height: 8
 #| message: false
-#| eval: false
-ggpairs(mel_houses_knn, columns=c(4,2,10,11,1,3))
+ggpairs(mel_houses_imputed,
+        columns=c(4,2,10,11,13,15,16,1,3))
 ```
 
-- Except for price the continuous variables are all discrete. We can still examine the associations. It could be useful to use a jittered scatterplot, but that would require making a special plot function to use in the ggpairs function. 
+- Some continuous variables are discrete. We can still examine the associations. It could be useful to use a jittered scatterplot, but that would require making a special plot function to use in the ggpairs function. 
 - There is positive linear association between price, rooms, bedroom2, bathroom, which indicates the bigger the house the higher the price
-- From the boxplots: houses in Brighton tend to be higher priced and bigger than South Yarra, and houses tend to be worth more than apartments or units.
-- From the fluctuation diagram, Brighton tends to have more houses, and South Yarra has more apartments.
-- From the density plot, price has a skewed distribution.
-- There is one big outlier, one house sold for a much higher price. There are a few bivariate outliers, houses with a large number of bathrooms but relatively low price.
+- From the boxplots: houses in Brighton tend to be higher priced and bigger than South Yarra, and houses tend to be worth more than townhouses and units.
+- There are lots of outliers.
 
 ```{r}
-#| eval: false
 #| message: false
 # To add jitter
-ggpairs(mel_houses_knn, columns=c(4,2,10,11,1,3),
+ggpairs(mel_houses_imputed,
+        columns=c(4,2,10,11,13,15,16),
         lower=list(continuous=wrap("points",
                   position=position_jitter(height=0.3, width=0.3))))
 ```
 :::
 
-d. Subset the data to Brighton only. Make an interactive scatterplot matrix of rooms, bedroom2, bathroom and price, coloured by type of property. There are some high price properties. Select these cases, and determine what's special about them -- if anything. 
+e. Here's where we will start using interactive plots to explore the multivariate relationships. Subset the data to Brighton only. This will make the analysis easier. Make an interactive scatterplot matrix of  price, rooms, bedroom2, bathroom and landsize, coloured by type of property. There are some high price properties. Select these cases, and determine what's special about them -- if anything. 
 
 ::: unilur-solution
 
@@ -200,12 +342,11 @@ d. Subset the data to Brighton only. Make an interactive scatterplot matrix of r
 #| fig-width: 8
 #| fig-height: 6
 #| message: false
-#| eval: false
-brighton <- mel_houses_knn |> 
+brighton <- mel_houses_imputed |> 
   dplyr::filter(suburb=="Brighton") 
 highlight_key(brighton) |>
   ggpairs(aes(shape = price_NA, colour=type), 
-          columns = c(4,2,10,11,17,18,13),
+          columns = c(4,2,10,11,13),
                   upper=list(continuous="points")) |>
   ggplotly(900, 900) |>
   highlight("plotly_selected")
@@ -213,12 +354,12 @@ highlight_key(brighton) |>
 
 
 ```{r}
-#| eval: false
 # To add jittering
-# Don't recommend this
+# which makes it a little easier to see all points
+# in the discrete variables
 highlight_key(brighton) |>
   ggpairs(aes(shape = price_NA, colour=type), 
-          columns = c(4,2,10,11,17,18,13),
+          columns = c(4,2,10,11,13),
           lower=list(continuous=wrap("points",
                   position=position_jitter(height=0.3, width=0.3))),
           upper=list(continuous=wrap("points",
@@ -227,6 +368,74 @@ highlight_key(brighton) |>
   highlight("plotly_selected") 
 
 ```
+
+- There is one very high price, which is a modest size of 4 bedrooms and 3 bathrooms.
+- There is one property with an extraordinarily large number of rooms, but this is an imputed value for price. Something may have gone wrong with the imputation, because it has a low price despite being a big property. Despite the large number of rooms it only has 3 bedrooms and 2 bathrooms.
+
+:::
+
+f. The realtors mantra is location, location, location! Next check the location of properties relative to price and size, using two linked plots.
+One should have the longitude and latitude, and the other price by rooms. Ideally, you can make a map underneath the spatial coordinates, to better put these in context. 
+
+::: unilur-solution
+
+The `ozmaps` package has quick maps of Australia that can be used. The code below checks that the map can be made. 
+
+```{r}
+# Check location
+library(sf)
+library(ozmaps)
+library(ggthemes)
+library(crosstalk)
+lga_sf <- ozmap_data("abs_lga")
+brighton_map <- lga_sf |>
+  filter(NAME %in% c("Bayside (C)", 
+                     "Glen Eira (C)",
+                     "Stonnington (C)",
+                     "Port Phillip (C)"))
+basic_map <- ggplot(brighton_map) + geom_sf() +
+  geom_point(data=brighton, 
+             aes(x=longitude, y=latitude,
+                 colour=type, shape=price_NA)) +
+  theme_map() +
+  theme(legend.position = "none")
+```
+
+This code can be used to make the interactive linked plots.
+
+```{r}
+# Now make interactive linked plots
+shared_brighton <- SharedData$new(brighton)
+
+map <- ggplot(brighton_map) + geom_sf() +
+  geom_point(data=shared_brighton, 
+             aes(x=longitude, y=latitude,
+                 colour=type, shape=price_NA)) +
+  theme_map() +
+  theme(legend.position = "none")
+mapi <- ggplotly(map)  |>
+  highlight(on = "plotly_selected", 
+              off = "plotly_deselect")
+
+sp <- ggplot(shared_brighton, 
+             aes(x=rooms, y=price, 
+                 colour=type, shape=price_NA)) +
+  geom_point() +
+  theme(legend.position="none")
+spi <- ggplotly(sp) |>
+  highlight(on = "plotly_selected", 
+              off = "plotly_deselect")
+
+bscols(
+     mapi, spi,
+     widths = c(5, 5)
+ )
+```
+
+- The high priced house is right agains the bay. 
+- The property with the large number of rooms is also close to the bay.
+- Otherwise, if you select the properties near the bay, they don't seem to be especially higher in price.
+- 
 :::
 
 
