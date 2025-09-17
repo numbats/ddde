@@ -407,32 +407,36 @@ This code can be used to make the interactive linked plots.
 # Now make interactive linked plots
 shared_brighton <- SharedData$new(brighton)
 
-map <- ggplot(brighton_map) + geom_sf() +
+map <- ggplot(brighton_map) + 
+  geom_sf() +
   geom_point(data=shared_brighton, 
              aes(x=longitude, y=latitude,
                  colour=type, shape=price_NA)) +
   theme_map() +
   theme(legend.position = "none")
-mapi <- ggplotly(map)  |>
-  highlight(on = "plotly_selected", 
-              off = "plotly_deselect")
 
 sp <- ggplot(shared_brighton, 
              aes(x=rooms, y=price, 
-                 colour=type, shape=price_NA)) +
+                 colour=type, 
+                 shape=price_NA)) +
   geom_point() +
   theme(legend.position="none")
+
+mapi <- ggplotly(map) |>
+  highlight(on = "plotly_selected", 
+              off = "plotly_deselect")
 spi <- ggplotly(sp) |>
   highlight(on = "plotly_selected", 
               off = "plotly_deselect")
 
 bscols(
-     mapi, spi,
-     widths = c(5, 5)
+  widths = c(5, 5), 
+  mapi, 
+  spi 
  )
 ```
 
-- The high priced house is right agains the bay. 
+- The high priced house is right against the bay. 
 - The property with the large number of rooms is also close to the bay.
 - Otherwise, if you select the properties near the bay, they don't seem to be especially higher in price.
 - 
