@@ -1,0 +1,224 @@
+---
+title: "ETC5521 Worksheet Week 9"
+subtitle: "Exploring data having a space and time context Part I"
+author: "Prof. Di Cook"
+quarto-required: ">=1.3.0"
+format:
+    unilur-html:
+        output-file: worksheet.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: worksheetsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+code-fold: true
+---
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(colorspace)
+library(brolgar)
+library(patchwork)
+library(conflicted)
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+```
+
+
+### Exercise 1: Men's heights 
+
+The `heights` data provided in the `brolgar` package contains average male heights in 144 countries from 1500-1989. 
+
+a. What's the time index for this data? What is the key?
+
+::: unilur-solution
+The time index is year, and key is country.
+:::
+
+b. Filter the data to keep only measurements since 1700, when there are records for many countries. Make a spaghetti plot for the values from Australia. Does it look like Australian males are getting taller?
+
+::: unilur-solution
+Its looking like Australian males are getting taller BUT .... There are few measurements in the 1900s, and none since 1975. The data for Australia looks unreliable.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+#| out-width: 100%
+heights <- brolgar::heights |> filter(year > 1700)
+heights_oz <- heights |> 
+  filter(country == "Australia") 
+ggplot(heights_oz,
+       aes(x = year,
+           y = height_cm,
+           group = country)) + 
+  geom_point() + 
+  geom_line()
+```
+:::
+
+c. Check the number of observations for each country. How many countries have less than five years of measurements? Filter these countries out of the data, because we can't study temporal trend without sufficient measurements. 
+
+::: unilur-solution
+
+```{r echo=TRUE}
+heights <- heights |> 
+  add_n_obs() |> 
+  filter(n_obs >= 5)
+```
+:::
+
+d. Make a spaghetti plot of all the data, with a smoother overlaid. Does it look like men are generally getting taller?
+
+::: unilur-solution
+Generally, the trend is up, so yes it does look like men are getting taller acorss the globe.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+#| out-width: 100%
+ggplot(heights,
+       aes(x = year,
+           y = height_cm)) + 
+  geom_line(aes(group = country), alpha = 0.3) + 
+  geom_smooth(se=FALSE)
+```
+:::
+
+e. Use `facet_strata` to break the data into subsets using  the `year`, and plot is several facets. What sort of patterns are there in terms of the earliest year that a country appears in the data?
+
+::: unilur-solution
+The countries are pretty evenly distributed across the facets, which means that there are roughly similar numbers of countries regularly joining their data into the collection.
+
+```{r }
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 100%
+heights <- as_tsibble(heights,
+                      index = year,
+                      key = country,
+                      regular = FALSE)
+set.seed(530)
+ggplot(heights, aes(x = year,
+           y = height_cm,
+           group = country)) + 
+  geom_line() + 
+  facet_strata(along = -year)
+```
+:::
+
+f. Compute the three number summary (min, median, max) for each country. Make density plots of these statistics, overlaid in a single plot, and a parallel coordinate plot of these three statistics. What is the average minimum (median, maximum) height across countries? Are there some countries who have roughly the same minimum, median and maximum height?
+
+::: unilur-solution
+The average minimum height is about 164cm, median is about 168cm and tallest is about 172cm. The maximum height appears to be bimodal, with a small peak around 178cm.
+
+Most countries have the expected pattern of increasing heights from minimum, median to maximum. There are a few which have very similar values of these, though, which is a bit surprising. It means that there has been no change in these metrics over time.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 100%
+heights_three <- heights |>
+  features(height_cm, c(
+    min = min,
+    median = median,
+    max = max
+  ))
+heights_three_l <- heights_three |> 
+  pivot_longer(cols = min:max,
+               names_to = "feature",
+               values_to = "value")
+
+p1 <- heights_three_l |> 
+  ggplot(aes(x = value,
+             fill = feature)) + 
+  geom_density(alpha = 0.5) +
+  labs(x = "Value",
+       y = "Density",
+       fill = "Feature") + 
+  scale_fill_discrete_qualitative(palette = "Dark 3") +
+  xlab("Height") +
+  ylab("") +
+  theme(legend.position = "none",
+        aspect.ratio = 1)
+
+p2 <- heights_three_l |> 
+ ggplot(aes(x = factor(feature, 
+                       levels = c("min", "median", "max")),
+            y = value,
+             group = country)) + 
+  geom_line(alpha = 0.4) +
+  xlab("") +
+  ylab("Height") +
+  theme(aspect.ratio = 1)
+
+heights_three <- heights_three |> 
+  mutate(country = factor(country)) |>
+  mutate(country = fct_reorder(country, median)) 
+p3 <- heights_three |>
+    ggplot() + 
+    geom_point(aes(x = country,
+           y = median)) +
+    geom_errorbar(aes(x = country, 
+                      ymin=min, ymax=max), 
+                  alpha = 0.6, width=0) +
+    xlab("") + ylab("heights") +
+    coord_flip() +
+  theme(axis.text.y = element_text(size=6),
+        aspect.ratio = 2)
+ 
+design <- "
+1133
+1133
+2233
+2233"
+p1 + p2 + p3 + 
+  plot_layout(design = design)
+```
+:::
+
+g. Which country has the tallest men? Which country has highest median male height? Which country has the shortest men? Would you say that the distribution of heights within a  country is similar for all countries?
+
+::: unilur-solution
+Denmark has the tallest man (max). Estonia has the tallest median height. Papua New Guinea has the shortest men, on all metrics. The distribution of heights over the years is not the same for each country.
+:::
+
+

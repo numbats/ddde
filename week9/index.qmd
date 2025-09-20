@@ -17,6 +17,8 @@ schedule |>
   pull(ref)
 ```
 
+Also see [tsibble documentation](https://tsibble.tidyverts.org/).
+
 ## What you will learn this week
 
 - What is temporal data?
@@ -36,6 +38,11 @@ schedule |>
 - [pdf](https://ddde.numbat.space/week9/slides.pdf)
 - [qmd](https://ddde.numbat.space/week9/slides.qmd)
 - [R](https://ddde.numbat.space/week9/slides.R)
+
+## Worksheet instructions
+
+- [html](https://ddde.numbat.space/week9/worksheet.html)
+- [qmd](https://ddde.numbat.space/week9/worksheet.qmd)
 
 ## Tutorial instructions
 
