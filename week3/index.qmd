@@ -44,8 +44,6 @@ schedule |>
 - [html](https://ddde.numbat.space/week3/tutorial.html)
 - [qmd](https://ddde.numbat.space/week3/tutorial.qmd)
 
-## Assignments
-
 ```{r}
 #| output: asis
 show_assignments(3)

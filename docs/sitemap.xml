@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://ddde.numbat.space/week9/worksheet.html</loc>
+    <lastmod>2025-09-20T00:04:50.447Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week9/worksheetsol.html</loc>
     <lastmod>2025-09-20T00:04:50.447Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week9/slides.html</loc>
     <lastmod>2025-09-19T05:10:02.587Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week8/worksheet.html</loc>
+    <lastmod>2025-09-20T01:09:05.577Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week8/worksheetsol.html</loc>
@@ -17,12 +25,20 @@
     <lastmod>2025-09-16T00:38:50.229Z</lastmod>
   </url>
   <url>
+    <loc>https://ddde.numbat.space/week7/worksheet.html</loc>
+    <lastmod>2025-09-05T02:52:15.624Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week7/worksheetsol.html</loc>
     <lastmod>2025-09-05T02:52:15.624Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week7/slides.html</loc>
     <lastmod>2024-09-07T08:58:46.282Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week6/worksheet.html</loc>
+    <lastmod>2025-09-02T06:48:06.978Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week6/worksheetsol.html</loc>
@@ -33,12 +49,20 @@
     <lastmod>2025-09-01T02:57:39.978Z</lastmod>
   </url>
   <url>
+    <loc>https://ddde.numbat.space/week5/worksheet.html</loc>
+    <lastmod>2025-08-24T01:01:24.965Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week5/worksheetsol.html</loc>
     <lastmod>2025-08-24T01:01:24.965Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week5/slides.html</loc>
     <lastmod>2025-08-26T01:49:37.472Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week4/worksheet.html</loc>
+    <lastmod>2025-08-19T06:16:32.375Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week4/worksheetsol.html</loc>
@@ -49,6 +73,10 @@
     <lastmod>2025-09-16T02:00:49.626Z</lastmod>
   </url>
   <url>
+    <loc>https://ddde.numbat.space/week3/worksheet.html</loc>
+    <lastmod>2025-08-12T06:42:18.216Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week3/worksheetsol.html</loc>
     <lastmod>2025-08-12T06:42:18.216Z</lastmod>
   </url>
@@ -57,12 +85,12 @@
     <lastmod>2025-08-12T03:40:12.091Z</lastmod>
   </url>
   <url>
-    <loc>https://ddde.numbat.space/week2/worksheetsol.html</loc>
+    <loc>https://ddde.numbat.space/week2/worksheet.html</loc>
     <lastmod>2025-08-01T03:53:59.217Z</lastmod>
   </url>
   <url>
-    <loc>https://ddde.numbat.space/week2/tukey-contributions.html</loc>
-    <lastmod>2025-09-20T01:19:11.951Z</lastmod>
+    <loc>https://ddde.numbat.space/week2/worksheetsol.html</loc>
+    <lastmod>2025-08-01T03:53:59.217Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week2/index.html</loc>
@@ -73,6 +101,10 @@
     <lastmod>2025-08-24T01:53:57.144Z</lastmod>
   </url>
   <url>
+    <loc>https://ddde.numbat.space/week1/worksheet.html</loc>
+    <lastmod>2025-07-30T02:17:15.799Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week1/worksheetsol.html</loc>
     <lastmod>2025-07-30T02:17:15.799Z</lastmod>
   </url>
@@ -81,7 +113,23 @@
     <lastmod>2025-07-30T02:28:36.446Z</lastmod>
   </url>
   <url>
+    <loc>https://ddde.numbat.space/resources.html</loc>
+    <lastmod>2025-07-14T22:58:53.386Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/index.html</loc>
+    <lastmod>2025-08-27T03:28:24.479Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week1/index.html</loc>
+    <lastmod>2025-08-24T01:51:45.265Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week1/tutorialsol.html</loc>
+    <lastmod>2025-07-27T07:43:45.895Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week1/tutorial.html</loc>
     <lastmod>2025-07-27T07:43:45.895Z</lastmod>
   </url>
   <url>
@@ -101,11 +149,19 @@
     <lastmod>2025-07-31T02:12:41.208Z</lastmod>
   </url>
   <url>
+    <loc>https://ddde.numbat.space/week2/tutorial.html</loc>
+    <lastmod>2025-07-31T02:12:41.208Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week3/index.html</loc>
-    <lastmod>2025-08-24T01:52:17.146Z</lastmod>
+    <lastmod>2025-09-21T23:42:38.082Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week3/tutorialsol.html</loc>
+    <lastmod>2025-08-08T03:28:41.899Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week3/tutorial.html</loc>
     <lastmod>2025-08-08T03:28:41.899Z</lastmod>
   </url>
   <url>
@@ -117,11 +173,19 @@
     <lastmod>2025-08-17T05:03:58.753Z</lastmod>
   </url>
   <url>
+    <loc>https://ddde.numbat.space/week4/tutorial.html</loc>
+    <lastmod>2025-08-17T05:03:58.753Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week5/index.html</loc>
     <lastmod>2025-08-24T01:52:37.956Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week5/tutorialsol.html</loc>
+    <lastmod>2025-08-24T01:28:29.211Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week5/tutorial.html</loc>
     <lastmod>2025-08-24T01:28:29.211Z</lastmod>
   </url>
   <url>
@@ -133,11 +197,19 @@
     <lastmod>2025-09-03T06:29:48.011Z</lastmod>
   </url>
   <url>
+    <loc>https://ddde.numbat.space/week6/tutorial.html</loc>
+    <lastmod>2025-09-03T06:29:48.011Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week7/index.html</loc>
     <lastmod>2025-09-05T02:38:02.194Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week7/tutorialsol.html</loc>
+    <lastmod>2025-09-05T02:42:33.998Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week7/tutorial.html</loc>
     <lastmod>2025-09-05T02:42:33.998Z</lastmod>
   </url>
   <url>
@@ -149,11 +221,19 @@
     <lastmod>2025-09-17T22:12:24.363Z</lastmod>
   </url>
   <url>
+    <loc>https://ddde.numbat.space/week8/tutorial.html</loc>
+    <lastmod>2025-09-17T22:12:24.363Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week9/index.html</loc>
     <lastmod>2025-09-19T23:58:30.865Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week9/tutorialsol.html</loc>
+    <lastmod>2025-09-20T00:56:05.612Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week9/tutorial.html</loc>
     <lastmod>2025-09-20T00:56:05.612Z</lastmod>
   </url>
 </urlset>
