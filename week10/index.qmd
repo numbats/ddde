@@ -17,6 +17,8 @@ schedule |>
   pull(ref)
 ```
 
+Also see the [Moraga, Paula. (2019). Geospatial Health Data](https://www.paulamoraga.com/book-geospatial/index.html).
+
 ## What you will learn this week
 
 - Breaking up data by time, and by space
@@ -36,6 +38,11 @@ schedule |>
 - [pdf](https://ddde.numbat.space/week10/slides.pdf)
 - [qmd](https://ddde.numbat.space/week10/slides.qmd)
 - [R](https://ddde.numbat.space/week10/slides.R)
+
+## Worksheet instructions
+
+- [html](https://ddde.numbat.space/week10/worksheet.html)
+- [qmd](https://ddde.numbat.space/week10/worksheet.qmd)
 
 ## Tutorial instructions
 

@@ -1,0 +1,186 @@
+---
+title: "ETC5521 Worksheet Week 10"
+subtitle: "Exploring data having a space and time context Part II"
+author: "Prof. Di Cook"
+quarto-required: ">=1.8.0"
+format:
+    unilur-html:
+        output-file: worksheet.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+    unilur-html+solution:
+        output-file: worksheetsol.html
+        embed-resources: true
+        css: "../assets/tutorial.css"
+        show-solution: true
+code-fold: true
+---
+
+```{r include=FALSE}
+#| echo: false
+library(tidyverse)
+library(colorspace)
+library(cubble)
+library(GGally)
+library(patchwork)
+library(ggthemes)
+library(conflicted)
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+options(
+  digits = 2,
+  width = 80,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+
+```
+
+
+### Exercise 1: Gridded spatiotemporal data
+
+Conduct a spatiotemporal analysis of ozone measurements over central America, following the analysis of temperature provided in the class lecture notes.
+
+#### a. Make a single map
+
+Load the `nasa` data from the GGally package, and make a map of ozone for January 2015, overlaid on a map of the geographic area. What do you learn about the spatial distribution of ozone?
+
+::: unilur-solution
+
+The high concentrations of ozone are at the highest latitude. The lowest are close to the equator, and there is a small increase in values in the southern hemisphere. The trend is primarily north-south, and doesn't change between land and sea.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+data(nasa) # from GGally package
+
+nasa_cb <- as_cubble(as_tibble(nasa), 
+                     key=id, 
+                     index=time, 
+                     coords=c(long, lat))
+
+sth_america <- map_data("world") |>
+  filter(between(long, -115, -53), between(lat, -20.5, 41))
+nasa_cb |> face_temporal() |>
+  filter(month == 1, year == 1995) |> 
+  select(id, time, ozone) |>
+  unfold(long, lat) |>
+  ggplot() + 
+  geom_tile(aes(x=long, y=lat, fill=ozone)) +
+  geom_path(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            colour="white", linewidth=1) +
+  scale_fill_viridis_c("ozone", option = "magma") +
+  theme_map() +
+  theme(aspect.ratio = 0.8, legend.position = "bottom") +
+  ggtitle("January 1995")
+```
+
+:::
+
+#### b. Display the map over time
+
+Generate the maps of ozone for all of the time period, by facetting on month and year. Why was the plot organised so that months were in columns and years in rows, do you think? What do you learn about the temporal changes in the spatial distribution of ozone?
+
+::: unilur-solution
+
+The primary comparison is same month each year, which we might expect to be fairly similar. Reading down columns is easier for making this comparison. Reading across the row, allows comparison of seasonal patterns within a year.
+
+There is a small seasonal pattern, in that there is a decrease in values in the northern hemisphere in the late northern hemisphere summer (July, Aug, Sep). There is an increase during these months around the equator also. Because the latitude does not go as far south as north, we cannot see whether the ozone values are similarly high in the south as in the north, for corresponding distance from the equator. The pattern remains that it is mostly north-south trend rather than east-west trend or land-sea trend. There is not a lot of difference across years: perhaps slightly increased values extending further towards the equator from the northern latitudes in the summer months.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, ozone) |>
+  unfold(long, lat) |>
+  ggplot() + 
+  geom_tile(aes(x=long, y=lat, fill=ozone)) +
+  facet_grid(year~month) +
+  scale_fill_viridis_c("ozone",
+                       option = "magma") +
+  #coord_map() +
+  theme_map() +
+  theme(aspect.ratio = 0.8, legend.position="bottom")
+```
+
+:::
+
+#### c. Glyphmap
+
+Make two glyphmaps of ozone, one with time series at each spatial grid point, scaled globally, and the other using polar coordinates at each spatial grid point, scaled individually. What do you learn about the temporal trend, and seasonal patterns of ozone over this geographic region?
+
+::: unilur-solution
+
+The dominant pattern from the (time series) glyph maps of high values in the north, and decreasing values going south, and then a slight increase at the most southern values. There may be some seasonality because the series have the up-down pattern repeated 6 times for the 6 years, visible at all locations.
+
+In the seasonal glyphmaps, the seasonality is the strongest pattern at all locations. Some years tend to have more ozone than others, because the 6 "petals" are different sizes in some locations. There is possibly a slight land-sea difference in seasonality. It's also possible to see the shift in seasons, that the peaks in the south are at different times of the year than the peaks in the north.
+
+```{r time_space, fig.width=6, fig.height=6, out.width="80%"}
+#| fig-width: 8
+#| fig-height: 6
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, ozone) |>
+  unfold(long, lat) |>
+  ggplot() +
+  geom_polygon(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            fill="#014221", alpha=0.5, colour="#ffffff") +
+  cubble::geom_glyph_box(data=nasa, aes(x_major = long, x_minor = date,
+            y_major = lat, y_minor = ozone), fill=NA) +
+  cubble::geom_glyph(data=nasa, aes(x_major = long, x_minor = date,
+            y_major = lat, y_minor = ozone)) +
+  theme_map() +
+  theme(aspect.ratio = 0.8)
+```
+
+```{r time_space2, fig.width=6, fig.height=6, out.width="80%"}
+#| fig-width: 8
+#| fig-height: 6
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, ozone) |>
+  unfold(long, lat) |>
+  ggplot() + 
+  geom_polygon(data=sth_america, 
+           aes(x=long, y=lat, group=group), 
+          fill="#014221", alpha=0.5, colour="#ffffff") +
+  cubble::geom_glyph_box(data=nasa, 
+                 aes(x_major = long, x_minor = date,
+            y_major = lat, y_minor = ozone), fill=NA) +
+  cubble::geom_glyph(data=nasa, aes(x_major = long, x_minor = date,
+            y_major = lat, y_minor = ozone), 
+            polar = TRUE) +
+  theme_map() +
+  theme(aspect.ratio = 0.8)
+```
+
+:::

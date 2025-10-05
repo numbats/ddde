@@ -2,7 +2,7 @@
 title: "ETC5521 Worksheet Week 9"
 subtitle: "Exploring data having a space and time context Part I"
 author: "Prof. Di Cook"
-quarto-required: ">=1.3.0"
+quarto-required: ">=1.8.0"
 format:
     unilur-html:
         output-file: worksheet.html
@@ -26,6 +26,7 @@ library(conflicted)
 conflicts_prefer(dplyr::filter)
 conflicts_prefer(dplyr::select)
 conflicts_prefer(dplyr::slice)
+conflicts_prefer(brolgar::heights)
 
 # Set up chunk for all slides
 knitr::opts_chunk$set(
@@ -109,7 +110,7 @@ heights <- heights |>
 d. Make a spaghetti plot of all the data, with a smoother overlaid. Does it look like men are generally getting taller?
 
 ::: unilur-solution
-Generally, the trend is up, so yes it does look like men are getting taller acorss the globe.
+Generally, the trend is up, so yes it does look like men are getting taller across the globe.
 
 ```{r}
 #| fig-width: 8
@@ -142,6 +143,15 @@ ggplot(heights, aes(x = year,
            group = country)) + 
   geom_line() + 
   facet_strata(along = -year)
+
+set.seed(530)
+heights |>
+  sample_n_keys(size = 10) |>
+  ggplot(aes(x = year,
+           y = height_cm,
+           group = country)) + 
+  geom_line() 
+  
 ```
 :::
 
@@ -218,6 +228,31 @@ p1 + p2 + p3 +
 g. Which country has the tallest men? Which country has highest median male height? Which country has the shortest men? Would you say that the distribution of heights within a  country is similar for all countries?
 
 ::: unilur-solution
+
+```{r}
+h_slope <- heights |>
+  add_n_obs() |>
+  filter(n_obs > 4) |>
+  add_key_slope(height_cm ~ year) 
+
+h_slope |>
+  filter(.slope_year > 0.1) |>
+    ggplot(aes(x = year,
+           y = height_cm,
+           group = country)) + 
+  geom_line() 
+
+h_slope |>
+  filter(.slope_year < 0 ) |>
+    ggplot(aes(x = year,
+           y = height_cm,
+           group = country)) + 
+  geom_line() 
+
+library(plotly)
+ggplotly()
+```
+
 Denmark has the tallest man (max). Estonia has the tallest median height. Papua New Guinea has the shortest men, on all metrics. The distribution of heights over the years is not the same for each country.
 :::
 

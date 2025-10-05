@@ -663,6 +663,29 @@ ggplot(lineup(null_permute("origin"), true=flights_mth, n=12),
         axis.text = element_blank(),
         axis.title = element_blank())
 ```
+
+```{r}
+#| eval: false
+#| echo: false
+# Correct code
+flights_mth_s1 <- flights_ts |> 
+  as_tibble() |>
+  group_by(month) |>
+  mutate(origin = sample(origin)) |>
+  ungroup() |>
+  group_by(month, origin) |>
+  summarise(dep_delay = mean(dep_delay, na.rm=TRUE)) |>
+  as_tsibble(key=origin, index=month)
+
+ggplot(flights_mth_s1, 
+       aes(x=month, y=dep_delay, colour=origin)) +
+  geom_point() +
+  geom_smooth(se=F) +
+  theme(aspect.ratio = 0.5, 
+        legend.position = "none",
+        axis.text = element_blank(),
+        axis.title = element_blank())
+```
 :::
 ::: {.column width=30%}
 
