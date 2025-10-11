@@ -4590,5 +4590,173 @@
     "title": "ETC5521 Worksheet Week 10",
     "section": "",
     "text": "Exercise 1: Gridded spatiotemporal data\nConduct a spatiotemporal analysis of ozone measurements over central America, following the analysis of temperature provided in the class lecture notes.\n\na. Make a single map\nLoad the nasa data from the GGally package, and make a map of ozone for January 2015, overlaid on a map of the geographic area. What do you learn about the spatial distribution of ozone?\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nThe high concentrations of ozone are at the highest latitude. The lowest are close to the equator, and there is a small increase in values in the southern hemisphere. The trend is primarily north-south, and doesn’t change between land and sea.\n\n\nCode\ndata(nasa) # from GGally package\n\nnasa_cb &lt;- as_cubble(as_tibble(nasa), \n                     key=id, \n                     index=time, \n                     coords=c(long, lat))\n\nsth_america &lt;- map_data(\"world\") |&gt;\n  filter(between(long, -115, -53), between(lat, -20.5, 41))\nnasa_cb |&gt; face_temporal() |&gt;\n  filter(month == 1, year == 1995) |&gt; \n  select(id, time, ozone) |&gt;\n  unfold(long, lat) |&gt;\n  ggplot() + \n  geom_tile(aes(x=long, y=lat, fill=ozone)) +\n  geom_path(data=sth_america, \n            aes(x=long, y=lat, group=group), \n            colour=\"white\", linewidth=1) +\n  scale_fill_viridis_c(\"ozone\", option = \"magma\") +\n  theme_map() +\n  theme(aspect.ratio = 0.8, legend.position = \"bottom\") +\n  ggtitle(\"January 1995\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nb. Display the map over time\nGenerate the maps of ozone for all of the time period, by facetting on month and year. Why was the plot organised so that months were in columns and years in rows, do you think? What do you learn about the temporal changes in the spatial distribution of ozone?\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nThe primary comparison is same month each year, which we might expect to be fairly similar. Reading down columns is easier for making this comparison. Reading across the row, allows comparison of seasonal patterns within a year.\nThere is a small seasonal pattern, in that there is a decrease in values in the northern hemisphere in the late northern hemisphere summer (July, Aug, Sep). There is an increase during these months around the equator also. Because the latitude does not go as far south as north, we cannot see whether the ozone values are similarly high in the south as in the north, for corresponding distance from the equator. The pattern remains that it is mostly north-south trend rather than east-west trend or land-sea trend. There is not a lot of difference across years: perhaps slightly increased values extending further towards the equator from the northern latitudes in the summer months.\n\n\nCode\nnasa_cb |&gt; face_temporal() |&gt;\n  select(id, time, month, year, ozone) |&gt;\n  unfold(long, lat) |&gt;\n  ggplot() + \n  geom_tile(aes(x=long, y=lat, fill=ozone)) +\n  facet_grid(year~month) +\n  scale_fill_viridis_c(\"ozone\",\n                       option = \"magma\") +\n  #coord_map() +\n  theme_map() +\n  theme(aspect.ratio = 0.8, legend.position=\"bottom\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nc. Glyphmap\nMake two glyphmaps of ozone, one with time series at each spatial grid point, scaled globally, and the other using polar coordinates at each spatial grid point, scaled individually. What do you learn about the temporal trend, and seasonal patterns of ozone over this geographic region?\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nThe dominant pattern from the (time series) glyph maps of high values in the north, and decreasing values going south, and then a slight increase at the most southern values. There may be some seasonality because the series have the up-down pattern repeated 6 times for the 6 years, visible at all locations.\nIn the seasonal glyphmaps, the seasonality is the strongest pattern at all locations. Some years tend to have more ozone than others, because the 6 “petals” are different sizes in some locations. There is possibly a slight land-sea difference in seasonality. It’s also possible to see the shift in seasons, that the peaks in the south are at different times of the year than the peaks in the north.\n\n\nCode\nnasa_cb |&gt; face_temporal() |&gt;\n  select(id, time, month, year, ozone) |&gt;\n  unfold(long, lat) |&gt;\n  ggplot() +\n  geom_polygon(data=sth_america, \n            aes(x=long, y=lat, group=group), \n            fill=\"#014221\", alpha=0.5, colour=\"#ffffff\") +\n  cubble::geom_glyph_box(data=nasa, aes(x_major = long, x_minor = date,\n            y_major = lat, y_minor = ozone), fill=NA) +\n  cubble::geom_glyph(data=nasa, aes(x_major = long, x_minor = date,\n            y_major = lat, y_minor = ozone)) +\n  theme_map() +\n  theme(aspect.ratio = 0.8)\n\n\n\n\n\n\n\n\n\n\n\nCode\nnasa_cb |&gt; face_temporal() |&gt;\n  select(id, time, month, year, ozone) |&gt;\n  unfold(long, lat) |&gt;\n  ggplot() + \n  geom_polygon(data=sth_america, \n           aes(x=long, y=lat, group=group), \n          fill=\"#014221\", alpha=0.5, colour=\"#ffffff\") +\n  cubble::geom_glyph_box(data=nasa, \n                 aes(x_major = long, x_minor = date,\n            y_major = lat, y_minor = ozone), fill=NA) +\n  cubble::geom_glyph(data=nasa, aes(x_major = long, x_minor = date,\n            y_major = lat, y_minor = ozone), \n            polar = TRUE) +\n  theme_map() +\n  theme(aspect.ratio = 0.8)"
+  },
+  {
+    "objectID": "week11/slides.html#outline",
+    "href": "week11/slides.html#outline",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Outline",
+    "text": "Outline\n\nDifferent types of model fitting\nDecomposing data from model\n\nfitted\nresidual\n\nDiagnostic calculations\n\nanomalies\nleverage\ninfluence"
+  },
+  {
+    "objectID": "week11/slides.html#models-can-be-used-to-re-focus-the-view-of-data",
+    "href": "week11/slides.html#models-can-be-used-to-re-focus-the-view-of-data",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Models can be used to re-focus the view of data",
+    "text": "Models can be used to re-focus the view of data"
+  },
+  {
+    "objectID": "week11/slides.html#different-types-of-model-fitting",
+    "href": "week11/slides.html#different-types-of-model-fitting",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Different types of model fitting",
+    "text": "Different types of model fitting\n\n\nThe basic form for fitting a model with data (response \\(Y\\) and predictors \\(X\\)) is:\n\\[\nY = f(X) + \\varepsilon\n\\]\nand \\(X\\) could be include multiple variables, \\(X = (X_{1}, X_{2}, \\dots, X_{p})\\) where \\(p\\) is the number of variables. We have a sample of \\(n\\) observations, \\(y_i, x_{i1}, \\dots x_{ip}, ~~~ i=1, \\dots, n\\).\n\n\nIn a parametric model, the form of \\(f\\) is specified, e.g. \\(\\beta_0 + \\beta_1X_1 + \\beta_2X_2 + \\beta_3X_1X_2\\), and one would estimate the parameters \\(\\beta_0, \\beta_1, \\beta_2, \\beta_3\\).\n\nFrequentist fitting assumes that parameters are fixed values.\nIn a Bayesian framework, the parameters are assumed to have a distribution, e.g. Gaussian.\n\nIn a non-parametric model, the form of \\(f\\) is NOT specified but fitted from the data. May not have a specific functional form, and needs more data, typically. Imposes less assumptions. Can be done in a Bayesian framework.\nDifferent types of variables can change the model specification, e.g. binary or categorical \\(Y\\), or temporal or spatial context.\nDifferent model products, e.g. fitted values or residuals, after the fit change the lens with which we view the data."
+  },
+  {
+    "objectID": "week11/slides.html#parametric-regression",
+    "href": "week11/slides.html#parametric-regression",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Parametric regression",
+    "text": "Parametric regression"
+  },
+  {
+    "objectID": "week11/slides.html#specification",
+    "href": "week11/slides.html#specification",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Specification",
+    "text": "Specification\n\n\nSpecify the\n\nfunctional form, e.g. function form is has linear and quadratic terms\n\n\\[f(X) = \\beta_0 + \\beta_1 X + \\beta_2 X^2\\]\n\ndistribution of errors, e.g. \n\n\\[\\varepsilon \\sim N(0, \\sigma^2)\\]\nFitting results in:\n\nfitted values, \\(\\widehat{y}\\) (sharpening)\nresiduals, \\(e = y-\\widehat{y}\\) (what did we miss)\n\n\n\n\n\nCode\nmtcars_fit &lt;- lm(mpg~poly(hp, 2), data=mtcars)\nmtcars_all &lt;- augment(mtcars_fit, mtcars)\np1 &lt;- ggplot(mtcars_all, aes(x=hp, y=mpg)) +\n  geom_point() +\n  ylim(c(10, 35)) +\n  ggtitle(\"data\")\np2 &lt;- ggplot(mtcars_all, aes(x=hp, y=.fitted)) +\n  geom_point() +\n  ylab(\"f\") +\n  ylim(c(10, 35)) +\n  ggtitle(\"model\")\np1 + p2 + plot_layout(ncol=2)\n\n\n\n\n\n\n\n\n\nCode\nmtcars_coefs &lt;- tidy(mtcars_fit)\nmtcars_stats &lt;- glance(mtcars_fit)\nmtcars_coefs\n\n\n# A tibble: 3 × 5\n  term         estimate std.error statistic  p.value\n  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)      20.1     0.544     36.9  6.15e-26\n2 poly(hp, 2)1    -26.0     3.08      -8.46 2.51e- 9\n3 poly(hp, 2)2     13.2     3.08       4.27 1.89e- 4\n\n\nCode\nmtcars_stats\n\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic      p.value    df\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;\n1     0.756         0.739  3.08      45.0      1.30e-9     2\n# ℹ 6 more variables: logLik &lt;dbl&gt;, AIC &lt;dbl&gt;, BIC &lt;dbl&gt;,\n#   deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;"
+  },
+  {
+    "objectID": "week11/slides.html#diagnostics-13",
+    "href": "week11/slides.html#diagnostics-13",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Diagnostics (1/3)",
+    "text": "Diagnostics (1/3)\n\n\nResiduals, \\(e = y-\\widehat{y}\\) (what doesn’t the fitted model see?)\n\nShould be consistent with a sample from the specified error model\nShould have no relationship with the response variable\n\n\n\nLineupNormal?LineupRelationship?\n\n\n\n\nCode\nset.seed(1026)\nggplot(lineup(null_dist(\".resid\", \"norm\"), n=12, true=mtcars_all), \n       aes(x=.resid)) +\n  geom_histogram(binwidth=1, colour=\"white\") +\n  facet_wrap(~.sample, ncol=4) +\n  theme(axis.title = element_blank(),\n        axis.text = element_blank())\n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\np3 &lt;- ggplot(mtcars_all, aes(x=.resid)) +\n  geom_histogram(binwidth=1, colour=\"white\") \np4 &lt;- ggplot(mtcars_all, aes(sample=.resid)) +\n  geom_qq_line() +\n  geom_qq() \np5 &lt;- ggplot(mtcars_all, aes(x=1, y=.resid)) +\n  geom_quasirandom() \np6 &lt;- ggplot(mtcars_all, aes(x=1, y=.resid)) +\n  geom_violin(fill=\"#D93F00\", colour=\"white\", \n              draw_quantiles=c(0.25, 0.5, 0.75)) \n\np3 + p4 + p5 + p6 + plot_layout(ncol=2)\n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\nset.seed(1058)\nggplot(lineup(null_dist(\".resid\", \"norm\"), n=12, true=mtcars_all), \n       aes(x=hp, y=.resid)) +\n  geom_point() +\n  facet_wrap(~.sample, ncol=4) +\n  theme(axis.title = element_blank(),\n        axis.text = element_blank())\n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\np7 &lt;- ggplot(mtcars_all, aes(x=hp, y=.resid)) +\n  geom_point() +\n  ylab(\"e\") +\n  ylim(c(-3, 3)) +\n  ggtitle(\"residuals\")\nmt_full_fit &lt;- tibble(hp = seq(50, 340, 10))\nmt_full_fit &lt;- mt_full_fit |&gt;\n                mutate(mpg = predict(mtcars_fit, mt_full_fit))\np8 &lt;- ggplot(mtcars_all, aes(x=hp, y=mpg)) +\n  geom_point() +\n  geom_line(data=mt_full_fit, colour=\"#D93F00\", linewidth=2) +\n  ylim(c(10, 35)) +\n  ggtitle(\"data+f\")\n\np7 + p8 + plot_layout(ncol=2)"
+  },
+  {
+    "objectID": "week11/slides.html#diagnostics-23",
+    "href": "week11/slides.html#diagnostics-23",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Diagnostics (2/3)",
+    "text": "Diagnostics (2/3)\n\n\nLeverage\n\nThe matrix \\(\\mathbf{H} = \\mathbf{X}(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\mathbf{X}^\\top\\) is referred to as the hat matrix.\nThe \\(i\\)-th diagonal element of \\(\\mathbf{H}\\), \\(h_{ii}\\), is called the leverage of the \\(i\\)-th observation.\nLeverages are always between zero and one, \\[0 \\leq h_{ii} \\leq 1.\\]\nNotice that leverages are not dependent on the response!\nPoints with high leverage can exert a lot of influence on the parameter estimates\n\nStudentized residuals\n\nIn order to obtain residuals with equal variance, many texts recommend using the studentised residuals \\[e_i^* = \\dfrac{e_i} {\\widehat{\\sigma} \\sqrt{1 - h_{ii}}}\\] for diagnostic checks.\n\n\nCook’s distance\n\nCook’s distance, \\(D\\), is another measure of influence: \\[\\begin{eqnarray*}\nD_i &=& \\dfrac{(\\widehat{\\boldsymbol{\\beta}}- \\widehat{\\boldsymbol{\\beta}}_{[-i]})^\\top Var(\\widehat{\\boldsymbol{\\beta}})^{-1}(\\widehat{\\boldsymbol{\\beta}}- \\widehat{\\boldsymbol{\\beta}}_{[-i]})}{p}\\\\\n&=&\\frac{e_i^2 h_{ii}}{(1-h_{ii})^2p\\widehat\\sigma^2},\n\\end{eqnarray*}\\] where \\(p\\) is the number of elements in \\(\\boldsymbol{\\beta}\\), \\(\\widehat{\\boldsymbol{\\beta}}_{[-i]}\\) and \\(\\widehat Y_{j[-i]}\\) are least squares estimates and the fitted value obtained by fitting the model ignoring the \\(i\\)-th data point \\((\\boldsymbol{x}_i,Y_i)\\), respectively."
+  },
+  {
+    "objectID": "week11/slides.html#diagnostics-33",
+    "href": "week11/slides.html#diagnostics-33",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Diagnostics (3/3)",
+    "text": "Diagnostics (3/3)\n\n\nCode\nmtcars_all &lt;- mtcars_all |&gt;\n  mutate(id = 1:n())\np10 &lt;- ggplot(mtcars_all, aes(x=id, y=.hat, label=id)) +\n  geom_point() +\n  labs(title=\"leverage\")\np11 &lt;- ggplot(mtcars_all, aes(x=id, y=.cooksd, label=id)) +\n  geom_point() +\n  labs(title=\"cooks d\") \np12 &lt;- ggplot(mtcars_all, aes(x=.resid, y=.std.resid, label=id)) +\n  geom_point() +\n  labs(title=\"studentised residuals\")"
+  },
+  {
+    "objectID": "week11/slides.html#simulation",
+    "href": "week11/slides.html#simulation",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Simulation",
+    "text": "Simulation\n\n\nGenerate response values for un-collected predictor values\n\nmt_full_fit &lt;- tibble(hp = seq(50, 340, 10))\nmt_full_fit &lt;- mt_full_fit |&gt;\n                mutate(mpg = predict(mtcars_fit, mt_full_fit))\n\n\n\n\n\n\n\n\n\n\n\nSimulate new samples\n\n123\n\n\n\n\nCode\nset.seed(1249)\nmt_sample1 &lt;- tibble(hp = runif(nrow(mtcars), 50, 340),\n                     e = rnorm(nrow(mtcars), sd = mtcars_stats$sigma))\nmt_sample1 &lt;- mt_sample1 |&gt;\n                mutate(mpg = predict(mtcars_fit, mt_sample1) + e,\n                       type = \"sim\") |&gt;\n  select(hp, mpg, type)\nmtcars_sub &lt;- mtcars |&gt;\n  select(hp, mpg) |&gt;\n  mutate(type = \"data\")\nmt_sample1 &lt;- bind_rows(mt_sample1, mtcars_sub)\n\nggplot(mt_sample1, aes(x=hp, y=mpg, colour=type)) +\n  geom_point() +\n  scale_color_discrete_divergingx(palette = \"Zissou 1\") +\n  ylim(c(10, 35)) \n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\nset.seed(1250)\nmt_sample2 &lt;- tibble(hp = runif(nrow(mtcars), 50, 340),\n                     e = rnorm(nrow(mtcars), sd = mtcars_stats$sigma))\nmt_sample2 &lt;- mt_sample2 |&gt;\n                mutate(mpg = predict(mtcars_fit, mt_sample2) + e,\n                       type = \"sim\") |&gt;\n  select(hp, mpg, type)\nmtcars_sub &lt;- mtcars |&gt;\n  select(hp, mpg) |&gt;\n  mutate(type = \"data\")\nmt_sample2 &lt;- bind_rows(mt_sample2, mtcars_sub)\n\nggplot(mt_sample2, aes(x=hp, y=mpg, colour=type)) +\n  geom_point() +\n  scale_color_discrete_divergingx(palette = \"Zissou 1\") +\n  ylim(c(10, 35)) \n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\nset.seed(1350)\nmt_sample3 &lt;- tibble(hp = runif(nrow(mtcars), 50, 340),\n                     e = rnorm(nrow(mtcars), sd = mtcars_stats$sigma))\nmt_sample3 &lt;- mt_sample3 |&gt;\n                mutate(mpg = predict(mtcars_fit, mt_sample3) + e,\n                       type = \"sim\") |&gt;\n  select(hp, mpg, type)\nmtcars_sub &lt;- mtcars |&gt;\n  select(hp, mpg) |&gt;\n  mutate(type = \"data\")\nmt_sample3 &lt;- bind_rows(mt_sample3, mtcars_sub)\n\nggplot(mt_sample3, aes(x=hp, y=mpg, colour=type)) +\n  geom_point() +\n  scale_color_discrete_divergingx(palette = \"Zissou 1\") +\n  ylim(c(10, 35))"
+  },
+  {
+    "objectID": "week11/slides.html#what-can-go-wrong-with-parametric-model",
+    "href": "week11/slides.html#what-can-go-wrong-with-parametric-model",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "What can go wrong with parametric model?",
+    "text": "What can go wrong with parametric model?"
+  },
+  {
+    "objectID": "week11/slides.html#wrong-specification",
+    "href": "week11/slides.html#wrong-specification",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Wrong specification",
+    "text": "Wrong specification\n\n\nSpecify function form is has only linear term\n\\[f(X) = \\beta_0 + \\beta_1 X\\]\n\n\nCode\nmtcars_fit2 &lt;- lm(mpg~hp, data=mtcars)\nmtcars_all2 &lt;- augment(mtcars_fit2, mtcars)\nsp1 &lt;- ggplot(mtcars_all2, aes(x=hp, y=mpg)) +\n  geom_point() +\n  geom_point(aes(x=hp, y=.fitted), colour=\"#D93F00\") + \n  ylim(c(10, 35)) +\n  ggtitle(\"data+model\")\nsp2 &lt;- ggplot(mtcars_all2, aes(x=hp, y=.resid)) +\n  geom_hline(yintercept=0, colour=\"grey60\") +\n  geom_point() +\n  ylab(\"e\") +\n  ggtitle(\"residuals\")\nsp1 + sp2 + plot_layout(ncol=2)\n\n\n\n\n\n\n\n\n\n\nPolynomial\n\n\n# A tibble: 3 × 5\n  term         estimate std.error statistic  p.value\n  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)      20.1     0.544     36.9  6.15e-26\n2 poly(hp, 2)1    -26.0     3.08      -8.46 2.51e- 9\n3 poly(hp, 2)2     13.2     3.08       4.27 1.89e- 4\n\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic      p.value    df\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;\n1     0.756         0.739  3.08      45.0      1.30e-9     2\n# ℹ 6 more variables: logLik &lt;dbl&gt;, AIC &lt;dbl&gt;, BIC &lt;dbl&gt;,\n#   deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;\n\n\nLinear\n\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic  p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)  30.1       1.63       18.4  6.64e-18\n2 hp           -0.0682    0.0101     -6.74 1.79e- 7\n\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic     p.value    df\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;\n1     0.602         0.589  3.86      45.5 0.000000179     1\n# ℹ 6 more variables: logLik &lt;dbl&gt;, AIC &lt;dbl&gt;, BIC &lt;dbl&gt;,\n#   deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;"
+  },
+  {
+    "objectID": "week11/slides.html#extrapolating",
+    "href": "week11/slides.html#extrapolating",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Extrapolating",
+    "text": "Extrapolating\n\n\nGenerate response values for un-collected predictor values OUTSIDE of domain of collected data, can produce HALLUCINATIONS.\n\n\nCode\nmtcars_fit3 &lt;- lm(mpg~poly(hp, 5), data=mtcars)\nmtcars_all3 &lt;- augment(mtcars_fit3, mtcars)\nmtcars_stats3 &lt;- glance(mtcars_fit3)\n\nset.seed(129)\nmt_extrap &lt;- tibble(hp = seq(250, 450, 10),\n                    e = rnorm(length(hp), sd=mtcars_stats3$sigma))\nmt_extrap &lt;- mt_extrap |&gt;\n                mutate(mpg = predict(mtcars_fit3, mt_extrap) + e) |&gt;\n  mutate(type = \"new\") |&gt;\n  select(-e)\nmt_extrap &lt;- bind_rows(mt_extrap, mtcars_sub)"
+  },
+  {
+    "objectID": "week11/slides.html#multiple-variables",
+    "href": "week11/slides.html#multiple-variables",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Multiple variables",
+    "text": "Multiple variables\n\n\nMissing terms\n\n\n\n\n\n\n\n\n\n\n\nCode\nmtcars_fit4 &lt;- lm(mpg~poly(hp, 2)+am, data=mtcars)\nmtcars_all4 &lt;- augment(mtcars_fit4, mtcars)\nmtcars_coefs4 &lt;- tidy(mtcars_fit4)\nmtcars_stats4 &lt;- glance(mtcars_fit4)\nmtcars_fit5 &lt;- lm(mpg~poly(hp, 2)*am, data=mtcars)\nmtcars_all5 &lt;- augment(mtcars_fit5, mtcars)\nmtcars_coefs5 &lt;- tidy(mtcars_fit5)\nmtcars_stats5 &lt;- glance(mtcars_fit5)\nip1 &lt;- ggplot(mtcars_all4, aes(x=hp, y=.fitted, colour=am)) +\n  geom_point() +\n  scale_color_discrete_divergingx(palette=\"Zissou 1\") +\n  ggtitle(\"No interaction\") +\n  theme(legend.position = \"None\")\nip2 &lt;- ggplot(mtcars_all5, aes(x=hp, y=.fitted, colour=am)) +\n  geom_point() +\n  scale_color_discrete_divergingx(palette=\"Zissou 1\") +\n  ggtitle(\"With interaction\") +\n  theme(legend.position = \"None\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# A tibble: 4 × 5\n  term         estimate std.error statistic  p.value\n  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)     18.6      0.669     27.8  6.37e-22\n2 poly(hp, 2)1   -23.5      2.79      -8.43 3.58e- 9\n3 poly(hp, 2)2     7.88     3.14       2.51 1.80e- 2\n4 ammanual         3.75     1.16       3.22 3.20e- 3\n\n\n# A tibble: 6 × 5\n  term                 estimate std.error statistic  p.value\n  &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)             18.4      0.784    23.5   5.05e-19\n2 poly(hp, 2)1           -20.4      5.02     -4.07  3.93e- 4\n3 poly(hp, 2)2             7.02     7.09      0.990 3.32e- 1\n4 ammanual                 3.55     1.22      2.92  7.11e- 3\n5 poly(hp, 2)1:ammanu…    -5.97     6.36     -0.940 3.56e- 1\n6 poly(hp, 2)2:ammanu…     2.93     8.12      0.361 7.21e- 1"
+  },
+  {
+    "objectID": "week11/slides.html#non-parametric-model",
+    "href": "week11/slides.html#non-parametric-model",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Non-parametric model",
+    "text": "Non-parametric model"
+  },
+  {
+    "objectID": "week11/slides.html#smoothing-splines",
+    "href": "week11/slides.html#smoothing-splines",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Smoothing splines",
+    "text": "Smoothing splines\n\n\nWe’ve seen loess, which fits a linear model in a sliding window over predictor, where span controls size of window.\n\n\nCode\nmtcars_fit6 &lt;- loess(mpg~hp, data=mtcars, degree=1, span=0.2)\nmtcars_fit7 &lt;- loess(mpg~hp, data=mtcars, degree=1, span=0.5)\nmtcars_lo &lt;- mtcars |&gt;\n  mutate(fit6 = mtcars_fit6$fitted,\n         fit7 = mtcars_fit7$fitted)\nmtcars_lop &lt;- tibble(hp = seq(50, 340, 5))\nmtcars_lop &lt;- mtcars_lop |&gt;\n                mutate(mpg6 = predict(mtcars_fit6, mtcars_lop),\n                       mpg7 = predict(mtcars_fit7, mtcars_lop))\n\nggplot(data=mtcars_lo, aes(x=hp, y=mpg)) +\n  geom_point() +\n  geom_line(data=mtcars_lop, aes(x=hp, y=mpg6), colour=\"#D93F00\") +\n  geom_line(data=mtcars_lop, aes(x=hp, y=mpg7), colour=\"#027EB6\") \n\n\n\n\n\n\n\n\n\n\nSmoothing splines, provide more advanced technique, and stability.\n\n\nCode\nmtcars_fit8 &lt;- gam(mpg~s(hp, bs=\"cr\", k=3, m=1), data=mtcars, \n                   knots=list(seq(90, 300, length=3)))\nmtcars_fit9 &lt;- gam(mpg~s(hp, bs=\"cr\", k=10, m=1), data=mtcars, \n                   knots=list(seq(90, 300, length=3)))\nmtcars_gam &lt;- mtcars |&gt;\n  mutate(fit8 = mtcars_fit8$fitted.values,\n         fit9 = mtcars_fit9$fitted.values)\nmtcars_gamp &lt;- tibble(hp = seq(50, 450, 5))\nmtcars_gamp &lt;- mtcars_gamp |&gt;\n                mutate(mpg8 = predict(mtcars_fit8, mtcars_gamp),\n                       mpg9 = predict(mtcars_fit9, mtcars_gamp))\n\nggplot(data=mtcars_gam, aes(x=hp, y=mpg)) +\n  geom_point() +\n  geom_line(data=mtcars_gamp, aes(x=hp, y=mpg8), colour=\"#D93F00\") +\n  geom_line(data=mtcars_gamp, aes(x=hp, y=mpg9), colour=\"#027EB6\") \n\n\n\n\n\n\n\n\n\nAnd are used to fit non-linear models to multiple predictors."
+  },
+  {
+    "objectID": "week11/slides.html#logistic-regression",
+    "href": "week11/slides.html#logistic-regression",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Logistic regression",
+    "text": "Logistic regression\n\n\n\nNot all parametric models assume normally distributed errors nor continuous responses.\nLogistic regression models the relationship between a set of explanatory variables \\((x_{i1}, ..., x_{ik})\\) and a set of binary outcomes \\(Y_i\\) for \\(i = 1, ..., n\\).\nWe assume that \\(Y_i \\sim B(1, p_i)\\equiv Bernoulli(p_i)\\) and the model is given by\n\n\\[\\text{logit}(p_i) = \\text{ln}\\left(\\dfrac{p_i}{1 - p_i}\\right) = \\beta_0 + \\beta_1x_{i1} + ... + \\beta_k x_{ik}.\\]\n\nTaking the exponential of both sides and rearranging we get \\[p_i = \\dfrac{1}{1 + e^{-(\\beta_0 + \\beta_1x_{i1} + ... + \\beta_k x_{ik})}}.\\]\nThe function \\(f(p) = \\text{ln}\\left(\\dfrac{p}{1 - p}\\right)\\) is called the logit function, continuous with range \\((-\\infty, \\infty)\\), and if \\(p\\) is the probablity of an event, \\(f(p)\\) is the log of the odds.\n\n\n\n\nCode\nmtcars_ordered &lt;- mtcars |&gt;\n  mutate(ami = as.numeric(am)-1) |&gt;\n  arrange(mpg)\nmtcars_am_fit1 &lt;- loess(ami~mpg, data=mtcars_ordered, degree=0, span=0.7)\nmtcars_am_lo &lt;- mtcars_ordered |&gt;\n  mutate(fit1 = mtcars_am_fit1$fitted)\nlg1 &lt;- ggplot(mtcars_ordered, aes(x=mpg, y=ami)) +\n  geom_point() +\n  geom_point(data=mtcars_am_lo, aes(x=mpg, y=fit1), colour=\"#D93F00\") +\n  geom_line(data=mtcars_am_lo, aes(x=mpg, y=fit1), colour=\"#D93F00\") +\n  ylab(\"automatic\") +\n  ggtitle(\"Loess\")\n\nmtcars_am_fit2 &lt;- glm(ami~mpg, data=mtcars_ordered, family = binomial(link = \"logit\"))\nmtcars_am_lo &lt;- mtcars_am_lo |&gt;\n  mutate(fit2 = mtcars_am_fit2$fitted.values)\nlg2 &lt;- ggplot(mtcars_ordered, aes(x=mpg, y=ami)) +\n  geom_point() +\n  geom_point(data=mtcars_am_lo, aes(x=mpg, y=fit2), colour=\"#D93F00\") +\n  geom_line(data=mtcars_am_lo, aes(x=mpg, y=fit2), colour=\"#D93F00\") +\n  ylab(\"automatic\") +\n  ggtitle(\"Logistic\")\n\nlg1 + lg2 + plot_layout(ncol=2)\n\n\n\n\n\n\n\n\n\nSlide a window and compute average (proportion) using loess, vs logistic function."
+  },
+  {
+    "objectID": "week11/slides.html#time-series",
+    "href": "week11/slides.html#time-series",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Time series",
+    "text": "Time series"
+  },
+  {
+    "objectID": "week11/slides.html#trend-and-seasonality",
+    "href": "week11/slides.html#trend-and-seasonality",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Trend and seasonality",
+    "text": "Trend and seasonality\n\n\n\n\nCode\nco2 &lt;- read_csv(\"../data/CO2-monthly.csv\") |&gt;\n  mutate(date = dmy(date))\nco2_long &lt;- co2 |&gt;\n  pivot_longer(ljo:spo, names_to = \"stn\", values_to = \"co2\") |&gt;\n  filter(stn %in% c(\"ptb\", \"ljo\", \"spo\", \"mlf\")) |&gt;\n  mutate(stn = factor(stn, levels = c(\"ptb\", \"ljo\", \"mlf\", \"spo\"))) |&gt;\n  filter(!is.na(co2)) |&gt;\n  filter(co2 &lt; 430)\nco2_p1 &lt;- ggplot(co2_long, aes(x=date, y=co2, colour=stn)) +\n  geom_point() +\n  facet_wrap(~stn, ncol=2) +\n  theme(legend.position=\"none\") +\n  ylim(c(330, 430)) +\n  theme(aspect.ratio = 0.5)\n\nco2_fit &lt;- co2_long |&gt;\n  mutate(time = as.numeric(date)-7304) |&gt;\n  nest(dat = -stn) |&gt;\n  mutate(mod_trend = map(dat, ~lm(co2~time+I(time^2), data=.x)),\n         mod_season = map(dat, ~lm(co2~time+I(time^2)+month, data=.x)),\n        coef_trend = map(mod_trend, tidy),\n        coef_seasonal = map(mod_season, tidy),\n        fit_trend = map(mod_trend, augment),\n        fit_season = map(mod_season, augment)) |&gt;\n    select(stn, starts_with('fit')) |&gt; \n    pivot_longer(\n        cols = starts_with('fit')\n    ) |&gt;\n    unnest(value)\nco2_p2 &lt;- co2_fit |&gt;\n  filter(name == \"fit_trend\") |&gt;\n  ggplot(aes(x=time, y=.fitted, colour=stn)) +\n  geom_point() +\n  ylim(c(330, 430))\n\nco2_p3 &lt;- co2_fit |&gt;\n  filter(name == \"fit_season\") |&gt;\n  mutate(year = time %/% 356 + 1990) |&gt;\n  group_by(stn, year) |&gt;\n  mutate(.fitted_seas = .fitted - mean(.fitted, na.rm=TRUE)) |&gt;\n  ggplot(aes(x=time, y=.fitted_seas, colour=stn)) +\n  geom_line() + \n  facet_wrap(~stn, ncol=2) +\n  theme(aspect.ratio=0.5)\n\n\n\n\nDataTrendSeasonality\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nData from Global CO2 monitoring stations"
+  },
+  {
+    "objectID": "week11/slides.html#exploring-lags",
+    "href": "week11/slides.html#exploring-lags",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Exploring lags",
+    "text": "Exploring lags\nMelbourne’s temperature, from high to low!\n\n\n\n\n\n\n\n\nToday plotted vertically, yesterday plotted horizontally. Different types of plots are different models applied to the data (lags).\nHyndman, Bashtannyk, Grunwald (1996)"
+  },
+  {
+    "objectID": "week11/slides.html#high-dimensions",
+    "href": "week11/slides.html#high-dimensions",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "High-dimensions",
+    "text": "High-dimensions"
+  },
+  {
+    "objectID": "week11/slides.html#groups",
+    "href": "week11/slides.html#groups",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Groups",
+    "text": "Groups\n\n\n\nData\n\n\nA little fuzzy.\n\n\n\nModel view\n\n\nClearer view. Misses some quirks."
+  },
+  {
+    "objectID": "week11/slides.html#relationships",
+    "href": "week11/slides.html#relationships",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Relationships",
+    "text": "Relationships"
+  },
+  {
+    "objectID": "week11/slides.html#take-aways",
+    "href": "week11/slides.html#take-aways",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Take-aways",
+    "text": "Take-aways\n\nModels provide different lenses for extracting the patterns in the data\n\nSharpen\nExaggerate\nHallucinate\n\nForm a decomposition of the observed values into different strata\nProvide a multitude of other numerical quantities with which to see various aspects of the data.\nWe are already using models, all the time, when making plots."
+  },
+  {
+    "objectID": "week11/slides.html#resources",
+    "href": "week11/slides.html#resources",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Resources",
+    "text": "Resources\n\nCook & Weisberg (1994) An Introduction to Regression Graphics\nBelsley, Kuh and Welsch (1980). Regression Diagnostics\nHyndman, Bashtannyk, Grunwald (1996) Estimating and Visualizing Conditional Densities"
   }
 ]
