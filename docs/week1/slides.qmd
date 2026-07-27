@@ -94,7 +94,7 @@ Monash University <br>
 
 <br><br>
 
-✋ Ask durectly in live lecture.
+✋ Ask directly in live lecture.
 
 <br><br>
 
@@ -160,7 +160,7 @@ Thu 1:00-2:00pm, 2:00-3:00pm and 3:00-4:00pm  CL_Anc-19.LTB_387 *Attendance is e
 
 ## 💯 Assessment [Part 1/2]{.smaller}
 
-- Exercises 1 (**25%**), through GitHub classroom,  Due: Aug 21, 11:55pm. This is an individual assessment. 
+- Exercises 1 (**25%**), through GitHub classroom lookalike,  Due: Aug 21, 11:55pm. This is an individual assessment. 
 <br>
 
 - Mid-semester test (**25%**),  Scheduled Monday  Sep 7, 10:00am-noon. This is an individual assessment, to be completed IN-PERSON. 
@@ -234,14 +234,24 @@ load(here::here("data/tips.rda"))
 
 ## Activity: Brainstorm your own questions {.activity-slide .center}
 
-::: {style="font-size: 70%;"}
-⏱ 5 minutes, in pairs
-:::
+```{r}
+#| echo: false
+countdown::countdown(10)
+```
 
-Before we look any further at the tips data, write down:
+Let's see what AI says we should do to analyse the tips data:
 
-- Three questions you would want to answer with this data
-- For each, what result would you **expect** to find, and why
+- prompt your AI, can be any free chatbot, your choice, by pointing [the tips explanation slide](https://ddde.numbat.space/week1/slides.html#/what-are-the-factors-that-affect-tipping-behaviour) and asking for 
+    - questions that might be answered with this data
+    - plots to make
+    - models to fit
+    - a plan for the analysis
+    - maybe even what the expected answers to the questions?
+
+Ideally we come up with:
+
+- a set of questions you would want to answer with this data
+- for each, what result would you **expect** to find, and why
 
 ## Recommended procedure in the book
 
@@ -265,7 +275,7 @@ Calculate tip % as tip/total bill $\times$ 100
 
 
 ```{r echo = TRUE}
-tips <- tips %>%
+tips <- tips |>
   mutate(tip_pct = tip/totbill * 100) 
 ```
 
@@ -284,8 +294,8 @@ Fit the full model with all variables
 <br>
 
 ```{r echo = TRUE}
-tips_lm <- tips %>%
-  select(tip_pct, sex, smoker, day, time, size) %>%
+tips_lm <- tips |>
+  select(tip_pct, sex, smoker, day, time, size) %>% # one place where magrittr pipe must be used!
   lm(tip_pct ~ ., data=.) 
 ```
 
@@ -298,15 +308,15 @@ tips_lm <- tips %>%
 ```{r modela, echo=TRUE, results="hide"}
 library(broom)
 library(kableExtra)
-tidy(tips_lm) %>% 
-  kable(digits=2) %>% 
+tidy(tips_lm) |> 
+  kable(digits=2) |> 
   kable_styling() 
 ```
 
 ```{r modelb, echo=TRUE, results="hide"}
-glance(tips_lm) %>% 
+glance(tips_lm) |> 
   select(r.squared, statistic, 
-         p.value) %>% 
+         p.value) |> 
   kable(digits=3)
 ```
 
@@ -329,9 +339,10 @@ glance(tips_lm) %>%
 
 ## Activity: Which variables matter? {.activity-slide .center}
 
-::: {style="font-size: 70%;"}
-⏱ 3 minutes
-:::
+```{r}
+#| echo: false
+countdown::countdown(3)
+```
 
 Looking at the full model summary on the previous slide:
 
@@ -345,17 +356,17 @@ Looking at the full model summary on the previous slide:
 ::: {.column}
 
 ```{r model_smalla, echo=TRUE, results='hide'}
-tips_lm <- tips %>%
-  select(tip_pct, size) %>% 
+tips_lm <- tips |>
+  select(tip_pct, size) %>% # one place where magrittr pipe must be used!
   lm(tip_pct ~ ., data=.) 
-tidy(tips_lm) %>% 
-  kable(digits=2) %>% 
+tidy(tips_lm) |> 
+  kable(digits=2) |> 
   kable_styling() 
 ```
 
 ```{r model_smallb, echo=TRUE, results='hide'}
-glance(tips_lm) %>% 
-  select(r.squared, statistic, p.value) %>% 
+glance(tips_lm) |> 
+  select(r.squared, statistic, p.value) |> 
   kable(digits=3)
 ```
 
@@ -421,9 +432,10 @@ What do the $t$ statistics and $p$-value associated with model coefficients mean
 
 ## Activity: What does R² = 0.02 tell you? {.activity-slide .center}
 
-::: {style="font-size: 70%;"}
-⏱ 5 minutes, in pairs
-:::
+```{r}
+#| echo: false
+countdown::countdown(5)
+```
 
 In plain language (no jargon), write one or two sentences explaining what $R^2 = 0.02$ means for:
 
@@ -680,16 +692,17 @@ ggplot(tips,
 
 ## Activity: Predict the next histogram {.activity-slide .center}
 
-::: {style="font-size: 70%;"}
-⏱ 3 minutes
-:::
+```{r}
+#| echo: false
+countdown::countdown(3)
+```
 
-Before the next slide, sketch what you expect the histogram of `tip` to look like with a much narrower binwidth (e.g. 10 cent bins).
+Before the next slide, sketch what you expect the histogram of `tip` to look like with a much larger or much narrower binwidth (e.g. 10 cent bins).
 
 - Will it still look skewed?
 - Will any new features appear?
 
-## Because, one binwidth is never enough ... {background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Potato-Chips.jpg/800px-Potato-Chips.jpg" background-size="cover" .center}
+## Because, one binwidth is never enough ... {.center}
 
 ## Distributions of tips
 
@@ -805,9 +818,11 @@ p
 
 ## Activity: Read the scatterplot {.activity-slide .center}
 
-::: {style="font-size: 70%;"}
-⏱ 5 minutes, in pairs
-:::
+```{r}
+#| echo: false
+countdown::countdown(5)
+```
+
 
 Looking at tip vs total bill with the 20% guideline:
 
@@ -855,9 +870,11 @@ p + facet_grid(smoker~sex)
 
 ## Activity: What else would you explore? {.activity-slide .center}
 
-::: {style="font-size: 70%;"}
-⏱ 5 minutes
-:::
+```{r}
+#| echo: false
+countdown::countdown(5)
+```
+
 
 The tips analysis uncovered rounding, weak bill/tip correlation, and gender/smoking differences.
 
@@ -916,16 +933,18 @@ For this waiter and the restaurant manager, there is some useful information. Li
 :::
 ::::
 
-## Activity: Design a null sample {.activity-slide .center}
+## Activity: How do we check our findings? {.activity-slide .center}
 
-::: {style="font-size: 70%;"}
-⏱ 8 minutes, in small groups
-:::
+```{r}
+#| echo: false
+countdown::countdown(8)
+```
 
-Pick one claim: *"Smokers are less reliable tippers."*
 
-- Describe a permutation or resampling scheme that could test whether this pattern is more extreme than you'd expect by chance
-- What statistic would you compute from each null sample?
+Pick a claim: *"Smokers are less reliable tippers."* Discuss with each other
+
+- how would you verify this finding? 
+- can you check the claim using the current sample of data?
 
 ## Words of wisdom {.transition-slide .center}
 
@@ -950,19 +969,7 @@ Pick one claim: *"Smokers are less reliable tippers."*
 :::
 ::::
 
-## Activity: Apply the guide to a new dataset {.activity-slide .center}
-
-::: {style="font-size: 70%;"}
-⏱ 10 minutes
-:::
-
-Choose a dataset you know well (or one provided by your tutor). Work through steps 1-4 of the Guide:
-
-- Describe the variables and how the data was collected
-- Brainstorm two questions and write down your expectations
-- Sketch the plots/summaries you'd need to compute
-
-## Topics covered
+## Topics to be covered
 
 - Methods for single, bivariate, multivariate
     - numerical variables

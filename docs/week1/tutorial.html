@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
 width: 0.8em;
 margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
 }
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+}
+pre.numberSource { margin-left: 3em; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -4382,7 +4417,8 @@ color: #C8008F;
 <li>Install this list of R packages:</li>
 </ul>
 <ul>
-<li>Create an RStudio Project for this unit, called <code>ETC5521</code>. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for <code>data</code>, one for <code>tutorial_XX</code>, … Each week when you begin your tutorial, open the project.</li>
+<li>Create an RStudio project for this unit, called <code>ETC5521</code>. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for <code>data</code>, one for <code>tutorial_XX</code>, … Each week when you begin your tutorial, open the project.</li>
+<li>Alternatively, you can use positron, but make sure to keep everything organised similarly to the above structure.</li>
 </ul>
 </section>
 <section id="exercises" class="level2">
@@ -4392,11 +4428,15 @@ color: #C8008F;
 <h2 class="anchored" data-anchor-id="how-good-are-your-detective-skills">1. How good are your detective skills?</h2>
 <p>Being good at noticing something unexpected or unusual is an important skills for exploratory data analysis. This exercise is designed to practice your detective skills.</p>
 <p>Play the game <code>alzheimer_test</code> from the <code>fun</code> package by running this code:</p>
-<p>You will be given 6 tasks to complete. Each one is to find a specific letter hidden among a <span class="math inline">\(10\times 30\)</span> grid of letters. When you are finished, answer these questions:</p>
-<ol type="1">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fun)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">alzheimer_test</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You will be given 6 tasks to complete. Each one is to find a specific letter hidden among a <span class="math inline">\(10\times 30\)</span> grid of letters. Each time you will also be asked to enter the row, and then the column of your answer. You can take as much time to work these out as you need. When you are finished, answer these questions:</p>
+<ol type="a">
 <li>Which task did you THINK was the most difficult?</li>
-<li>Which task does the DATA say was most difficult based, based on the time taken to answer, <code>tm1.1.j.</code> in your results data?</li>
-<li>Save the dataset to an <code>.rda</code> file.</li>
+<li>Your data was saved into the object <code>x</code>. Which task does the DATA say was most difficult based, based on the time taken to answer, which is variable <code>tm1.1.j.</code> in your results data?</li>
+<li>Save the dataset to <code>alzheimers.rda</code> file, and share with your tutor.</li>
 </ol>
 <div class="callout callout-style-default callout-solution no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -4427,14 +4467,83 @@ ans.user            9          6  3.812386</code></pre>
 </div>
 </div>
 </section>
-<section id="get-started-using-github-classroom" class="level2">
-<h2 class="anchored" data-anchor-id="get-started-using-github-classroom">3. Get started using GitHub Classroom</h2>
-<ol type="1">
-<li>In <a href="https://learning.monash.edu/course/view.php?id=34784">Moodle</a> go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.</li>
-<li>Clone the assignment repo to your computer.</li>
-<li>Open the <code>assign01.html</code> instructions.</li>
-<li>Make a start on loading the data into R.</li>
+<section id="are-you-like-everyone-else" class="level2">
+<h2 class="anchored" data-anchor-id="are-you-like-everyone-else">2. Are you like everyone else?</h2>
+<p>With the combined data collated by the tutor, answer these questions:</p>
+<ol type="a">
+<li>What was the task that was the most difficult based on the overall average time?</li>
+<li>Which task had the most variation among the class?</li>
+<li>Is there a relationship between the location of the hidden letter and the time taken to find it? (How should you calculate this?)</li>
+<li>How fast are you relative to your class mates? (How should you calculate this?)</li>
 </ol>
+<div class="callout callout-style-default callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="unilur-solution">
+<p>The code to be able to answer the questions above is:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  char2.1.j.     m
+  &lt;chr&gt;      &lt;dbl&gt;
+1 N          17.6 
+2 T          13.4 
+3 C          10.9 
+4 O          10.4 
+5 6           3.84
+6 E           3.39</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  char2.1.j.       s
+  &lt;chr&gt;        &lt;dbl&gt;
+1 N          18.7   
+2 O           9.54  
+3 T           8.95  
+4 C           8.01  
+5 E           1.46  
+6 6           0.0427</code></pre>
+</div>
+</div>
+<p>The variables <code>X1.1</code>, <code>X2.1</code> have the true location of the letters. Row might be easier to compute than column, because there are only 6 rows. With 30 columns, there are too many location options to check. Grouping into bunches of 5 might help.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img role="img" src="tutorial_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Should you adjust by the letter? Probably!</p>
+<p>It might be computed similarly to how we would compute your relative speed. Because everyone did the same tasks, we can compare the times. First compute your standardised score across the 6 tasks. It is easier to compare numbers if they are on a standardised scale. This code will show you your relative speed for each task. In the sample data there are only two participants, which is not enough to compute standardised scores. You could also compute your overall average, based on your standardised scores, by averaging them!</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>-0.7071068 
+0.7071068 
+18.74217 
+0.1120218 
+-0.6312203 
+0.4269558 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="share-your-github-names-with-your-tutor" class="level2">
+<h2 class="anchored" data-anchor-id="share-your-github-names-with-your-tutor">3. Share your GitHub names with your tutor</h2>
+<p>Please provide your GitHub username to your tutor, using the Google sheet provided.</p>
 </section>
 <section id="finishing-up" class="level2">
 <h2 class="anchored" data-anchor-id="finishing-up">👌 Finishing up</h2>

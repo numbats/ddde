@@ -31,7 +31,8 @@ This is the first tutorial meeting of the semester. The goal is to get to know o
 install.packages(c("fun", "dplyr", "here"))
 ```
 
-- Create an RStudio Project for this unit, called `ETC5521`. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for `data`, one for `tutorial_XX`, ... Each week when you begin your tutorial, open the project. 
+- Create an RStudio project for this unit, called `ETC5521`. All your work in the tutorials should be conducted in this project. Ideally, your project is organised into folders, one for `data`, one for `tutorial_XX`, ... Each week when you begin your tutorial, open the project. 
+- Alternatively, you can use positron, but make sure to keep everything organised similarly to the above structure. 
 
 ## 📥 Exercises
 
@@ -43,34 +44,93 @@ Play the game `alzheimer_test` from the `fun` package by running this code:
 
 ```{r}
 #| eval: false
+#| echo: true
 #| code-fold: false
 library(fun)
 x = alzheimer_test()
 ```
 
-You will be given 6 tasks to complete. Each one is to find a specific letter hidden among a $10\times 30$ grid of letters. When you are finished, answer these questions:
+You will be given 6 tasks to complete. Each one is to find a specific letter hidden among a $10\times 30$ grid of letters. Each time you will also be asked to enter the row, and then the column of your answer. You can take as much time to work these out as you need. When you are finished, answer these questions:
 
-1. Which task did you THINK was the most difficult?
-2. Which task does the DATA say was most difficult based, based on the time taken to answer, `tm1.1.j.` in your results data? 
-3. Save the dataset to an `.rda` file.
+a. Which task did you THINK was the most difficult?
+b. Your data was saved into the object `x`. Which task does the DATA say was most difficult based, based on the time taken to answer, which is variable `tm1.1.j.` in your results data? 
+c. Save the dataset to `alzheimers.rda` file, and share with your tutor.
 
 ::: unilur-solution
 ```{r}
 #| message: false
 load(here::here("data/alzheimers.rda"))
 library(dplyr)
-x %>% 
-  select(char1.1.j., char2.1.j., tm1.1.j.) %>%
+x |>
+  select(char1.1.j., char2.1.j., tm1.1.j.) |>
   arrange(desc(tm1.1.j.))
 ```
 :::
 
-## 3. Get started using GitHub Classroom
+## 2. Are you like everyone else?
 
-1. In [Moodle](https://learning.monash.edu/course/view.php?id=34784) go to the Assignment 1 instructions to find the invitation to a GitHub Classroom. Accept this invitation.
-2. Clone the assignment repo to your computer.
-3. Open the `assign01.html` instructions.
-3. Make a start on loading the data into R.
+With the combined data collated by the tutor, answer these questions:
+
+a. What was the task that was the most difficult based on the overall average time? 
+b. Which task had the most variation among the class?
+c. Is there a relationship between the location of the hidden letter and the time taken to find it? (How should you calculate this?)
+d. How fast are you relative to your class mates? (How should you calculate this?)
+
+::: unilur-solution
+
+The code to be able to answer the questions above is:
+
+```{r}
+#| message: false
+load(here::here("data/alzheimers-class.rda"))
+xclass |>
+  group_by(char2.1.j.) |>
+  summarise(m = mean(tm1.1.j.)) |>
+  arrange(desc(m))
+xclass |>
+  group_by(char2.1.j.) |>
+  summarise(s = sd(tm1.1.j.)) |>
+  arrange(desc(s))
+```
+
+The variables `X1.1`, `X2.1` have the true location of the letters. Row might be easier to compute than column, because there are only 6 rows. With 30 columns, there are too many location options to check. Grouping into bunches of 5 might help.
+
+```{r}
+#| message: false
+# Not enough participants - only 2*6 - to be able to answer this one
+# but this is the code anyway
+library(ggplot2)
+xclass |> 
+  group_by(X1.1) |>
+  summarise(m = mean(tm1.1.j.)) |>
+  ggplot(aes(X1.1, m)) + 
+    geom_point() +
+    xlab("Row") +
+    ylab("Time")
+```
+
+Should you adjust by the letter? Probably!
+
+It might be computed similarly to how we would compute your relative speed. Because everyone did the same tasks, we can compare the times.  First compute your standardised score across the 6 tasks. It is easier to compare numbers if they are on a standardised scale. This code will show you your relative speed for each task. In the sample data there are only two participants, which is not enough to compute standardised scores. You could also compute your overall average, based on your standardised scores, by averaging them!
+
+```{r}
+#| message: false
+tasks <- xclass |>
+  group_by(char2.1.j.) |>
+  summarise(m = mean(tm1.1.j.),
+            s = sd(tm1.1.j.))
+myresults <- xclass |>
+  filter(id == 1) # Use your id here!
+for (i in 1:6) {
+  cat((myresults$tm1.1.j[i] - tasks$m[i])/tasks$s[i], "\n")
+}
+```
+
+:::
+
+## 3. Share your GitHub names with your tutor
+
+Please provide your GitHub username to your tutor, using the Google sheet provided. 
 
 ## 👌 Finishing up
 
