@@ -337,7 +337,7 @@ vis_dat(xlsx_df)
 
 ::: {.column width=50%}
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, eval = FALSE}
 library(inspectdf)
 inspect_types(xlsx_df)  |> 
   show_plot()

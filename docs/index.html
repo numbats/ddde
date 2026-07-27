@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.24">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>ETC5521: Diving Deeply into Data Exploration</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -19,41 +22,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -67,15 +35,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-c9e5e408d163d550d5495b7315735d8d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-35f8967574e6339c6be47ffc8765f34c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-bfd059dd951fe0f004152978af4b0131.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7d80270b191d8b179d7cd52f6bacfd5d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -116,8 +83,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">ETC5521: Diving Deeply into Data Exploration</span>
     </a>
@@ -191,12 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="https://edstem.org/au/courses/27016/discussion/"> <i class="bi bi-chat-fill" role="img">
-</i> 
-<span class="menu-text">Discussion</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://learning.monash.edu/course/view.php?id=34784"> <i class="bi bi-mortarboard-fill" role="img">
+    <a class="nav-link" href="https://learning.monash.edu/course/view.php?id=46718"> <i class="bi bi-mortarboard-fill" role="img">
 </i> 
 <span class="menu-text">Moodle</span></a>
   </li>  
@@ -264,7 +224,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Professor Di Cook</strong>
 <ul>
 <li>Email: <a href="mailto:etc5521.clayton-x@monash.edu">etc5521.clayton-x@monash.edu</a></li>
-<li>Consultation: Fridays 11-1 Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 352 and on zoom (see link in moodle)</li>
+<li>Consultation: TBA Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 352 and on zoom (see link in moodle)</li>
 </ul></li>
 </ul>
 </section>
@@ -273,17 +233,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Krisanat Anukarnsakulchularp
 <ul>
-<li>Tutorials: Thu 9am (CL_LTB_188), 10am (CL_LTB_188), 3pm (CL_LTB_387)</li>
-<li>Consultation: Mondays 9-10am, Thursdays 4-5pm Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 232A</li>
+<li>Tutorials: 1-2pm, 2-3pm, 3-4pm CL_Anc-19.LTB_387</li>
+<li>Consultation: TBA Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 232A</li>
 </ul></li>
 </ul>
 </section>
 <section id="weekly-schedule" class="level2">
 <h2 class="anchored" data-anchor-id="weekly-schedule">Weekly schedule</h2>
 <ul>
-<li>Lecture+workshop: Tues 2-5pm on zoom (link in <a href="https://learning.monash.edu/course/view.php?id=34784">Moodle</a>)</li>
+<li>Lecture+workshop: <strong>Tues 9-12 pm in-person CAULFIELD B220</strong> (also recordings in <a href="https://learning.monash.edu/course/view.php?id=46718">Moodle</a>)</li>
 <li>Tutorial: 1 hour</li>
-<li>Weekly learning quizzes due each Thursday 9am, from week 2</li>
 </ul>
 <table class="caption-top table">
 <thead>
@@ -296,88 +255,76 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">29 Jul</td>
+<td style="text-align: left;">27 Jul</td>
 <td style="text-align: left;"><a href="./week1/index.html">Overview. Why this course? What is EDA?</a></td>
 <td style="text-align: left;"><a href="https://journal.r-project.org/archive/2019/RJ-2019-033/RJ-2019-033.pdf">The Landscape of R Packages for Automated Exploratory Data Analysis</a></td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">05 Aug</td>
+<td style="text-align: left;">03 Aug</td>
 <td style="text-align: left;"><a href="./week2/index.html">Learning from history</a></td>
 <td style="text-align: left;"><a href="https://vita.had.co.nz/papers/bay-area-blues.pdf">EDA Case Study: Bay area blues</a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 1</a></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">12 Aug</td>
+<td style="text-align: left;">10 Aug</td>
 <td style="text-align: left;"><a href="./week3/index.html">Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA</a></td>
 <td style="text-align: left;"><a href="https://www.jstor.org/stable/2981969?seq=1#metadata_info_tab_contents">The initial examination of data</a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 2</a></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">19 Aug</td>
+<td style="text-align: left;">17 Aug</td>
 <td style="text-align: left;"><a href="./week4/index.html">Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly</a></td>
 <td style="text-align: left;"><a href="https://vita.had.co.nz/papers/inference-infovis.pdf">Wickham et al.&nbsp;(2010) Graphical inference for Infovis</a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Exercises 1</a>,<a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 3</a></td>
+<td style="text-align: left;"><a href="NA">Exercises 1</a></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">26 Aug</td>
+<td style="text-align: left;">24 Aug</td>
 <td style="text-align: left;"><a href="./week5/index.html">Working with a single variable, making transformations, detecting outliers, using robust statistics</a></td>
 <td style="text-align: left;"><a href="https://clauswilke.com/dataviz/histograms-density-plots.html">Wilke (2019) Ch 6 Visualizing Amounts; Ch 7 Visualizing distributions</a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 4</a></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">02 Sep</td>
+<td style="text-align: left;">31 Aug</td>
 <td style="text-align: left;"><a href="./week6/index.html">Bivariate dependencies and relationships, transformations to linearise</a></td>
 <td style="text-align: left;"><a href="https://clauswilke.com/dataviz/visualizing-associations.html">Wilke (2019) Ch 12 Visualising associations</a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Exercises 2</a>,<a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 5</a></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">09 Sep</td>
+<td style="text-align: left;">07 Sep</td>
 <td style="text-align: left;"><a href="./week7/index.html">Making comparisons between groups and strata</a></td>
 <td style="text-align: left;"><a href="https://clauswilke.com/dataviz">Wilke (2019) Ch 9, 10.2-4, 11.2</a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 6</a></td>
+<td style="text-align: left;"><a href="NA">Mid-semester test</a></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">16 Sep</td>
+<td style="text-align: left;">14 Sep</td>
 <td style="text-align: left;"><a href="./week8/index.html">Going beyond two variables, exploring high dimensions</a></td>
 <td style="text-align: left;"><a href="https://dicook.github.io/mulgar_book/1-intro.html">Cook and Laa (2023) Interactively exploring high-dimensional data and models in R Chapter 1</a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 7</a></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">23 Sep</td>
+<td style="text-align: left;">28 Sep</td>
 <td style="text-align: left;"><a href="./week9/index.html">Exploring data having a space and time context Part I</a></td>
 <td style="text-align: left;"><a href="https://journal.r-project.org/articles/RJ-2022-023/">brolgar: An R package to BRowse Over Longitudinal Data Graphically and Analytically in R</a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Exercises 3</a>,<a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 8</a></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">30 Sep</td>
-<td style="text-align: left;">Mid-semester break</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">07 Oct</td>
+<td style="text-align: left;">05 Oct</td>
 <td style="text-align: left;"><a href="./week10/index.html">Exploring data having a space and time context Part II</a></td>
 <td style="text-align: left;"><a href="https://www.jstatsoft.org">cubble: An R Package for Organizing and Wrangling Multivariate Spatio-temporal Data</a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 9</a></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">14 Oct</td>
-<td style="text-align: left;"><a href="./week11/index.html">Sculpting data using models, checking assumptions, co-dependency and performing diagnostics</a></td>
-<td style="text-align: left;"><a href="https://www.dicook.org/posts/2019-09-13-touring-multicollinearity/">How to use a tour to check if your model suffers from multicollinearity</a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Project Part 1</a>,<a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 10</a></td>
+<td style="text-align: left;"><a href="NA">Project Part 1</a></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">21 Oct</td>
-<td style="text-align: left;"><a href="./week12/index.html">Help session</a></td>
-<td style="text-align: left;"><a href=""></a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Quiz 11</a></td>
+<td style="text-align: left;">12 Oct</td>
+<td style="text-align: left;"><a href="./week11/index.html">Sculpting data using models, checking assumptions, co-dependency and performing diagnostics</a></td>
+<td style="text-align: left;"><a href="https://www.dicook.org/posts/2019-09-13-touring-multicollinearity/">How to use a tour to check if your model suffers from multicollinearity</a></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">04 Nov</td>
-<td style="text-align: left;"><a href="./week14/index.html"></a></td>
-<td style="text-align: left;"><a href="NA"></a></td>
-<td style="text-align: left;"><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Project Part 2</a></td>
+<td style="text-align: left;">19 Oct</td>
+<td style="text-align: left;"><a href="./week12/index.html">Project feedback</a></td>
+<td style="text-align: left;"><a href=""></a></td>
+<td style="text-align: left;"><a href="NA">Project Part 2</a></td>
 </tr>
 </tbody>
 </table>
@@ -385,22 +332,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="assessments" class="level2">
 <h2 class="anchored" data-anchor-id="assessments">Assessments</h2>
 <ul>
-<li><a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Weekly learning quizzes</a>: 5% (<strong>Due</strong> each week by Thu 9am, weeks 2-12)</li>
-<li>Exercises 1: <a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Instructions</a> (15%) (<strong>Due</strong> Monday 11:55pm)</li>
-<li>Exercises 2: <a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Instructions</a> (20%) (<strong>Due</strong> Monday 11:55pm)</li>
-<li>Exercises 3: <a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Instructions</a> (20%) (<strong>Due</strong> Monday 11:55pm)</li>
-<li>Project part 1: <a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Instructions</a> (20%) (<strong>Due</strong> Monday 11:55pm)</li>
-<li>Project part 2: <a href="https://learning.monash.edu/course/view.php?id=34784&amp;section=8">Instructions</a> (20%) (<strong>Due</strong> Monday 11:55pm)</li>
+<li>Exercises 1: <a href="https://learning.monash.edu/mod/assign/view.php?id=6088321">Instructions</a> (25%) (<strong>Due</strong> Friday, 21 Aug 11:55pm)</li>
+<li>Mid-semester test: <a href="">Instructions</a> (25%) (<strong>Due</strong> Monday, 7 Sep 10am-noon)</li>
+<li>Project part 1: <a href="https://learning.monash.edu/mod/assign/view.php?id=6088324">Instructions</a> (25%) (<strong>Due</strong> Friday, 9 Oct 11:55pm)</li>
+<li>Project part 2: <a href="https://learning.monash.edu/mod/assign/view.php?id=6088325">Instructions</a> (25%) (<strong>Due</strong> Friday, 23 Oct 11:55pm)</li>
 </ul>
 </section>
 <section id="software" class="level2">
 <h2 class="anchored" data-anchor-id="software">Software</h2>
 <p>We will be using the latest versions of <a href="https://cran.rstudio.com">R</a> and <a href="https://posit.co/download/rstudio-desktop/">RStudio</a>.</p>
-<p>Here is the code to install (most of) the R packages we will be using in this unit.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"tidyr"</span>, <span class="st">"dplyr"</span>, <span class="st">"readr"</span>, <span class="st">"readxl"</span>, <span class="st">"readabs"</span>, <span class="st">"forcats"</span>, <span class="st">"tsibble"</span>, <span class="st">"cubble"</span>, <span class="st">"lubridate"</span>, <span class="st">"ggplot2"</span>, <span class="st">"GGally"</span>, <span class="st">"ggthemes"</span>, <span class="st">"sugrrants"</span>, <span class="st">"ggbeeswarm"</span>, <span class="st">"plotly"</span>, <span class="st">"gganimate"</span>, <span class="st">"tourr"</span>, <span class="st">"sugarbag"</span>, <span class="st">"tsibbletalk"</span>, <span class="st">"visdat"</span>, <span class="st">"inspectdf"</span>, <span class="st">"naniar"</span>, <span class="st">"validate"</span>, <span class="st">"vcd"</span>, <span class="st">"mvtnorm"</span>, <span class="st">"nullabor"</span>, <span class="st">"visage"</span>, <span class="st">"forecast"</span>, <span class="st">"cassowaryr"</span>, <span class="st">"brolgar"</span>, <span class="st">"palmerpenguins"</span>, <span class="st">"housingData"</span>,  <span class="st">"broom"</span>, <span class="st">"kableExtra"</span>, <span class="st">"lvplot"</span>, <span class="st">"colorspace"</span>, <span class="st">"patchwork"</span>), <span class="at">dependencies=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>From GitHub, install</p>
-<pre><code>remotes::install_github("casperhart/detourr")</code></pre>
-<p>If you are relatively new to R, working through the materials at <a href="https://learnr.numbat.space">https://startr.numbat.space</a> is an excellent way to up-skill. You are epsecially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you.</p>
+<p>If you are relatively new to R, working through the materials at <a href="https://learnr.numbat.space">https://startr.numbat.space</a> is an excellent way to up-skill. You are especially encouraged to work through Chapter 3, on Troubleshooting and asking for help, because at some point you will need help with your coding, and how you go about this matters and impacts the ability of others to help you.</p>
+<p>If you are new to version control using GitHub, the resources at <a href="https://rcp.numbat.space">ETC5513: Collaborative and Reproducible Practices</a>, weeks 3-5, will help you get started.</p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"></a><br>These materials are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
 
 

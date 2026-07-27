@@ -35,7 +35,7 @@ source("../setup.R")
 <img src="https://www.dicook.org/dicook-2023.png" width = "200px"/>
 
 Di Cook <br>
-*Distinguished Professor* <br> 
+*Professor* <br> 
 Monash University <br>
 
 <br>
@@ -85,7 +85,7 @@ Monash University <br>
 * and a Master of Business Analytics, Monash University | 2022 - 2023.
 * He has published the R package [animbook](https://krisanata.github.io/animbook/)
 * and is a first year PhD student at Monash, working on data structures, visualisation and models for spatiotemporal networks.
-* This is his fourth semester tutoring at Monash, and the only unit working on this semester.
+* This is his fifth semester tutoring at Monash, and the only unit working on this semester.
 
 :::
 ::::
@@ -94,15 +94,17 @@ Monash University <br>
 
 <br><br>
 
-✋ 🔡 You can [ask]{.monash-blue2} directly by unmuting yourself, or [typing]{.monash-blue2} in the chat, of the live lecture.
+✋ Ask durectly in live lecture.
 
 <br><br>
 
-💻 If watching the recording, please [post]{.monash-blue2} questions in the discussion (ED) forum.
+💻 Post questions in the discussion forum.
 
 <br><br>
 
-[I hope you have many questions!]{.monash-orange2}  🙋🏻👣 
+🔡 Come to a consultation, or ask the tutor during tutorial.
+
+💻 Ask your AI expert!
 
 ## Welcome!
 
@@ -135,12 +137,12 @@ Beyond modelling and prediction, [data might have many more stories]{.monash-blu
 
 <br>
 
-- [2 hour lecture]{.monash-blue2} 👩‍🏫 Tue 2.00 - 4:00pm, on zoom (see moodle for the link) *Class is more fun if you can attend live!*
+- [2 hour lecture]{.monash-blue2} 👩‍🏫 Tue 9.00 - 11:00am, CAULFIELD Building B, Room B220, *Class is more fun if you can attend in-person, I promise!*
 
-- [1 hour workshop]{.monash-blue2} Tue 4:00 - 5:00pm, on same zoom link. This is based on material during lecture.
+- [1 hour workshop]{.monash-blue2} Tue 11:00am - noon, on same room. 
 
 - [1 hour on-campus tutorial]{.monash-blue2} 🛠️
-Thu 9:00-10:00am, 10:00-11am and 3:00-4:00pm  CL_Anc-19.LTB_188 *Attendance is expected - this is the chance to practice and get help with assignments from your tutor's.* 
+Thu 1:00-2:00pm, 2:00-3:00pm and 3:00-4:00pm  CL_Anc-19.LTB_387 *Attendance is expected - this is the chance to practice and get help with assignments from your tutor.* 
 
 ## 📚 Resources
 
@@ -150,43 +152,26 @@ Thu 9:00-10:00am, 10:00-11am and 3:00-4:00pm  CL_Anc-19.LTB_188 *Attendance is e
 <br>
 
 🈴 **Moodle**: this is where you find discussion forum, zoom links, and marks
-[https://learning.monash.edu/course/view.php?id=34784](https://learning.monash.edu/course/view.php?id=34784)
+[https://learning.monash.edu/course/view.php?id=46718](https://learning.monash.edu/course/view.php?id=46718)
 
 <br>
 
-🧰 **GitHub classroom**: this is where you will find assignments, but links to each will be available in moodle.
-[https://classroom.github.com/](https://classroom.github.com/)
+🧰 **GitHub classroom look-alike**: this is where you will find assignments, but links to each will be available in moodle.
 
 ## 💯 Assessment [Part 1/2]{.smaller}
 
-- Weekly quizzes (**5%**)
-There will be a weekly quiz starting week 2 provided through Moodle. These are a great chance to check your knowledge, and help you prepare for the tutorial and to keep up to date with the weekly course material. Your best 10 scores will be used for your final quiz total. 
+- Exercises 1 (**25%**), through GitHub classroom,  Due: Aug 21, 11:55pm. This is an individual assessment. 
 <br>
 
-- Exercises 1 (**15%**), through GitHub classroom,  Due: Aug 18, 11:55pm. This is an individual assessment. 
+- Mid-semester test (**25%**),  Scheduled Monday  Sep 7, 10:00am-noon. This is an individual assessment, to be completed IN-PERSON. 
 <br>
 
-- Exercises 2 (**20%**), through GitHub classroom,  Due: Sep 1, 11:55pm. This is an individual assessment. 
-<br>
-
-- Exercises 3 (**20%**): through GitHub classroom,  Due: Sep 22, 11:55pm. This is an individual assessment. 
-<br>
-
-- Project, parts 1 and 2 (**20%** each), through GitHub classroom, Due: Oct 13, 11:55pm and Nov 3, 11:55pm. 
+- Project, parts 1 and 2 (**25%** each), through GitHub classroom look-alike, Due: Oct 9, 11:55pm and Oct 23, 11:55pm. This is a group assessment, but your individual contribution to the group work will be assessed, too.
 
 
 ## GitHub Classroom
 
-We are going to use [GitHub Classroom](https://classroom.github.com/) to distribute assignment templates and keep track of your assignment progress. 
-
-::: {.smaller}
-
-1. Clone the first assignment by [clicking on the link given in Moodle](https://learning.monash.edu/mod/assign/view.php?id=4669425).
-2. Once you have accepted it, you will get a cloned copy on your own GitHub account. It is a private repo, which means you and the teaching staff will be the only people with access.
-3. If you need some help getting started, check [this information](https://github.com/education/students).
-4. The week 1 tutorial will help you get started. 
-
-:::
+We are going to use GitHub Classroom look-alike to distribute assignment templates and keep track of your assignment progress. 
 
 ## What does it mean to explore data?
 
@@ -220,7 +205,8 @@ Food servers’ tips in restaurants may be influenced by many factors, including
 
 ```{r}
 library(tidyverse)
-tips <- read_csv("http://ggobi.org/book/data/tips.csv")
+#tips <- read_csv("http://ggobi.org/book/data/tips.csv")
+load(here::here("data/tips.rda"))
 ```
 
 <img src="images/tips.png" width="100%">
@@ -245,6 +231,17 @@ tips <- read_csv("http://ggobi.org/book/data/tips.csv")
 
 [The basic rules of tipping that everyone should know about](https://www.washingtonpost.com/news/going-out-guide/wp/2016/09/15/tipping-can-be-complicated-these-are-the-basic-rules-you-should-know-about/)
 :::
+
+## Activity: Brainstorm your own questions {.activity-slide .center}
+
+::: {style="font-size: 70%;"}
+⏱ 5 minutes, in pairs
+:::
+
+Before we look any further at the tips data, write down:
+
+- Three questions you would want to answer with this data
+- For each, what result would you **expect** to find, and why
 
 ## Recommended procedure in the book
 
@@ -330,6 +327,18 @@ glance(tips_lm) %>%
 :::
 ::::
 
+## Activity: Which variables matter? {.activity-slide .center}
+
+::: {style="font-size: 70%;"}
+⏱ 3 minutes
+:::
+
+Looking at the full model summary on the previous slide:
+
+- Which coefficients would you keep?
+- Which would you drop, and why?
+- Compare your choice with the refined model on the next slide
+
 ## Step 3: Refine model
 
 :::: {.columns}
@@ -409,6 +418,17 @@ What do the $F$ statistic and $p$-value mean?
 What do the $t$ statistics and $p$-value associated with model coefficients mean?
 
 :::
+
+## Activity: What does R² = 0.02 tell you? {.activity-slide .center}
+
+::: {style="font-size: 70%;"}
+⏱ 5 minutes, in pairs
+:::
+
+In plain language (no jargon), write one or two sentences explaining what $R^2 = 0.02$ means for:
+
+- the restaurant manager
+- a food server deciding where to work
 
 ## Overall model significance
 
@@ -658,6 +678,17 @@ ggplot(tips,
 :::
 ::::
 
+## Activity: Predict the next histogram {.activity-slide .center}
+
+::: {style="font-size: 70%;"}
+⏱ 3 minutes
+:::
+
+Before the next slide, sketch what you expect the histogram of `tip` to look like with a much narrower binwidth (e.g. 10 cent bins).
+
+- Will it still look skewed?
+- Will any new features appear?
+
 ## Because, one binwidth is never enough ... {background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Potato-Chips.jpg/800px-Potato-Chips.jpg" background-size="cover" .center}
 
 ## Distributions of tips
@@ -772,6 +803,18 @@ p
 :::
 ::::
 
+## Activity: Read the scatterplot {.activity-slide .center}
+
+::: {style="font-size: 70%;"}
+⏱ 5 minutes, in pairs
+:::
+
+Looking at tip vs total bill with the 20% guideline:
+
+- Describe the pattern in one sentence
+- Identify anything that surprises you
+- What would you check next?
+
 ## We should examine bar charts and mosaic plots of the categorical variables next {.center}
 
 but I've already done that, and there's not too much of interest there.
@@ -809,6 +852,17 @@ p + facet_grid(smoker~sex)
     - discovered differences in the tipping behavior of male and female smokers and non-smokers.
 
 [These are unexpected insights]{.monash-orange2} were missed from the analysis that focused solely on the primary question.
+
+## Activity: What else would you explore? {.activity-slide .center}
+
+::: {style="font-size: 70%;"}
+⏱ 5 minutes
+:::
+
+The tips analysis uncovered rounding, weak bill/tip correlation, and gender/smoking differences.
+
+- List two more questions this data could still answer
+- What additional data (if any) would you want to collect?
 
 ## What can go wrong? {.transition-slide .center  style="text-align: center;"}
 
@@ -862,6 +916,17 @@ For this waiter and the restaurant manager, there is some useful information. Li
 :::
 ::::
 
+## Activity: Design a null sample {.activity-slide .center}
+
+::: {style="font-size: 70%;"}
+⏱ 8 minutes, in small groups
+:::
+
+Pick one claim: *"Smokers are less reliable tippers."*
+
+- Describe a permutation or resampling scheme that could test whether this pattern is more extreme than you'd expect by chance
+- What statistic would you compute from each null sample?
+
 ## Words of wisdom {.transition-slide .center}
 
 *False discovery* is the lesser danger when compared to non-discovery. **Non-discovery** is the failure to identify meaningful structure, and it may result in false or incomplete modeling. In a healthy scientific enterprise, the **fear of non-discovery** should be at least as great as the *fear of false discovery*.
@@ -884,6 +949,18 @@ For this waiter and the restaurant manager, there is some useful information. Li
 9. Communicate findings.
 :::
 ::::
+
+## Activity: Apply the guide to a new dataset {.activity-slide .center}
+
+::: {style="font-size: 70%;"}
+⏱ 10 minutes
+:::
+
+Choose a dataset you know well (or one provided by your tutor). Work through steps 1-4 of the Guide:
+
+- Describe the variables and how the data was collected
+- Brainstorm two questions and write down your expectations
+- Sketch the plots/summaries you'd need to compute
 
 ## Topics covered
 

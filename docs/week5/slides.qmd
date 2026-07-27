@@ -1857,7 +1857,9 @@ hid_p1 + hid_p2 + hid_p3 + hid_p4 + plot_layout(ncol=2)
 #| fig-width: 8
 #| fig-height: 6
 #| out-width: 100%
-olive <- read_csv("http://ggobi.org/book/data/olive.csv") |>
+#olive <- read_csv("http://ggobi.org/book/data/olive.csv") |>
+#  rename(id = `...1`)
+olive <- read_csv(here::here("data/olive.csv")) |>
   rename(id = `...1`)
 op1 <- olive |>
   ggplot(aes(x=arachidic, y=1)) +

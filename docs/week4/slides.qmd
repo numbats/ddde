@@ -509,6 +509,7 @@ Is there a problem with the model?
 #| out-width: 60%
 #| fig-width: 3
 #| fig-height: 3
+#| eval: false
 library(visage)
 vi_lineup <- readRDS("/Users/cookd/students_PhD/Patrick/lineup_residual_diagnostics/data/vi_lineup.rds")
 i <- 915
@@ -537,6 +538,7 @@ Is there a problem with the model?
 #| out-width: 60%
 #| fig-width: 3
 #| fig-height: 3
+#| eval: false
 VI_MODEL$plot(filter(l$data, k==5), 
                      remove_grid_line = TRUE, 
                      theme = theme_light())
@@ -561,6 +563,7 @@ Is there a problem with the model?
 #| out-width: 60%
 #| fig-width: 3
 #| fig-height: 3
+#| eval: false
 VI_MODEL$plot(filter(l$data, k==14), 
                      remove_grid_line = TRUE, 
                      theme = theme_light())
@@ -588,6 +591,7 @@ Residual plots are better when viewed in the [context of good residual plots]{.m
 #| out-width: 80%
 #| fig-width: 7
 #| fig-height: 6
+#| eval: false
 VI_MODEL$plot_lineup(l$data, 
                      remove_grid_line = TRUE, 
                      theme = theme_light(),
@@ -617,6 +621,7 @@ All of the residual plots shown slides 22-24 were NULL plots.
 #| out-width: 80%
 #| fig-width: 7
 #| fig-height: 6
+#| eval: false
 VI_MODEL$plot_lineup(l$data, 
                      remove_grid_line = TRUE, 
                      theme = theme_light(),
@@ -648,6 +653,7 @@ The actual residual plot is
 #| out-width: 80%
 #| fig-width: 7
 #| fig-height: 6
+#| eval: false
 VI_MODEL$plot_lineup(l$data, 
                      remove_grid_line = TRUE, 
                      theme = theme_light(),

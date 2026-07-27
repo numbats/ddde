@@ -95,7 +95,6 @@ ggplot(lineup(null_dist(".resid", "norm"), n=12, true=mtcars_all),
   theme(axis.title = element_blank(),
         axis.text = element_blank())
 
-
 ## ----------------------------------------------------------------
 #| code-fold: true
 #| fig-width: 6
