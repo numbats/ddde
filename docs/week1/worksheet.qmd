@@ -8,10 +8,6 @@ format:
         output-file: worksheet.html
         embed-resources: true
         css: "../assets/tutorial.css"
-    unilur-html+solution:
-        output-file: worksheetsol.html
-        embed-resources: true
-        css: "../assets/tutorial.css"
 show-solution: true
 code-fold: true
 ---
@@ -31,6 +27,20 @@ knitr::opts_chunk$set(
   cache = FALSE,
   dev.args = list(pointsize = 11)
 )
+
+library(dplyr)
+library(ggplot2)
+
+theme_set(
+  theme_minimal(base_size = 13) +
+    theme(
+      plot.title.position = "plot",
+      plot.background     = element_rect(fill = "transparent", colour = NA),
+      panel.background    = element_rect(fill = "transparent", colour = NA),
+      legend.background   = element_rect(fill = "transparent", colour = NA),
+      legend.position     = "bottom"
+    )
+)
 ```
 
 ## 🎯 Objectives
@@ -44,4 +54,193 @@ The goal of this worksheet is to tackle a data analysis together, by
 
 ## 📋 About the data 
 
+Only American citizens (and green-card holders) can contribute to federal
+politics, but the American divisions of foreign companies can form political
+action committees (PACs) and collect contributions from their American
+employees. This worksheet works with data on contributions to US political
+parties from foreign-connected PACs across 13 election cycles between 2000 and
+2024, sourced from
+[OpenSecrets](https://www.opensecrets.org/political-action-committees-pacs/foreign-connected-pacs/2024).
+
+The data preparation steps below reproduce the pipeline from the original
+analysis by Mine Çetinkaya-Rundel
+([source](https://github.com/mine-cetinkaya-rundel/beyond-prompt-icots-2026/blob/main/open-secrets/open-secrets.qmd)).
+Run all chunks in order and save the resulting data `pac_uk` as an `rda` file in order to attempt the tasks below.
+
 We are going to take a look at [Mine Çetinkaya-Rundel's keynote data analysis](https://speakerdeck.com/minecr/beyond-the-prompt-programming-as-a-pathway-to-statistical-thinking?slide=4) and work our way through the data analysis.
+
+### Following the tutorial
+
+```{r}
+#| label: plot-totals
+#| code-fold: true
+load(here::here("data/pac_uk_long.rda"))
+load(here::here("data/pac_uk_boot.rda"))
+party_colours <- c(Democrat = "#3A4EB8", Republican = "#D62728")
+pac_uk_long |>
+  #group_by(year, party) |>
+  #sample_n(size = n(), replace = TRUE) |>
+  #ungroup() |>
+  summarise(
+    total_amount_M = sum(amount, na.rm = TRUE),
+    .by = c(year, party)
+  ) |>
+  ggplot(aes(x=year, 
+             y=total_amount_M / 1e6, 
+             colour = party, 
+             group = party)) +
+    geom_line() +
+    geom_point(size = 2) +
+    scale_colour_manual(values = party_colours) +
+    scale_x_continuous(breaks = seq(2000, 2024, 4)) +
+    scale_y_continuous(labels = 
+      scales::label_dollar(suffix = "M"), limits=c(0,3.8)) +
+    labs(x = "Election cycle", 
+         y = "Total contributions (M)",
+         colour = "Party",
+         title = "UK-connected PAC contributions to US parties, 2000–2024") +
+    theme_minimal()
+```
+
+### What happens with a different sample?
+
+```{r}
+#| label: plot-sample
+#| code-fold: true
+pac_uk_long |>
+  group_by(year, party) |>
+  sample_n(size = n(), replace = TRUE) |>
+  ungroup() |>
+  summarise(
+    total_amount_M = sum(amount, na.rm = TRUE),
+    .by = c(year, party)
+  ) |>
+  ggplot(aes(x=year, 
+             y=total_amount_M/1e6, 
+             colour = party, 
+             group = party)) +
+    geom_line() +
+    scale_colour_manual(values = party_colours) +
+    labs(x = "Election cycle", 
+         y = "Total contributions (M)",
+         colour = "Party") +
+    theme_minimal()
+```
+
+Repeat it multiple times. Why does the pattern change?
+
+```{r}
+#| label: plot-many-samples
+#| code-fold: true
+#| eval: false
+library(ggdibbler)
+B <- 20
+ggplot(pac_uk_boot,
+       aes(x = year, colour = party, group = party)) +
+  geom_line_sample(
+    aes(y = boot_dist),
+    times = B, alpha = 0.2
+  ) +
+  geom_line(
+    aes(y = total_amount_M),
+    linewidth = 1
+  ) +
+  geom_point(aes(y = total_amount_M), size = 2) +
+  scale_colour_manual(values = party_colours) +
+  scale_x_continuous(breaks = seq(2000, 2024, 4)) +
+  scale_y_continuous_distribution(labels = scales::label_dollar(suffix = "M")) +
+  labs(
+    x        = "Election cycle",
+    y        = "Total contributions (M)",
+    colour   = "Party"
+  )
+```
+
+### What happens each year?
+
+```{r why-variable}
+#| eval: false
+#| code-fold: true
+library(ggbeeswarm)
+ggplot(pac_uk_long, aes(x=year, y=amount/1e6)) +
+  geom_quasirandom() +
+  facet_wrap(~party, ncol=1) +    
+  labs(x = "Election cycle", 
+       y = "Total contributions (M)",
+       colour = "Party") 
+
+```
+
+Why do the totals vary so much when we sample the values for each party each year?
+
+
+```{r compare-parties}
+#| eval: false
+#| code-fold: true
+ggplot(pac_uk_long, aes(x=party, y=amount/1e6)) +
+  geom_quasirandom() +
+  stat_summary(colour="red") +
+  #scale_y_log10() +
+  facet_wrap(~year, ncol=5) +
+  coord_flip() +    
+  labs(x = "Election cycle", 
+       y = "Total contributions (M)",
+       colour = "Party") 
+```
+
+### Where do donations come from?
+
+```{r donors}
+#| code-fold: true
+#| eval: false
+# Need to use brolgar
+library(brolgar)
+library(tsibble)
+library(plotly)
+set.seed(1024)
+sampled_pacs <- pac_uk_long |>
+  distinct(pac_name) |>
+  slice_sample(n = 20) |>
+  pull(pac_name)
+
+pac_uk_long |>
+  filter(pac_name %in% sampled_pacs) |>
+  summarise(amount = sum(amount), .by = c(year, pac_name, party)) |>
+  ggplot(aes(x=year, 
+             y=amount, 
+             group=pac_name, 
+             colour=party)) +
+  geom_line(alpha = 0.7) +
+  scale_colour_manual(values = party_colours) +
+  facet_wrap(~party, ncol=1) +
+  theme(legend.position = "none")
+ggplotly()
+```
+
+### Do the same donors donate every year?
+
+### Do donors favor one party?
+
+```{r pacs}
+#| code-fold: true
+#| eval: false
+library(forcats)
+set.seed(1024)
+sampled_pacs <- pac_uk_long |>
+  distinct(pac_name) |>
+  slice_sample(n = 10) |>
+  pull(pac_name)
+pac_uk_long |>
+  filter(pac_name %in% sampled_pacs) |>
+  mutate(party = fct_recode(party, D="Democrat", R="Republican")) |>
+  summarise(amount = sum(amount), .by = c(year, pac_name, party)) |>
+  ggplot(aes(x=party, 
+             y=amount, 
+             group=pac_name)) +
+  geom_point() +
+  geom_line(alpha = 0.7) +
+  facet_grid(pac_name~year) +
+  theme(legend.position = "none")
+ggplotly()
+```
+
