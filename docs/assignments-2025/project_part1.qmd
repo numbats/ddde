@@ -1,0 +1,183 @@
+---
+title: "ETC5521 Diving Deeper into Data Exploration: Project, part 1"
+subtitle: "As per Monash's integrity rules, these solutions are not to be shared beyond this class."
+author: "Prof. Di Cook"
+date: "Oct 6, 2025"
+quarto-required: ">=1.8.0"
+format:
+    unilur-html: 
+        output-file: project_part1.html
+        css: "assignment.css"
+        embed-resources: true
+    unilur-html+solution:
+        output-file: project_part1_sol.html
+        css: "assignment.css"
+        embed-resources: true
+        show-solution: true
+---
+
+```{r}
+#| echo: false
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+```
+
+```{r}
+#| echo: false
+# Load libraries
+library(tidyverse)
+library(readxl)
+library(visdat)
+library(naniar)
+library(imputeTS)
+library(rvest)
+library(plotly)
+library(here)
+library(conflicted)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+# Plot options and themes
+options(
+  digits = 2,
+  width = 60,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+```
+
+## 🎯 Goal
+
+The project is designed to challenge you to conduct an exploratory data analysis. Here we are going to explore corporate financials over 2020-2022 as reported from the Bureau van Dijk OSIRIS Database. 
+
+The project represents 20\% of your final grade for ETC5521. This is a **team** assignment, and your team member(s) will be allocated by the teaching staff. **The last part of the name of your repo should be your team name, eg project-koala.**
+
+## 📌 Guidelines 
+
+1. Check your team allocation by visiting the [Google Sheet](https://docs.google.com/spreadsheets/d/1J0cRjTsiWwXApDB_PqmK3wx_EN0ZsyhBixwjr9qzi7M/edit?usp=sharing). The "teams" sheet has your **email address** along with the name of your **team**. Get in contact with your other team member(s), as soon as possible, to decide on what country you'd like to work on. The list of possible choices is in the "datasets" sheet. Put your team name against one of the them, only one. First team in, first choice is yours. At most two teams per country.
+
+2. One team member will need to accept the GitHub Classroom Assignment through the link in moodle using a GitHub Classroom compatible web browser. This will generate a **private** GitHub repository that can be found at https://github.com/etc5521-2025. You will need to give the other team member(s) access, and change the name to match your team name: **The last part of the name of your repo should be your team name, eg if your team name is koala, then the repo name should be project-koala.** Your GitHub project repo should contain the file `project_part1.html`, `README.md`, `report.qmd`, `project_work_diary.csv`, `P1.Rproj`, and `.gitignore`.
+
+3. The diary needs to be **updated after every meeting, and after any period of individual work on the project**. Working as a team is a skill, needing management of individual strengths, working habits and personality differences, with an end-product that is better than any member can do on their own. The diary should include individual work effort as well as team efforts. *Note that marks will be deducted for lack of collaborative effort, by any individual member, and could be as much as 100% deduction.* 
+
+4. The first discussions (recommended where you discuss strategy for approaching the project) with your team members needs to be conducted and **recorded** with zoom and where members are on camera. About 5-10 minutes is sufficient. The recording needs to be **uploaded to Moodle**.
+
+5. For the final submission knit the `.qmd` file and push the resulting `.html` files to your GitHub repo. You will also need to **provide links to any Generative AI conversation** you employed in arriving at your solution. *Note that marks are allocated for overall grammar and structure of your final report.* 
+
+6. We will check your git commit history. Every team member should have substantial and roughly equal in number of contributions to the repo with consistent commits over time.
+
+7. Refer back to relevant lecture notes and tutorial exercises in developing your solutions. The purpose is to demonstrate what you have learned fron this unit. Only content from this unit can be used. This includes plotting methods, numerical methods, R packages, modeling methods. Every plot, table, and calculation made needs to have a reference to the material, e.g. *(Lecture 1, slide 10)* or *(Reading Week 3)*. Marks will be deducted for approaches used that have not been discussed in the unit. 
+
+8. You are expected to **develop your solutions with your team members**, without discussing any details with other class members or other friends or contacts. You can ask for clarifications from the teaching team and we encourage you to attend consultations to get assistance as needed.  As a Monash student you are expected to adhere to **[Monash's academic integrity policy](https://publicpolicydms.monash.edu/Monash/documents/1935748).** and the details on use of Generative AI as detailed on this unit's Moodle assessment overview. 
+
+9. We expect that there will be 1-2 hours of team meetings, and 7-9 hours of individual work on this project. 
+
+10. If you have a problem with the team work, it needs to be reported [here](https://forms.gle/5T1emSe3kZWt9TLGA), ideally in a timely manner so the problem can be corrected.
+
+Deadlines: 
+
+```{r create-deadline-table, echo = FALSE}
+due_date <- c("11:45pm Mon Oct 13", "11:45pm Mon Oct 20")
+
+turn_in <- c("Project Repo on GitHub has been created, video discussion uploaded to moodle", "Final solutions available on repo")
+
+library(tibble)
+df_project <- tibble(`Due date` = due_date,
+                     `Turn in` = turn_in)
+
+```
+
+```{r display-table, echo = FALSE}
+library(kableExtra)
+kable(df_project, table.attr = 'data-quarto-disable-processing="true"') %>%
+  column_spec(1, width = "3cm", bold = T, border_right = T) %>%
+  column_spec(2, width = "5cm", border_right = T) %>%
+  kable_styling(full_width = FALSE) 
+```
+
+## 🛠️ Exercises
+
+This is data is the OSIRIS from the Bureau van Dijk OSIRIS Database, which contains comprehensive financial and ownership information on public companies, banks, and insurance companies globally. It provides standardised and "as reported" financials, earnings estimates, ownership data, and news. Visit the link in the References section to learn more about the variables reported in this data.
+
+The time period of 2020-2022 covers the pandemic period. So the primary question motivating the analysis is "How did the pandemic affect corporate financials?"
+
+However, remember that exploratory data analysis is about finding interesting and unexpected patterns in data. So while you need to answer the above question in some way, you are also expected to report on several patterns or relationships in this data that are surprising or unexpected. 
+
+To help motivate your exploration, have a read through the paper *"Boom and Bust of Technology Companies at the Turn of the 21st Century"* is in the file hofmann_wickham_cook.pdf. 
+
+## References
+
+Bureau van Dijk Electronic Publishing. (n.d.). Osiris. Bureau van Dijk Electronic Publishing. https://ezproxy.lib.monash.edu.au/login?url=http://osiris.bvdep.com/ip
+
+
+## Marks
+
+
+```{r create-marks-table, echo = FALSE}
+part <- c("Introduction & Data Description", "IDA", "EDA", "Conclusions", "Collaboration", "Citations & Generative AI Analysis", "Reproducibility, Formatting, Spelling & Grammar")
+
+points <- c(2, 4, 7, 3, 4, -5, -5)
+
+df_marks <- tibble(`Part` = part,
+                     `Points` = points)
+
+```
+
+```{r display-marks, echo = FALSE}
+library(kableExtra)
+kable(df_marks, table.attr = 'data-quarto-disable-processing="true"') |>
+  kable_styling(full_width = FALSE) |>
+  column_spec(1, width = "5cm", border_right = T) |>
+  column_spec(2, width = "0.3cm") 
+
+```
+
+Note that the negative marks for "Generative AI Analysis", "Formatting, Spelling & Grammar" correspond to reductions in scores. You can lose up to 3 marks for poor use of the GAI. For example, no use, basic questions only, no link to the script, and no acknowledgment but clearly used. You can lose up to 5 marks if your report is not reproducible, for poorly formatted and written answers. Three marks will be reserved for appropriate GitHub work, accepting the assignment in a timely fashion and consistent and substantive commits.
+
+## Rubric
+
+To help you complete in your report, below is a rubric to guide you  to what we are expecting:
+
+```{r, echo = FALSE, message=FALSE}
+rubric <- readr::read_tsv("rubric_project_part1.tsv") 
+
+rubric |>
+#  replace_na(list(`Very good (D)` = "", `Good (C)` = "")) |>
+  kable() |>
+  kable_styling(full_width = FALSE) |> 
+  column_spec(1, bold = TRUE, width = "10em", border_right = TRUE) |> 
+  column_spec(2, width = "30em") |> 
+  column_spec(3, width = "20em") |> 
+  column_spec(4, width = "20em") |> 
+  column_spec(5, width = "20em") |> 
+  column_spec(6, width = "20em") 
+```
+

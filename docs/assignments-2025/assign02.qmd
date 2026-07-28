@@ -1,0 +1,651 @@
+---
+title: "ETC5521 Diving Deeper into Data Exploration: Assignment 2"
+subtitle: "As per Monash's integrity rules, these solutions are not to be shared beyond this class."
+author: "Prof. Di Cook"
+date: "Aug 18, 2025"
+quarto-required: ">=1.8.0"
+format:
+    unilur-html: 
+        output-file: assign02.html
+        css: "assignment.css"
+        embed-resources: true
+    unilur-html+solution:
+        output-file: assign02sol.html
+        css: "assignment.css"
+        embed-resources: true
+        show-solution: true
+---
+
+```{r}
+#| echo: false
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+```
+
+```{r}
+#| echo: false
+# Load libraries
+library(tidyverse)
+library(readxl)
+library(visdat)
+library(naniar)
+library(imputeTS)
+library(rvest)
+library(plotly)
+library(here)
+library(conflicted)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+# Plot options and themes
+options(
+  digits = 2,
+  width = 60,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     #aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+```
+
+## 🎯 Goal
+
+The assignment is designed to practice using initial data analysis to prepare data for exploration, and conduct randomisation appropriate tests for significance of patterns. The assignment represents 20\% of your final grade for ETC5521. This is an **individual** assignment.
+
+## 📌 Guidelines 
+
+1. Accept the GitHub Classroom Assignment provided in Moodle using a GitHub Classroom compatible web browser. This should generate a **private** GitHub repository that can be found at https://github.com/etc5521-2025. Your GitHub assignment 2 repo should contain the file `assign02.html`, `README.md`, `assign02-submission.qmd`, `assignment.css`, `etc5521-assignment2.Rproj`, `.gitignore`, and data files generated from your work needed to render your solution file. Code should be available but folded in report.
+
+2. Answer each question in the `assign02-submission.qmd` in the repo.
+
+3. For the final submission knit `assign02-submission.qmd` which will contain your answers. Make sure to **provide the link to the script of any Generative AI conversation** you employed in arriving at your solution. *Note that marks are allocated for overall grammar and structure of your final report.*
+
+4. Leave all of your files in your GitHub repo for marking. We will check your git commit history. You should have contributions to the repo with consistent commits over time. (*Note: nothing needs to be submitted to Moodle.*)
+
+5. You are expected to **develop your solutions by yourself**, without discussing any details with other class members or other friends or contacts. You can ask for clarifications from the teaching team and we encourage you to attend consultations to get assistance as needed.  As a Monash student you are expected to adhere to **[Monash's academic integrity policy](https://publicpolicydms.monash.edu/Monash/documents/1935748).** and the details on use of Generative AI as detailed on this unit's Moodle assessment overview. 
+
+6. We expect that this assignment takes about 10-12 hours of time to complete. You should work on this analysis steadily over the time period between release and due date. Spend a couple of hours soon after the assignment is released getting started, and several hours each of the following two weeks to refine your analysis. Your GitHub `commit` history should reflect this working pattern.
+
+Deadlines: 
+
+```{r create-deadline-table, echo = FALSE}
+due_date <- c("11:45pm Mon Aug 25", "11:45pm Mon Sep 1")
+
+turn_in <- c("Assignment 2 Repo on GitHub has been created", "Final solutions available on repo")
+
+library(tibble)
+df_project <- tibble(`Due date` = due_date,
+                     `Turn in` = turn_in)
+
+```
+
+```{r display-table, echo = FALSE}
+library(kableExtra)
+kable(df_project, table.attr = 'data-quarto-disable-processing="true"') %>%
+  column_spec(1, width = "3cm", bold = T, border_right = T) %>%
+  column_spec(2, width = "5cm", border_right = T) %>%
+  kable_styling(full_width = FALSE) 
+```
+
+## 🛠️ Exercises
+
+The file `yarra_wq.xls` contains water quality measurements from [Victorian Department of Energy, Environment, and Climate Action](https://data.water.vic.gov.au/WMIS/). Metadata on the stations is provided in `SW Metadata.csv`.
+
+Your boss has received a complaint from the Rakali Organisation that water quality in the Yarra River has declined. They have tasked you with preparing the data to answer the question "Has water quality declined from the 1990s to recent years?"
+
+## Question 1: Conduct an IDA
+
+Check the data for what can be used to prepare it to answer this question, and do the data processing that is needed. This might include:
+
+- Reading and checking types of variables,
+- Converting dates into date, month, weekday, hour
+- Checking which sites have sufficient measurements
+- Checking which parameters (water quality variables like pH, nitrogen, ...) have sufficient measurements
+
+You should write out a cleaned data set, called `yarra_wq_clean.csv` into the `data` directory.
+
+::: unilur-solution
+
+Load the libraries, read the data, and make the temporal variables.
+
+```{r}
+#| code-fold: true
+library(tidyverse)
+library(readxl)
+library(lubridate)
+
+d <- read_xls("data/yarra_wq/yarra_wq.xls",
+              col_types = c("text", 
+                            "text",
+                            "date",
+                            "text",
+                            "numeric", 
+                            "text",
+                            "numeric",
+                            "text",
+                            "text",
+                            "text"))
+
+# Make time variables
+d <- d |>
+  mutate(date = date(Datetime),
+         year = year(Datetime),
+         month = month(Datetime, label = TRUE),
+         wday = wday(Datetime, label = TRUE, 
+                     week_start = 1),
+         hour = hour(Datetime))
+```
+
+Check the dates for each of the sensors. We find only `YARRA @ CHANDLER HWY` has data ranging over the period needed to answer the primary question. (Note: `YARRA @ WARRANDYTE` shows incorrect values here because dates are in the 1800s.)
+
+```{r}
+#| code-fold: true
+
+# Initial checks on data
+d |> count(Name, sort=TRUE)
+d |> group_by(Name) |> summarise(mn = min(year, na.rm=TRUE),
+                                 mx = max(year, na.rm=TRUE))
+```
+
+Subset to just this sensor, and then keep checking.
+
+```{r}
+#| code-fold: true
+d_ch <- d |>
+  filter(Name == "YARRA @ CHANDLER HWY")
+```
+
+Now check number of measurements for each variable recorded. Looks like lots of missings. 
+
+```{r}
+#| code-fold: true
+d_ch |> count(Parameter, sort=TRUE) |> print(n=25)
+```
+
+Convert to wide form, to check again. Missings values are explicitly recorded as NA.
+
+```{r}
+#| code-fold: true
+d_ch_w <- d_ch |>
+  group_by(Name, date, Parameter) |>
+  summarise(Value = mean(Value, na.rm=TRUE), 
+            .groups="drop") |>
+  select(Name, Parameter, Value, date) |>
+  pivot_wider(names_from = Parameter, 
+              values_from = Value, 
+              values_fill = NA) |>
+  mutate(year = year(date),
+         month = month(date, label = TRUE),
+         wday = wday(date, label = TRUE, 
+                     week_start = 1))
+
+library(GGally)
+library(patchwork)
+p1 <- ggduo(d_ch_w, columnsX=26, columnsY=3:8)
+p2 <- ggduo(d_ch_w, columnsX=26, columnsY=9:14)
+p3 <- ggduo(d_ch_w, columnsX=26, columnsY=15:20)
+p4 <- ggduo(d_ch_w, columnsX=26, columnsY=20:25)
+```
+ 
+:::: {.columns} 
+::: {.column}
+```{r}
+#| label: fig-check-vars1
+#| echo: false
+#| fig-width: 6
+#| fig-height: 7
+#| fig-cap: "Check of first 6 water quality measurements."
+p1
+```
+
+```{r}
+#| label: fig-check-vars3
+#| echo: false
+#| fig-width: 6
+#| fig-height: 7
+#| fig-cap: "Check of third 6 water quality measurements."
+p3
+```
+:::
+::: {.column}
+
+```{r}
+#| label: fig-check-vars2
+#| echo: false
+#| fig-width: 6
+#| fig-height: 7
+#| fig-cap: "Check of second 6 water quality measurements."
+p2
+```
+
+```{r}
+#| label: fig-check-vars4
+#| echo: false
+#| fig-width: 6
+#| fig-height: 7
+#| fig-cap: "Check of last 6 water quality measurements."
+p4
+```
+
+:::
+
+::::
+ 
+
+```{r}
+#| code-fold: true
+d_clean <- d_ch_w |>
+  mutate(period = as.factor(if_else(year < 2000, "1990s", "2020s"))) |>
+  filter(year > 1989) |>
+  select(Name, period, date, year, month, wday,
+         `Salinity as EC@25`, Turbidity,
+         `Water Temperature`, pH) |>
+  rename(salinity = `Salinity as EC@25`,
+         turbidity = Turbidity,
+         temperature = `Water Temperature`)
+
+write_csv(d_clean, file="data/yarra_wq_clean.csv")
+```
+
+Only four variables have sufficient data in the 1990s and 2020s to study the difference: Salinity, Turbidity, Water Temperature and pH.
+
+ 
+:::
+
+
+## Question 2: EDA
+
+Make some numerical and graphical summaries to address the main question. These might include side-by-side plots of the distributions of different parameters, and means/standard deviations.
+
+Write some explanatory sentences for each plot and table made, describing what is learned.
+
+::: unilur-solution
+
+Read the data and take a quick look.
+
+```{r}
+#| label: fig-readcleandata
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 80%
+#| fig-cap: "Examining the distribution of each variable across the two periods"
+library(ggbeeswarm)
+d <- read_csv("data/yarra_wq_clean.csv",
+              col_types = "cfDiffdddd") |>
+  mutate(wday = factor(wday, 
+    levels = c("Mon", "Tue", "Wed", "Thu", 
+               "Fri", "Sat", "Sun")))
+d |>
+  pivot_longer(salinity:pH, names_to = "variable", 
+               values_to = "value") |>
+  ggplot(aes(x=period, y=value)) +
+    geom_quasirandom() +
+    facet_wrap(~variable, ncol=2, scales = "free_y")
+```
+
+@fig-readcleandata shows dotplots of the four water chemistry variables shown by 1990s and 2020s. There looks to be some differences on a couple. But there are a few problems to fix:
+
+- three missing values that are dropped when plotting
+- several 0s on pH that have to be incorrect
+- an extreme value on salinity, which might be suspicious
+- turbidity needs to be transformed
+- temperature in the 2020s is bimodal
+
+We need to also check that the same months are represented in both periods, so that we have comparable sets of data. It might also be a good idea to check that the week days are relatively equally represented.
+
+```{r}
+#| label: fig-tidy-data
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 80%
+#| fig-cap: "Examining the distribution of each variable across the two periods, on tidied data."
+summary(d[,6:10])
+d_tidied <- d |>
+  mutate(pH = if_else(pH < 5, NA, pH),
+         salinity = if_else(salinity > 800, NA, salinity),
+         salinity = if_else(salinity < 5, NA, salinity),
+         turbidity = if_else(turbidity < 5, NA, turbidity)) |>
+  mutate(turbidity = log10(turbidity))
+
+d_tidied |>
+  pivot_longer(salinity:pH, names_to = "variable", 
+               values_to = "value") |>
+  ggplot(aes(x=period, y=value)) +
+    geom_quasirandom() +
+    facet_wrap(~variable, ncol=2, scales = "free_y")
+```
+
+- The three missings are all on turbidity. 
+- Zeros on pH, salinity and turbidity converted to missing
+- Extreme salinity value converted to missing - it might be a correct value, but it is going to affect all the analysis, so for now we remove it from the analysis. We might investigate this value in more detail later. 
+- A log10 transformation was done on turbidity.
+
+Now check that other information matches.
+
+```{r}
+#| label: checksupport
+#| code-fold: true
+mth_chk <- d_tidied |>
+  pivot_longer(salinity:pH, names_to = "variable", 
+               values_to = "value") |>
+  count(variable, period, month) |>
+  pivot_wider(names_from = month, values_from = n) |>
+  print (n=50)
+```
+
+There is a relatively similar distribution of counts over months for each of the two time periods and each of the variables. It should be reasonable to compare them.
+
+Now we are ready to make some statements about differences. 
+
+#### pH
+
+```{r}
+#| label: fig-pH
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 6
+#| out-width: 60%
+#| fig-cap: "A deeper look at difference in distribution of pH over the two times. The red dot and line indicate the means and standard errors."
+ggplot(d_tidied, aes(x=period, y=pH)) + 
+  geom_quasirandom() +
+  stat_summary(colour="red") +
+  xlab("")
+
+d_tidied |>
+  group_by(period) |>
+  summarise(m = mean(pH, na.rm=TRUE),
+            s = sd(pH, na.rm=TRUE)) 
+```
+
+@fig-pH shows that pH is higher on average in the 2020s. This means that the water has become more alkaline, on average. We note that the discreteness of pH measurements is more prominent in the 2020s but this is due to more observations making it more visible.
+
+#### salinity
+
+```{r}
+#| label: fig-salinity
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 6
+#| out-width: 60%
+#| fig-cap: "A deeper look at difference in distribution of salinity over the two times. The red dot and line indicate the means and standard errors."
+ggplot(d_tidied, aes(x=period, y=salinity)) + 
+  geom_quasirandom() +
+  stat_summary(colour="red") +
+  xlab("")
+
+d_tidied |>
+  group_by(period) |>
+  summarise(m = mean(salinity, na.rm=TRUE),
+            s = sd(salinity, na.rm=TRUE)) 
+```
+
+@fig-salinity suggests that salinity hasn't changed over this time.
+
+#### temperature
+
+```{r}
+#| label: fig-temp
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 6
+#| out-width: 60%
+#| fig-cap: "A deeper look at difference in distribution of temperature over the two times. The red dot and line indicate the means and standard errors."
+ggplot(d_tidied, aes(x=period, y=temperature)) + 
+  geom_quasirandom() +
+  stat_summary(colour="red") +
+  xlab("")
+
+d_tidied |>
+  group_by(period) |>
+  summarise(m = mean(temperature, na.rm=TRUE),
+            s = sd(temperature, na.rm=TRUE)) 
+```
+
+@fig-temp suggests water temperature may have increased a little. But the bimodality of the 2020s might be interesting to check. This could be related to different times of the year. 
+
+```{r}
+#| label: fig-temp-mth
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: 80%
+#| fig-cap: "A deeper look at difference in distribution of temperature over the two times, by month."
+ggplot(d_tidied, aes(x=month, y=temperature, colour=period)) + 
+  geom_quasirandom(alpha=0.5) +
+  stat_summary() +
+  xlab("") +
+  scale_colour_brewer("", palette = "Dark2")
+```
+
+This is interesting! The differences in temperature are occurring in the summer months: Jan, Feb, Mar, Nov, Dec (@fig-temp-mth).
+
+#### turbidity
+
+```{r}
+#| label: fig-turbidity
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 6
+#| out-width: 60%
+#| fig-cap: "A deeper look at difference in distribution of turbidity over the two times. The red dot and line indicate the means and standard errors."
+ggplot(d_tidied, aes(x=period, y=turbidity)) + 
+  geom_quasirandom() +
+  stat_summary(colour="red") +
+  xlab("")
+
+d_tidied |>
+  group_by(period) |>
+  summarise(m = mean(turbidity, na.rm=TRUE),
+            s = sd(turbidity, na.rm=TRUE)) 
+```
+
+@fig-turbidity suggests that turbidity is slightly lower in the 2020s, which means the water may be getting clearer. 
+
+#### pairwise relationships
+
+```{r}
+#| label: fig-pairs
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 80%
+#| fig-cap: "Pairwise relationships between the variables, coloured by period."
+ggscatmat(d_tidied, columns = 6:10, color = "period", alpha=0.5) +
+  scale_colour_brewer("", palette = "Dark2") +
+  theme(aspect.ratio = 1)
+```
+
+```{r}
+#| label: fig-pairs-mth
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 80%
+#| fig-cap: "Examining temperature and pH by month, coloured by period."
+ggplot(d_tidied, aes(x=temperature, y=pH, colour=period)) +
+  geom_point(alpha=0.5) +
+  facet_wrap(~month, ncol=4, scales="free") +
+  scale_colour_brewer("", palette = "Dark2") +
+  theme(aspect.ratio = 1,
+        axis.text = element_blank())
+```
+
+There is nothing to see in the pairwise plots (@fig-pairs, @fig-pairs-mth). While based on correlation it might seem like there are some associations between variables in the two periods, it is very weak. 
+
+:::
+
+## Question 3: Check your findings
+
+For three of the plots you have produced, write down what was the null hypothesis being tested. This needs to be based on your `ggplot` code, not on what was in the plot of the data. 
+
+Generate the appropriate lineup, to check whether your summary statements from the previous part were reasonable or not.
+
+::: unilur-solution
+We'll check the conclusions about pH, about temperature difference being greater in the summer, and the pairwise relationships. 
+
+```{r}
+#| label: fig-ph-lineup
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 80%
+#| fig-cap: "Lineup plot of pH by period."
+library(nullabor)
+
+set.seed(303)
+ggplot(lineup(null_permute("period"), d_tidied), 
+       aes(x=period, y=pH)) + 
+  geom_quasirandom() +
+  stat_summary(colour="red") +
+  facet_wrap(~.sample, ncol=5) +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank())
+
+```
+
+Because the test is whether there is a difference in the period, the null samples are computed by permuting the period variable.
+
+The data plot (18) is clearly visible in this lineup. If we wanted to test it we would show this plot to about 10 friends, and use `pvisual()` to compute a $p$-value. 
+
+```{r}
+#| label: fig-temp-mth-lineup
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 80%
+#| fig-cap: "Lineup plot of temperature by period over months."
+set.seed(308)
+ggplot(lineup(null_permute("period"), d_tidied, n=6), 
+       aes(x=month, y=temperature, colour=period)) + 
+  geom_quasirandom(alpha=0.1) +
+  stat_summary() +
+  xlab("") +
+  scale_colour_brewer("", palette = "Dark2") +
+  facet_wrap(~.sample, ncol=2) +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank(),
+        legend.position = "none")
+
+```
+
+Because the test is whether there is a difference in the period, the null samples are computed by permuting the period variable.
+
+Some choices in making the lineups are: 
+
+- Only made 5 null samples, to produce lineups of size 6, because reading these plots is complicated. 
+- Focus the plots on the means because trying to compare the whole distribution is even more complicated. 
+- If we want to have more comparisons we could make several different lineups to show to more people. 
+
+The data plot (5) is reasonably visible in the lineups which suggests the warmer summer temperature is a plausible conclusion.
+
+```{r}
+#| label: fig-ph-temp-lineup
+#| code-fold: true
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 80%
+#| fig-cap: "Lineup plot of pairwise relationships."
+set.seed(320)
+ggplot(lineup(null_permute("pH"), d_tidied), 
+       aes(x=pH, y=temperature)) + 
+  geom_point(alpha=0.8) +
+  facet_wrap(~.sample, ncol=5) +
+  theme(aspect.ratio=1,
+        axis.title = element_blank(),
+        axis.text = element_blank())
+```
+
+Because we are interested in assessing the pairwise relationships, ignoring difference in period, we would permute one of the two variables to generate null samples. This breaks association between them.
+
+It's going to be easier to do this for each pair of variables. @fig-ph-temp-lineup shows the lineup for pH and temperature.
+
+We think it is very difficult to detect the data plot (17) in this lineup, which suggests the conclusion that there is no relationship between the variables is reasonable.
+:::
+
+## Generative AI analysis
+
+In this part, we would like you to actively discuss how generative AI helped with your answers to the assignment questions, and where or how it was mistaken or misleading. 
+
+You need to provide a link that makes the full script of your conversation with any generative AI tool accessible to the teaching staff. You should not use a paid service, as the freely available systems will sufficiently helpful.
+
+
+
+## Marks
+
+
+```{r create-marks-table, echo = FALSE}
+part <- c("Q1 worth", "Q2 worth", "Q3  worth", "GitHub Repo", "Generative AI Analysis", "Reproducibility, Formatting, Spelling & Grammar")
+
+points <- c(5, 7, 5, 3, -3, -5)
+
+df_marks <- tibble(`Part` = part,
+                     `Points` = points)
+
+```
+
+```{r display-marks, echo = FALSE}
+library(kableExtra)
+kable(df_marks, table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_styling(full_width = FALSE) %>%
+  column_spec(1, width = "5cm", border_right = T) %>%
+  column_spec(2, width = "0.3cm") 
+
+```
+
+Note that the negative marks for "Generative AI Analysis", "Formatting, Spelling & Grammar" correspond to reductions in scores. You can lose up to 3 marks for poor use of the GAI. For example, no use, basic questions only, no link to the script, and no acknowledgment but clearly used. You can lose up to 5 marks if your report is not reproducible, for poorly formatted and written answers. Three marks will be reserved for appropriate GitHub work, accepting the assignment in a timely fashion and consistent and substantive commits.
+
+Here are some guidelines for code:
+
+- Split chunks that process data and ones that plot data
+- It is dangerous to run scraping code or downloading data each render because web sites often change. Always best to scrape once or download once and save the result for the rest of the analysis. (This is general advice not needed for this assignment.) 
+- Label the chunks - helps to locate errors
+- Comment the code so you can remember what each is supposed to do when you come back to it.
+- Learn how to name things well, see https://github.com/jennybc/how-to-name-files
+
+## Rubric
+
+To help you complete in your report, below is a rubric to guide you  to what we are expecting:
+
+```{r, echo = FALSE, message=FALSE}
+rubric <- readr::read_tsv("rubric_assign02.tsv") 
+
+rubric |>
+#  replace_na(list(`Very good (D)` = "", `Good (C)` = "")) |>
+  kable() |>
+  kable_styling(full_width = FALSE) |> 
+  column_spec(1, bold = TRUE, width = "10em", border_right = TRUE) |> 
+  column_spec(2, width = "30em") |> 
+  column_spec(3, width = "20em") |> 
+  column_spec(4, width = "20em") |> 
+  column_spec(5, width = "20em") |> 
+  column_spec(6, width = "20em") 
+```
+

@@ -1,0 +1,185 @@
+---
+title: "ETC5521 Diving Deeper into Data Exploration: Project, part 2"
+subtitle: "As per Monash's integrity rules, these solutions are not to be shared beyond this class."
+author: "Prof. Di Cook"
+date: "Oct 20, 2025"
+quarto-required: ">=1.8.0"
+format:
+    unilur-html: 
+        output-file: project_part2.html
+        css: "assignment.css"
+        embed-resources: true
+    unilur-html+solution:
+        output-file: project_part2_sol.html
+        css: "assignment.css"
+        embed-resources: true
+        show-solution: true
+---
+
+```{r}
+#| echo: false
+# Set up chunk for all slides
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  code.line.numbers = FALSE,
+  fig.retina = 4,
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dev.args = list(pointsize = 11)
+)
+```
+
+```{r}
+#| echo: false
+# Load libraries
+library(tidyverse)
+library(readxl)
+library(visdat)
+library(naniar)
+library(imputeTS)
+library(rvest)
+library(plotly)
+library(here)
+library(conflicted)
+
+conflicts_prefer(dplyr::filter)
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::slice)
+
+# Plot options and themes
+options(
+  digits = 2,
+  width = 60,
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis",
+  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+)
+
+theme_set(theme_bw(base_size = 14) +
+   theme(
+     aspect.ratio = 1,
+     plot.background = element_rect(fill = 'transparent', colour = NA),
+     plot.title.position = "plot",
+     plot.title = element_text(size = 24),
+     panel.background = element_rect(fill = 'transparent', colour = NA),
+     legend.background = element_rect(fill = 'transparent', colour = NA),
+     legend.key = element_rect(fill = 'transparent', colour = NA)
+   )
+)
+```
+
+## 🎯 Goal
+
+The project is designed to challenge you to conduct an exploratory data analysis. Here we are going to explore corporate financials over 2020-2022 as reported from the Bureau van Dijk OSIRIS Database. 
+
+The project represents 20\% of your final grade for ETC5521. This is a **team** assignment, and your team member(s) will be allocated by the teaching staff. 
+
+## 📌 Guidelines 
+
+1. Check the [team sheet](https://docs.google.com/spreadsheets/d/1J0cRjTsiWwXApDB_PqmK3wx_EN0ZsyhBixwjr9qzi7M/edit?usp=sharing). The "part2" sheet lists your team and the country chosen for part 1. Decide which country you want to compare the analysis with. You can pick any other country, although it cannot be the same as the other team that analysed the same country as you in Part 1. That is, if team A and team B work on Australia, then if team A chooses Germany as the second country, team B need to choose any other country except Australia or Germany. 
+
+2. One team member will need to 
+
+    - create a release of the final state of the repo, labelled `Part1`.
+    - provide access to the [Project Part 1 Github repo](https://github.com/etc5521-2025) to the new group members who also analysed the same country. This needs to be done by **Thursday, Oct 24, 11:45pm** (Tutorial day week 12). 
+
+3. The diary still needs to be **updated after every meeting, and after any period of individual work on the project**. Working as a team is a skill, needing management of individual strengths, working habits and personality differences, with an end-product that is better than any member can do on their own. The diary should include individual work effort as well as team efforts. *Note that marks will be deducted for lack of collaborative effort, by any individual member, and could be as much as 100% deduction.* 
+
+4. For the the second part put your analysis in a new document `report_p2.qmd`. This file and the resulting `.html` file need to be added to your GitHub repo. You will also need to **provide links to any Generative AI conversation** you employed in arriving at your solution. *Note that marks are allocated for overall grammar and structure of your final report.* 
+
+5. We will check your git commit history. Every team member should have substantial and roughly equal in number of contributions to the repo with consistent commits over time.
+
+6. Refer back to relevant lecture notes and tutorial exercises in developing your solutions. The purpose is to demonstrate what you have learned fron this unit. Only content from this unit can be used. This includes plotting methods, numerical methods, R packages, modeling methods. Every plot, table, and calculation made needs to have a reference to the material, e.g. *(Lecture 1, slide 10)* or *(Reading Week 3)*. Marks will be deducted for approaches used that have not been discussed in the unit. 
+
+7. You are expected to **develop your solutions with your team members**, without discussing any details with other class members or other friends or contacts. You can ask for clarifications from the teaching team and we encourage you to attend consultations to get assistance as needed.  As a Monash student you are expected to adhere to **[Monash's academic integrity policy](https://publicpolicydms.monash.edu/Monash/documents/1935748).** and the details on use of Generative AI as detailed on this unit's Moodle assessment overview. 
+
+8. We expect that there will be 1-2 hours of team meetings, and 7-9 hours of individual work on this project. 
+
+9. If you have a problem with the team work, it needs to be reported [here](https://forms.gle/5T1emSe3kZWt9TLGA), ideally in a timely manner so the problem can be corrected.
+
+Deadlines: 
+
+```{r create-deadline-table, echo = FALSE}
+due_date <- c("11:45pm Mon Oct 27", "11:45pm Mon Nov 3")
+
+turn_in <- c("Feedback on other group's analysis", "Final report available on repo")
+
+library(tibble)
+df_project <- tibble(`Due date` = due_date,
+                     `Turn in` = turn_in)
+
+```
+
+```{r display-table, echo = FALSE}
+library(kableExtra)
+kable(df_project, table.attr = 'data-quarto-disable-processing="true"') %>%
+  column_spec(1, width = "3cm", bold = T, border_right = T) %>%
+  column_spec(2, width = "5cm", border_right = T) %>%
+  kable_styling(full_width = FALSE) 
+```
+
+## 🛠️ Exercises
+
+There are two pieces in this assignment. 
+
+A. Assess other group's Part 1 report.
+
+- Add the new group members to your Part 1 repo, giving them `read` access.
+- You should also now have access to your new repo. Clone a copy locally, to examine the report. 
+- On the **issues**, each group member needs to make an issue with constructive feedback for the group, e.g. one thing that was done very well in the analysis, one suggestion for improving, and the result that was the most interesting. 
+
+B. You should compare and contrast the companies environment between the two countries, country from part 1 that you analysed in detail, and the newly chosen country. You can interpret this in any way that you want, but it needs to be defined and the comparison should focus on interesting differences (and possibly similarities). Note that, most marks are awarded for the EDA here, because the IDA for the new country should be similar to part 1. 
+
+## References
+
+Bureau van Dijk Electronic Publishing. (n.d.). Osiris. Bureau van Dijk Electronic Publishing. 
+
+## Marks
+
+
+```{r create-marks-table, echo = FALSE}
+part <- c("Introduction & Data Description", "IDA", "EDA", "Conclusions", "Feedback")
+
+points <- c(2, 2, 9, 3, 4)
+
+df_marks <- tibble(`Part` = part,
+                     `Points` = points)
+
+```
+
+```{r display-marks, echo = FALSE}
+library(kableExtra)
+kable(df_marks, table.attr = 'data-quarto-disable-processing="true"') |>
+  kable_styling(full_width = FALSE) |>
+  column_spec(1, width = "5cm", border_right = T) |>
+  column_spec(2, width = "0.3cm") 
+
+```
+
+Note that up to 5 mark deduction each for poor "Generative AI Analysis", "Formatting, Spelling & Grammar", "Citations". For example, no use, basic questions only, no link to the script, and no acknowledgment but clearly used. You can lose up to 5 marks if your report is not reproducible, for poorly formatted and written answers. If collaborative contribution is not equal and substantive you could lose up to 100% of mark.
+
+## Rubric
+
+To help you complete in your report, below is a rubric to guide you  to what we are expecting:
+
+```{r, echo = FALSE, message=FALSE}
+rubric <- readr::read_tsv("rubric_project_part2.tsv") 
+
+rubric |>
+#  replace_na(list(`Very good (D)` = "", `Good (C)` = "")) |>
+  kable() |>
+  kable_styling(full_width = FALSE) |> 
+  column_spec(1, bold = TRUE, width = "10em", border_right = TRUE) |> 
+  column_spec(2, width = "30em") |> 
+  column_spec(3, width = "20em") |> 
+  column_spec(4, width = "20em") |> 
+  column_spec(5, width = "20em") |> 
+  column_spec(6, width = "20em") 
+```
+
