@@ -4530,26 +4530,24 @@ ans.user            9          6  3.812386</code></pre>
 </div>
 <p>The variables <code>X1.1</code>, <code>X2.1</code> have the true location of the letters. Row might be easier to compute than column, because there are only 6 rows. With 30 columns, there are too many location options to check. Grouping into bunches of 5 might help.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Not enough participants - only 2*6 - to be able to answer this one</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># but this is the code anyway</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>xclass <span class="sc">|&gt;</span> </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(X1<span class="fl">.1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">m =</span> <span class="fu">mean</span>(tm1.<span class="fl">1.</span>j.)) <span class="sc">|&gt;</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X1<span class="fl">.1</span>, m)) <span class="sc">+</span> </span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Row&quot;</span>) <span class="sc">+</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Time&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>xclass <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(X1<span class="fl">.1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">m =</span> <span class="fu">mean</span>(tm1.<span class="fl">1.</span>j.)) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X1<span class="fl">.1</span>, m)) <span class="sc">+</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Row&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Time&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img role="img" src="tutorial_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img role="img" src="tutorial_files/figure-html/row-time-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Should you adjust by the letter? Probably, because for each letter there might have been a concentration of low or high rows on any letter. Because we have already seen that the letters have varying times to find, the times for the rows could be inadvertently pulled up or down due the differences in letter times.</p>
-<p>It might be computed similarly to how we would compute your relative speed. Because everyone did the same tasks, we can compare the times. First compute your standardised score across the 6 tasks. It is easier to compare numbers if they are on a standardised scale. This code will show you your relative speed for each task. In the sample data there are only two participants, which is not enough to compute standardised scores. You could also compute your overall average, based on your standardised scores, by averaging them!</p>
+<p>Should you adjust by the letter? Probably, because some letters might just be harder to find than others, regardless of where they are hidden. If certain letters happen to have been placed more often in particular rows, then those rows would look artificially slow or fast, when really it’s the letter that’s driving the difference. Adjusting for letter removes this confounding.</p>
+<p>For part (d), the challenge is that each of the 6 tasks has a different average time and a different amount of spread (some tasks are just harder, or more variable, than others). This means a raw time of, say, 10 seconds could be fast for one task and slow for another, so raw times aren’t directly comparable across tasks. Standardising (subtracting the task mean and dividing by the task standard deviation, i.e. a z-score) puts every task on the same scale: it tells you how many standard deviations above or below the class average you were on that task, regardless of how hard the task was overall. Once every task is on this common scale, you can fairly compare your performance across tasks, and even average your standardised scores together to get one overall measure of relative speed. In the sample data there are only two participants, which is not enough to compute standardised scores meaningfully.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="ot">&lt;-</span> xclass <span class="sc">|&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(char2.<span class="fl">1.</span>j.) <span class="sc">|&gt;</span></span>

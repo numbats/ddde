@@ -43,6 +43,7 @@ Being good at noticing something unexpected or unusual is an important skills fo
 Play the game `alzheimer_test` from the `fun` package by running this code:
 
 ```{r}
+#| label: run-expt
 #| eval: false
 #| echo: true
 #| code-fold: false
@@ -58,6 +59,7 @@ c. Save the dataset to `alzheimers.rda` file, and share with your tutor.
 
 ::: unilur-solution
 ```{r}
+#| label: save-scores
 #| message: false
 #| echo: true
 load(here::here("data/alzheimers.rda"))
@@ -82,6 +84,7 @@ d. How fast are you relative to your class mates? (How should you calculate this
 The code to be able to answer the questions above is:
 
 ```{r}
+#| label: class-summary
 #| message: false
 #| echo: true
 load(here::here("data/alzheimers-class.rda"))
@@ -98,10 +101,9 @@ xclass |>
 The variables `X1.1`, `X2.1` have the true location of the letters. Row might be easier to compute than column, because there are only 6 rows. With 30 columns, there are too many location options to check. Grouping into bunches of 5 might help.
 
 ```{r}
+#| label: row-time
 #| message: false
 #| echo: true
-# Not enough participants - only 2*6 - to be able to answer this one
-# but this is the code anyway
 library(ggplot2)
 xclass |> 
   group_by(X1.1) |>
@@ -112,11 +114,12 @@ xclass |>
     ylab("Time")
 ```
 
-Should you adjust by the letter? Probably, because for each letter there might have been a concentration of low or high rows on any letter. Because we have already seen that the letters have varying times to find, the times for the rows could be inadvertently pulled up or down due the differences in letter times.
+Should you adjust by the letter? Probably, because some letters might just be harder to find than others, regardless of where they are hidden. If certain letters happen to have been placed more often in particular rows, then those rows would look artificially slow or fast, when really it's the letter that's driving the difference. Adjusting for letter removes this confounding.
 
-It might be computed similarly to how we would compute your relative speed. Because everyone did the same tasks, we can compare the times.  First compute your standardised score across the 6 tasks. It is easier to compare numbers if they are on a standardised scale. This code will show you your relative speed for each task. In the sample data there are only two participants, which is not enough to compute standardised scores. You could also compute your overall average, based on your standardised scores, by averaging them!
+For part (d), the challenge is that each of the 6 tasks has a different average time and a different amount of spread (some tasks are just harder, or more variable, than others). This means a raw time of, say, 10 seconds could be fast for one task and slow for another, so raw times aren't directly comparable across tasks. Standardising (subtracting the task mean and dividing by the task standard deviation, i.e. a z-score) puts every task on the same scale: it tells you how many standard deviations above or below the class average you were on that task, regardless of how hard the task was overall. Once every task is on this common scale, you can fairly compare your performance across tasks, and even average your standardised scores together to get one overall measure of relative speed. In the sample data there are only two participants, which is not enough to compute standardised scores meaningfully.
 
 ```{r}
+#| label: my-performance
 #| message: false
 #| echo: true
 tasks <- xclass |>
