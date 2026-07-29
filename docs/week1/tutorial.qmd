@@ -12,7 +12,7 @@ format:
         output-file: tutorialsol.html
         embed-resources: true
         css: "../assets/tutorial.css"
-show-solution: true
+        show-solution: true
 ---
 
 ## 🎯 Objectives

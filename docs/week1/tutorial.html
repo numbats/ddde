@@ -4438,39 +4438,6 @@ color: #C8008F;
 <li>Your data was saved into the object <code>x</code>. Which task does the DATA say was most difficult based, based on the time taken to answer, which is variable <code>tm1.1.j.</code> in your results data?</li>
 <li>Save the dataset to <code>alzheimers.rda</code> file, and share with your tutor.</li>
 </ol>
-<div class="callout callout-style-default callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="unilur-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/alzheimers.rda&quot;</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(char1.<span class="fl">1.</span>j., char2.<span class="fl">1.</span>j., tm1.<span class="fl">1.</span>j.) <span class="sc">|&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tm1.<span class="fl">1.</span>j.))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>           char1.1.j. char2.1.j.  tm1.1.j.
-ans.user.2          M          N 30.839718
-ans.user.3          I          T 19.695932
-ans.user.5          D          O 17.189302
-ans.user.1          O          C 16.534676
-ans.user.4          F          E  4.424869
-ans.user            9          6  3.812386</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
 </section>
 <section id="are-you-like-everyone-else" class="level2">
 <h2 class="anchored" data-anchor-id="are-you-like-everyone-else">2. Are you like everyone else?</h2>
@@ -4481,98 +4448,6 @@ ans.user            9          6  3.812386</code></pre>
 <li>Is there a relationship between the location of the hidden letter and the time taken to find it? (How should you calculate this?)</li>
 <li>How fast are you relative to your class mates? (How should you calculate this?)</li>
 </ol>
-<div class="callout callout-style-default callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="unilur-solution">
-<p>The code to be able to answer the questions above is:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/alzheimers-class.rda&quot;</span>))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>xclass <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(char2.<span class="fl">1.</span>j.) <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">m =</span> <span class="fu">mean</span>(tm1.<span class="fl">1.</span>j.)) <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(m))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 2
-  char2.1.j.     m
-  &lt;chr&gt;      &lt;dbl&gt;
-1 N          20.8 
-2 O          15.1 
-3 T           7.75
-4 C           5.99
-5 6           5.18
-6 E           4.11</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>xclass <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(char2.<span class="fl">1.</span>j.) <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">s =</span> <span class="fu">sd</span>(tm1.<span class="fl">1.</span>j.)) <span class="sc">|&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(s))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 2
-  char2.1.j.     s
-  &lt;chr&gt;      &lt;dbl&gt;
-1 N          17.0 
-2 O          13.0 
-3 T           7.11
-4 C           6.01
-5 6           3.09
-6 E           2.35</code></pre>
-</div>
-</div>
-<p>The variables <code>X1.1</code>, <code>X2.1</code> have the true location of the letters. Row might be easier to compute than column, because there are only 6 rows. With 30 columns, there are too many location options to check. Grouping into bunches of 5 might help.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>xclass <span class="sc">|&gt;</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(X1<span class="fl">.1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">m =</span> <span class="fu">mean</span>(tm1.<span class="fl">1.</span>j.)) <span class="sc">|&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X1<span class="fl">.1</span>, m)) <span class="sc">+</span> </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Row&quot;</span>) <span class="sc">+</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Time&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img role="img" src="tutorial_files/figure-html/row-time-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Should you adjust by the letter? Probably, because some letters might just be harder to find than others, regardless of where they are hidden. If certain letters happen to have been placed more often in particular rows, then those rows would look artificially slow or fast, when really it’s the letter that’s driving the difference. Adjusting for letter removes this confounding.</p>
-<p>For part (d), the challenge is that each of the 6 tasks has a different average time and a different amount of spread (some tasks are just harder, or more variable, than others). This means a raw time of, say, 10 seconds could be fast for one task and slow for another, so raw times aren’t directly comparable across tasks. Standardising (subtracting the task mean and dividing by the task standard deviation, i.e. a z-score) puts every task on the same scale: it tells you how many standard deviations above or below the class average you were on that task, regardless of how hard the task was overall. Once every task is on this common scale, you can fairly compare your performance across tasks, and even average your standardised scores together to get one overall measure of relative speed. In the sample data there are only two participants, which is not enough to compute standardised scores meaningfully.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="ot">&lt;-</span> xclass <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(char2.<span class="fl">1.</span>j.) <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">m =</span> <span class="fu">mean</span>(tm1.<span class="fl">1.</span>j.),</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">s =</span> <span class="fu">sd</span>(tm1.<span class="fl">1.</span>j.))</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>myresults <span class="ot">&lt;-</span> xclass <span class="sc">|&gt;</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(id <span class="sc">==</span> <span class="dv">1</span>) <span class="co"># Use your id here!</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>myresults <span class="sc">|&gt;</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(tasks, <span class="at">by =</span> <span class="st">&quot;char2.1.j.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">std_score =</span> (tm1.<span class="fl">1.</span>j. <span class="sc">-</span> m)<span class="sc">/</span>s) <span class="sc">|&gt;</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(char2.<span class="fl">1.</span>j., std_score)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  char2.1.j.  std_score
-1          6 -0.4426827
-2          C  1.7538244
-3          N  0.5898853
-4          T  1.6799758
-5          E  0.1338864
-6          O  0.1582762</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
 </section>
 <section id="share-your-github-names-with-your-tutor" class="level2">
 <h2 class="anchored" data-anchor-id="share-your-github-names-with-your-tutor">3. Share your GitHub names with your tutor</h2>
