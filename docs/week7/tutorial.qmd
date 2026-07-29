@@ -112,7 +112,7 @@ The data can be read and processed using this code:
 
 ```{r}
 #| message: false
-melb_df <- read_csv("https://raw.githubusercontent.com/numbats/ddde/main/data/melb_temp_2023-09-08.csv") |>
+melb_df <- read_csv("https://raw.githubusercontent.com/numbats/ddde/main/docs/data/melb_temp_2023-09-08.csv") |>
   clean_names() |>
   rename(temp = maximum_temperature_degree_c) |>
   dplyr::filter(!is.na(temp)) |>

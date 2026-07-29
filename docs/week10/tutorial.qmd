@@ -126,7 +126,7 @@ NAs really have to be 0s. Its likely that the cells were left blank when numbers
 # Convert to long form to join with polygons
 # Make the date variables a proper date
 # Set NAs to 0, this is a reasonable assumption
-covid <- read_csv("https://raw.githubusercontent.com/numbats/ddde/master/data/melb_lga_covid.csv") |>
+covid <- read_csv("https://raw.githubusercontent.com/numbats/ddde/master/docs/data/melb_lga_covid.csv") |>
   mutate(Buloke = as.numeric(ifelse(Buloke == "null", "0", Buloke))) |>
    mutate(Hindmarsh = as.numeric(ifelse(Hindmarsh == "null", "0", Hindmarsh))) |>
    mutate(Towong = as.numeric(ifelse(Towong == "null", "0", Towong))) |>

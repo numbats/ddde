@@ -272,7 +272,7 @@ write_csv(d, file="data/which-transform.csv")
 #| echo: false
 #| fig-width: 8
 #| fig-height: 6
-d <- read_csv("https://raw.githubusercontent.com/numbats/ddde/main/data/which-transform.csv")
+d <- read_csv("https://raw.githubusercontent.com/numbats/ddde/main/docs/data/which-transform.csv")
 p1 <- ggplot(d, aes(x=x1, y=1)) + geom_quasirandom(alpha=0.5)
 p2 <- ggplot(d, aes(x=x2, y=1)) + geom_quasirandom(alpha=0.5)
 p3 <- ggplot(d, aes(x=x3, y=1)) + geom_quasirandom(alpha=0.5)
