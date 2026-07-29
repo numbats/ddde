@@ -4452,6 +4452,11 @@ color: #C8008F;
 <div class="callout-body-container callout-body">
 <div class="unilur-solution">
 <div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/alzheimers.rda&quot;</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(char1.<span class="fl">1.</span>j., char2.<span class="fl">1.</span>j., tm1.<span class="fl">1.</span>j.) <span class="sc">|&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tm1.<span class="fl">1.</span>j.))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           char1.1.j. char2.1.j.  tm1.1.j.
 ans.user.2          M          N 30.839718
@@ -4491,31 +4496,50 @@ ans.user            9          6  3.812386</code></pre>
 <div class="unilur-solution">
 <p>The code to be able to answer the questions above is:</p>
 <div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/alzheimers-class.rda&quot;</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>xclass <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(char2.<span class="fl">1.</span>j.) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">m =</span> <span class="fu">mean</span>(tm1.<span class="fl">1.</span>j.)) <span class="sc">|&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(m))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 2
   char2.1.j.     m
   &lt;chr&gt;      &lt;dbl&gt;
-1 N          17.6 
-2 T          13.4 
-3 C          10.9 
-4 O          10.4 
-5 6           3.84
-6 E           3.39</code></pre>
+1 N          20.8 
+2 O          15.1 
+3 T           7.75
+4 C           5.99
+5 6           5.18
+6 E           4.11</code></pre>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>xclass <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(char2.<span class="fl">1.</span>j.) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">s =</span> <span class="fu">sd</span>(tm1.<span class="fl">1.</span>j.)) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(s))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 2
-  char2.1.j.       s
-  &lt;chr&gt;        &lt;dbl&gt;
-1 N          18.7   
-2 O           9.54  
-3 T           8.95  
-4 C           8.01  
-5 E           1.46  
-6 6           0.0427</code></pre>
+  char2.1.j.     s
+  &lt;chr&gt;      &lt;dbl&gt;
+1 N          17.0 
+2 O          13.0 
+3 T           7.11
+4 C           6.01
+5 6           3.09
+6 E           2.35</code></pre>
 </div>
 </div>
 <p>The variables <code>X1.1</code>, <code>X2.1</code> have the true location of the letters. Row might be easier to compute than column, because there are only 6 rows. With 30 columns, there are too many location options to check. Grouping into bunches of 5 might help.</p>
 <div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Not enough participants - only 2*6 - to be able to answer this one</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># but this is the code anyway</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>xclass <span class="sc">|&gt;</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(X1<span class="fl">.1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">m =</span> <span class="fu">mean</span>(tm1.<span class="fl">1.</span>j.)) <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X1<span class="fl">.1</span>, m)) <span class="sc">+</span> </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Row&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Time&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -4524,16 +4548,27 @@ ans.user            9          6  3.812386</code></pre>
 </div>
 </div>
 </div>
-<p>Should you adjust by the letter? Probably!</p>
+<p>Should you adjust by the letter? Probably, because for each letter there might have been a concentration of low or high rows on any letter. Because we have already seen that the letters have varying times to find, the times for the rows could be inadvertently pulled up or down due the differences in letter times.</p>
 <p>It might be computed similarly to how we would compute your relative speed. Because everyone did the same tasks, we can compare the times. First compute your standardised score across the 6 tasks. It is easier to compare numbers if they are on a standardised scale. This code will show you your relative speed for each task. In the sample data there are only two participants, which is not enough to compute standardised scores. You could also compute your overall average, based on your standardised scores, by averaging them!</p>
 <div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="ot">&lt;-</span> xclass <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(char2.<span class="fl">1.</span>j.) <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">m =</span> <span class="fu">mean</span>(tm1.<span class="fl">1.</span>j.),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">s =</span> <span class="fu">sd</span>(tm1.<span class="fl">1.</span>j.))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>myresults <span class="ot">&lt;-</span> xclass <span class="sc">|&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(id <span class="sc">==</span> <span class="dv">1</span>) <span class="co"># Use your id here!</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>myresults <span class="sc">|&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(tasks, <span class="at">by =</span> <span class="st">&quot;char2.1.j.&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">std_score =</span> (tm1.<span class="fl">1.</span>j. <span class="sc">-</span> m)<span class="sc">/</span>s) <span class="sc">|&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(char2.<span class="fl">1.</span>j., std_score)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>-0.7071068 
-0.7071068 
-18.74217 
-0.1120218 
--0.6312203 
-0.4269558 </code></pre>
+<pre><code>  char2.1.j.  std_score
+1          6 -0.4426827
+2          C  1.7538244
+3          N  0.5898853
+4          T  1.6799758
+5          E  0.1338864
+6          O  0.1582762</code></pre>
 </div>
 </div>
 </div>

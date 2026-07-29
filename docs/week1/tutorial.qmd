@@ -59,6 +59,7 @@ c. Save the dataset to `alzheimers.rda` file, and share with your tutor.
 ::: unilur-solution
 ```{r}
 #| message: false
+#| echo: true
 load(here::here("data/alzheimers.rda"))
 library(dplyr)
 x |>
@@ -82,6 +83,7 @@ The code to be able to answer the questions above is:
 
 ```{r}
 #| message: false
+#| echo: true
 load(here::here("data/alzheimers-class.rda"))
 xclass |>
   group_by(char2.1.j.) |>
@@ -97,6 +99,7 @@ The variables `X1.1`, `X2.1` have the true location of the letters. Row might be
 
 ```{r}
 #| message: false
+#| echo: true
 # Not enough participants - only 2*6 - to be able to answer this one
 # but this is the code anyway
 library(ggplot2)
@@ -109,21 +112,23 @@ xclass |>
     ylab("Time")
 ```
 
-Should you adjust by the letter? Probably!
+Should you adjust by the letter? Probably, because for each letter there might have been a concentration of low or high rows on any letter. Because we have already seen that the letters have varying times to find, the times for the rows could be inadvertently pulled up or down due the differences in letter times.
 
 It might be computed similarly to how we would compute your relative speed. Because everyone did the same tasks, we can compare the times.  First compute your standardised score across the 6 tasks. It is easier to compare numbers if they are on a standardised scale. This code will show you your relative speed for each task. In the sample data there are only two participants, which is not enough to compute standardised scores. You could also compute your overall average, based on your standardised scores, by averaging them!
 
 ```{r}
 #| message: false
+#| echo: true
 tasks <- xclass |>
   group_by(char2.1.j.) |>
   summarise(m = mean(tm1.1.j.),
             s = sd(tm1.1.j.))
 myresults <- xclass |>
   filter(id == 1) # Use your id here!
-for (i in 1:6) {
-  cat((myresults$tm1.1.j[i] - tasks$m[i])/tasks$s[i], "\n")
-}
+myresults |>
+  left_join(tasks, by = "char2.1.j.") |>
+  mutate(std_score = (tm1.1.j. - m)/s) |>
+  select(char2.1.j., std_score)
 ```
 
 :::
