@@ -138,7 +138,7 @@ myresults |>
 
 ## 3. Share your GitHub names with your tutor
 
-Please provide your GitHub username to your tutor, using the Google sheet provided. 
+Please provide your GitHub username to your tutor, using the Google sheet provided. See [this sheet](https://drive.google.com/drive/folders/1vnyfXcKccxoZBr68YLPEO5PDMuN8J1Sk?usp=sharing).
 
 ## 👌 Finishing up
 
