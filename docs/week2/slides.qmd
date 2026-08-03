@@ -20,12 +20,35 @@ format:
     height: 900
     margin: 0.05
     embed-resources: true
+    code-fold: true
+    code-summary: "Show code"
+filters:
+  - timeline
 ---
 
-```{r, include = FALSE}
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+#| echo: false
 source("../setup.R")
 ```
 
+```{r}
+#| label: read-data
+#| message: false
+#| echo: false
+fuel <- read_csv(here::here("data/fuelcheck_u91_sample.csv"))
+fuel_main <- fuel |> filter(group == "main")
+
+fuel_by_type <- read_csv(here::here("data/fuelcheck_latest_by_fueltype.csv"))
+
+transport <- tibble(
+  mode = c("Train", "Car", "Bike", "Train", "Walk", "Car", "Train", "Bus",
+           "Bike", "Train", "Car", "Walk", "Train", "Bike", "Car", "Train",
+           "Bus", "Walk", "Car", "Train", "Bike", "Train", "Car", "Walk")
+)
+```
 
 ## Birth of EDA {background-image="images/tukey_cover.png" background-size="40%" background-position="95% 15%"}
 
@@ -101,6 +124,8 @@ Tukey's expertise is described as [for trial and error learning]{.monash-orange2
 ::: 
 ::::
 
+Today we're taking this seriously: [grab a pen and paper]{.monash-orange2}, because for the rest of the lecture, you'll be doing the arithmetic and drawing the pictures yourself.
+
 ## Setting the frame of mind 
 
 *Excerpt from the introduction*
@@ -112,10 +137,10 @@ This book is based on an important principle.
 **It is important to understand  what you CAN DO before you learn to  measure how WELL you seem to have DONE it.** 
 
 <br>
-Learning first what you can do will  help you to work more easily  and effectively. 
+Learning first what you can do will help you to work more easily  and effectively. 
 
 <br>
-This book is about exploratory data analysis, about looking at data to see  what it seems to say. It concentrates on simple  arithmetic and easy-to-draw pictures. It regards whatever appearances  we have recognized as partial descriptions, and tries to look beneath them for  new insights. Its concern is with  appearance, not with confirmation.
+This book is about exploratory data analysis, about [looking at data to see  what it seems to say]{.monash-blue2}. It concentrates on simple  arithmetic and easy-to-draw pictures. It regards whatever appearances  we have recognized as partial descriptions, and tries to look beneath them for  new insights. Its concern is with  appearance, not with confirmation.
 
 <br>
 **Examples, NOT case histories**
@@ -124,7 +149,7 @@ This book is about exploratory data analysis, about looking at data to see  what
 The book does not exist to make the case that exploratory data analysis is useful. Rather it exists to expose its readers and users to a considerable variety of techniques for looking more effectively at one's data.  The examples are not intended to be complete case histories. Rather they should isolated techniques in action on real data. The emphasis is on general techniques, rather than specific problems. 
 <br>
 
-A basic problem about any body of data is to make it more easily and effectively handleable by minds -- our minds, her mind, his mind. To this general end:
+A basic problem about any body of [data is to make it more easily and effectively handleable by minds]{.monash-blue2} -- our minds, her mind, his mind. To this general end:
 
 - anything that make a simpler description possible makes the description more easily handleable.
 - anything that looks below the previously described surface makes the description more effective.
@@ -135,13 +160,13 @@ A basic problem about any body of data is to make it more easily and effectively
 So we shall always be glad (a) to simplify description and (b) to describe one layer deeper. In particular, 
 
 - to be able to say that we looked one layer deeper, and found nothing, is a definite step forward -- though not as far as to be able to say that we looked deeper and found thus-and-such.
-- to be able to say that "if we change our point of view in the following way ... things are simpler" is always a gain--though not quite so much as to be able to say "if we don't bother to change out point of view (some other) things are equally simple."
+- to be able to say that "if we change our point of view in the following way ... things are simpler" is always a gain--though not quite so much as to be able to say "if we don't bother to change our point of view (some other) things are equally simple."
 
 <br>
 ...
 
 <br>
-Consistent with this view, we believe, is a clear demand that pictures based on exploration of data should *force* their messages upon us. Pictures that emphasize what we already know--"security blankets" to reassure us--are frequently not worth the space they take. Pictures that have to be gone over with a reading glass to see the main point are wasteful of time and inadequate of effect. **The greatest value of a picture** is when it *forces* us to notice **what we never expected to see.**
+Consistent with this view, we believe, is a clear demand that pictures based on exploration of data should *force* their messages upon us. [Pictures that emphasize what we already know--"security blankets" to reassure us--are frequently not worth the space they take.]{.monash-orange2} Pictures that have to be gone over with a reading glass to see the main point are wasteful of time and inadequate of effect. [**The greatest value of a picture** is when it *forces* us to notice **what we never expected to see.**]{.monash-blue2}
 
 <br>
 <center> <b>Confirmation</b> </center>
@@ -159,7 +184,7 @@ Once upon a time, statisticians only explored. Then they learned to confirm exac
 
 <br>
 
-Today, the flexibility of (approximate) confirmation by the jacknife makes it relatively easy to ask, for almost any clearly specified exploration, "How far is it confirmed?"
+Today, the flexibility of (approximate) confirmation by the [jacknife]{.monash-orange2} makes it relatively easy to ask, for almost any clearly specified exploration, "How far is it confirmed?"
 
 <br>
 
@@ -173,7 +198,7 @@ Today, the flexibility of (approximate) confirmation by the jacknife makes it re
 The teacher needs to be careful about assigning problems. Not too many, please. They are likely to take longer than you think. The number supplied is to accommodate diversity of interest, not to keep everybody busy. 
 
 <br>
-Besides the length of our problems, both teacher and student need to realise that many problems do not have a single "right answer". There can be many ways to approach a body of data. Not all are equally good. For some bodies of data this may be clear, but for others we may not be able to tell from a single body of data which approach is preferred. Even several bodies of data about very similar situations may not be enough to show which approach should be preferred. Accordingly, it will often be quite reasonable for different analysts to reach somewhat different analyses.
+Besides the length of our problems, [both teacher and student need to realise that many problems do not have a single "right answer".]{.monsh-blue2} There can be many ways to approach a body of data. Not all are equally good. For some bodies of data this may be clear, but for others we may not be able to tell from a single body of data which approach is preferred. Even several bodies of data about very similar situations may not be enough to show which approach should be preferred. Accordingly, it will often be quite reasonable for different analysts to reach somewhat different analyses.
 
 <br>
 Yet more--to unlock the analysis of a body of day, to find the good way to approach it, may require a key, whose finding is a creative act. Not everyone can be expected to create the key to any one situation. And to continue to paraphrase Barnum, no one can be expected to create a key to each situation he or she meets. 
@@ -184,13 +209,13 @@ Yet more--to unlock the analysis of a body of day, to find the good way to appro
 <br>
 <center><b> Precision</b></center>
 
-The teacher who heeds these words and admits that there need be *no one correct approach* may, I regret to contemplate, still want whatever is done to be digit perfect. (Under such a requirement, the write should still be able to pass the course, but it is not clear whether she would get an "A".) One does, from time to time, have to produce digit-perfect, carefully checked results, but forgiving techniques that are not too distributed by unusual data are also, usually, *little disturbed by SMALL arithmetic errors*. The techniques we discuss here have been chosen to be forgiving. It is hoped, then, that small arithmetic errors will take little off the problem's grades, leaving severe penalties for larger errors, either of arithmetic or concept.
+The teacher who heeds these words and admits that there need be *no one correct approach* may, I regret to contemplate, still want whatever is done to be digit perfect. (Under such a requirement, the write should still be able to pass the course, but it is not clear whether she would get an "A".) One does, from time to time, have to produce digit-perfect, carefully checked results, but forgiving techniques that are not too distributed by unusual data are also, usually, *little disturbed by SMALL arithmetic errors*. [The techniques we discuss here have been chosen to be forgiving. It is hoped, then, that small arithmetic errors will take little off the problem's grades, leaving severe penalties for larger errors, either of arithmetic or concept.]{.monash-blue2}
 
 :::
 
 ## Outline
 
-:::: {.columns}
+:::: {.columns .smaller}
 
 ::: {.column width=45%}
 
@@ -211,7 +236,7 @@ The teacher who heeds these words and admits that there need be *no one correct 
 
 :::
 
-::: {.column width=45%}
+::: {.column .smaller width=45%}
 11. Making two-way analyses
 12. Advanced fits
 13. Three way fits
@@ -225,196 +250,83 @@ The teacher who heeds these words and admits that there need be *no one correct 
 ::: 
 ::::
 
+[Today we're covering the first three (in bold), by hand.]{.monash-blue2}
+
 ## Looking at numbers with Tukey {.transition-slide .center style="text-align: center;"}
 
-
-
-
-## Scratching down numbers
-
-:::: {.columns}
-::: {.column}
-Prices of Chevrolet in the local used car newspaper ads of 1968. 
-
-```{r}
-options(width=20)
-chevrolets <- tibble(
-  prices = c(250, 150, 795, 895, 695, 
-               1699, 1499, 1099, 1693, 1166,
-               688, 1333, 895, 1775, 895,
-               1895, 795))
-#chevrolets$prices
-```
-
-
-:::
-
-::: {.column}
-
-[Stem-and-leaf plot]{.monash-blue2}: still seen in introductory statistics texts
-
-```{r}
-#| echo: false
-fabric_drawing(cid = "canvas1", 
-               cwidth = 1050, 
-               cheight = 450, 
-               cfill = "whitesmoke", 
-               drawingWidth = 3, 
-               gumSize = 10)
-fabric_text_add(cid = "canvas1", textId = "txt1",
-                text = "250, 150, 795, 895, 695,  ",
-                left = 10, top = 10, 
-                fontFamily = "Courier", fontSize = 28)
-fabric_text_add(cid = "canvas1", textId = "txt2",
-                text = "1699, 1499, 1099, 1693,",
-                left = 10, top = 60, 
-                fontFamily = "Courier", fontSize = 28)
-fabric_text_add(cid = "canvas1", textId = "txt3",
-                text = "1166, 688, 1333, 895,",
-                left = 10, top = 110, 
-                fontFamily = "Courier", fontSize = 28)
-fabric_text_add(cid = "canvas1", textId = "txt3",
-                text = "1775, 895, 1895, 795",
-                left = 10, top = 160, 
-                fontFamily = "Courier", fontSize = 28)
-#fabric_curtail(cid = "canvas1", imgsrc = #"images/lecture-02A/chevy.png", 
-#                    type = "background")
-```
-
-:::
-::::
-
-##
-
-:::: {.columns}
-
-::: {.column width=45%}
-
-First stem-and-leaf, first digit on stem, second digit on leaf
-
-<img src="images/canvas1-IMG (5).png" width="90%">
-
-::: 
-
-
-::: {.column width=45% .fragment}
-
-Order any leaves which need it, eg stem 6
-
-<img src="images/canvas1-IMG (6).png" width="90%">
-
-::: 
-::::
-
-::: {.fragment}
-[*A benefit is that the numbers can be read off the plot, but the focus is still on the pattern. Also quantiles like the median, can be computed easily.*]{.smaller}
-:::
-
-##
+## What's a stem-and-leaf plot?
 
 :::: {.columns}
 ::: {.column width=50%}
 
-Shrink the stem
+A quick way to sketch the shape of a batch of numbers using only the digits themselves:
 
-<img src="images/canvas1-IMG (8).png" width="90%">
+- Split each number into a **stem** (leading digit(s)) and a **leaf** (the next digit).
+- Write the stems down a column, smallest to largest.
+- Add each leaf to its stem's row, in the order the data arrive.
+- Then re-sort the leaves within each row, smallest to largest.
 
 ::: 
-
 ::: {.column width=50%}
 
-Shrink the stem more
+[Stem-and-leaf plot]{.monash-blue2}: still seen in introductory statistics texts, and still one of the fastest ways to *see* a small batch of numbers with just pen and paper.
 
-<img src="images/canvas1-IMG (9).png" width="90%">
+The plot doubles as a histogram turned on its side, but keeps every original digit, so you can still read off the numbers, the median, quartiles, and so on.
 
 ::: 
 ::::
+
+## Your turn: petrol prices {.activity-slide}
+
+Unleaded 91 price (cents/litre) at `r nrow(fuel_main)` Sydney service stations, most recent report as of end of July 2026.
+
+[Real data from the NSW Government's FuelCheck scheme, via the [FuelCheck open data API](https://data.nsw.gov.au/data/dataset/fuel-check) (`data.nsw.gov.au`).]{.smallest}
+
+```{r}
+#| label: petrol-data
+options(width = 60)
+print(fuel_main$price, digits = 4)
+```
+
+::: {.callout-tip title="Pen & paper exercise"}
+By hand:
+
+1. Decide on a sensible stem (tens? hundreds?).
+2. Write the stems in a column.
+3. Add a leaf for each price, then sort the leaves within each stem.
+4. What shape do you see? Is it symmetric, or does it lean one way?
+:::
 
 ## And, in R ...
 
-```{r stem, echo=TRUE}
-chevrolets$prices
-stem(chevrolets$prices)
+```{r}
+#| label: stem
+stem(fuel_main$price)
 ```
 
-## 🔖 Remember the tips data
+[Compare this to your hand-drawn version. Does the shape match what you expected?]{.monash-blue2}
 
-```{r echo=FALSE}
-# data comes from http://ggobi.org/book/data/tips.csv
-# but it keeps throwing a download error, so saving locally
-options(width=80, digits=3)
-tips <- read_csv(here::here("data/tips.csv"))
-head(tips$tip, 50)
-```
+## Refining the scale
 
-```{r stem_tips, echo=TRUE}
-stem(tips$tip, scale=0.5, width=120)
-```
-
-
-## Refining the size
-
-:::: {.columns}
-
-::: {.column width=25%}
-
-Five digits per stem
-
-<img src="images/stem_stretched.png" width="100%">
-
-<br>
-
-::: {.fragment}
-[What is the number in parentheses? And why might this be useful?]{.monash-orange2}
-:::
-
-::: 
-
-::: {.column width=25%}
-::: {.fragment}
-
-Two digits per stem
-
-<img src="images/stem_5line.png" width="100%">
-:::
-::: 
-::: {.column style="text-size: 80%; width: 39%;"}
-
-::: {.fragment}
-
-```{r echo=FALSE}
-options(width=100)
-```
-
-```{r stem_tips2, echo=TRUE}
-stem(tips$tip, scale=2)
-```
-
-:::
-
-::: {.fragment}
-[Why no number in parentheses?]{.monash-orange2}
-:::
-
-::: {.fragment}
+The stem doesn't have to be a single digit. Splitting or stretching stems can reveal more, or less, structure.
 
 ```{r}
-median(tips$tip)
+#| label: stem-scale1
+stem(fuel_main$price, scale = 2)
 ```
+
+::: {.fragment}
+[What changed compared to the default?]{.monash-orange2}
 :::
 
-:::
-::::
+## Summary: stem-and-leaf
 
-## Summary
-
-- Stem-and-leaf plots are similar information to the histogram. 
-- Generally it is possible to also read off the numbers, and to then easily calculate median or Q1 or Q3. 
+- Stem-and-leaf plots carry similar information to a histogram, but keep the raw digits.
+- Because the numbers are still there, it's easy to then read off the median, Q1, or Q3 by hand.
 - It's great for small data sets, when you only have pencil and paper.
-- Alternatives are a histogram, (jittered) dotplot, density plot, box plot, violin plot, letter value plot. 
+- Alternatives: histogram, (jittered) dot plot, density plot, box plot, violin plot, letter-value plot.
 
-
-## a different style of number scratching
+## A different style of number-scratching
 
 for categorical variables
 
@@ -425,7 +337,7 @@ We know about
 
 <img src="images/tally.png" width="90%">
 
-but its too easy to 
+but it's too easy to 
 
 <img src="images/tally_error.png" width="90%">
 
@@ -439,38 +351,35 @@ Is this easier?
 <img src="images/squares.png" width="90%">
 
 ::: {.fragment}
-or harder
+or harder?
 :::
 ::: 
 ::::
 
-## Count this data using the squares approach.
+## Your turn: getting to campus {.activity-slide}
 
-:::: {.columns}
+24 postgrad students were asked, in a 2026 survey, how they usually get to campus:
 
-::: {.column width=30%}
+[Illustrative values, constructed for this exercise -- not from an actual survey.]{.smallest}
 
-```{r echo=FALSE}
-options(width=30)
-tips$sex[1:72]
-```
-
-
-::: 
-
-::: {.column width=70%}
 ```{r}
-#| echo: false
-fabric_drawing(cid = "canvas2", 
-               cwidth = 800, 
-               cheight = 750, 
-               cfill = "whitesmoke", 
-               drawingWidth = 3, 
-               gumSize = 10)
+#| label: transport-data
+options(width = 60)
+transport$mode
 ```
 
-::: 
-::::
+::: {.callout-tip title="Pen & paper exercise"}
+By hand, tally these into counts for each mode of transport -- try the five-bar-gate tally first, then try the squares approach. Which method did you find less error-prone?
+:::
+
+Actually, wait. This will be a competition, one group using five-bar-gate tally, and the other group using the squares.
+
+## And, in R ...
+
+```{r}
+#| label: transport-count
+transport |> count(mode)
+```
 
 ## What does it mean to "feel what the data are like?" {.center}
 
@@ -485,6 +394,8 @@ fabric_drawing(cid = "canvas2",
 ::: {.column width=50%}
 
 This is a stem and leaf of the height of the highest peak in each of the 50 US states. 
+
+[Data: US Geological Survey elevation records, as tabulated in Tukey (1977).]{.smallest}
 
 <br>
 
@@ -508,110 +419,141 @@ The states roughly fall into three groups.
 :::: {.columns}
 ::: {.column width="50%"}
 
-```{r}
-#| echo: false
-options(width=25)
-x <- c(-3.2, -1.7, -0.4, 0.1, 0.3, 1.2, 1.5, 1.8, 2.4, 3.0, 4.3, 6.4, 9.8)
-x
-```
+You know the median is the middle number. What's a **hinge**?
 
-You know the median is the middle number. What's a hinge?
+- Find the median: the middle value.
+- Split the data at the median into a lower half and an upper half (include the median itself in both halves if $n$ is odd).
+- The **hinge** is the median of each half.
 
-There are 13 data values here, provided already sorted.  We are going to write them into a Tukey named down-up-down-up pattern, evenly. 
+Hinges are almost always close to Q1 and Q3, but are simpler to find by hand.
 
-[Median will be 7th, hinge will be 4th from each end.]{.monash-blue2}
 ::: 
-
 ::: {.column width="50%"}
 
+Our `r nrow(fuel_main)` petrol prices, sorted:
+
 ```{r}
-#| echo: false
-fabric_drawing(cid = "canvas3", 
-               cwidth = 750, 
-               cheight = 600, 
-               cfill = "whitesmoke", 
-               drawingWidth = 3, 
-               gumSize = 10)
+#| label: petrol-sorted
+options(width = 25)
+print(sort(fuel_main$price), digits = 4)
 ```
+
+[With `r nrow(fuel_main)` values: the median is the ??, and each hinge is the middle of the remaining ?? (the ?? from each end).]{.monash-blue2}
+
 ::: 
 ::::
 
-## Hinges and 5-number summary
+## Your turn: hinges and the 5-number summary {.activity-slide}
+
+::: {.callout-tip title="Pen & paper exercise"}
+Using the stem-and-leaf:
+
+```{r}
+#| label: stem-repeat
+#| echo: false
+stem(fuel_main$price, scale=2)
+```
+
+1. Find the median.
+2. Find the lower and upper hinge.
+3. Find the minimum and maximum.
+4. Write out the full 5-number summary: minimum, lower hinge, median, upper hinge, maximum.
+:::
+
+## Check in R
+
+```{r}
+#| label: fivenum
+print(fivenum(fuel_main$price), digits = 4)
+```
+
+[`fivenum()` returns min, lower hinge, median, upper hinge, max -- using the same depth rule you just used by hand.]{.smaller}
+
+## Box-and-whisker display
 
 :::: {.columns}
-
 ::: {.column width="50%"}
-<img src="images/canvas3-IMG.png" width="80%">
-::: 
 
-::: {.column width="50%"}
-<img src="images/hinges.png" width="80%">
-::: 
+Starting from your 5-number summary:
 
-
-Hinges are almost always the same as Q1 and Q3
-::::
-
-## box-and-whisker display
-
-:::: {.columns}
-
-::: {.column width="50%"}
-<img src="images/canvas3-IMG.png" width="80%">
-::: 
-
-::: {.column width="50%"}
-Starting with a 5-number summary
+- Draw a box from the lower hinge to the upper hinge.
+- Mark the median with a line inside the box.
+- Draw whiskers out to the min and max.
 
 <img src="images/5-number.png" width="80%">
- 
+
 ::: 
-::::
-
-## box-and-whisker display
-
-:::: {.columns}
-
 ::: {.column width="50%"}
 
-Starting with a 5-number summary
+::: {.callout-tip title="Pen & paper exercise"}
+Using your 5-number summary for the petrol prices, draw the box-and-whisker plot by hand on a simple number line.
+:::
 
-<img src="images/5-number.png" width="80%">
- 
-::: 
+::: {.panel-tabset}
 
-::: {.column width="50%"}
+## Check in R
+
+## boxplot
 
 ```{r}
-#| echo: false
-fabric_drawing(cid = "canvas4", 
-               cwidth = 750, 
-               cheight = 600, 
-               cfill = "whitesmoke", 
-               drawingWidth = 3, 
-               gumSize = 10)
+#| label: boxplot
+#| out-width: 50%
+ggplot(fuel_main, aes(x = "", y = price)) +
+  geom_boxplot() +
+  xlab("") 
 ```
 
+:::
+
 ::: 
 ::::
 
-## Identified end values
+
+## Fences and outside values {background-image="images/schematic.png" background-size="20%" background-position="99% 50%"}
+
+::: {.column width="80%"}
+
+- H-spread: difference between the hinges (we would call this Inter-Quartile Range)
+- step: 1.5 times H-spread
+- inner fences: 1 step outside the hinges
+- outer fences: 2 steps outside the hinges
+- the value at each end closest to, but still inside, the inner fence is "adjacent"
+- values between an inner fence and its neighbouring outer fence are "outside"
+- values beyond outer fences are "far out"
+- these rules produce a SCHEMATIC PLOT
+:::
+
+## Your turn: two more stations turn up {.activity-slide}
+
+Two more NSW stations show up in the data: **Independent Goulburn** (200.9c/L) and **Thredbo Service Station** (287.0c/L).
+
+[Goulburn is a regional town on the Hume Highway; Thredbo is a remote alpine resort village -- both plausible reasons for pricier fuel.]{.smallest}
+
+::: {.callout-tip title="Pen & paper exercise"}
+1. Using the H-spread from your hinges, compute the inner and outer fences.
+2. Where do 200.9 and 287.0 fall: inside, outside, or far out?
+3. Would either of the *original* values have been flagged, if you hadn't already seen them as "normal"?
+:::
+
+::: {.panel-tabset}
+
+## Check in R
+
+## boxplot
+
+```{r}
+#| label: boxplot-fences
+#| out-width: 25%
+fuel |>
+  ggplot(aes(x = "", y = price)) +
+  geom_boxplot() +
+  xlab("")
+```
+
+:::
 
 
-:::: {.columns}
-
-::: {.column width="50%"}
-<img src="images/box_and_whisker.png" width="40%">
-
-Why are some individual points singled out? 
-::: 
-
-::: {.column width="50%"}
-<img src="images/schematic.png" width="40%">
-
-Rules for this one may be clearer?
-::: 
-::::
+[Points plotted beyond the whiskers are exactly the "outside" and "far out" values from your fence rule.]{.monash-blue2}
 
 ## {.center style="text-align: center;"}
 
@@ -623,34 +565,33 @@ Rules for this one may be clearer?
 
 [Another Tukey wisdom drop]{.smallest}
 
-
-## Fences and outside values {background-image="images/schematic.png" background-size="20%" background-position="99% 50%"}
-
-::: {.column width="80%"}
-
-- H-spread: difference between the hinges (we would call this Inter-Quartile Range)
-- step: 1.5 times H-spread
-- inner fences: 1 step outside the hinges
-- outer fences: 2 steps outside the hinges
-- the value at each end closest to, but still inside the inner fence are "adjacent"
-- values between an inner fence and its neighbouring outer fence are "outside"
-- values beyond outer fences are "far out"
-- these rules produce a SCHEMATIC PLOT
-:::
-
 ## New statistics: trimeans
 
 The number that comes closest to 
 
 $$\frac{\text{lower hinge} + 2\times \text{median} + \text{upper hinge}}{4}$$
-is the **trimean**.
+is the **trimean** -- a measure of centre that leans on the median, but nudges toward the hinges too.
 
 <br>
-<br>
 
-Think about trimmed means, where we might drop  the highest and lowest 5% of observations.
+Think about trimmed means, where we might drop the highest and lowest 5% of observations, as a related idea.
 
-## Letter value plots: today's solution
+## Your turn: compute the trimean {.activity-slide}
+
+::: {.callout-tip title="Pen & paper exercise"}
+Using your median and hinges from the petrol prices, compute the trimean by hand. How does it compare to the plain mean of the values?
+:::
+
+## Check in R
+
+```{r}
+#| label: trimean
+fn <- fivenum(fuel_main$price)
+print((fn[2] + 2 * fn[3] + fn[4]) / 4, digits = 4)
+print(mean(fuel_main$price), digits = 4)
+```
+
+## Letter-value plots: today's solution
 
 :::: {.columns}
 
@@ -661,22 +602,73 @@ What does a 7-number summary look like?
 
 <img src="images/7-number.png" width="80%">
 
-[How would you make an 11-number summary?]{.monash-orange2}
+[How would you make an 11-number summary? (This one is easier to explore with more data than by hand -- we'll let R do the arithmetic.)]{.monash-orange2}
 ::: 
 ::: {.column width="50%"}
 
-```{r lvplot, echo=TRUE}
-library(lvplot)
-p <- ggplot(mpg, 
-            aes(class, hwy))
-p + geom_lv(aes(fill=..LV..)) + 
-  scale_fill_brewer() + 
-  coord_flip() + 
-  xlab("")
+Petrol price (cents/litre), by fuel type, for `r nrow(fuel_by_type)` NSW service station reports in July 2026 -- still more than you'd want to sort by hand.
+
+[Real data: latest price per station and fuel type, via the NSW FuelCheck open data API.]{.smallest}
+
+```{r}
+#| label: lvplot
+ggplot(fuel_by_type, aes(fuel_type, price)) +
+  geom_lv(aes(fill = after_stat(LV))) +
+  scale_fill_brewer() +
+  xlab("fuel type")
 ```
 
 ::: 
 ::::
+
+## Your turn: choosing k {.activity-slide}
+
+`geom_lv()` picks the number of letter values (`k`) automatically from the sample size, but you can also set it yourself.
+
+::: {.callout-tip title="Using R"}
+1. Re-run the plot with `geom_lv(aes(fill = after_stat(LV)), k = 3)`, then again with `k = 6` and `k = 10`.
+2. What changes as `k` gets smaller? As it gets larger?
+3. Is there a `k` that feels like "too few" letter values? Too many? Why?
+:::
+
+::: {.panel-tabset}
+
+## Check your plots
+
+## k=3
+
+```{r}
+#| label: lvplot-k3
+#| out-width: 25%
+ggplot(fuel_by_type, aes(fuel_type, price)) +
+  geom_lv(aes(fill = after_stat(LV)), k = 3) +
+  scale_fill_brewer() +
+  xlab("fuel type")
+```
+
+## k=6
+
+```{r}
+#| label: lvplot-k6
+#| out-width: 25%
+ggplot(fuel_by_type, aes(fuel_type, price)) +
+  geom_lv(aes(fill = after_stat(LV)), k = 6) +
+  scale_fill_brewer() +
+  xlab("fuel type")
+```
+
+## k=10
+
+```{r}
+#| label: lvplot-k10
+#| out-width: 25%
+ggplot(fuel_by_type, aes(fuel_type, price)) +
+  geom_lv(aes(fill = after_stat(LV)), k = 10) +
+  scale_fill_brewer() +
+  xlab("fuel type")
+```
+
+:::
 
 ---
 ## Box plots are ubiquitous in use today. 
@@ -724,6 +716,43 @@ It turns out that the role of a [zero power]{.monash-orange2}, is for the purpos
 ## Re-express to symmetrize the distribution
 
 <img src="images/logs.png" width="50%">
+
+## Your turn: fixing the skew {.activity-slide}
+
+Your stem-and-leaf of the petrol prices likely showed a mild tail on the high side (the Edgecliff station stands apart from the rest).
+
+::: {.callout-tip title="Usinf R"}
+1. Take $\log_{10}$ of each of the prices (a calculator is fine here).
+2. Sketch a rough stem-and-leaf of the logged values.
+3. Compare the shape to your original stem-and-leaf. Is it more symmetric?
+:::
+
+::: {.smaller}
+::: {.panel-tabset}
+## Check in R
+
+## Original
+
+::: {.smallest}
+```{r}
+#| label: stem-original
+stem(fuel_main$price, scale=2)
+```
+:::
+
+## Log 10
+
+::: {.smallest}
+
+```{r}
+#| label: stem-log
+stem(log10(fuel_main$price), scale=2)
+```
+
+:::
+
+:::
+:::
 
 ## Power ladder {.center style="text-align: center;"}
 <br>
@@ -818,19 +847,79 @@ See some fluctuations in the early years, too. [Note that the log transformation
 
 ["We love data!"]{.monash-white .larger}
 
-## Take-aways
+## Summary: what we learned today
 
-- Tukey's approach was a [reaction to many years of formalising data analysis]{.monash-blue2} using statistical hypothesis testing. 
-- Methodology development in statistical testing was a [reaction to the ad-hoc nature]{.monash-blue2} of data analysis.
-- Complex machine learning models like neural networks are in [reaction to the inability of statistical models]{.monash-blue2} to capture highly non-linear relationships, and depend heavily on the data provided. 
-- Exploring data today is in reaction to the need to [explain complex models]{.monash-blue2}, to support organisations against legal challenges to decisions made from the model
-- It is much [easier]{.monash-blue2} to accomplish [computers]{.monash-blue2}.
-- "Exploratory data analysis" as commonly used today term is unfortunately synonymous with "descriptive statistics", but it is truly much more. Understanding its history from Tukey's advocation helps you see it is the tooling to [discover what you don't know]{.monash-orange2}.
+:::: {.columns}
+
+::: {.column .smaller width="50%"}
+**Scratching down numbers**
+
+- [Stem-and-leaf plots]{.monash-blue2}: keep every digit, still readable as a histogram shape, by hand.
+- [Tallying]{.monash-blue2}: counting categorical data without losing track (five-bar gate, squares).
+
+**Schematic summary**
+
+- [Hinges and the 5-number summary]{.monash-blue2}: median + hinges, found by hand via depth.
+- [Box-and-whisker plots]{.monash-blue2}: built directly from the 5-number summary.
+- [Fences]{.monash-blue2}: H-spread-based rules for flagging "outside" and "far out" values.
+- [Trimean]{.monash-blue2}: a robust measure of centre, weighting the median more than the hinges.
+- [Letter-value plots]{.monash-blue2}: extend the idea to more letter values (`k`) for larger data sets.
+::: 
+
+::: {.column .smaller width="50%"}
+**Easy re-expression**
+
+- Logs, square roots, and reciprocals can [symmetrize a skewed distribution]{.monash-blue2}.
+- The [power ladder]{.monash-blue2} gives a systematic way to choose a transformation, in either direction.
+- Straightening and flattening [help us see relationships more clearly]{.monash-blue2}.
+
+**Underlying theme**
+
+- Tukey's tools are [simple arithmetic and easy-to-draw pictures]{.monash-orange2}, designed to be done with pencil and paper.
+- The goal throughout is *exploration*: looking at data to see what it seems to say, before any formal confirmation.
+::: 
+::::
+
+## The meandering of time {.scrollable}
+
+Each step below is a reaction to the one before it:
+
+::: {.timeline .compact-timeline}
+
+::: {.event data-label="Many decades"}
+**Hypothesis testing formalised**
+:::
+
+::: {.event data-label="1977"}
+**Tukey's EDA**
+Reaction to too much emphasis on hypothesis testing.
+:::
+
+::: {.event data-label="Later 20th C"}
+**Testing methodology matures**
+Reaction to the ad-hoc nature of data analysis.
+:::
+
+::: {.event data-label="Recent decades"}
+**Machine learning**
+Reaction to statistical models missing non-linear relationships.
+:::
+
+::: {.event data-label="Today"}
+**Renewed data exploration**
+Reaction to the need to explain complex models.
+:::
+
+:::
+
+::: {.smaller}
+Throughout, it has become much [easier]{.monash-blue2} to accomplish thanks to [computers]{.monash-blue2}. "Exploratory data analysis" as commonly used today is unfortunately synonymous with "descriptive statistics", but it is truly much more -- it is the tooling to [discover what you don't know]{.monash-orange2}.
+:::
 
 ## Resources
 
-- [wikipedia](https://en.wikipedia.org/wiki/Exploratory_data_analysis)
+- [Exploratory Data Analysis in wikipedia](https://en.wikipedia.org/wiki/Exploratory_data_analysis)
 - John W. Tukey (1977) Exploratory data analysis
 - Data coding using [`tidyverse` suite of R packages](https://www.tidyverse.org) 
-- Sketching canvases made using [`fabricerin`](https://ihaddadenfodil.com/post/fabricerin-a-tutorial/)
-
+- Letter-value plots via the [`lvplot` package](https://cran.r-project.org/package=lvplot)
+- Petrol prices: real prices at NSW service stations, retrieved August 2026 from the [NSW FuelCheck open data API](https://data.nsw.gov.au/data/dataset/fuel-check) (`data.nsw.gov.au`). See `week2/fuelcheck-sample.R` for how both were built.

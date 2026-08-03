@@ -282,6 +282,29 @@ Secondary colours are to be used:
   background-color: #9651A0!important; 
 }
 
+.activity-slide h2::before,
+.activity-slide h3::before {
+  content: "✏️ ";
+}
+
+// Shrink the "Show code" toggle produced by code-fold, so it doesn't
+// compete visually with slide content.
+.reveal .cell > details > summary,
+.reveal details.code-fold > summary {
+  font-size: 0.5em;
+}
+
+// Shrink the quarto-timeline extension's output so it fits within a
+// slide instead of overflowing (also see .scrollable on the slide as
+// a fallback if content is still taller than the viewport).
+.reveal .timeline.compact-timeline {
+  font-size: 0.55em;
+  max-height: 65vh;
+}
+.reveal .timeline.compact-timeline .event {
+  padding: 0.3em;
+}
+
 div.info {
   padding: 1em;
   padding-top: 2px;

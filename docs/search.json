@@ -1194,7 +1194,7 @@
     "href": "week5/worksheetsol.html",
     "title": "ETC5521 Worksheet Week 5",
     "section": "",
-    "text": "1. Understanding the velocity of galaxies\nLoad the galaxies data in the MASS package and answer the following questions based on this dataset.\n\n\nCode\ndata(galaxies, package = \"MASS\")\n\n\nYou can access documentation of the data (if available) using the help function specifying the package name in the argument.\n\n\nCode\nhelp(galaxies, package = \"MASS\")\n\n\n\nWhat does the data contain? And what is the data source?\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\n\nCode\ndata(galaxies, package = \"MASS\")\nglimpse(galaxies)\n\n\n num [1:82] 9172 9350 9483 9558 9775 ...\n\n\nThe data contains velocities in km/sec of 82 galaxies from 6 well-separated conic sections of an unfilled survey of the Corona Borealis region. The original data is from Postman et al. (1986) and this data is from Roeder with 83rd observation removed from the original data as well as typo for the 78th observation.\n\nPostman, M., Huchra, J. P. and Geller, M. J. (1986) Probes of large-scale structures in the Corona Borealis region. Astronomical Journal 92, 1238–1247\nRoeder, K. (1990) Density estimation with confidence sets exemplified by superclusters and voids in galaxies. Journal of the American Statistical Association 85, 617–624.\n\n\n\n\n\n\nBased on the description in the R Help for the data, what would be an appropriate null distribution of this data?\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nThe description in the R help for the data says Multimodality in such surveys is evidence for voids and superclusters in the far universe.\nDeciding on an appropriate null hypothesis is always tricky. If we wanted to test the statement that the data is multimodal, we could compare against a unimodal distribution, either a normal or an exponential depending on what shape we might expect.\nHowever, the published work has already made a claim that the data is multimodal, so it would be interesting to determine if we can generate samples from a multimodal distribution that are indistinguishable from the data.\n\\(H_0:\\) The distribution is multimodal. \\(H_a:\\) The distribution is something other than multimodal.\n\n\n\n\n\nHow many observations are there?\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nThere are 82 observations.\n\n\n\n\n\nIf the data is multimodal, which of the following displays do you think would be the best? Which would not be at all useful?\n\n\nhistogram\nboxplot\ndensity plot\nviolin plot\njittered dot plot\nletter value plot\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nIf you said a density plot, jittered dot plot, or a histogram, you’re on the right track, because each can give a fine resolution for showing modes. (The violin plot is not any different from a density plot, when only looking at one variable.)\n\n\n\n\n\nMake these plots for the data. Experiment with different binwidths for the histogram and different bandwiths for the density plot. Were you right in your thinking about which would be the best?\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\n\nCode\ng &lt;- ggplot(tibble(galaxies), aes(galaxies)) +\n  theme(\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\ng1 &lt;- g + geom_histogram(binwidth = 1000, color = \"white\") \ng2 &lt;- g + geom_boxplot() \ng3 &lt;- g + geom_density() \ng4 &lt;- g + geom_violin(aes(x=galaxies, y=1), draw_quantiles = c(0.25, 0.5, 0.75))\ng5 &lt;- g + geom_quasirandom(aes(x=1, y=galaxies)) + coord_flip() \ng6 &lt;- g + geom_lv(aes(x=1, y=galaxies)) + coord_flip() \n\ng1 + g2 + g3 + g4 + g5 + g6 + plot_layout(ncol = 2)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFit your best mixture model to the data, and simulate 19 nulls to make a lineup. Did you do a good job in matching the distribution, ie does the data plot stand out or not? (Extra bonus: What is the model that you have created? Can you make a plot to show how it looks relative to the observed data?)\n\nThis code might be helpful to get you started. This code generates a jittered dotplot, but you can use your preferred type from part e.\n\n\nCode\n# Fit a mixture model\nlibrary(mixtools)\ngalaxies_fit &lt;- normalmixEM(galaxies, k=3)\n\nset.seed(1138)\ngalaxies_sim1 &lt;- rnormmix(n=length(galaxies), \n              lambda=galaxies_fit$lambda, \n              mu=galaxies_fit$mu,\n              sigma=galaxies_fit$sigma)\n\n\n\n\nCode\n# Plot your data\nggplot(tibble(galaxies_sim1), aes(x=galaxies_sim1)) +\n  geom_quasirandom(aes(x=1, y=galaxies_sim1)) + \n  coord_flip() +\n  theme(\n    aspect.ratio = 0.7,\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\n\n\n\n\nCode\n# Generate null plots and make a lineup\ngalaxies_null &lt;- tibble(.sample=1, galaxies=galaxies_sim1)\nfor (i in 2:19) {\n  gsim &lt;- rnormmix(n=length(galaxies), \n              lambda=galaxies_fit$lambda, \n              mu=galaxies_fit$mu,\n              sigma=galaxies_fit$sigma)\n  galaxies_null &lt;- bind_rows(galaxies_null,\n                             tibble(.sample=i, galaxies=gsim))\n}\ngalaxies_null &lt;- bind_rows(galaxies_null,\n                             tibble(.sample=20,\n                                    galaxies=galaxies))\n# Randomise .sample  to hide data plot\ngalaxies_null$.sample &lt;- rep(sample(1:20, 20), rep(82, 20))\nggplot(tibble(galaxies_null), aes(x=galaxies)) +\n  geom_quasirandom(aes(x=1, y=galaxies)) + \n  facet_wrap(~.sample, ncol=5) +\n  coord_flip() +\n  theme(\n    aspect.ratio = 0.7,\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\n\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\n\nnumber of iterations= 42 \n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\n# To make a rough plot of your model\nplot(galaxies_fit, whichplots=2)\n\n\n\n\n\n\n\n\n\nThe lambda value provides the proportion of mixing, from three normal samples. The mu and sigma give the mean and standard deviations for each of the distributions.\n\n\n\n\n\n\n2. What is the best transformation to make?\nFor each of the variables in the data, which-transform.csv, decide on an appropriate transformation to make the distribution more symmetric for five of the variables and remove discreteness on one variable.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nRemember the power ladder, go down to fix right-skew, and up to fix left-skew. For multi-modal find an explanatory variable, or do a severe quantile transformation."
+    "text": "1. Understanding the velocity of galaxies\nLoad the galaxies data in the MASS package and answer the following questions based on this dataset.\n\n\nCode\ndata(galaxies, package = \"MASS\")\n\n\nYou can access documentation of the data (if available) using the help function specifying the package name in the argument.\n\n\nCode\nhelp(galaxies, package = \"MASS\")\n\n\n\nWhat does the data contain? And what is the data source?\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\n\nCode\ndata(galaxies, package = \"MASS\")\nglimpse(galaxies)\n\n\n num [1:82] 9172 9350 9483 9558 9775 ...\n\n\nThe data contains velocities in km/sec of 82 galaxies from 6 well-separated conic sections of an unfilled survey of the Corona Borealis region. The original data is from Postman et al. (1986) and this data is from Roeder with 83rd observation removed from the original data as well as typo for the 78th observation.\n\nPostman, M., Huchra, J. P. and Geller, M. J. (1986) Probes of large-scale structures in the Corona Borealis region. Astronomical Journal 92, 1238–1247\nRoeder, K. (1990) Density estimation with confidence sets exemplified by superclusters and voids in galaxies. Journal of the American Statistical Association 85, 617–624.\n\n\n\n\n\n\nBased on the description in the R Help for the data, what would be an appropriate null distribution of this data?\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nThe description in the R help for the data says Multimodality in such surveys is evidence for voids and superclusters in the far universe.\nDeciding on an appropriate null hypothesis is always tricky. If we wanted to test the statement that the data is multimodal, we could compare against a unimodal distribution, either a normal or an exponential depending on what shape we might expect.\nHowever, the published work has already made a claim that the data is multimodal, so it would be interesting to determine if we can generate samples from a multimodal distribution that are indistinguishable from the data.\n\\(H_0:\\) The distribution is multimodal. \\(H_a:\\) The distribution is something other than multimodal.\n\n\n\n\n\nHow many observations are there?\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nThere are 82 observations.\n\n\n\n\n\nIf the data is multimodal, which of the following displays do you think would be the best? Which would not be at all useful?\n\n\nhistogram\nboxplot\ndensity plot\nviolin plot\njittered dot plot\nletter value plot\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nIf you said a density plot, jittered dot plot, or a histogram, you’re on the right track, because each can give a fine resolution for showing modes. (The violin plot is not any different from a density plot, when only looking at one variable.)\n\n\n\n\n\nMake these plots for the data. Experiment with different binwidths for the histogram and different bandwiths for the density plot. Were you right in your thinking about which would be the best?\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\n\nCode\ng &lt;- ggplot(tibble(galaxies), aes(galaxies)) +\n  theme(\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\ng1 &lt;- g + geom_histogram(binwidth = 1000, color = \"white\") \ng2 &lt;- g + geom_boxplot() \ng3 &lt;- g + geom_density() \ng4 &lt;- g + geom_violin(aes(x=galaxies, y=1), draw_quantiles = c(0.25, 0.5, 0.75))\ng5 &lt;- g + geom_quasirandom(aes(x=1, y=galaxies)) + coord_flip() \ng6 &lt;- g + geom_lv(aes(x=1, y=galaxies)) + coord_flip() \n\ng1 + g2 + g3 + g4 + g5 + g6 + plot_layout(ncol = 2)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFit your best mixture model to the data, and simulate 19 nulls to make a lineup. Did you do a good job in matching the distribution, ie does the data plot stand out or not? (Extra bonus: What is the model that you have created? Can you make a plot to show how it looks relative to the observed data?)\n\nThis code might be helpful to get you started. This code generates a jittered dotplot, but you can use your preferred type from part e.\n\n\nCode\n# Fit a mixture model\nlibrary(mixtools)\ngalaxies_fit &lt;- normalmixEM(galaxies, k=3)\n\nset.seed(1138)\ngalaxies_sim1 &lt;- rnormmix(n=length(galaxies), \n              lambda=galaxies_fit$lambda, \n              mu=galaxies_fit$mu,\n              sigma=galaxies_fit$sigma)\n\n\n\n\nCode\n# Plot your data\nggplot(tibble(galaxies_sim1), aes(x=galaxies_sim1)) +\n  geom_quasirandom(aes(x=1, y=galaxies_sim1)) + \n  coord_flip() +\n  theme(\n    aspect.ratio = 0.7,\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\n\n\n\n\nCode\n# Generate null plots and make a lineup\ngalaxies_null &lt;- tibble(.sample=1, galaxies=galaxies_sim1)\nfor (i in 2:19) {\n  gsim &lt;- rnormmix(n=length(galaxies), \n              lambda=galaxies_fit$lambda, \n              mu=galaxies_fit$mu,\n              sigma=galaxies_fit$sigma)\n  galaxies_null &lt;- bind_rows(galaxies_null,\n                             tibble(.sample=i, galaxies=gsim))\n}\ngalaxies_null &lt;- bind_rows(galaxies_null,\n                             tibble(.sample=20,\n                                    galaxies=galaxies))\n# Randomise .sample  to hide data plot\ngalaxies_null$.sample &lt;- rep(sample(1:20, 20), rep(82, 20))\nggplot(tibble(galaxies_null), aes(x=galaxies)) +\n  geom_quasirandom(aes(x=1, y=galaxies)) + \n  facet_wrap(~.sample, ncol=5) +\n  coord_flip() +\n  theme(\n    aspect.ratio = 0.7,\n    axis.title = element_blank(),\n    axis.text = element_blank(),\n    axis.ticks = element_blank()\n  )\n\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\n\nnumber of iterations= 109 \n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\n# To make a rough plot of your model\nplot(galaxies_fit, whichplots=2)\n\n\n\n\n\n\n\n\n\nThe lambda value provides the proportion of mixing, from three normal samples. The mu and sigma give the mean and standard deviations for each of the distributions.\n\n\n\n\n\n\n2. What is the best transformation to make?\nFor each of the variables in the data, which-transform.csv, decide on an appropriate transformation to make the distribution more symmetric for five of the variables and remove discreteness on one variable.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nRemember the power ladder, go down to fix right-skew, and up to fix left-skew. For multi-modal find an explanatory variable, or do a severe quantile transformation."
   },
   {
     "objectID": "week5/slides.html#quantitative-variables",
@@ -2342,42 +2342,14 @@
     "href": "week2/worksheet.html",
     "title": "ETC5521 Worksheet Week 2",
     "section": "",
-    "text": "The goal of this worksheet is to search for R packages that can be used for exploring data, and to understand their capacity.\nThe paper The Landscape of R Packages for Automated Exploratory Data Analysis"
-  },
-  {
-    "objectID": "week2/worksheet.html#objectives",
-    "href": "week2/worksheet.html#objectives",
-    "title": "ETC5521 Worksheet Week 2",
-    "section": "",
-    "text": "The goal of this worksheet is to search for R packages that can be used for exploring data, and to understand their capacity.\nThe paper The Landscape of R Packages for Automated Exploratory Data Analysis"
-  },
-  {
-    "objectID": "week2/worksheet.html#tasks",
-    "href": "week2/worksheet.html#tasks",
-    "title": "ETC5521 Worksheet Week 2",
-    "section": "🧩 Tasks",
-    "text": "🧩 Tasks\n\n1. Use AI to obtain a list of packages that might be used for exploring data in R.\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nHere is my list of prompts:\n\nDo you know the paper “The Landscape of R Packages for Automated Exploratory Data Analysis” ?\nWhat would you recommend for R packages for exploratory data analysis today? I’m not sure that the package list in that paper are reasonable 5 years into the future of today.\nWhat about databot? (Notice the botching of author: “Jennifer (Yihui) Cheng and others”)\nAre there any packages that are true to Tukey’s original book Exploratory Data Analysis from 1977?\nWhat about packages that can explore high-dimensional data?\n\n\n\n\n\n\n\n2. Pick one of the packages mentioned and give it a spin\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n3. Use AI to learn about some of Tukey’s most famous quotes, and also what methods he developed are still in common use today\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nMy prompts:\n\nWhat are some of Tukey’s most famous quotes?\nWhat are some methods that Tukey developed that are commonly used today?\nWhat are the R packages that have these methods?\nWhat about the letter value plot?\nI would love a “A one-page “Tukey contributions” teaching sheet for a lecture?” Can you provide it as a quarto document?\n\n\n\n\n\n\n\n4. For the gardenR example from week 1, ask for some Tukey-style summaries of this data\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nPrompt:\n\nFor the gardenR package data, could you make some code to do Tukey-like summaries of the data?"
+    "text": "Nothing here this week, all embedded in the lecture slides"
   },
   {
     "objectID": "week2/worksheetsol.html",
     "href": "week2/worksheetsol.html",
     "title": "ETC5521 Worksheet Week 2",
     "section": "",
-    "text": "The goal of this worksheet is to search for R packages that can be used for exploring data, and to understand their capacity.\nThe paper The Landscape of R Packages for Automated Exploratory Data Analysis"
-  },
-  {
-    "objectID": "week2/worksheetsol.html#objectives",
-    "href": "week2/worksheetsol.html#objectives",
-    "title": "ETC5521 Worksheet Week 2",
-    "section": "",
-    "text": "The goal of this worksheet is to search for R packages that can be used for exploring data, and to understand their capacity.\nThe paper The Landscape of R Packages for Automated Exploratory Data Analysis"
-  },
-  {
-    "objectID": "week2/worksheetsol.html#tasks",
-    "href": "week2/worksheetsol.html#tasks",
-    "title": "ETC5521 Worksheet Week 2",
-    "section": "🧩 Tasks",
-    "text": "🧩 Tasks\n\n1. Use AI to obtain a list of packages that might be used for exploring data in R.\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nHere is my list of prompts:\n\nDo you know the paper “The Landscape of R Packages for Automated Exploratory Data Analysis” ?\nWhat would you recommend for R packages for exploratory data analysis today? I’m not sure that the package list in that paper are reasonable 5 years into the future of today.\nWhat about databot? (Notice the botching of author: “Jennifer (Yihui) Cheng and others”)\nAre there any packages that are true to Tukey’s original book Exploratory Data Analysis from 1977?\nWhat about packages that can explore high-dimensional data?\n\n\n\n\n\n\n\n2. Pick one of the packages mentioned and give it a spin\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\n\n\n\n\n\n\n3. Use AI to learn about some of Tukey’s most famous quotes, and also what methods he developed are still in common use today\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nMy prompts:\n\nWhat are some of Tukey’s most famous quotes?\nWhat are some methods that Tukey developed that are commonly used today?\nWhat are the R packages that have these methods?\nWhat about the letter value plot?\nI would love a “A one-page “Tukey contributions” teaching sheet for a lecture?” Can you provide it as a quarto document?\n\n\n\n\n\n\n\n4. For the gardenR example from week 1, ask for some Tukey-style summaries of this data\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nPrompt:\n\nFor the gardenR package data, could you make some code to do Tukey-like summaries of the data?"
+    "text": "Nothing here this week, all embedded in the lecture slides"
   },
   {
     "objectID": "week2/index.html",
@@ -3238,7 +3210,7 @@
     "href": "index.html#tutors",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Tutors",
-    "text": "Tutors\n\nKrisanat Anukarnsakulchularp\n\nTutorials: 1-2pm, 2-3pm, 3-4pm CL_Anc-19.LTB_387\nConsultation: TBA Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 232A"
+    "text": "Tutors\n\nKrisanat Anukarnsakulchularp\n\nTutorials: 1-2pm, 2-3pm, 3-4pm CL_Anc-19.LTB_387\nConsultation: Friday 12-2pm Clayton: Education Blg, its blg 6, 29 Ancora Imparo way, Room 231"
   },
   {
     "objectID": "index.html#weekly-schedule",
@@ -3605,18 +3577,25 @@
     "text": "Taking a glimpse back in time\nis possible with the American Statistical Association video lending library.\n We’re going to watch John Tukey talking about exploring high-dimensional data with an amazing new computer in 1973, four years before the EDA book.\n\nLook out for these things:\nTukey’s expertise is described as for trial and error learning and the computing equipment.\n\n\nFirst 4.25 minutes"
   },
   {
+    "objectID": "week2/slides.html#section",
+    "href": "week2/slides.html#section",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Today we’re taking this seriously: grab a pen and paper, because for the rest of the lecture, you’ll be doing the arithmetic and drawing the pictures yourself."
+  },
+  {
     "objectID": "week2/slides.html#setting-the-frame-of-mind",
     "href": "week2/slides.html#setting-the-frame-of-mind",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Setting the frame of mind",
-    "text": "Setting the frame of mind\nExcerpt from the introduction\n\nThis book is based on an important principle.\n It is important to understand what you CAN DO before you learn to measure how WELL you seem to have DONE it.\n Learning first what you can do will help you to work more easily and effectively.\n This book is about exploratory data analysis, about looking at data to see what it seems to say. It concentrates on simple arithmetic and easy-to-draw pictures. It regards whatever appearances we have recognized as partial descriptions, and tries to look beneath them for new insights. Its concern is with appearance, not with confirmation.\n Examples, NOT case histories\n The book does not exist to make the case that exploratory data analysis is useful. Rather it exists to expose its readers and users to a considerable variety of techniques for looking more effectively at one’s data. The examples are not intended to be complete case histories. Rather they should isolated techniques in action on real data. The emphasis is on general techniques, rather than specific problems. \nA basic problem about any body of data is to make it more easily and effectively handleable by minds – our minds, her mind, his mind. To this general end:\n\nanything that make a simpler description possible makes the description more easily handleable.\nanything that looks below the previously described surface makes the description more effective.\n\n\nSo we shall always be glad (a) to simplify description and (b) to describe one layer deeper. In particular,\n\nto be able to say that we looked one layer deeper, and found nothing, is a definite step forward – though not as far as to be able to say that we looked deeper and found thus-and-such.\nto be able to say that “if we change our point of view in the following way … things are simpler” is always a gain–though not quite so much as to be able to say “if we don’t bother to change out point of view (some other) things are equally simple.”\n\n …\n Consistent with this view, we believe, is a clear demand that pictures based on exploration of data should force their messages upon us. Pictures that emphasize what we already know–“security blankets” to reassure us–are frequently not worth the space they take. Pictures that have to be gone over with a reading glass to see the main point are wasteful of time and inadequate of effect. The greatest value of a picture is when it forces us to notice what we never expected to see.\n\n\nConfirmation\n\n\nThe principles and procedures of what we call confirmatory data analysis are both widely used and one of the great intellectual products of our century. In their simplest form, these principles and procedures look at a sample–and at what that sample has told us about the population from which it came–and assess the precision with which our inference from sample to population is made. We can no longer get along without confirmatory data analysis. But we need not start with it.\n\nThe best way to understand what CAN be done is not longer–if it ever was–to ask what things could, in the current state of our skill techniques, be confirmed (positively or negatively). Even more understanding is lost if we consider each thing we can do to data only in terms of some set of very restrictive assumptions under which that thing is best possible–assumptions we know we CANNOT check in practice.\n\nExploration AND confirmation\n\nOnce upon a time, statisticians only explored. Then they learned to confirm exactly–to confirm a few things exactly, each under very specific circumstances. As they emphasized exact confirmation, their techniques inevitably became less flexible. The connection of the most used techniques with past insights was weakened. Anything to which confirmatory procedure was not explicitly attached was decried as “mere descriptive statistics”, no matter how much we learned from it.\n\nToday, the flexibility of (approximate) confirmation by the jacknife makes it relatively easy to ask, for almost any clearly specified exploration, “How far is it confirmed?”\n\nToday, exploratory and confirmatory can–and should–proceed side by side. This book, of course, considers only exploratory techniques, leaving confirmatory techniques to other accounts.\n\n\n About the problems \n\n The teacher needs to be careful about assigning problems. Not too many, please. They are likely to take longer than you think. The number supplied is to accommodate diversity of interest, not to keep everybody busy.\n Besides the length of our problems, both teacher and student need to realise that many problems do not have a single “right answer”. There can be many ways to approach a body of data. Not all are equally good. For some bodies of data this may be clear, but for others we may not be able to tell from a single body of data which approach is preferred. Even several bodies of data about very similar situations may not be enough to show which approach should be preferred. Accordingly, it will often be quite reasonable for different analysts to reach somewhat different analyses.\n Yet more–to unlock the analysis of a body of day, to find the good way to approach it, may require a key, whose finding is a creative act. Not everyone can be expected to create the key to any one situation. And to continue to paraphrase Barnum, no one can be expected to create a key to each situation he or she meets.\n To learn about data analysis, it is right that each of us try many things that do not work–that we tackle more problems than we make expert analyses of. We often learn less from an expertly done analysis than from one where, by not trying something, we missed–at least until we were told about it–an opportunity to learn more. Each teacher needs to recognize this in grading and commenting on problems.\n\n\n Precision\n\nThe teacher who heeds these words and admits that there need be no one correct approach may, I regret to contemplate, still want whatever is done to be digit perfect. (Under such a requirement, the write should still be able to pass the course, but it is not clear whether she would get an “A”.) One does, from time to time, have to produce digit-perfect, carefully checked results, but forgiving techniques that are not too distributed by unusual data are also, usually, little disturbed by SMALL arithmetic errors. The techniques we discuss here have been chosen to be forgiving. It is hoped, then, that small arithmetic errors will take little off the problem’s grades, leaving severe penalties for larger errors, either of arithmetic or concept."
+    "text": "Setting the frame of mind\nExcerpt from the introduction\n\nThis book is based on an important principle.\n It is important to understand what you CAN DO before you learn to measure how WELL you seem to have DONE it.\n Learning first what you can do will help you to work more easily and effectively.\n This book is about exploratory data analysis, about looking at data to see what it seems to say. It concentrates on simple arithmetic and easy-to-draw pictures. It regards whatever appearances we have recognized as partial descriptions, and tries to look beneath them for new insights. Its concern is with appearance, not with confirmation.\n Examples, NOT case histories\n The book does not exist to make the case that exploratory data analysis is useful. Rather it exists to expose its readers and users to a considerable variety of techniques for looking more effectively at one’s data. The examples are not intended to be complete case histories. Rather they should isolated techniques in action on real data. The emphasis is on general techniques, rather than specific problems. \nA basic problem about any body of data is to make it more easily and effectively handleable by minds – our minds, her mind, his mind. To this general end:\n\nanything that make a simpler description possible makes the description more easily handleable.\nanything that looks below the previously described surface makes the description more effective.\n\n\nSo we shall always be glad (a) to simplify description and (b) to describe one layer deeper. In particular,\n\nto be able to say that we looked one layer deeper, and found nothing, is a definite step forward – though not as far as to be able to say that we looked deeper and found thus-and-such.\nto be able to say that “if we change our point of view in the following way … things are simpler” is always a gain–though not quite so much as to be able to say “if we don’t bother to change our point of view (some other) things are equally simple.”\n\n …\n Consistent with this view, we believe, is a clear demand that pictures based on exploration of data should force their messages upon us. Pictures that emphasize what we already know–“security blankets” to reassure us–are frequently not worth the space they take. Pictures that have to be gone over with a reading glass to see the main point are wasteful of time and inadequate of effect. The greatest value of a picture is when it forces us to notice what we never expected to see.\n\n\nConfirmation\n\n\nThe principles and procedures of what we call confirmatory data analysis are both widely used and one of the great intellectual products of our century. In their simplest form, these principles and procedures look at a sample–and at what that sample has told us about the population from which it came–and assess the precision with which our inference from sample to population is made. We can no longer get along without confirmatory data analysis. But we need not start with it.\n\nThe best way to understand what CAN be done is not longer–if it ever was–to ask what things could, in the current state of our skill techniques, be confirmed (positively or negatively). Even more understanding is lost if we consider each thing we can do to data only in terms of some set of very restrictive assumptions under which that thing is best possible–assumptions we know we CANNOT check in practice.\n\nExploration AND confirmation\n\nOnce upon a time, statisticians only explored. Then they learned to confirm exactly–to confirm a few things exactly, each under very specific circumstances. As they emphasized exact confirmation, their techniques inevitably became less flexible. The connection of the most used techniques with past insights was weakened. Anything to which confirmatory procedure was not explicitly attached was decried as “mere descriptive statistics”, no matter how much we learned from it.\n\nToday, the flexibility of (approximate) confirmation by the jacknife makes it relatively easy to ask, for almost any clearly specified exploration, “How far is it confirmed?”\n\nToday, exploratory and confirmatory can–and should–proceed side by side. This book, of course, considers only exploratory techniques, leaving confirmatory techniques to other accounts.\n\n\n About the problems \n\n The teacher needs to be careful about assigning problems. Not too many, please. They are likely to take longer than you think. The number supplied is to accommodate diversity of interest, not to keep everybody busy.\n Besides the length of our problems, both teacher and student need to realise that many problems do not have a single “right answer”. There can be many ways to approach a body of data. Not all are equally good. For some bodies of data this may be clear, but for others we may not be able to tell from a single body of data which approach is preferred. Even several bodies of data about very similar situations may not be enough to show which approach should be preferred. Accordingly, it will often be quite reasonable for different analysts to reach somewhat different analyses.\n Yet more–to unlock the analysis of a body of day, to find the good way to approach it, may require a key, whose finding is a creative act. Not everyone can be expected to create the key to any one situation. And to continue to paraphrase Barnum, no one can be expected to create a key to each situation he or she meets.\n To learn about data analysis, it is right that each of us try many things that do not work–that we tackle more problems than we make expert analyses of. We often learn less from an expertly done analysis than from one where, by not trying something, we missed–at least until we were told about it–an opportunity to learn more. Each teacher needs to recognize this in grading and commenting on problems.\n\n\n Precision\n\nThe teacher who heeds these words and admits that there need be no one correct approach may, I regret to contemplate, still want whatever is done to be digit perfect. (Under such a requirement, the write should still be able to pass the course, but it is not clear whether she would get an “A”.) One does, from time to time, have to produce digit-perfect, carefully checked results, but forgiving techniques that are not too distributed by unusual data are also, usually, little disturbed by SMALL arithmetic errors. The techniques we discuss here have been chosen to be forgiving. It is hoped, then, that small arithmetic errors will take little off the problem’s grades, leaving severe penalties for larger errors, either of arithmetic or concept."
   },
   {
     "objectID": "week2/slides.html#outline",
     "href": "week2/slides.html#outline",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Outline",
-    "text": "Outline\n\n\n\nScratching down numbers\nSchematic summary\nEasy re-expression\nEffective comparison\nPlots of relationship\nStraightening out plots (using three points)\nSmoothing sequences\nParallel and wandering schematic plots\nDelineations of batches of points\nUsing two-way analyses\n\n\n\n\n\nMaking two-way analyses\nAdvanced fits\nThree way fits\nLooking in two or more ways at batched of points\nCounted fractions\nBetter smoothing\nCounts in bin after bin\nProduct-ratio plots\nShapes of distributions\nMathematical distributions"
+    "text": "Outline\n\n\n\nScratching down numbers\nSchematic summary\nEasy re-expression\nEffective comparison\nPlots of relationship\nStraightening out plots (using three points)\nSmoothing sequences\nParallel and wandering schematic plots\nDelineations of batches of points\nUsing two-way analyses\n\n\n\n\n\nMaking two-way analyses\nAdvanced fits\nThree way fits\nLooking in two or more ways at batched of points\nCounted fractions\nBetter smoothing\nCounts in bin after bin\nProduct-ratio plots\nShapes of distributions\nMathematical distributions\n\n\nToday we’re covering the first three (in bold), by hand."
   },
   {
     "objectID": "week2/slides.html#looking-at-numbers-with-tukey",
@@ -3626,67 +3605,60 @@
     "text": "Looking at numbers with Tukey"
   },
   {
-    "objectID": "week2/slides.html#scratching-down-numbers",
-    "href": "week2/slides.html#scratching-down-numbers",
+    "objectID": "week2/slides.html#whats-a-stem-and-leaf-plot",
+    "href": "week2/slides.html#whats-a-stem-and-leaf-plot",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Scratching down numbers",
-    "text": "Scratching down numbers\n\n\nPrices of Chevrolet in the local used car newspaper ads of 1968.\n\noptions(width=20)\nchevrolets &lt;- tibble(\n  prices = c(250, 150, 795, 895, 695, \n               1699, 1499, 1099, 1693, 1166,\n               688, 1333, 895, 1775, 895,\n               1895, 795))\n#chevrolets$prices\n\n\nStem-and-leaf plot: still seen in introductory statistics texts"
+    "section": "What’s a stem-and-leaf plot?",
+    "text": "What’s a stem-and-leaf plot?\n\n\nA quick way to sketch the shape of a batch of numbers using only the digits themselves:\n\nSplit each number into a stem (leading digit(s)) and a leaf (the next digit).\nWrite the stems down a column, smallest to largest.\nAdd each leaf to its stem’s row, in the order the data arrive.\nThen re-sort the leaves within each row, smallest to largest.\n\n\nStem-and-leaf plot: still seen in introductory statistics texts, and still one of the fastest ways to see a small batch of numbers with just pen and paper.\nThe plot doubles as a histogram turned on its side, but keeps every original digit, so you can still read off the numbers, the median, quartiles, and so on."
   },
   {
-    "objectID": "week2/slides.html#section-1",
-    "href": "week2/slides.html#section-1",
+    "objectID": "week2/slides.html#your-turn-petrol-prices",
+    "href": "week2/slides.html#your-turn-petrol-prices",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "",
-    "text": "First stem-and-leaf, first digit on stem, second digit on leaf\n\n\nOrder any leaves which need it, eg stem 6\n\n\n\nA benefit is that the numbers can be read off the plot, but the focus is still on the pattern. Also quantiles like the median, can be computed easily."
-  },
-  {
-    "objectID": "week2/slides.html#section-2",
-    "href": "week2/slides.html#section-2",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "",
-    "text": "Shrink the stem\n\n\nShrink the stem more"
+    "section": "Your turn: petrol prices",
+    "text": "Your turn: petrol prices\nUnleaded 91 price (cents/litre) at 39 Sydney service stations, most recent report as of end of July 2026.\nReal data from the NSW Government’s FuelCheck scheme, via the FuelCheck open data API (data.nsw.gov.au).\n\n\nShow code\noptions(width = 60)\nprint(fuel_main$price, digits = 4)\n\n\n [1] 190.9 180.7 182.9 179.9 190.9 199.9 182.7 182.7 189.9\n[10] 181.9 194.9 186.9 185.9 184.9 185.7 183.7 186.9 181.9\n[19] 189.9 183.9 187.7 189.7 184.5 192.7 181.7 190.9 185.9\n[28] 189.9 187.9 184.5 185.9 195.9 187.9 189.9 206.9 192.9\n[37] 188.9 191.9 194.7\n\n\n\n\n\n\n\n\n\nPen & paper exercise\n\n\nBy hand:\n\nDecide on a sensible stem (tens? hundreds?).\nWrite the stems in a column.\nAdd a leaf for each price, then sort the leaves within each stem.\nWhat shape do you see? Is it symmetric, or does it lean one way?"
   },
   {
     "objectID": "week2/slides.html#and-in-r",
     "href": "week2/slides.html#and-in-r",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "And, in R …",
-    "text": "And, in R …\n\nchevrolets$prices\n\n [1]  250  150  795\n [4]  895  695 1699\n [7] 1499 1099 1693\n[10] 1166  688 1333\n[13]  895 1775  895\n[16] 1895  795\n\nstem(chevrolets$prices)\n\n\n  The decimal point is 3 digit(s) to the right of the |\n\n  0 | 23\n  0 | 7788999\n  1 | 123\n  1 | 57789"
+    "text": "And, in R …\n\n\nShow code\nstem(fuel_main$price)\n\n\n\n  The decimal point is 1 digit(s) to the right of the |\n\n  17 | \n  18 | 0122233344\n  18 | 5556666778889\n  19 | 00000111233\n  19 | 556\n  20 | 0\n  20 | 7\n\n\nCompare this to your hand-drawn version. Does the shape match what you expected?"
   },
   {
-    "objectID": "week2/slides.html#remember-the-tips-data",
-    "href": "week2/slides.html#remember-the-tips-data",
+    "objectID": "week2/slides.html#refining-the-scale",
+    "href": "week2/slides.html#refining-the-scale",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "🔖 Remember the tips data",
-    "text": "🔖 Remember the tips data\n\n\n [1] 1.01 1.66 3.50 3.31 3.61 4.71 2.00 3.12 1.96 3.23 1.71 5.00 1.57 3.00 3.02\n[16] 3.92 1.67 3.71 3.50 3.35 4.08 2.75 2.23 7.58 3.18 2.34 2.00 2.00 4.30 3.00\n[31] 1.45 2.50 3.00 2.45 3.27 3.60 2.00 3.07 2.31 5.00 2.24 2.54 3.06 1.32 5.60\n[46] 3.00 5.00 6.00 2.05 3.00\n\n\n\nstem(tips$tip, scale=0.5, width=120)\n\n\n  The decimal point is at the |\n\n   1 | 000001233334445555555555556666667777788889\n   2 | 000000000000000000000000000000000000000001122222223333555555555555556666677788899\n   3 | 00000000000000000000000011111112222222333344445555555555555666778889\n   4 | 0000000000001112233335777\n   5 | 00000000001122226799\n   6 | 05577\n   7 | 6\n   8 | \n   9 | 0\n  10 | 0"
+    "section": "Refining the scale",
+    "text": "Refining the scale\nThe stem doesn’t have to be a single digit. Splitting or stretching stems can reveal more, or less, structure.\n\n\nShow code\nstem(fuel_main$price, scale = 2)\n\n\n\n  The decimal point is at the |\n\n  178 | 9\n  180 | 7799\n  182 | 77979\n  184 | 5597999\n  186 | 99799\n  188 | 979999\n  190 | 9999\n  192 | 79\n  194 | 799\n  196 | \n  198 | 9\n  200 | \n  202 | \n  204 | \n  206 | 9\n\n\n\nWhat changed compared to the default?"
   },
   {
-    "objectID": "week2/slides.html#refining-the-size",
-    "href": "week2/slides.html#refining-the-size",
+    "objectID": "week2/slides.html#summary-stem-and-leaf",
+    "href": "week2/slides.html#summary-stem-and-leaf",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Refining the size",
-    "text": "Refining the size\n\n\nFive digits per stem\n\n\n\nWhat is the number in parentheses? And why might this be useful?\n\n\n\nTwo digits per stem\n\n\n\n\n\nstem(tips$tip, scale=2)\n\n\n  The decimal point is 1 digit(s) to the left of the |\n\n   10 | 0000107\n   12 | 55526\n   14 | 44578000000000678\n   16 | 1346781356\n   18 | 032678\n   20 | 00000000000000000000000000000000011233598\n   22 | 0033440114\n   24 | 5700000000002456\n   26 | 01412455\n   28 | 382\n   30 | 00000000000000000000000267891245688\n   32 | 133557159\n   34 | 0188800000000015\n   36 | 0181566\n   38 | 2\n   40 | 0000000000006889\n   42 | 09004\n   44 | 0\n   46 | 713\n   48 | \n   50 | 000000000074567\n   52 | 0\n   54 | \n   56 | 05\n   58 | 52\n   60 | 0\n   62 | \n   64 | 00\n   66 | 03\n   68 | \n   70 | \n   72 | \n   74 | 8\n   76 | \n   78 | \n   80 | \n   82 | \n   84 | \n   86 | \n   88 | \n   90 | 0\n   92 | \n   94 | \n   96 | \n   98 | \n  100 | 0\n\n\n\n\nWhy no number in parentheses?\n\n\n\nmedian(tips$tip)\n\n[1] 2.9"
-  },
-  {
-    "objectID": "week2/slides.html#summary",
-    "href": "week2/slides.html#summary",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Summary",
-    "text": "Summary\n\nStem-and-leaf plots are similar information to the histogram.\nGenerally it is possible to also read off the numbers, and to then easily calculate median or Q1 or Q3.\nIt’s great for small data sets, when you only have pencil and paper.\nAlternatives are a histogram, (jittered) dotplot, density plot, box plot, violin plot, letter value plot."
+    "section": "Summary: stem-and-leaf",
+    "text": "Summary: stem-and-leaf\n\nStem-and-leaf plots carry similar information to a histogram, but keep the raw digits.\nBecause the numbers are still there, it’s easy to then read off the median, Q1, or Q3 by hand.\nIt’s great for small data sets, when you only have pencil and paper.\nAlternatives: histogram, (jittered) dot plot, density plot, box plot, violin plot, letter-value plot."
   },
   {
     "objectID": "week2/slides.html#a-different-style-of-number-scratching",
     "href": "week2/slides.html#a-different-style-of-number-scratching",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "a different style of number scratching",
-    "text": "a different style of number scratching\nfor categorical variables\n\n\nWe know about\n\nbut its too easy to\n\nmake a mistake\n\nIs this easier?\n\n\nor harder"
+    "section": "A different style of number-scratching",
+    "text": "A different style of number-scratching\nfor categorical variables\n\n\nWe know about\n\nbut it’s too easy to\n\nmake a mistake\n\nIs this easier?\n\n\nor harder?"
   },
   {
-    "objectID": "week2/slides.html#count-this-data-using-the-squares-approach.",
-    "href": "week2/slides.html#count-this-data-using-the-squares-approach.",
+    "objectID": "week2/slides.html#your-turn-getting-to-campus",
+    "href": "week2/slides.html#your-turn-getting-to-campus",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Count this data using the squares approach.",
-    "text": "Count this data using the squares approach.\n\n\n\n\n [1] \"F\" \"M\" \"M\" \"M\" \"F\" \"M\"\n [7] \"M\" \"M\" \"M\" \"M\" \"M\" \"F\"\n[13] \"M\" \"M\" \"F\" \"M\" \"F\" \"M\"\n[19] \"F\" \"M\" \"M\" \"F\" \"F\" \"M\"\n[25] \"M\" \"M\" \"M\" \"M\" \"M\" \"F\"\n[31] \"M\" \"M\" \"F\" \"F\" \"M\" \"M\"\n[37] \"M\" \"F\" \"M\" \"M\" \"M\" \"M\"\n[43] \"M\" \"M\" \"M\" \"M\" \"M\" \"M\"\n[49] \"M\" \"M\" \"M\" \"F\" \"F\" \"M\"\n[55] \"M\" \"M\" \"M\" \"F\" \"M\" \"M\"\n[61] \"M\" \"M\" \"M\" \"M\" \"M\" \"M\"\n[67] \"F\" \"F\" \"M\" \"M\" \"M\" \"F\""
+    "section": "Your turn: getting to campus",
+    "text": "Your turn: getting to campus\n24 postgrad students were asked, in a 2026 survey, how they usually get to campus:\nIllustrative values, constructed for this exercise – not from an actual survey.\n\n\nShow code\noptions(width = 60)\ntransport$mode\n\n\n [1] \"Train\" \"Car\"   \"Bike\"  \"Train\" \"Walk\"  \"Car\"   \"Train\"\n [8] \"Bus\"   \"Bike\"  \"Train\" \"Car\"   \"Walk\"  \"Train\" \"Bike\" \n[15] \"Car\"   \"Train\" \"Bus\"   \"Walk\"  \"Car\"   \"Train\" \"Bike\" \n[22] \"Train\" \"Car\"   \"Walk\" \n\n\n\n\n\n\n\n\n\nPen & paper exercise\n\n\nBy hand, tally these into counts for each mode of transport – try the five-bar-gate tally first, then try the squares approach. Which method did you find less error-prone?\n\n\n\n\nActually, wait. This will be a competition, one group using five-bar-gate tally, and the other group using the squares."
+  },
+  {
+    "objectID": "week2/slides.html#and-in-r-1",
+    "href": "week2/slides.html#and-in-r-1",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "And, in R …",
+    "text": "And, in R …\n\n\nShow code\ntransport |&gt; count(mode)\n\n\n# A tibble: 5 × 2\n  mode      n\n  &lt;chr&gt; &lt;int&gt;\n1 Bike      4\n2 Bus       2\n3 Car       6\n4 Train     8\n5 Walk      4"
   },
   {
     "objectID": "week2/slides.html#what-does-it-mean-to-feel-what-the-data-are-like",
@@ -3696,15 +3668,15 @@
     "text": "What does it mean to “feel what the data are like?”"
   },
   {
-    "objectID": "week2/slides.html#section-3",
-    "href": "week2/slides.html#section-3",
+    "objectID": "week2/slides.html#section-1",
+    "href": "week2/slides.html#section-1",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
-    "text": "This is a stem and leaf of the height of the highest peak in each of the 50 US states.\n\nThe states roughly fall into three groups.\n\nIt’s not really surprising, but we can imagine this grouping. Alaska is in a group of its own, with a much higher high peak. Then the Rocky Mountain states, California, Washington and Hawaii also have high peaks, and the rest of the states lump together."
+    "text": "This is a stem and leaf of the height of the highest peak in each of the 50 US states.\nData: US Geological Survey elevation records, as tabulated in Tukey (1977).\n\nThe states roughly fall into three groups.\n\nIt’s not really surprising, but we can imagine this grouping. Alaska is in a group of its own, with a much higher high peak. Then the Rocky Mountain states, California, Washington and Hawaii also have high peaks, and the rest of the states lump together."
   },
   {
-    "objectID": "week2/slides.html#section-4",
-    "href": "week2/slides.html#section-4",
+    "objectID": "week2/slides.html#section-2",
+    "href": "week2/slides.html#section-2",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
     "text": "More summaries of numerical values"
@@ -3714,70 +3686,91 @@
     "href": "week2/slides.html#hinges-and-5-number-summaries",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Hinges and 5-number summaries",
-    "text": "Hinges and 5-number summaries\n\n\n\n\n [1] -3.2 -1.7 -0.4  0.1\n [5]  0.3  1.2  1.5  1.8\n [9]  2.4  3.0  4.3  6.4\n[13]  9.8\n\n\nYou know the median is the middle number. What’s a hinge?\nThere are 13 data values here, provided already sorted. We are going to write them into a Tukey named down-up-down-up pattern, evenly.\nMedian will be 7th, hinge will be 4th from each end."
+    "text": "Hinges and 5-number summaries\n\n\nYou know the median is the middle number. What’s a hinge?\n\nFind the median: the middle value.\nSplit the data at the median into a lower half and an upper half (include the median itself in both halves if \\(n\\) is odd).\nThe hinge is the median of each half.\n\nHinges are almost always close to Q1 and Q3, but are simpler to find by hand.\n\nOur 39 petrol prices, sorted:\n\n\nShow code\noptions(width = 25)\nprint(sort(fuel_main$price), digits = 4)\n\n\n [1] 179.9 180.7 181.7\n [4] 181.9 181.9 182.7\n [7] 182.7 182.9 183.7\n[10] 183.9 184.5 184.5\n[13] 184.9 185.7 185.9\n[16] 185.9 185.9 186.9\n[19] 186.9 187.7 187.9\n[22] 187.9 188.9 189.7\n[25] 189.9 189.9 189.9\n[28] 189.9 190.9 190.9\n[31] 190.9 191.9 192.7\n[34] 192.9 194.7 194.9\n[37] 195.9 199.9 206.9\n\n\nWith 39 values: the median is the ??, and each hinge is the middle of the remaining ?? (the ?? from each end)."
   },
   {
-    "objectID": "week2/slides.html#hinges-and-5-number-summary",
-    "href": "week2/slides.html#hinges-and-5-number-summary",
+    "objectID": "week2/slides.html#your-turn-hinges-and-the-5-number-summary",
+    "href": "week2/slides.html#your-turn-hinges-and-the-5-number-summary",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Hinges and 5-number summary",
-    "text": "Hinges and 5-number summary\n\n\n\n\n\nHinges are almost always the same as Q1 and Q3"
+    "section": "Your turn: hinges and the 5-number summary",
+    "text": "Your turn: hinges and the 5-number summary\n\n\n\n\n\n\n\nPen & paper exercise\n\n\nUsing the stem-and-leaf:\n\n\n\n  The decimal point is at the |\n\n  178 | 9\n  180 | 7799\n  182 | 77979\n  184 | 5597999\n  186 | 99799\n  188 | 979999\n  190 | 9999\n  192 | 79\n  194 | 799\n  196 | \n  198 | 9\n  200 | \n  202 | \n  204 | \n  206 | 9\n\n\n\nFind the median.\nFind the lower and upper hinge.\nFind the minimum and maximum.\nWrite out the full 5-number summary: minimum, lower hinge, median, upper hinge, maximum."
+  },
+  {
+    "objectID": "week2/slides.html#check-in-r",
+    "href": "week2/slides.html#check-in-r",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Check in R",
+    "text": "Check in R\n\n\nShow code\nprint(fivenum(fuel_main$price), digits = 4)\n\n\n[1] 179.9 184.2 187.7\n[4] 190.9 206.9\n\n\nfivenum() returns min, lower hinge, median, upper hinge, max – using the same depth rule you just used by hand."
   },
   {
     "objectID": "week2/slides.html#box-and-whisker-display",
     "href": "week2/slides.html#box-and-whisker-display",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "box-and-whisker display",
-    "text": "box-and-whisker display\n\n\n\n\nStarting with a 5-number summary"
-  },
-  {
-    "objectID": "week2/slides.html#box-and-whisker-display-1",
-    "href": "week2/slides.html#box-and-whisker-display-1",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "box-and-whisker display",
-    "text": "box-and-whisker display\n\n\nStarting with a 5-number summary"
-  },
-  {
-    "objectID": "week2/slides.html#identified-end-values",
-    "href": "week2/slides.html#identified-end-values",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Identified end values",
-    "text": "Identified end values\n\n\n\nWhy are some individual points singled out?\n\n\nRules for this one may be clearer?"
-  },
-  {
-    "objectID": "week2/slides.html#section-5",
-    "href": "week2/slides.html#section-5",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "",
-    "text": "Isn’t this imposing a belief?"
-  },
-  {
-    "objectID": "week2/slides.html#section-6",
-    "href": "week2/slides.html#section-6",
-    "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "",
-    "text": "There is no excuse for failing to plot and look\nAnother Tukey wisdom drop"
+    "section": "Box-and-whisker display",
+    "text": "Box-and-whisker display\n\n\nStarting from your 5-number summary:\n\nDraw a box from the lower hinge to the upper hinge.\nMark the median with a line inside the box.\nDraw whiskers out to the min and max.\n\n\n\n\n\n\n\n\n\n\nPen & paper exercise\n\n\nUsing your 5-number summary for the petrol prices, draw the box-and-whisker plot by hand on a simple number line.\n\n\n\n\n\nCheck in Rboxplot\n\n\n\n\n\n\n\nShow code\nggplot(fuel_main, aes(x = \"\", y = price)) +\n  geom_boxplot() +\n  xlab(\"\")"
   },
   {
     "objectID": "week2/slides.html#fences-and-outside-values",
     "href": "week2/slides.html#fences-and-outside-values",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Fences and outside values",
-    "text": "Fences and outside values\n\n\nH-spread: difference between the hinges (we would call this Inter-Quartile Range)\nstep: 1.5 times H-spread\ninner fences: 1 step outside the hinges\nouter fences: 2 steps outside the hinges\nthe value at each end closest to, but still inside the inner fence are “adjacent”\nvalues between an inner fence and its neighbouring outer fence are “outside”\nvalues beyond outer fences are “far out”\nthese rules produce a SCHEMATIC PLOT"
+    "text": "Fences and outside values\n\n\nH-spread: difference between the hinges (we would call this Inter-Quartile Range)\nstep: 1.5 times H-spread\ninner fences: 1 step outside the hinges\nouter fences: 2 steps outside the hinges\nthe value at each end closest to, but still inside, the inner fence is “adjacent”\nvalues between an inner fence and its neighbouring outer fence are “outside”\nvalues beyond outer fences are “far out”\nthese rules produce a SCHEMATIC PLOT"
+  },
+  {
+    "objectID": "week2/slides.html#your-turn-two-more-stations-turn-up",
+    "href": "week2/slides.html#your-turn-two-more-stations-turn-up",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Your turn: two more stations turn up",
+    "text": "Your turn: two more stations turn up\nTwo more NSW stations show up in the data: Independent Goulburn (200.9c/L) and Thredbo Service Station (287.0c/L).\nGoulburn is a regional town on the Hume Highway; Thredbo is a remote alpine resort village – both plausible reasons for pricier fuel.\n\n\n\n\n\n\n\nPen & paper exercise\n\n\n\nUsing the H-spread from your hinges, compute the inner and outer fences.\nWhere do 200.9 and 287.0 fall: inside, outside, or far out?\nWould either of the original values have been flagged, if you hadn’t already seen them as “normal”?\n\n\n\n\n\n\nCheck in Rboxplot\n\n\n\n\n\n\n\nShow code\nfuel |&gt;\n  ggplot(aes(x = \"\", y = price)) +\n  geom_boxplot() +\n  xlab(\"\")\n\n\n\n\n\n\n\n\n\n\n\n\nPoints plotted beyond the whiskers are exactly the “outside” and “far out” values from your fence rule."
+  },
+  {
+    "objectID": "week2/slides.html#section-3",
+    "href": "week2/slides.html#section-3",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "Isn’t this imposing a belief?"
+  },
+  {
+    "objectID": "week2/slides.html#section-4",
+    "href": "week2/slides.html#section-4",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "",
+    "text": "There is no excuse for failing to plot and look\nAnother Tukey wisdom drop"
   },
   {
     "objectID": "week2/slides.html#new-statistics-trimeans",
     "href": "week2/slides.html#new-statistics-trimeans",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "New statistics: trimeans",
-    "text": "New statistics: trimeans\nThe number that comes closest to\n\\[\\frac{\\text{lower hinge} + 2\\times \\text{median} + \\text{upper hinge}}{4}\\] is the trimean.\n \nThink about trimmed means, where we might drop the highest and lowest 5% of observations."
+    "text": "New statistics: trimeans\nThe number that comes closest to\n\\[\\frac{\\text{lower hinge} + 2\\times \\text{median} + \\text{upper hinge}}{4}\\] is the trimean – a measure of centre that leans on the median, but nudges toward the hinges too.\n\nThink about trimmed means, where we might drop the highest and lowest 5% of observations, as a related idea."
+  },
+  {
+    "objectID": "week2/slides.html#your-turn-compute-the-trimean",
+    "href": "week2/slides.html#your-turn-compute-the-trimean",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Your turn: compute the trimean",
+    "text": "Your turn: compute the trimean\n\n\n\n\n\n\n\nPen & paper exercise\n\n\nUsing your median and hinges from the petrol prices, compute the trimean by hand. How does it compare to the plain mean of the values?"
+  },
+  {
+    "objectID": "week2/slides.html#check-in-r-3",
+    "href": "week2/slides.html#check-in-r-3",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Check in R",
+    "text": "Check in R\n\n\nShow code\nfn &lt;- fivenum(fuel_main$price)\nprint((fn[2] + 2 * fn[3] + fn[4]) / 4, digits = 4)\n\n\n[1] 187.6\n\n\nShow code\nprint(mean(fuel_main$price), digits = 4)\n\n\n[1] 188.1"
   },
   {
     "objectID": "week2/slides.html#letter-value-plots-todays-solution",
     "href": "week2/slides.html#letter-value-plots-todays-solution",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Letter value plots: today’s solution",
-    "text": "Letter value plots: today’s solution\n\n\nWhy break the data into quarters? Why not eighths, sixteenths? k-number summaries?\nWhat does a 7-number summary look like?\n\nHow would you make an 11-number summary?\n\n\nlibrary(lvplot)\np &lt;- ggplot(mpg, \n            aes(class, hwy))\np + geom_lv(aes(fill=..LV..)) + \n  scale_fill_brewer() + \n  coord_flip() + \n  xlab(\"\")"
+    "section": "Letter-value plots: today’s solution",
+    "text": "Letter-value plots: today’s solution\n\n\nWhy break the data into quarters? Why not eighths, sixteenths? k-number summaries?\nWhat does a 7-number summary look like?\n\nHow would you make an 11-number summary? (This one is easier to explore with more data than by hand – we’ll let R do the arithmetic.)\n\nPetrol price (cents/litre), by fuel type, for 7919 NSW service station reports in July 2026 – still more than you’d want to sort by hand.\nReal data: latest price per station and fuel type, via the NSW FuelCheck open data API.\n\n\nShow code\nggplot(fuel_by_type, aes(fuel_type, price)) +\n  geom_lv(aes(fill = after_stat(LV))) +\n  scale_fill_brewer() +\n  xlab(\"fuel type\")"
+  },
+  {
+    "objectID": "week2/slides.html#your-turn-choosing-k",
+    "href": "week2/slides.html#your-turn-choosing-k",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Your turn: choosing k",
+    "text": "Your turn: choosing k\ngeom_lv() picks the number of letter values (k) automatically from the sample size, but you can also set it yourself.\n\n\n\n\n\n\n\nUsing R\n\n\n\nRe-run the plot with geom_lv(aes(fill = after_stat(LV)), k = 3), then again with k = 6 and k = 10.\nWhat changes as k gets smaller? As it gets larger?\nIs there a k that feels like “too few” letter values? Too many? Why?\n\n\n\n\n\n\nCheck your plotsk=3k=6k=10\n\n\n\n\n\n\n\nShow code\nggplot(fuel_by_type, aes(fuel_type, price)) +\n  geom_lv(aes(fill = after_stat(LV)), k = 3) +\n  scale_fill_brewer() +\n  xlab(\"fuel type\")\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow code\nggplot(fuel_by_type, aes(fuel_type, price)) +\n  geom_lv(aes(fill = after_stat(LV)), k = 6) +\n  scale_fill_brewer() +\n  xlab(\"fuel type\")\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow code\nggplot(fuel_by_type, aes(fuel_type, price)) +\n  geom_lv(aes(fill = after_stat(LV)), k = 10) +\n  scale_fill_brewer() +\n  xlab(\"fuel type\")"
   },
   {
     "objectID": "week2/slides.html#box-plots-are-ubiquitous-in-use-today.",
@@ -3808,6 +3801,13 @@
     "text": "Re-express to symmetrize the distribution"
   },
   {
+    "objectID": "week2/slides.html#your-turn-fixing-the-skew",
+    "href": "week2/slides.html#your-turn-fixing-the-skew",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "Your turn: fixing the skew",
+    "text": "Your turn: fixing the skew\nYour stem-and-leaf of the petrol prices likely showed a mild tail on the high side (the Edgecliff station stands apart from the rest).\n\n\n\n\n\n\n\nUsinf R\n\n\n\nTake \\(\\log_{10}\\) of each of the prices (a calculator is fine here).\nSketch a rough stem-and-leaf of the logged values.\nCompare the shape to your original stem-and-leaf. Is it more symmetric?\n\n\n\n\n\n\n\nCheck in ROriginalLog 10\n\n\n\n\n\n\n\n\nShow code\nstem(fuel_main$price, scale=2)\n\n\n\n  The decimal point is at the |\n\n  178 | 9\n  180 | 7799\n  182 | 77979\n  184 | 5597999\n  186 | 99799\n  188 | 979999\n  190 | 9999\n  192 | 79\n  194 | 799\n  196 | \n  198 | 9\n  200 | \n  202 | \n  204 | \n  206 | 9\n\n\n\n\n\n\n\n\nShow code\nstem(log10(fuel_main$price), scale=2)\n\n\n\n  The decimal point is 2 digit(s) to the left of the |\n\n  225 | 579\n  226 | 002224\n  226 | 56679999\n  227 | 22344\n  227 | 689999\n  228 | 1113\n  228 | 559\n  229 | 02\n  229 | \n  230 | 1\n  230 | \n  231 | \n  231 | 6"
+  },
+  {
     "objectID": "week2/slides.html#power-ladder",
     "href": "week2/slides.html#power-ladder",
     "title": "ETC5521: Diving Deeply into Data Exploration",
@@ -3815,8 +3815,8 @@
     "text": "Power ladder\n \n⬅️ fix RIGHT-skewed values  \n-2, -1, -1/2, 0 (log), 1/3, 1/2, 1, 2, 3, 4\n\nfix LEFT-skewed values ➡️"
   },
   {
-    "objectID": "week2/slides.html#section-7",
-    "href": "week2/slides.html#section-7",
+    "objectID": "week2/slides.html#section-5",
+    "href": "week2/slides.html#section-5",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
     "text": "We now regard re-expression as a tool, something to let us do a better job of grasping. The grasping is done with the eye and the better job is through a more symmetric appearance.\nAnother Tukey wisdom drop"
@@ -3843,25 +3843,32 @@
     "text": "Rules and advice\n\n\n\nGraphics are friendly.\nArithmetic often exists to make graphs possible.\nGraphs force us to notice the unexpected; nothing could be more important.\nDifferent graphs show us quite different aspects of the same data.\nThere is no more reason to expect one graph to “tell all” than to expect one number to do the same.\n“Plotting \\(y\\) against \\(x\\)” involves significant choices–how we express one or both variables can be crucial.\n\n\n\n\n\nThe first step in penetrating plotting is to straighten out the dependence or point scatter as much as reasonable.\nPlotting \\(y^2\\), \\(\\sqrt{y}\\), \\(log(y)\\), \\(-1/y\\) or the like instead of \\(y\\) is one plausible step to take in search of straightness.\nPlotting \\(x^2\\), \\(\\sqrt{x}\\), \\(log(x)\\), \\(-1/x\\) or the like instead of \\(x\\) is another.\nOnce the plot is straightened, we can usually gain much by flattening it, usually by plotting residuals.\nWhen plotting scatters, we may need to be careful about how we express \\(x\\) and \\(y\\) in order to avoid concealment by crowding."
   },
   {
-    "objectID": "week2/slides.html#section-8",
-    "href": "week2/slides.html#section-8",
+    "objectID": "week2/slides.html#section-6",
+    "href": "week2/slides.html#section-6",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "",
     "text": "The book is a digest of 🌟 tricks and treats 🌟 of massaging numbers and drafting displays.\nMany of the tools have made it into today’s analyses in various ways. Many have not.\nNotice the word developments too: froots, fences. Tukey brought you the word “software”\nThe temperament of the book is an inspiration for the mind-set for this unit. There is such delight in working with numbers!\n“We love data!”"
   },
   {
-    "objectID": "week2/slides.html#take-aways",
-    "href": "week2/slides.html#take-aways",
+    "objectID": "week2/slides.html#summary-what-we-learned-today",
+    "href": "week2/slides.html#summary-what-we-learned-today",
     "title": "ETC5521: Diving Deeply into Data Exploration",
-    "section": "Take-aways",
-    "text": "Take-aways\n\nTukey’s approach was a reaction to many years of formalising data analysis using statistical hypothesis testing.\nMethodology development in statistical testing was a reaction to the ad-hoc nature of data analysis.\nComplex machine learning models like neural networks are in reaction to the inability of statistical models to capture highly non-linear relationships, and depend heavily on the data provided.\nExploring data today is in reaction to the need to explain complex models, to support organisations against legal challenges to decisions made from the model\nIt is much easier to accomplish computers.\n“Exploratory data analysis” as commonly used today term is unfortunately synonymous with “descriptive statistics”, but it is truly much more. Understanding its history from Tukey’s advocation helps you see it is the tooling to discover what you don’t know."
+    "section": "Summary: what we learned today",
+    "text": "Summary: what we learned today\n\n\nScratching down numbers\n\nStem-and-leaf plots: keep every digit, still readable as a histogram shape, by hand.\nTallying: counting categorical data without losing track (five-bar gate, squares).\n\nSchematic summary\n\nHinges and the 5-number summary: median + hinges, found by hand via depth.\nBox-and-whisker plots: built directly from the 5-number summary.\nFences: H-spread-based rules for flagging “outside” and “far out” values.\nTrimean: a robust measure of centre, weighting the median more than the hinges.\nLetter-value plots: extend the idea to more letter values (k) for larger data sets.\n\n\nEasy re-expression\n\nLogs, square roots, and reciprocals can symmetrize a skewed distribution.\nThe power ladder gives a systematic way to choose a transformation, in either direction.\nStraightening and flattening help us see relationships more clearly.\n\nUnderlying theme\n\nTukey’s tools are simple arithmetic and easy-to-draw pictures, designed to be done with pencil and paper.\nThe goal throughout is exploration: looking at data to see what it seems to say, before any formal confirmation."
+  },
+  {
+    "objectID": "week2/slides.html#the-meandering-of-time",
+    "href": "week2/slides.html#the-meandering-of-time",
+    "title": "ETC5521: Diving Deeply into Data Exploration",
+    "section": "The meandering of time",
+    "text": "The meandering of time\nEach step below is a reaction to the one before it:\n\n\nHypothesis testing formalised\n\n\nTukey’s EDA Reaction to too much emphasis on hypothesis testing.\n\n\nTesting methodology matures Reaction to the ad-hoc nature of data analysis.\n\n\nMachine learning Reaction to statistical models missing non-linear relationships.\n\n\nRenewed data exploration Reaction to the need to explain complex models.\n\n\n\nThroughout, it has become much easier to accomplish thanks to computers. “Exploratory data analysis” as commonly used today is unfortunately synonymous with “descriptive statistics”, but it is truly much more – it is the tooling to discover what you don’t know."
   },
   {
     "objectID": "week2/slides.html#resources",
     "href": "week2/slides.html#resources",
     "title": "ETC5521: Diving Deeply into Data Exploration",
     "section": "Resources",
-    "text": "Resources\n\nwikipedia\nJohn W. Tukey (1977) Exploratory data analysis\nData coding using tidyverse suite of R packages\nSketching canvases made using fabricerin"
+    "text": "Resources\n\nExploratory Data Analysis in wikipedia\nJohn W. Tukey (1977) Exploratory data analysis\nData coding using tidyverse suite of R packages\nLetter-value plots via the lvplot package\nPetrol prices: real prices at NSW service stations, retrieved August 2026 from the NSW FuelCheck open data API (data.nsw.gov.au). See week2/fuelcheck-sample.R for how both were built."
   },
   {
     "objectID": "week2/tutorialsol.html",
@@ -3882,14 +3889,14 @@
     "href": "week2/tutorialsol.html#preparation",
     "title": "ETC5521 Tutorial 2",
     "section": "🔧 Preparation",
-    "text": "🔧 Preparation\nThe reading for this week is EDA Case Study: Bay area blues. It is authored by Hadley Wickham, Deborah F. Swayne, and David Poole. It appeared in the book “Beautiful Data” edited by Jeff Hammerbacher and Toby Segaran. Not all the chapters in the book are good examples of data analysis, though.\n\nComplete the weekly quiz, before the deadline!\nMake sure you have this list of R packages installed:\n\n\ninstall.packages(c(\"tidyverse\", \"forcats\", \"patchwork\"))\n\n\nNote that the code and data for reproducing their analysis can be found here.\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+    "text": "🔧 Preparation\nThe reading for this week is EDA Case Study: Bay area blues. It is authored by Hadley Wickham, Deborah F. Swayne, and David Poole. It appeared in the book “Beautiful Data” edited by Jeff Hammerbacher and Toby Segaran. Not all the chapters in the book are good examples of data analysis, though.\n\nMake sure you have this list of R packages installed:\n\n\ninstall.packages(c(\"tidyverse\", \"forcats\", \"patchwork\"))\n\n\nNote that the code and data for reproducing their analysis can be found here.\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
   },
   {
     "objectID": "week2/tutorialsol.html#exercises",
     "href": "week2/tutorialsol.html#exercises",
     "title": "ETC5521 Tutorial 2",
     "section": "📥 Exercises",
-    "text": "📥 Exercises\nPoint your web browser to the github site for the analysis, https://github.com/hadley/sfhousing. The main data file is house-sales.csv. Read this data into your R session. (🛑 ARE YOU USING A PROJECT FOR THIS UNIT? IF NOT, STOP and OPEN IT NOW.)\nYou can read the data in directly from the web site using this code:\n\nlibrary(tidyverse)\nlibrary(patchwork)\nlibrary(forcats)\nsales &lt;- read_csv(\"https://raw.githubusercontent.com/hadley/sfhousing/master/house-sales.csv\")\n\n\n1. What’s in the data?\n\nIs the data in tidy form?\nOf the variables in the data, which are\n\nnumeric?\ncategorical?\ntemporal?\n\nWhat would be an appropriate plot to make to examine the\n\nnumeric variables?\ncategorical variables?\na categorical and numeric variable?\na temporal variable and a numeric variable?\n\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\nYes\n\nprice, br, lsqft, bsqft\ncounty, city, zip, street\nyear, date, datesold\n\n\nscatterplots\nbar charts, pie charts, mosaic\nfacet by the categorical variable. could be boxplots, or density plots, or facetted scatterplots to look at multiple numeric variables\n\ntime series plot, connect lines to indicate time, maybe need to aggregate over time to get one value per time point\n\n\n\n\n\n\n\n\n2. Time series plots\nReproduce the time series plots of weekly average price and volume of sales.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nNote, stacking time series plots helps compare the series relative to the time point.\n\nsales_weekly &lt;- sales |&gt;\n  group_by(date) |&gt;\n  summarise(av_price = mean(price, na.rm=TRUE),\n            volume = n())\np1 &lt;- ggplot(sales_weekly, aes(x=date,\n                               y=av_price)) +\n  geom_line() +\n  scale_y_continuous(\"Average price (millions)\", \n              breaks = seq(500000, 800000, 50000), \n              labels = c(\"0.50\", \"0.55\", \"0.60\", \"0.65\",\n                         \"0.70\", \"0.75\", \"0.80\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\") +\n  theme(aspect.ratio = 0.5)\np2 &lt;- ggplot(sales_weekly, aes(x=date, y=volume)) + geom_line() +\n  scale_y_continuous(\"Number of sales\", \n              breaks = seq(500,3000,500), \n              labels = c(\"500\", \"1,000\", \"1,500\", \"2,000\",\n                         \"2,500\", \"3,000\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\") +\n  theme(aspect.ratio = 0.5)\np1 + p2 + plot_layout(ncol=1)\n\n\n\n\n\n\n\n3. Correlation between series\nIt looks like volume goes down as price goes up. There is a better plot to make to examine this. What is it? Make the plot. After making the plot, report what you learn about the apparent correlation.\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\nggplot(sales_weekly, aes(x=av_price, y=volume)) +\n  geom_point() +\n  theme(aspect.ratio = 1)\n\n\n\n\n\n\n\n\nAny correlation is very weak, and negative.\n\n\n\n\n\n\n4. Geographic differences\nThink about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn.\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\nggplot(sales, \n       aes(x = fct_reorder(county, \n                  price, na.rm=TRUE), \n           y = price)) +\n         geom_boxplot() + \n  scale_y_log10() +\n  xlab(\"\") +\n  coord_flip()\n\n\n\n\n\n\n\n\nMarin County has the highest prices on average, and San Joaquin the lowest. The lowest priced house was sold in Sonoma County. The highest priced properties and lowest priced are pretty similar from one county to another - that is, the variability within county is large.\n\n\n\n\n\n\n5. The Rich Get Richer and the Poor Get Poorer\nIn the section “The Rich Get Richer and the Poor Get Poorer” there are some interesting transformations of the data, and unusual types of plots. Explain why looking at proportional change in value refines the view of price movement in different higher vs lower priced properties.\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nThe transformation makes changes relative to the initial average price at the start of the time period. All curves produced will start from the same point. This means that we only need to compare the end points of each line, saving us from calculating differences between lines relative to the difference at the beginning.\n\n\n\n\n\n\n6. Anything surprising?\nWere there any findings that surprised the authors? Or would surprise you?\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nI found it interesting that Mountain View had no decline in housing prices. This city has the headquarters of many of the world’s largest technology companies are in the city, including Google, Mozilla Foundation, Symantec, and Intuit.\n\n\n\n\n\n\n7. Additional resources\nSome of the findings were compared against information gathered from external sources. Can you point to an example of this, and how the other information was used to support or question the finding?\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nAll of this is consistent with what we have learned about subprime mortgages since the housing bust hit the headlines.\nSubprime mortgages were offered on little collateral which meant they were quite risky, and they tended to be on the lower end of the housing market. This information was in all the news headlines at the time, and the analysis that these authors have done was checked against the common reporting at the time. The data was consistent with these reports."
+    "text": "📥 Exercises\nPoint your web browser to the github site for the analysis, https://github.com/hadley/sfhousing. The main data file is house-sales.csv. Read this data into your R session. (🛑 ARE YOU USING A PROJECT FOR THIS UNIT? IF NOT, STOP and OPEN IT NOW.)\nYou can read the data in directly from the web site using this code:\n\nlibrary(tidyverse)\nlibrary(patchwork)\nlibrary(forcats)\nsales &lt;- read_csv(\"https://raw.githubusercontent.com/hadley/sfhousing/master/house-sales.csv\")\n\n\n1. What’s in the data? (This is a check your knowledge and skills exercise)\n\nIs the data in tidy form?\nOf the variables in the data, which are\n\nnumeric?\ncategorical?\ntemporal?\n\nWhat would be an appropriate plot to make to examine the\n\nnumeric variables?\ncategorical variables?\na categorical and numeric variable?\na temporal variable and a numeric variable?\n\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\nYes\n\nprice, br, lsqft, bsqft\ncounty, city, zip, street\nyear, date, datesold\n\n\nscatterplots\nbar charts, pie charts, mosaic\nfacet by the categorical variable. could be boxplots, or density plots, or facetted scatterplots to look at multiple numeric variables\n\ntime series plot, connect lines to indicate time, maybe need to aggregate over time to get one value per time point\n\n\n\n\n\n\n\n\n2. Time series plots\nReproduce the time series plots of weekly average price and volume of sales.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nNote, stacking time series plots helps compare the series relative to the time point.\n\nsales_weekly &lt;- sales |&gt;\n  group_by(date) |&gt;\n  summarise(av_price = mean(price, na.rm=TRUE),\n            volume = n())\np1 &lt;- ggplot(sales_weekly, aes(x=date,\n                               y=av_price)) +\n  geom_line() +\n  scale_y_continuous(\"Average price (millions)\", \n              breaks = seq(500000, 800000, 50000), \n              labels = c(\"0.50\", \"0.55\", \"0.60\", \"0.65\",\n                         \"0.70\", \"0.75\", \"0.80\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\") +\n  theme(aspect.ratio = 0.5)\np2 &lt;- ggplot(sales_weekly, aes(x=date, y=volume)) + geom_line() +\n  scale_y_continuous(\"Number of sales\", \n              breaks = seq(500,3000,500), \n              labels = c(\"500\", \"1,000\", \"1,500\", \"2,000\",\n                         \"2,500\", \"3,000\")) +\n  scale_x_date(\"\", date_breaks = \"1 years\", \n               minor_breaks = NULL, \n               date_labels = \"%Y\") +\n  theme(aspect.ratio = 0.5)\np1 + p2 + plot_layout(ncol=1)\n\n\n\n\n\n\n\n3. Correlation between series\nIt looks like volume goes down as price goes up. There is a better plot to make to examine this. What is it? Make the plot. After making the plot, report what you learn about the apparent correlation.\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\nggplot(sales_weekly, aes(x=av_price, y=volume)) +\n  geom_point() +\n  theme(aspect.ratio = 1)\n\n\n\n\n\n\n\n\nAny correlation is very weak, and negative.\n\n\n\n\n\n\n4. Geographic differences\nThink about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn. (Try making a letter value plot instead of the boxplots.)\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\n\nggplot(sales, \n       aes(x = fct_reorder(county, \n                  price, na.rm=TRUE), \n           y = price)) +\n         geom_boxplot() + \n  scale_y_log10() +\n  xlab(\"\") +\n  coord_flip()\n\n\n\n\n\n\n\n\nMarin County has the highest prices on average, and San Joaquin the lowest. The lowest priced house was sold in Sonoma County. The highest priced properties and lowest priced are pretty similar from one county to another - that is, the variability within county is large.\n\n\n\n\n\n\n5. The Rich Get Richer and the Poor Get Poorer\nIn the section “The Rich Get Richer and the Poor Get Poorer” there are some interesting transformations of the data, and unusual types of plots. Explain why looking at proportional change in value refines the view of price movement in different higher vs lower priced properties.\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nThe transformation makes changes relative to the initial average price at the start of the time period. All curves produced will start from the same point. This means that we only need to compare the end points of each line, saving us from calculating differences between lines relative to the difference at the beginning.\n\n\n\n\n\n\n6. Anything surprising?\nWere there any findings that surprised the authors? Or would surprise you?\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nI found it interesting that Mountain View had no decline in housing prices. This city has the headquarters of many of the world’s largest technology companies are in the city, including Google, Mozilla Foundation, Symantec, and Intuit.\n\n\n\n\n\n\n7. Additional resources\nSome of the findings were compared against information gathered from external sources. Can you point to an example of this, and how the other information was used to support or question the finding?\n\n\n\n\n\n\nSolutionSolution\n\n\n\n\n\n\nAll of this is consistent with what we have learned about subprime mortgages since the housing bust hit the headlines.\nSubprime mortgages were offered on little collateral which meant they were quite risky, and they tended to be on the lower end of the housing market. This information was in all the news headlines at the time, and the analysis that these authors have done was checked against the common reporting at the time. The data was consistent with these reports."
   },
   {
     "objectID": "week2/tutorialsol.html#finishing-up",
@@ -3917,14 +3924,14 @@
     "href": "week2/tutorial.html#preparation",
     "title": "ETC5521 Tutorial 2",
     "section": "🔧 Preparation",
-    "text": "🔧 Preparation\nThe reading for this week is EDA Case Study: Bay area blues. It is authored by Hadley Wickham, Deborah F. Swayne, and David Poole. It appeared in the book “Beautiful Data” edited by Jeff Hammerbacher and Toby Segaran. Not all the chapters in the book are good examples of data analysis, though.\n\nComplete the weekly quiz, before the deadline!\nMake sure you have this list of R packages installed:\n\n\ninstall.packages(c(\"tidyverse\", \"forcats\", \"patchwork\"))\n\n\nNote that the code and data for reproducing their analysis can be found here.\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
+    "text": "🔧 Preparation\nThe reading for this week is EDA Case Study: Bay area blues. It is authored by Hadley Wickham, Deborah F. Swayne, and David Poole. It appeared in the book “Beautiful Data” edited by Jeff Hammerbacher and Toby Segaran. Not all the chapters in the book are good examples of data analysis, though.\n\nMake sure you have this list of R packages installed:\n\n\ninstall.packages(c(\"tidyverse\", \"forcats\", \"patchwork\"))\n\n\nNote that the code and data for reproducing their analysis can be found here.\nOpen your RStudio Project for this unit, (the one you created in week 1, ETC5521). Create a .qmd document for this weeks activities."
   },
   {
     "objectID": "week2/tutorial.html#exercises",
     "href": "week2/tutorial.html#exercises",
     "title": "ETC5521 Tutorial 2",
     "section": "📥 Exercises",
-    "text": "📥 Exercises\nPoint your web browser to the github site for the analysis, https://github.com/hadley/sfhousing. The main data file is house-sales.csv. Read this data into your R session. (🛑 ARE YOU USING A PROJECT FOR THIS UNIT? IF NOT, STOP and OPEN IT NOW.)\nYou can read the data in directly from the web site using this code:\n\nlibrary(tidyverse)\nlibrary(patchwork)\nlibrary(forcats)\nsales &lt;- read_csv(\"https://raw.githubusercontent.com/hadley/sfhousing/master/house-sales.csv\")\n\n\n1. What’s in the data?\n\nIs the data in tidy form?\nOf the variables in the data, which are\n\nnumeric?\ncategorical?\ntemporal?\n\nWhat would be an appropriate plot to make to examine the\n\nnumeric variables?\ncategorical variables?\na categorical and numeric variable?\na temporal variable and a numeric variable?\n\n\n\n\n2. Time series plots\nReproduce the time series plots of weekly average price and volume of sales.\n\n\n\n\n\n\n\n\n\n\n\n3. Correlation between series\nIt looks like volume goes down as price goes up. There is a better plot to make to examine this. What is it? Make the plot. After making the plot, report what you learn about the apparent correlation.\n\n\n4. Geographic differences\nThink about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn.\n\n\n5. The Rich Get Richer and the Poor Get Poorer\nIn the section “The Rich Get Richer and the Poor Get Poorer” there are some interesting transformations of the data, and unusual types of plots. Explain why looking at proportional change in value refines the view of price movement in different higher vs lower priced properties.\n\n\n6. Anything surprising?\nWere there any findings that surprised the authors? Or would surprise you?\n\n\n7. Additional resources\nSome of the findings were compared against information gathered from external sources. Can you point to an example of this, and how the other information was used to support or question the finding?"
+    "text": "📥 Exercises\nPoint your web browser to the github site for the analysis, https://github.com/hadley/sfhousing. The main data file is house-sales.csv. Read this data into your R session. (🛑 ARE YOU USING A PROJECT FOR THIS UNIT? IF NOT, STOP and OPEN IT NOW.)\nYou can read the data in directly from the web site using this code:\n\nlibrary(tidyverse)\nlibrary(patchwork)\nlibrary(forcats)\nsales &lt;- read_csv(\"https://raw.githubusercontent.com/hadley/sfhousing/master/house-sales.csv\")\n\n\n1. What’s in the data? (This is a check your knowledge and skills exercise)\n\nIs the data in tidy form?\nOf the variables in the data, which are\n\nnumeric?\ncategorical?\ntemporal?\n\nWhat would be an appropriate plot to make to examine the\n\nnumeric variables?\ncategorical variables?\na categorical and numeric variable?\na temporal variable and a numeric variable?\n\n\n\n\n2. Time series plots\nReproduce the time series plots of weekly average price and volume of sales.\n\n\n\n\n\n\n\n\n\n\n\n3. Correlation between series\nIt looks like volume goes down as price goes up. There is a better plot to make to examine this. What is it? Make the plot. After making the plot, report what you learn about the apparent correlation.\n\n\n4. Geographic differences\nThink about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn. (Try making a letter value plot instead of the boxplots.)\n\n\n5. The Rich Get Richer and the Poor Get Poorer\nIn the section “The Rich Get Richer and the Poor Get Poorer” there are some interesting transformations of the data, and unusual types of plots. Explain why looking at proportional change in value refines the view of price movement in different higher vs lower priced properties.\n\n\n6. Anything surprising?\nWere there any findings that surprised the authors? Or would surprise you?\n\n\n7. Additional resources\nSome of the findings were compared against information gathered from external sources. Can you point to an example of this, and how the other information was used to support or question the finding?"
   },
   {
     "objectID": "week2/tutorial.html#finishing-up",

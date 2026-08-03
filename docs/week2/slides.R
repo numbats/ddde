@@ -1,122 +1,147 @@
-## ----include = FALSE-----------------------------------------
+## -----------------------------------------------------------------------------
+#| label: setup
+#| message: false
+#| warning: false
 source("../setup.R")
-
-
-## ------------------------------------------------------------
-options(width=20)
-chevrolets <- tibble(
-  prices = c(250, 150, 795, 895, 695, 
-               1699, 1499, 1099, 1693, 1166,
-               688, 1333, 895, 1775, 895,
-               1895, 795))
-#chevrolets$prices
-
-
-## ------------------------------------------------------------
-#| echo: false
-fabric_drawing(cid = "canvas1", 
-               cwidth = 1050, 
-               cheight = 450, 
-               cfill = "whitesmoke", 
-               drawingWidth = 3, 
-               gumSize = 10)
-fabric_text_add(cid = "canvas1", textId = "txt1",
-                text = "250, 150, 795, 895, 695,  ",
-                left = 10, top = 10, 
-                fontFamily = "Courier", fontSize = 28)
-fabric_text_add(cid = "canvas1", textId = "txt2",
-                text = "1699, 1499, 1099, 1693,",
-                left = 10, top = 60, 
-                fontFamily = "Courier", fontSize = 28)
-fabric_text_add(cid = "canvas1", textId = "txt3",
-                text = "1166, 688, 1333, 895,",
-                left = 10, top = 110, 
-                fontFamily = "Courier", fontSize = 28)
-fabric_text_add(cid = "canvas1", textId = "txt3",
-                text = "1775, 895, 1895, 795",
-                left = 10, top = 160, 
-                fontFamily = "Courier", fontSize = 28)
-#fabric_curtail(cid = "canvas1", imgsrc = #"images/lecture-02A/chevy.png", 
-#                    type = "background")
-
-
-## ----stem, echo=TRUE-----------------------------------------
-chevrolets$prices
-stem(chevrolets$prices)
-
-
-## ----echo=FALSE----------------------------------------------
-# data comes from http://ggobi.org/book/data/tips.csv
-# but it keeps throwing a download error, so saving locally
-options(width=80, digits=3)
-tips <- read_csv(here::here("data/tips.csv"))
-head(tips$tip, 50)
-
-
-## ----stem_tips, echo=TRUE------------------------------------
-stem(tips$tip, scale=0.5, width=120)
-
-
-## ----echo=FALSE----------------------------------------------
-options(width=100)
-
-
-## ----stem_tips2, echo=TRUE-----------------------------------
-stem(tips$tip, scale=2)
-
-
-## ------------------------------------------------------------
-median(tips$tip)
-
-
-## ----echo=FALSE----------------------------------------------
-options(width=30)
-tips$sex[1:72]
-
-
-## ------------------------------------------------------------
-#| echo: false
-fabric_drawing(cid = "canvas2", 
-               cwidth = 800, 
-               cheight = 750, 
-               cfill = "whitesmoke", 
-               drawingWidth = 3, 
-               gumSize = 10)
-
-
-## ------------------------------------------------------------
-#| echo: false
-options(width=25)
-x <- c(-3.2, -1.7, -0.4, 0.1, 0.3, 1.2, 1.5, 1.8, 2.4, 3.0, 4.3, 6.4, 9.8)
-x
-
-
-## ------------------------------------------------------------
-#| echo: false
-fabric_drawing(cid = "canvas3", 
-               cwidth = 750, 
-               cheight = 600, 
-               cfill = "whitesmoke", 
-               drawingWidth = 3, 
-               gumSize = 10)
-
-
-## ------------------------------------------------------------
-#| echo: false
-fabric_drawing(cid = "canvas4", 
-               cwidth = 750, 
-               cheight = 600, 
-               cfill = "whitesmoke", 
-               drawingWidth = 3, 
-               gumSize = 10)
-
-
-## ----lvplot, echo=TRUE---------------------------------------
 library(lvplot)
-p <- ggplot(mpg, 
-            aes(class, hwy))
-p + geom_lv(aes(fill=..LV..)) + 
-  scale_fill_brewer() + 
-  coord_flip() + 
+
+
+## -----------------------------------------------------------------------------
+#| label: theme-data
+#| message: false
+# Theme A: small, right-skewed numeric data used throughout the
+# "numerical summaries" pipeline (stem-and-leaf, hinges, box-and-whisker,
+# fences, trimean, re-expression).
+# Real data: unleaded 91 (U91) price (cents/litre) at NSW service stations,
+# most recent report as of end of July 2026, via the NSW FuelCheck open data
+# API (data.nsw.gov.au). See data/fuelcheck_u91_sample.csv for the extract,
+# and week2/fuelcheck-sample.R for how it was built.
+fuel <- read_csv(here::here("data/fuelcheck_u91_sample.csv"))
+fuel_main <- fuel |> filter(group == "main")
+
+# Theme A (letter-value plot demo): a much larger real extract -- the most
+# recent price per station and fuel type, for the 5 common fuel types,
+# across all of NSW in July 2026. See data/fuelcheck_latest_by_fueltype.csv,
+# and week2/fuelcheck-sample.R for how it was built.
+fuel_by_type <- read_csv(here::here("data/fuelcheck_latest_by_fueltype.csv"))
+
+# Theme B: small categorical data used for the tallying exercise.
+transport <- tibble(
+  mode = c("Train", "Car", "Bike", "Train", "Walk", "Car", "Train", "Bus",
+           "Bike", "Train", "Car", "Walk", "Train", "Bike", "Car", "Train",
+           "Bus", "Walk", "Car", "Train", "Bike", "Train", "Car", "Walk")
+)
+
+
+## -----------------------------------------------------------------------------
+#| label: petrol-data
+options(width = 60)
+print(fuel_main$price, digits = 4)
+
+
+## -----------------------------------------------------------------------------
+#| label: stem
+stem(fuel_main$price)
+
+
+## -----------------------------------------------------------------------------
+#| label: stem-scale1
+stem(fuel_main$price, scale = 2)
+
+
+## -----------------------------------------------------------------------------
+#| label: transport-data
+options(width = 60)
+transport$mode
+
+
+## -----------------------------------------------------------------------------
+#| label: transport-count
+transport |> count(mode)
+
+
+## -----------------------------------------------------------------------------
+#| label: petrol-sorted
+options(width = 25)
+print(sort(fuel_main$price), digits = 4)
+
+
+## -----------------------------------------------------------------------------
+#| label: stem-repeat
+#| echo: false
+stem(fuel_main$price, scale=2)
+
+
+## -----------------------------------------------------------------------------
+#| label: fivenum
+print(fivenum(fuel_main$price), digits = 4)
+
+
+## -----------------------------------------------------------------------------
+#| label: boxplot
+#| out-width: 50%
+ggplot(fuel_main, aes(x = "", y = price)) +
+  geom_boxplot() +
+  xlab("") 
+
+
+## -----------------------------------------------------------------------------
+#| label: boxplot-fences
+#| out-width: 25%
+fuel |>
+  ggplot(aes(x = "", y = price)) +
+  geom_boxplot() +
   xlab("")
+
+
+## -----------------------------------------------------------------------------
+#| label: trimean
+fn <- fivenum(fuel_main$price)
+print((fn[2] + 2 * fn[3] + fn[4]) / 4, digits = 4)
+print(mean(fuel_main$price), digits = 4)
+
+
+## -----------------------------------------------------------------------------
+#| label: lvplot
+ggplot(fuel_by_type, aes(fuel_type, price)) +
+  geom_lv(aes(fill = after_stat(LV))) +
+  scale_fill_brewer() +
+  xlab("fuel type")
+
+
+## -----------------------------------------------------------------------------
+#| label: lvplot-k3
+#| out-width: 25%
+ggplot(fuel_by_type, aes(fuel_type, price)) +
+  geom_lv(aes(fill = after_stat(LV)), k = 3) +
+  scale_fill_brewer() +
+  xlab("fuel type")
+
+
+## -----------------------------------------------------------------------------
+#| label: lvplot-k6
+#| out-width: 25%
+ggplot(fuel_by_type, aes(fuel_type, price)) +
+  geom_lv(aes(fill = after_stat(LV)), k = 6) +
+  scale_fill_brewer() +
+  xlab("fuel type")
+
+
+## -----------------------------------------------------------------------------
+#| label: lvplot-k10
+#| out-width: 25%
+ggplot(fuel_by_type, aes(fuel_type, price)) +
+  geom_lv(aes(fill = after_stat(LV)), k = 10) +
+  scale_fill_brewer() +
+  xlab("fuel type")
+
+
+## -----------------------------------------------------------------------------
+#| label: stem-original
+stem(fuel_main$price, scale=2)
+
+
+## -----------------------------------------------------------------------------
+#| label: stem-log
+stem(log10(fuel_main$price), scale=2)
 

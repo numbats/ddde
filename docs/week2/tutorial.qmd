@@ -1,6 +1,6 @@
 ---
 title: "ETC5521 Tutorial 2"
-subtitle: "Deconstructing an exploratory data analysis"
+subtitle: "Using exploratory data analysis to assess a new data package"
 author: "Prof. Di Cook"
 quarto-required: ">=1.7.0"
 format:
@@ -70,7 +70,6 @@ Constructing, planning and evaluating an exploratory data analysis are important
 
 The reading for this week is [EDA Case Study: Bay area blues](https://vita.had.co.nz/papers/bay-area-blues.pdf). It is authored by Hadley Wickham, Deborah F. Swayne, and David Poole. It appeared in the book "Beautiful Data" edited by Jeff Hammerbacher and Toby Segaran. Not all the chapters in the book are good examples of data analysis, though.
 
-- Complete the weekly quiz, before the deadline!
 - Make sure you have this list of R packages installed: 
 
 ```{r}
@@ -99,7 +98,7 @@ library(forcats)
 sales <- read_csv("https://raw.githubusercontent.com/hadley/sfhousing/master/house-sales.csv")
 ```
 
-### 1. What's in the data?
+### 1. What's in the data? (This is a check your knowledge and skills exercise)
 
 - Is the data in tidy form? 
 - Of the variables in the data, which are 
@@ -199,7 +198,7 @@ Any correlation is very weak, and negative.
 
 ### 4. Geographic differences
 
-Think about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn.
+Think about potential plots you might make for examining differences by geographic region (as measured by zip, county or city). Make a plot, and report what you learn. (Try making a letter value plot instead of the boxplots.)
 
 ::: unilur-solution
 
