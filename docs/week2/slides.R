@@ -3,7 +3,6 @@
 #| message: false
 #| warning: false
 source("../setup.R")
-library(lvplot)
 
 
 ## -----------------------------------------------------------------------------
@@ -103,6 +102,9 @@ print(mean(fuel_main$price), digits = 4)
 
 ## -----------------------------------------------------------------------------
 #| label: lvplot
+fuel_by_type <- fuel_by_type |>
+  mutate(fuel_type = factor(fuel_type, 
+    levels = c("DL", "E10", "U91", "P95", "P98")))
 ggplot(fuel_by_type, aes(fuel_type, price)) +
   geom_lv(aes(fill = after_stat(LV))) +
   scale_fill_brewer() +

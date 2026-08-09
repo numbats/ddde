@@ -215,7 +215,7 @@ The teacher who heeds these words and admits that there need be *no one correct 
 
 ## Outline
 
-:::: {.columns .smaller}
+:::: {.columns .small}
 
 ::: {.column width=45%}
 
@@ -236,7 +236,7 @@ The teacher who heeds these words and admits that there need be *no one correct 
 
 :::
 
-::: {.column .smaller width=45%}
+::: {.column .small width=45%}
 11. Making two-way analyses
 12. Advanced fits
 13. Three way fits
@@ -403,7 +403,7 @@ The states roughly fall into three groups.
 
 <br>
 
-[It's not really surprising, but we can imagine this grouping. Alaska is in a group of its own, with a much higher high peak. Then the Rocky Mountain states, California, Washington and Hawaii also have high peaks, and the rest of the states lump together.]{.monash-blue2 .smaller}
+[It's not really surprising, but we can imagine this grouping. Alaska is in a group of its own, with a much higher high peak. Then the Rocky Mountain states, California, Washington and Hawaii also have high peaks, and the rest of the states lump together.]{.monash-blue2 .small}
 
 ::: 
 ::::
@@ -467,7 +467,7 @@ stem(fuel_main$price, scale=2)
 print(fivenum(fuel_main$price), digits = 4)
 ```
 
-[`fivenum()` returns min, lower hinge, median, upper hinge, max -- using the same depth rule you just used by hand.]{.smaller}
+[`fivenum()` returns min, lower hinge, median, upper hinge, max -- using the same depth rule you just used by hand.]{.small}
 
 ## Box-and-whisker display
 
@@ -612,6 +612,9 @@ Petrol price (cents/litre), by fuel type, for `r nrow(fuel_by_type)` NSW service
 
 ```{r}
 #| label: lvplot
+fuel_by_type <- fuel_by_type |>
+  mutate(fuel_type = factor(fuel_type, 
+    levels = c("DL", "E10", "U91", "P95", "P98")))
 ggplot(fuel_by_type, aes(fuel_type, price)) +
   geom_lv(aes(fill = after_stat(LV))) +
   scale_fill_brewer() +
@@ -627,7 +630,7 @@ ggplot(fuel_by_type, aes(fuel_type, price)) +
 
 ::: {.callout-tip title="Using R"}
 1. Re-run the plot with `geom_lv(aes(fill = after_stat(LV)), k = 3)`, then again with `k = 6` and `k = 10`.
-2. What changes as `k` gets smaller? As it gets larger?
+2. What changes as `k` gets small? As it gets larger?
 3. Is there a `k` that feels like "too few" letter values? Too many? Why?
 :::
 
@@ -691,7 +694,7 @@ What you need to know about logs?
 - how to find good enough logs fast and easily
 - that equal differences in logs correspond to equal ratios of raw values. 
 
-[(This means that wherever you find people using products or **ratios**-- even in such things as price indexes--using logs--thus converting producers to sums and ratios to differences--is likely to help.)]{.smaller}
+[(This means that wherever you find people using products or **ratios**-- even in such things as price indexes--using logs--thus converting producers to sums and ratios to differences--is likely to help.)]{.small}
 ::: 
 
 ::: {.column width="50%"}
@@ -727,7 +730,7 @@ Your stem-and-leaf of the petrol prices likely showed a mild tail on the high si
 3. Compare the shape to your original stem-and-leaf. Is it more symmetric?
 :::
 
-::: {.smaller}
+::: {.small}
 ::: {.panel-tabset}
 ## Check in R
 
@@ -851,7 +854,7 @@ See some fluctuations in the early years, too. [Note that the log transformation
 
 :::: {.columns}
 
-::: {.column .smaller width="50%"}
+::: {.column .small width="50%"}
 **Scratching down numbers**
 
 - [Stem-and-leaf plots]{.monash-blue2}: keep every digit, still readable as a histogram shape, by hand.
@@ -866,7 +869,7 @@ See some fluctuations in the early years, too. [Note that the log transformation
 - [Letter-value plots]{.monash-blue2}: extend the idea to more letter values (`k`) for larger data sets.
 ::: 
 
-::: {.column .smaller width="50%"}
+::: {.column .small width="50%"}
 **Easy re-expression**
 
 - Logs, square roots, and reciprocals can [symmetrize a skewed distribution]{.monash-blue2}.
@@ -912,7 +915,7 @@ Reaction to the need to explain complex models.
 
 :::
 
-::: {.smaller}
+::: {.small}
 Throughout, it has become much [easier]{.monash-blue2} to accomplish thanks to [computers]{.monash-blue2}. "Exploratory data analysis" as commonly used today is unfortunately synonymous with "descriptive statistics", but it is truly much more -- it is the tooling to [discover what you don't know]{.monash-orange2}.
 :::
 

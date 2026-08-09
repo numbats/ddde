@@ -1,6 +1,6 @@
 ---
 title: "ETC5521 Worksheet Week 3"
-subtitle: "Initial data analysis"
+subtitle: "Data validation with pointblank"
 author: "Prof. Di Cook"
 quarto-required: ">=1.8.0"
 format:
@@ -32,9 +32,6 @@ knitr::opts_chunk$set(
   dev.args = list(pointsize = 11)
 )
 library(tidyverse)
-library(ggbeeswarm)
-library(nullabor)
-library(broom)
 library(conflicted)
 
 conflicts_prefer(dplyr::filter)
@@ -43,183 +40,159 @@ conflicts_prefer(dplyr::slice)
 
 options(
   digits = 2,
-  width = 80,
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill = "viridis",
-  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
-  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
+  width = 80
 )
-theme_set(theme_bw(base_size = 14) +
-   theme(
-     aspect.ratio = 1,
-     plot.background = element_rect(fill = 'transparent', colour = NA),
-     plot.title.position = "plot",
-     plot.title = element_text(size = 24),
-     panel.background = element_rect(fill = 'transparent', colour = NA),
-     legend.background = element_rect(fill = 'transparent', colour = NA),
-     legend.key = element_rect(fill = 'transparent', colour = NA)
-   )
-)
+theme_set(theme_bw(base_size = 14))
 ```
 
 ## 🎯 Objectives
 
-Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns. 
+Practice setting up rule-based, automated data validation checks, using the [`pointblank`](https://rstudio.github.io/pointblank/) package, applied to the World Development Indicators (WDI) data from the week 3 lecture. This should take about **30 minutes**.
 
 ```{r}
 #| eval: false
 #| code-fold: false
-install.packages(c("tidyverse", "ggbeeswarm", "broom", "visdat"))
+install.packages(c("tidyverse", "pointblank", "janitor"))
 ```
 
-## 🧩 Tasks 
+## 📦 Data
 
-#### 1. Take a `glimpse` of the `penguins` data. What types are variables are present in the data?
+This is the same tidying used in lecture -- you don't need to change anything here, just run it to get `wdi` (long, one row per country/year/series) and `wdi2016` (a single cross-section).
+
+```{r}
+#| code-fold: false
+library(janitor)
+
+raw_dat <- read_csv(here::here("data/world-development-indicators.csv"),
+                    na = "..", n_max = 11935)
+
+wdi <- raw_dat |>
+  select(`Country Code`, `Series Code`, `1969 [YR1969]`:`2018 [YR2018]`) |>
+  rename_all(make_clean_names) |>
+  pivot_longer(x1969_yr1969:x2018_yr2018,
+               names_to = "year",
+               values_to = "value") |>
+  mutate(year = as.numeric(str_sub(year, 2, 5))) |>
+  pivot_wider(names_from = series_code, values_from = value)
+
+wdi2016 <- wdi |> filter(year == 2016)
+```
+
+Three series we'll use today:
+
+- `SP.DYN.LE00.IN`: life expectancy at birth, total (years)
+- `SP.POP.TOTL`: population, total
+- `EN.ATM.CO2E.PC`: CO2 emissions (metric tons per capita) -- note this series stops being reported after 2014, so it will be entirely missing in `wdi2016`.
+
+## 🧩 Tasks
+
+#### 1. Skim the [pointblank introduction](https://rstudio.github.io/pointblank/articles/VALID-I.html). In your own words, what is an `agent`, and why is `interrogate()` a separate step from adding the validation checks?
+
+::: unilur-solution
+
+An `agent` is an object that holds a *plan* of validation checks (a set of rules) for a particular table, built up with `create_agent()` and then piped through validation functions like `col_vals_not_null()`. Nothing is actually checked against the data until you call `interrogate()`, which runs every rule and records the results. Separating the two means you can build up and re-use a validation plan (e.g. save it, apply it to next month's data refresh) without re-running it every time you add a step.
+
+:::
+
+#### 2. Create a pointblank `agent` for `wdi2016`, and add two *structural* checks: `country_code` is never missing (`col_vals_not_null`), and `country_code` is unique (one row per country) (`rows_distinct`). `interrogate()` and check whether `all_passed()`.
 
 ::: unilur-solution
 
 ```{r}
-#| message: false
-library(tidyverse)
-glimpse(penguins)
+library(pointblank)
+
+agent <- create_agent(
+  tbl = wdi2016,
+  tbl_name = "wdi2016",
+  label = "WDI 2016 cross-section checks"
+) |>
+  col_vals_not_null(columns = vars(country_code)) |>
+  rows_distinct(columns = vars(country_code)) |>
+  interrogate()
+
+all_passed(agent)
 ```
+
+Both checks pass: every row has a `country_code`, and there's exactly one row per country in this cross-section.
+
 :::
 
-
-#### 2. How was this data collected? You will need to read the documentation for the `palmerpenguins` package, or see if AI knows.
-
-::: unilur-solution
-Details are at [https://allisonhorst.github.io/palmerpenguins/articles/intro.html](https://allisonhorst.github.io/palmerpenguins/articles/intro.html), and you learn "These data were collected from 2007 - 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program, part of the US Long Term Ecological Research Network. The data were imported directly from the Environmental Data Initiative (EDI) Data Portal." It is necessary to also read the original data collection article [https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081) to obtain details of the sampling. Breeding pairs of penguins were included based on sampling of nests where pairs of adults were present, were chosen and marked, before onset of egg-laying.
-:::
-
-#### 3. Using the `visdat` package make an overview plot to examine types of variables and for missing values. 
+#### 3. Now add two *plausibility* checks: life expectancy (`SP.DYN.LE00.IN`) should be between 0 and 100 years (`col_vals_between`), and population (`SP.POP.TOTL`) should not be negative (`col_vals_gte`). `interrogate()` again. Does the console output say every step is "OK"? Does `all_passed()` agree? If not, why not? (use `get_agent_report` here)
 
 ::: unilur-solution
-There are three factor variables - species, island, sex - and three integer variables - flipper_len, body_mass and year - and two numeric variables - bill_len and bill_dep.
-
-It is interesting that flipper_len and body_mass are reported without decimal places, and thus are integers, whereas bill_len and bill_dep are reported with one decimal place, and thus are doubles. Both are numeric variables, though.
-
-Four variables have missing values: sex, bill_len, bill_dep, flipper_len, body_mass. There are more missings on sex. The other missings occur together, the penguins are missing on all five variables.
 
 ```{r}
-library(visdat)
-vis_dat(penguins)
+agent <- create_agent(
+  tbl = wdi2016,
+  tbl_name = "wdi2016",
+  label = "WDI 2016 cross-section checks"
+) |>
+  col_vals_not_null(columns = vars(country_code)) |>
+  rows_distinct(columns = vars(country_code)) |>
+  col_vals_between(columns = vars(SP.DYN.LE00.IN), left = 0, right = 100) |>
+  col_vals_gte(columns = vars(SP.POP.TOTL), value = 0) |>
+  interrogate()
 
-p_nomiss <- penguins |>
-  select(species, bill_len, bill_dep, 
-         flipper_len, body_mass) |>
-  na.omit()
-
+agent
+all_passed(agent)
 ```
 
-:::
-
-#### 4. Check the distributions of each species on each of the size variables, using a jittered dotplot, using the `geom_quasirandom()` function in the `ggbeeswarm` package. There seems to be some bimodality in some species on some variables eg `bill_len`. Why do you think this might be? Check your thinking by making a suitable plot.
-
-::: unilur-solution
-
-Particularly on `bill_len` multimodality can be seen in the Chinstrap and Gentoo penguins. This corresponds to differences in the two species. Differences can be seen in the sexes for all of the variables and species, but it is only big enough in `bill_len` to be noticeable as bimodality.
+The printed summary shows a ✔ "OK" for every step, but `all_passed()` returns `FALSE`. That's because the console summary only flags steps that breach a *warn/stop* threshold (none are set here), while `all_passed()` asks whether *every single row* passed. Looking at the detailed report shows why:
 
 ```{r}
-library(ggbeeswarm)
-ggplot(penguins, aes(x=species, 
-                     y=bill_len)) +
-  geom_quasirandom() 
-ggplot(penguins, aes(x=species, 
-                     y=bill_len, 
-                     colour=sex)) +
-  geom_quasirandom() +
-  scale_color_brewer("", palette="Dark2")
-
+get_agent_report(agent, display_table = FALSE) |>
+  select(i, columns, units, n_pass, f_pass)
 ```
 
-:::
+The life expectancy check only passes for 91.7% of rows (18 of 217 countries have a missing value in 2016), and the population check passes for 99.5% (1 country missing). By default, pointblank counts a missing value as a *failing* unit for `col_vals_between()`/`col_vals_gte()`, since it can't confirm the value satisfies the rule.
 
-#### 5. Is there any indication of outliers from the jittered dotplots of different variables?
-
-::: unilur-solution
-
-Outliers can be seen on `bill_len` for Chinstrap and Gentoo. Interestingly, there is one female penguins with a really big bill, bigger than all the males even.
-
-Also on `flipper_len` there is one female penguins with a much smaller value than others.
-
-:::
-
-#### 6. Make a scatterplot of `body_mass_g` vs `flipper_length_mm` for all the penguins. What do the vertical stripes indicate? Are there any other unusual patterns to note, such as outliers or clustering or nonlinearity?
-
-::: unilur-solution
-
-The striping corresponds to rounded values of flipper length, that have been reported to the nearest mm. It appears that it is done across all measuring as it is present for both sexes, for all species, for each island and each year. Otherwise there is nothing much to report as unusual. 
+You can find which countries these are:
 
 ```{r}
-penguins |>
-  select(flipper_len, body_mass, species) |>
-  na.omit() |>
-  ggplot(aes(x=flipper_len,
-             y=body_mass, 
-             colour=species)) +
-  geom_point() +
-  theme(aspect.ratio=1)
-
-penguins |>
-  na.omit() |>
-  ggplot(aes(x=flipper_len,
-             y=body_mass)) +
-  geom_point() +
-  facet_wrap(~island, ncol=3, scales = "free") +
-  theme(aspect.ratio=1)
-
-penguins |>
-  na.omit() |>
-  ggplot(aes(x=flipper_len,
-             y=body_mass)) +
-  geom_point() +
-  facet_wrap(~sex, ncol=2, scales = "free") +
-  theme(aspect.ratio=1)
-
-penguins |>
-  na.omit() |>
-  ggplot(aes(x=flipper_len,
-             y=body_mass)) +
-  geom_point() +
-  facet_wrap(~species, ncol=3, scales = "free") +
-  theme(aspect.ratio=1)
-
-penguins |>
-  na.omit() |>
-  ggplot(aes(x=flipper_len,
-             y=body_mass)) +
-  geom_point() +
-  facet_wrap(~year, ncol=3, scales = "free") +
-  theme(aspect.ratio=1)
+wdi2016 |> filter(is.na(SP.DYN.LE00.IN)) |> select(country_code)
 ```
 
-⚠️ **Note**: That using `na.omit()` is VERY DANGEROUS. You should very rarely use it and only in very clear situations like this data.
 :::
 
-#### 7. How well can penguin body mass be predicted based on the flipper length? Fit a linear model to check. Report the equation, the $R^2$, $\sigma$, and make a residual plot of residuals vs `flipper_length_mm`. From the residual plot, are there any concerns about the model fit?
+#### 4. We already know from the lecture that this data has missingness, and haven't decided yet whether to treat it as a problem here. Re-run the same two plausibility checks with `na_pass = TRUE`, and explain what that argument changes -- and when you would, or wouldn't, want to use it.
 
 ::: unilur-solution
 
-The model fit statistics suggest it is a reasonably good model, with flipper length explaining about 76% of body mass. From the estimated standard deviation of the error, $\sigma=393$, we could say that the estimated body mass is likely accurate to within 800g. (Assuming normal distribution and 95% of observations within two $\sigma$.)
+```{r}
+agent <- create_agent(
+  tbl = wdi2016,
+  tbl_name = "wdi2016",
+  label = "WDI 2016 cross-section checks"
+) |>
+  col_vals_not_null(columns = vars(country_code)) |>
+  rows_distinct(columns = vars(country_code)) |>
+  col_vals_between(columns = vars(SP.DYN.LE00.IN), left = 0, right = 100, na_pass = TRUE) |>
+  col_vals_gte(columns = vars(SP.POP.TOTL), value = 0, na_pass = TRUE) |>
+  interrogate()
 
-The residual suggests no major problems. There is a little heteroskedasticity. Perhaps if you look carefully, though, it might indicate that different models should have been fitted for the smaller penguins and the bigger penguins, perhaps models separately for sex and species would be advised.
+all_passed(agent)
+```
+
+`na_pass = TRUE` tells pointblank to *excuse* `NA` values from the check -- a missing value is neither counted as a pass nor a fail, it's simply skipped, so it can no longer drag the pass rate down. Now `all_passed()` is `TRUE`.
+
+Use `na_pass = TRUE` when missingness is already known about and accepted (e.g. you documented it during IDA, and it doesn't itself indicate a data quality problem for this particular check). Leave it `FALSE` (the default) when you want validation to *catch* missingness -- for example, if a future data refresh should always be complete, and any new `NA` appearing would be a red flag worth investigating.
+
+:::
+
+#### 5. *(Bonus, if time permits)* Add a rule for `EN.ATM.CO2E.PC` (CO2 emissions per capita should not be negative) to the agent, using `na_pass = TRUE`, and interrogate. Does it pass? Is that reassuring?
+
+::: unilur-solution
 
 ```{r}
-library(broom)
-penguins_nona <- penguins |>
-  select(flipper_len, body_mass, species) |>
-  na.omit()
-penguins_fit <- lm(body_mass~flipper_len,
-                   data=penguins_nona)
-tidy(penguins_fit)
-glance(penguins_fit)
-penguins_m <- augment(penguins_fit)
-ggplot(penguins_m, aes(x=flipper_len, y=.resid)) +
-  geom_hline(yintercept=1, colour="grey70") +
-  geom_point() +
-  theme(aspect.ratio=1)
+agent <- create_agent(tbl = wdi2016, tbl_name = "wdi2016") |>
+  col_vals_gte(columns = vars(EN.ATM.CO2E.PC), value = 0, na_pass = TRUE) |>
+  interrogate()
+
+get_agent_report(agent, display_table = FALSE) |>
+  select(i, columns, units, n_pass, f_pass)
 ```
+
+It passes 100% -- but not reassuringly so. `EN.ATM.CO2E.PC` stops being reported after 2014, so *every* value in `wdi2016` is `NA`, and with `na_pass = TRUE` all of them are excused rather than checked. A validation step that always "passes" because there's nothing left to check isn't actually telling you anything useful; it's worth checking the *coverage* of a rule (how many non-missing values it actually evaluated), not just whether it passed.
 
 :::
 

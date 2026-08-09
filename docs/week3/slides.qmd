@@ -20,9 +20,14 @@ format:
     height: 900
     margin: 0.05
     embed-resources: true
+    code-fold: true
+    code-summary: "Show code"
 ---
 
-```{r, include = FALSE}
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
 source("../setup.R")
 ```
 
@@ -37,7 +42,7 @@ source("../setup.R")
 
 :::
 
-## Initial Data Analysis and Confirmatory Analysis
+## Initial Data Analysis
 
 :::: {.columns}
 
@@ -81,7 +86,48 @@ IDA is related to exploratory data analysis (EDA) in the sense that it is primar
 :::
 ::::
 
-## Taxonomies are useful but rarely perfect {.transition-slide .center style="text-align: center;"}
+## Model diagnostics
+
+:::: {.columns}
+
+::: {.column width=50%}
+
+::: {.info}
+After to conducting a [confirmatory data analysis]{.monash-black2}, it is important to [_check the results_]{.monash-orange2}. 
+:::
+
+::: {.fragment}
+* [Model diagnostics (MD)]{.monash-blue2} check that the result is fit for making inference:
+  * fit statistics, including error
+  * residual plots
+  * multicollinearity checks
+  * influence statistics
+  * feature importance
+  * not overfitting
+
+:::  
+:::
+
+::: {.column width=50%}
+
+::: {.fragment}
+
+* It may lead to, re-ftting after:
+  * removing variables and/or observations
+  * transforming variables
+  * changing the type of model
+
+
+::: 
+
+::: {.fragment}
+::: {.info}
+MD is related to exploratory data analysis (EDA) in the sense that it also depends on graphical summaries. 
+:::
+:::
+
+:::
+::::
 
 ## Objectives of IDA?
 
@@ -114,7 +160,7 @@ A [statistical value chain]{.monash-blue2} is constructed by defining a number o
 :::
 ::::
 
-[van der Loo & de Jonge (2018) Statistical Data Cleaning with Applications in R]{.smaller}
+[van der Loo & de Jonge (2018) Statistical Data Cleaning with Applications in R]{.small}
 
 
 
@@ -130,7 +176,7 @@ Huebner et al (2018)'s six steps of IDA: (1) Metadata setup, (2) [Data cleaning]
 ::: {.column width=50%}
 
 ::: {.info}
-IDA prepares an analyst for CDA. One needs to be careful about NOT compromising the inference. 
+IDA prepares the data for CDA. One needs to be careful about NOT compromising the inference. 
 :::
 
 How do you compromise inference?
@@ -155,7 +201,7 @@ How do you avoid these errors?
 - Pre-register your CDA plan, so that your CDA questions do not change.
 - Decisions made on outlier removal, variable selection, recoding, sampling, handling of zeros have known affects on results, and are justifiable.
 
-Insure yourself against accusations of [data snooping]{.monash-blue2}, data dredging, data fishing.
+Insure yourself against accusations of [data snooping]{.monash-blue2}, data dredging, data fishing, data leakage.
 :::
 
 :::
@@ -180,13 +226,7 @@ that is, checking for _data type_:
 * Was the date read in as character?
 * Was a factor read in as numeric?
 :::    
-::: {.column width=50%}
-  
-::: {.fragment}    
-Also important for making inference is to know whether the [data supports making broader conclusions]{.monash-blue2}. How was the data collected? Is it clear what the [population of interest]{.monash-orange2} is, and that the data is a representative sample of this population?
-:::
 
-:::
 ::::
 
 ## Example: Checking the data type [(1/2)]{.smallest}
@@ -335,19 +375,40 @@ vis_dat(xlsx_df)
 
 :::
 
-::: {.column width=50%}
-
-```{r, echo = TRUE, eval = FALSE}
-library(inspectdf)
-inspect_types(xlsx_df)  |> 
-  show_plot()
-```
-:::
 ::::
+
+## Your turn: spot the type problems {.activity-slide}
+
+A colleague sends you `lecture3-example2.csv`, an extension of the weather example with a few more rows.
+
+::: {.callout-tip title="Your turn"}
+1. Read the file in with `read_csv()` and `glimpse()` it -- don't specify `col_types` yet.
+2. What does R guess for each column's type? Is it right?
+3. Look closely at the `date` column: the file mixes dates from two different decades. What ambiguity does that create?
+4. Is there anything else worth flagging (e.g. missing values)?
+:::
+
+::: {.panel-tabset}
+
+## Check in R
+
+## Data
+
+```{r}
+#| label: example2-check
+ex2 <- read_csv(here::here("data/lecture3-example2.csv"))
+glimpse(ex2)
+```
+
+## Explanation
+
+The `loc` value is missing for one row, and `date` mixes "3/1/10" and "3/1/20" -- is that a two-digit year of 2010 vs 2020, or March 1 read a different way? Two-digit years are always worth double-checking.
+
+:::
 
 ## Data cleaning {.transition-slide .center style="text-align: center;"}
 
-## Data cleaning [(1/2)]{.smallest}
+## Data cleaning 
 
 Data quality checks should be one of the first steps in the data analysis to **_assess any problems with the data_**.
 
@@ -361,73 +422,6 @@ These include using [common or domain knowledge]{.monash-blue2} to check if the 
 * Does the data contain only positives, ie disease occurrences, or warranty claims? If so, what would the no report group look like? 
 
 :::
-
-
-## Data cleaning [(2/2)]{.smallest}
-
-In addition, numerical or graphical summaries may reveal that there is unwanted structure in the data, for example,
-
-::: {style="font-size: 70%;"}    
-
-::: {.fragment}
-
-* Does the treatment group have different demographic characteristics to the control group? 
-* Are the distributions similar between the training and test sets?
-* Are there sufficient measurements for each level of categorical variable, or across the range of numerical variables?
-
-:::
-
-::: {.fragment}
-
-* Does the distribution of the data imply violations of assumptions for the CDA, such as
-    - non-normality, 
-    - discrete rather real-valued, or
-    - different variance in different domains?
-
-:::
-:::
-
-::: {.fragment}
-
-[Data scrutinizing]{.monash-blue2} is a process that you get better at with practice and have familiarity with the domain area. 
-    
-:::
-
-
-
-## Example: Checking the data quality
-
-:::: {.columns}
-::: {.column width=50%}
-
-```{r}
-#| echo: false
-df2 <- read_csv(here("data/lecture3-example2.csv"),
-    col_types = cols(id = col_factor(),
-                     date = col_date(format = "%m/%d/%y"),
-                     loc = col_character(),
-                     temp = col_double()))
-df2
-```
-
-:::
-::: {.column width=50%}
-
-* Numerical or graphical summaries or even just eye-balling the data helps to uncover some data quality issues.
-* Any issues here?
-
-::: {.fragment}
-<br><br>
-
-* There's a missing value in `loc`.
-* Temperature is in Farenheit for New York but Celsius in Melbourne (you can validate this again using external sources).
-
-:::
-
-:::
-::::
-
-
 
 ## Case study: World development indicators [(1/7)]{.smallest}
 
@@ -476,7 +470,6 @@ country_code_df <- raw_dat  |>
 
 ::: {style="font-size: 70%;"}
 ```{r}
-#| echo: false
 options(width=80)
 glimpse(country_code_df)
 
@@ -523,7 +516,6 @@ wdi_vars <- raw_dat  |>
 <br>
 
 ```{r}
-#| echo: false
 wdi_vars |> gt::gt()
 ```
 :::
@@ -571,7 +563,6 @@ wdi2017 <- wdi  |> filter(year == 2017)
 ```{r}
 #| fig-width: 8
 #| fig-height: 6
-#| echo: false
 vis_miss(wdi, sort_miss = TRUE)
 ```
 
@@ -595,7 +586,6 @@ Check missings by
 ```{r}
 #| fig-width: 8
 #| fig-height: 6
-#| echo: false
 gg_miss_var(wdi, show_pct=TRUE)
 ```
 
@@ -604,7 +594,6 @@ gg_miss_var(wdi, show_pct=TRUE)
 ::: {.column width=30%}
 
 ```{r}
-#| echo: false
 #| fig-width: 2
 #| fig-height: 8
 #| out-width: 100%
@@ -646,7 +635,6 @@ Look at Costa Rica (CRI), most complete country
 ```{r}
 #| fig-width: 8
 #| fig-height: 6
-#| echo: false
 wdi_cri <- wdi |>
   filter(country_code == "CRI")
 vis_miss(wdi_cri, sort_miss=TRUE)
@@ -659,7 +647,6 @@ To illustrate imputation, we'll show one of the variables, that is relatively co
 ```{r}
 #| fig-width: 6
 #| fig-height: 3
-#| echo: false
 wdi_cri_p <- wdi_cri |>
   ggplot(aes(x=year, y=SE.PRM.CMPT.ZS)) +
   geom_miss_point() +
@@ -671,7 +658,7 @@ wdi_cri_p
 Impute a few temporal missings using nearest neighbours.
 
 :::
-:::
+::::
 
 
 ## Case study: World development indicators [(6/7)]{.smallest}
@@ -684,7 +671,6 @@ Missings imputed using `imputeTS` using the moving average method.
 ```{r}
 #| fig-width: 6
 #| fig-height: 3
-#| echo: false
 library(imputeTS)
 
 wdi_cri_v1 <- wdi_cri |>
@@ -715,6 +701,36 @@ Yes. The explanation of the variable suggests the numbers should range between 0
 
 
 :::
+::::
+
+## Your turn: check another country {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+1. Pick a different `country_code` from `wdi` (not `"CRI"`).
+2. Produce a `vis_miss()` plot for that country, sorted by missingness.
+3. Is it more or less complete than Costa Rica? Would you be comfortable imputing missing values for it?
+:::
+
+```{r}
+#| echo: false
+countdown::countdown(8, 34)
+```
+
+::: {.panel-tabset}
+
+## Check in R
+
+## Australia
+
+```{r}
+#| label: wdi-country-check
+#| fig-width: 8
+#| fig-height: 6
+wdi |>
+  filter(country_code == "AUS") |>
+  vis_miss(sort_miss = TRUE)
+```
+
 :::
 
 ## 📋 Summary of the process 
@@ -723,7 +739,6 @@ The steps we took roughly followed these:
 
 <center>
 ```{r}
-#| echo: false
 DiagrammeR::grViz("digraph {
   graph [layout = circo, rankdir = TB]
   
@@ -753,11 +768,15 @@ DiagrammeR::grViz("digraph {
 ```
 </center>
 
+::: {.smaller}
+
 At the end of this stage we would have:
 
 - 3 tables of data: country name/code, variables name/key, time series of multiple variables for many countries
 - What would you like to learn from this data? What sort of models might be fitted? What types of hypotheses might be tested?
 - Have we done anything that might have compromised the later analysis?
+
+:::
 
 ## Data collection {.transition-slide .center style="text-align: center;"}
 
@@ -769,7 +788,6 @@ Below is the data from ABS that shows the total number of people employed in a g
 <br>
 
 ```{r}
-#| echo: false
 #| eval: false
 # Note: because this downloads data
 # run it once, and save the result so 
@@ -785,7 +803,8 @@ save(employed, file="../data/employed.rda")
 
 
 ```{r, echo = TRUE}
-load(here("data/employed.rda"))
+load(here::here("data/employed.rda"))
+
 glimpse(employed)
 ```
 
@@ -796,24 +815,40 @@ glimpse(employed)
 
 :::: {.columns}
 ::: {.column width=40%}
-Do you notice anything?
+What do you notice?
 
 ```{r}
 #| label: unemp
-#| echo: false
 #| fig-width: 5
 #| fig-height: 8
 #| out-width: 70%
-employed |> 
-  filter(between(year, 2009, 2019)) |>
+employed_2000 <- employed |> 
+  filter(between(year, 2005, 2014)) |>
   mutate(year = factor(year)) |>
-  ggplot(aes(month, value, color = year)) + 
-  geom_line() + 
-  ylab("employed ('000)") +
+  ungroup() 
+labels_2000 <- employed_2000 |>
+  group_by(year) |>
+  slice_tail(n = 1) |>
+  ungroup() 
+
+ggplot() + 
+  geom_line(data = employed_2000, 
+    aes(x = month, y = value/1000, color = year)) + 
+  geom_label_repel(
+    data = labels_2000,
+    aes(x = month, y = value/1000, 
+        label = year, color = year),
+    fill = alpha("white", 0.6),
+    direction = "y",
+    hjust = 0,
+    nudge_x = 0.5,
+    segment.color = "grey70"
+  ) +
+  ylab("employed (mil)") +
   scale_x_continuous("month", breaks=seq(1, 12, 1)) +
-  scale_color_viridis_d("") +
+  scale_color_viridis_d("", end = 0.8) +
   theme(aspect.ratio = 1.5,
-        legend.position = "bottom")
+        legend.position = "none")
 ```
 
 :::
@@ -839,20 +874,16 @@ Why do you think the number of people employed is going up each year?
 :::: {.columns}
 ::: {.column width=50%}
 
-* There's a suspicious change in August numbers from 2014.
+* Also notice a change in August numbers from 2014.
 
 ```{r}
-#| echo: false
-employed  |> 
+employed_2000  |> 
   filter(month %in% 8:9)  |> 
-  pivot_wider(year, names_from = month)  |> 
+  pivot_wider(id_cols = year, 
+    names_from = month)  |> 
   mutate(diff = `9` - `8`)  |> 
-  ggplot(aes(year, diff)) + 
-  geom_point() + 
-  geom_line(group = 1) +
-  guides(x = guide_axis(n.dodge = 2)) + 
-  labs(y = "Difference (Sep - Aug)") +
-  theme(aspect.ratio=0.5)
+  ggplot(aes(x = diff, y = 1)) + 
+  geom_boxplot() 
 ```
 
 
@@ -872,6 +903,54 @@ See discussion on this at  [Hyndsight blog (10 October 2014)](https://robjhyndma
 :::
 ::::
 
+## Your turn: check other month pairs {.activity-slide}
+
+How do we provide evidence that the August-to-September is a genuine problem, that is worth investigating to understand why.
+
+::: {.callout-tip title="Your turn"}
+1. Repeat the same check for each consecutive different pair of adjacent months (e.g. June to July).
+2. Make the boxplots for each set of differences. You can plot them against month, or use facetting.
+3. Does the same kind of step-change show up?
+4. What does this tell you about whether the August/September pattern is a specific, real event, versus something you'd see between any two months?
+:::
+
+```{r}
+#| echo: false
+countdown::countdown(5, 22)
+```
+
+
+::: {.panel-tabset}
+
+## Check in R
+
+## Code
+
+```{r}
+#| label: employment-month-check
+employed_diffs <- employed_2000 |> 
+  arrange(date) |> 
+  mutate(diff = value - dplyr::lag(value)) |>
+  mutate(month_c = factor(month, levels = c(1:12), 
+    labels = c("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"))) |>
+  group_by(month_c) |>
+  mutate(diff_m = diff - 
+    median(diff, na.rm = TRUE)) |>
+  ungroup()
+```
+
+## Plot
+
+```{r}
+#| label: employment-month-plot
+#| out-width: 30%
+employed_diffs |> 
+  filter(!is.na(diff)) |>
+  ggplot(aes(x = month_c, y = diff_m)) + 
+    geom_boxplot()
+```
+
+:::
 
 ## Case study: 2014 Data Mining Cup winners 
 
@@ -888,7 +967,6 @@ Ugly plot of all observations provided in training sample, with response variabl
 :::: {.columns}
 ::: {.column width=50%}
 ```{r}
-#| echo: false
 options(width=50)
 load(here::here("data/french_fries.rda"))
 glimpse(french_fries)
@@ -933,13 +1011,42 @@ french_fries |> count(rep)
 :::
 ::::
 
+## Your turn: is this design complete? {.activity-slide}
+
+`lecture3-example3.csv` is a small field trial: yield measured on plots in a `row` x `col` grid, under different `trt` (treatment) and `block`.
+
+::: {.callout-tip title="Your turn"}
+1. Read in the data and cross-tabulate `trt` against `block` (e.g. with `count()`).
+2. Is every treatment applied in every block the same number of times?
+3. If not, which treatment(s) are over- or under-represented, and how might that affect comparisons between treatments?
+:::
+
+::: {.panel-tabset}
+
+## Check in R
+
+## Code
+
+```{r}
+#| label: design-check
+field <- read_csv(here::here("data/lecture3-example3.csv"))
+field |> 
+  count(trt, block) |> 
+  pivot_wider(names_from = block, values_from = n)
+```
+
+## Answer
+
+The `"none"` treatment appears 4 times per block, while every other treatment appears only once -- an unbalanced design.
+
+:::
+
 ## Case study: Warranty claims 
 
 :::: {.columns}
 ::: {.column width=50%}
 
 ```{r}
-#| echo: false
 warranty <- read_csv(here("data/warranty-kaggle.csv"))
 warranty |>
   filter(Product_type == "TV") |>
@@ -964,7 +1071,6 @@ warranty |>
 ::: {.fragment}
 
 ```{r}
-#| echo: false
 set.seed(635)
 warranty |> 
   filter(Product_type == "TV") |> 
@@ -1003,7 +1109,6 @@ warranty |>
 ::: {.column width=50%}
 
 ```{r}
-#| echo: false
 library(VGAM)
 data(olym12)
 olym12 |> select(country, totalmedal) |>
@@ -1132,10 +1237,6 @@ out <- confront(SBS2000, rules)
 summary(out)
 ```
 
-
-
-
-
 ## IDA for hypothesis testing {.transition-slide .center style="text-align: center;"}
 
 
@@ -1236,183 +1337,6 @@ Why does [equal variance matter]{.monash-orange2} in this test?
 :::
 ::::
 
-## IDA for inferential modeling {.transition-slide .center style="text-align: center;"}
-
-
-## Linear models [(1/3)]{.smallest}
-
-:::: {.columns}
-
-::: {.column width=50%}
-
-::: {style="font-size: 70%;"}    
-
-```{r}
-#| code-fold: true
-#| out-width: 80%
-library(tidyverse)
-library(broom)
-ggplot(cars, aes(speed, dist)) + 
-  geom_point() + 
-  geom_smooth(method = "lm", se = FALSE)
-```
-
-
-$$y_i = \beta_0 + \beta_1 x_i + e_i$$
-
-Assumptions:
-
-- Form is [linear]{.monash-blue2}
-- Error is normally distributed around 0
-:::
-:::
-
-::: {.column width=50%}
-
-Check using [residual plots]{.monash-blue2}
-
-::: {style="font-size: 70%;"}    
-
-```{r}
-#| code-fold: true
-#| fig-height: 3
-#| fig-width: 6
-cars_model <- lm(dist ~ speed, data = cars)
-cars_fit <- augment(cars_model)
-
-cars_p1 <- ggplot(cars_fit, aes(x=.fitted, 
-                                y=.resid)) + 
-  geom_hline(yintercept = 0, colour="grey70") +
-  geom_point() 
-cars_p2 <- ggplot(cars_fit, aes(x=.resid)) +
-  geom_density()
-cars_p1 + cars_p2 + plot_layout(ncol=2)
-```
-
-:::
-:::
-::::
-
-
-## Linear models [(2/3)]{.smallest}
-
-:::: {.columns}
-
-::: {.column width=50%}
-
-::: {style="font-size: 70%;"}    
-
-Data and loess smoother
-
-```{r}
-#| code-fold: true
-#| out-width: 80%
-ggplot(diamonds, aes(carat, price)) + 
-  geom_point(alpha = 0.2) + 
-  geom_smooth(se=F)
-```
-
-- Form is [not linear]{.monash-blue2}!
-- Also, insufficient data on large diamonds.
-
-:::
-:::
-
-::: {.column width=50%}
-
-[Fix 1: fit polynomial form]{.monash-blue2}
-
-::: {style="font-size: 70%;"}    
-
-$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + e_i.$$
-
-
-```{r}
-#| code-fold: true
-#| fig-height: 4
-#| fig-width: 8
-diamonds_sub <- diamonds |>
-  filter(carat < 3)
-
-diamonds_model <- lm(price ~ poly(carat, 2),
-                     data=diamonds_sub)
-diamonds_fit <- diamonds_sub |>
-  mutate(.fitted = diamonds_model$fitted.values, 
-         .resid = diamonds_model$residuals)
-
-diamonds_p1 <- ggplot(diamonds_fit) +
-  geom_point(aes(x=carat, y=price)) +
-  geom_point(aes(x=carat, y=.fitted),
-             colour="#D55E00")
-diamonds_p2 <- ggplot(diamonds_fit, 
-                      aes(x=.fitted, 
-                          y=.resid)) + 
-  geom_hline(yintercept = 0, colour="grey70") +
-  geom_point() 
-diamonds_p1 + diamonds_p2 + plot_layout(ncol=2)
-```
-
-::: {.fragment}
-Form is not quadratic, continue to [explore additional polynomial terms]{.monash-blue2}.
-:::
-
-:::
-:::
-::::
-
-## Linear models [(3/3)]{.smallest}
-
-:::: {.columns}
-
-::: {.column width=50%}
-
-::: {style="font-size: 70%;"}    
-
-Data and loess smoother
-
-```{r}
-#| code-fold: true
-#| out-width: 80%
-ggplot(diamonds, aes(carat, price)) + 
-  geom_point(alpha = 0.2) + 
-  geom_smooth(se=F)
-```
-
-- Form is [not linear]{.monash-blue2}!
-- Also, insufficient data on large diamonds.
-
-:::
-:::
-
-::: {.column width=50%}
-
-[Fix 2: linearise]{.monash-blue2}
-
-::: {style="font-size: 70%;"}    
-
-The [log transformation of both variables]{.monash-orange2} linearises the relationship, so that a simple linear model can be used, and can correct heteroskedasticity. 
-
-```{r}
-#| code-fold: true
-ggplot(diamonds_sub, aes(carat, price)) + 
-  geom_point(alpha = 0.2) + 
-  geom_smooth(method = lm) +
-  scale_x_log10() +
-  scale_y_log10() 
-```
-
-:::
-:::
-::::
-
-## Cautions
-
-* Notice that there was _**no formal statistical inference**_ when trying to determine an appropriate model form.
-
-::: {.info}
-Discarded models are hardly ever reported. Consequently, majority of reported statistics give a distorted view and it's important to [remind yourself what might _**not**_ be reported]{.monash-orange2}.
-:::
-
 ## Summary
 
 :::: {.columns}
@@ -1447,10 +1371,94 @@ Human actions are ubiquitous in every part of data analysis! The most objective 
 :::
 
 ::::
+## Data quality check list
+
+:::: {.columns}
+::: {.column .smaller}
+
+**Completeness**
+
+- [ ] Check for missing values, and whether random or systematic
+- [ ] Check for missing records entirely (e.g., expected rows/groups that don't appear)
+- [ ] Verify no truncated or incomplete data pulls (e.g., API/export cut off early)
+
+**Accuracy & validity**
+
+- [ ] Check for suspicious patterns (e.g., too many identical values, default/placeholder values like 9999 or "N/A" strings)
+- [ ] Check values fall within expected ranges (e.g., age isn't negative or 200)
+- [ ] Validate categorical variables against expected category lists (no typos/variants like "NY" vs "New York" vs "ny")
+- [ ] Check date fields are valid and logically ordered (e.g., start date before end date)
+
+:::
+::: {.column .smaller}
+
+**Consistency**
+
+- [ ] Check for duplicate records (exact and near-duplicates)
+- [ ] Verify consistent formatting (date formats, units of measurement, capitalization)
+- [ ] Check consistent coding across related variables (e.g., same ID format across joined tables)
+- [ ] Confirm consistent granularity (e.g., not mixing daily and monthly records unintentionally)
+
+**Structural integrity**
+
+- [ ] Confirm column data types match expectations (no numbers stored as text, etc.)
+- [ ] Check for structural issues from import (shifted columns, broken delimiters, encoding issues)
+- [ ] Verify referential integrity between related tables (foreign keys match)
 
 
+:::
+::::
 
-## Further reading
+## 
+
+:::: {.columns}
+::: {.column}
+
+### Data quality check list
+
+::: {.smaller}
+
+**Uniqueness**
+
+- [ ] Verify primary keys/IDs are actually unique
+- [ ] Check for unintended many-to-many joins when merging datasets
+
+**Timeliness**
+
+- [ ] Confirm data reflects the relevant/expected time period
+- [ ] Check for stale or outdated records if freshness matters
+
+**Documentation & provenance**
+
+- [ ] Confirm data source and collection method are known
+- [ ] Check for a data dictionary/metadata describing variables
+- [ ] Note any known transformations already applied to the data
+
+:::
+
+:::
+
+::: {.column}
+
+### Check list for statistical assumptions
+
+::: {.smaller}
+- [ ] Identify (statistical) outliers (z-score, IQR method), data errors or genuine extreme values
+- [ ] Univariate distributions are reasonably spread, not skewed or multimodal, or are transformations needed
+- [ ] Outcome variable could reasonably support normal error distribution
+- [ ] Are observations independently sampled?
+- [ ] Do outcome and continuous predictors have a linear relationship?
+- [ ] Is the relationship between outcome and predictors homoscedastic?
+- [ ] Are predictors not associated?
+- [ ] Are training and test sets similar?
+- [ ] For categorical variables, do all levels have sufficient sample size?
+
+:::
+
+:::
+::::
+
+## Resources
 
 - Huebner et al (2018) [A Contemporary Conceptual Framework for Initial Data Analysis](https://muse.jhu.edu/article/793379/pdf)
 - Huebner et al (2020) [Hidden analyses](https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-020-00942-y)

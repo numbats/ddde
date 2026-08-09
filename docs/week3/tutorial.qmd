@@ -66,52 +66,85 @@ conflicts_prefer(dplyr::slice)
 
 ## 🎯 Objectives
 
-Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns. 
+Practice doing data quality checks across multiple related tables, and practice writing up data problems as clear, reproducible GitHub issues. 
 
 ## 🔧 Preparation 
 
 The reading for this week is [The initial examination of data](https://www.jstor.org/stable/28c1953a-8130-3c31-bd91-3ca6ce1d96d8?seq=7). It is authored by Chris Chatfield, and is a classic paper explaining the role of initial data analysis. 
 
-- Complete the weekly quiz, before the deadline!
 - Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
+- Install the `ecotourism` package, which we'll use today:
 
+```{r}
+#| eval: false
+#| code-fold: false
+# install.packages("remotes")
+remotes::install_github("vahdatjavad/ecotourism")
+```
 
 ## 📥 Exercises
 
-Today, you have sprint competition to discover as many problems as possible in this data, [cafe.rda](https://github.com/numbats/ddde/blob/main/data/cafe.rda).
+Today you have a sprint competition to discover as many *distinct* problems as possible in the [`ecotourism`](https://github.com/vahdatjavad/ecotourism) package's data.
 
-*A small cafe in the city of Melbourne is interested in determining whether the daily earnings depend on the weather. They compiled data for a period over 2000-2001 to study this question.* The data has the following variables:
+*The `ecotourism` package bundles together wildlife occurrence records (glowworms, Gouldian finches, manta rays, orchids), the weather stations nearest to where each species is observed, daily weather at those stations, and ABS tourism trip data by region.* Because it's several related tables, rather than one flat data set, some problems will only show up once you try to **join tables together**, not by skimming any one table alone.
 
 ```{r}
 #| echo: false
 library(kableExtra)
-desc <- tibble(var=c("dt", "wday", "revenue", "expend", "precip", "mint", "maxt", "source"),
-               description=c("Date", 
-              "Day of the week",
-              "Daily revenue in hundreds, 11=1100", 
-              "Daily expenses in hundreds",
-              "Precipitation in mm", 
-              "Minimum temperature, Celsius",
-              "Maximum temperature, Celsius",
-              "Source of the weather data"))
+desc <- tibble(
+  object = c("glowworms", "gouldian_finch", "manta_rays", "orchids",
+             "top_stations", "weather_stations", "weather",
+             "tourism_region", "tourism_activity", "tourism_activity_name",
+             "tourism_reason", "tourism_reason_name"),
+  description = c(
+    "Glowworm occurrence records, 2014-2024 (lat/lon, date/time, `ws_id` of nearest station)",
+    "Gouldian finch occurrence records, 2014-2024",
+    "Manta ray occurrence records, 2014-2024",
+    "Orchid occurrence records, 2014-2024 (many species)",
+    "The weather station(s) chosen as \"nearest\" for each organism",
+    "Weather station metadata: name, location, state (key: `ws_id`)",
+    "Daily weather by station, 2014-2024 (temp, rain, wind, etc; key: `ws_id` + `date`)",
+    "SA2 tourism regions, with state, location, and nearest `ws_id` (key: `sa2_code_tra`)",
+    "Monthly tourism trips by SA2 region and stopover activity code",
+    "Lookup table: stopover activity code -> activity name",
+    "Monthly tourism trips by SA2 region and stopover reason code",
+    "Lookup table: stopover reason code -> reason name"
+  ))
 kbl(desc, table.attr = 'data-quarto-disable-processing="true"') |> 
   kable_styling(full_width = FALSE) |>
-  column_spec(1, width="2cm", border_right = T) |>
+  column_spec(1, width="3.5cm", border_right = T) |>
   column_spec(2, width="10cm")
 ```
 
+The package's [README](https://github.com/vahdatjavad/ecotourism#whats-inside) has a diagram of how these tables relate to each other -- look at it before you start.
+
+#### What to look for
+
+The list from the class slides is a reasonable place to start, although part of the exercise is noticing things nobody told you to look for. Some suggestions are:
+
+- **Missing data**: are there columns, or particular rows, with unexpectedly many (or entirely) missing values?
+- **Incomplete joins**: when you join two related tables on their key column(s), does every row find a match in both directions? If not, is that a genuine data problem, or just a real absence (e.g. a region with no reported trips)?
+- **Missing time points**: for a time series that should be contiguous (e.g. daily weather at one station), are there any gaps?
+- **Name/text mismatches**: do the same categories (e.g. states, regions) get written consistently across tables, and within a table?
+- Anything else you notice that looks wrong, inconsistent, or implausible.
+
+#### How to report what you find
+
+For **each distinct problem** you find, create a **separate GitHub issue** on the `ecotourism` package's repository. Each issue should include:
+
+1. A short, specific title (e.g. "tourism_region uses 'ACT' while other tables spell out the state name").
+2. Which table(s) and column(s) are involved.
+3. The R code you used to find it (so it's reproducible).
+4. Why it matters -- what would go wrong if you used the data as-is?
+
 #### Guidelines
 
-- Use whatever R package or software or tool you'd like, and report how you found the error.
+- Use whatever R package or software or tool you'd like.
 - Feel free to buddy up, and work with another student in your tutorial session.
-- No cheating! This time do the assignment without AI help, or searching for answers on the web.
-- Please don't ruin the later tutorials by sharing your work!
+- No cheating! This time do the assignment without AI help (except for code syntax), or searching for answers on the web. (Reading the package's own documentation and README is fine -- that's part of an initial data analysis.)
 
-The most complete list with best process for findings, as decided by your tutor, wins the prize! Your tutor's decision is final!
+The most complete list of *distinct, genuine* issues, each with a clear issue write-up, as decided by your tutor, wins the prize! Your tutor's decision is final!
 
-::: unilur-solution
-Your tutor has the solution!
-:::
 
 ## 👌 Finishing up
 
