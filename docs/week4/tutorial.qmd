@@ -1,6 +1,6 @@
 ---
 title: "ETC5521 Tutorial 4"
-subtitle: "Initial data analysis"
+subtitle: "Computational evidence"
 author: "Prof. Di Cook"
 quarto-required: ">=1.8.0"
 format:
@@ -18,8 +18,12 @@ format:
 
 ```{r include=FALSE}
 #| echo: false
-library(tidyverse)
-library(conflicted)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(nullabor)
+library(learningtower)
+library(ggbeeswarm)
 
 # Set up chunk for all slides
 knitr::opts_chunk$set(
@@ -55,6 +59,7 @@ theme_set(theme_bw(base_size = 14) +
    )
 )
 
+library(conflicted)
 conflicts_prefer(dplyr::filter)
 conflicts_prefer(dplyr::select)
 conflicts_prefer(dplyr::slice)
@@ -63,18 +68,17 @@ conflicts_prefer(dplyr::slice)
 
 ## 🎯 Objectives
 
-Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns. 
+Practice conducting using computational tools to assess significance of patterns. 
 
 ## 🔧 Preparation 
 
 The reading for this week is [Wickham et al. (2010) Graphical inference for Infovis](https://vita.had.co.nz/papers/inference-infovis.pdf).  
-- Complete the weekly quiz, before the deadline!
-- Make sure you have this list of R packages installed: 
+- Make sure you have this package installed from github: 
 
 ```{r}
 #| eval: false
 #| code-fold: false
-install.packages(c("tidyverse"))
+devtools::install_github("kevinwang09/learningtower")
 ```
 
 - Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
@@ -82,219 +86,192 @@ install.packages(c("tidyverse"))
 
 ## 📥 Exercises
 
-This tutorial focuses on IDA for the `gardenR` data, with the goal to answer this question:
-
-**Which variety of tomato produces the most return on investment, as measured by weight?**
-
 ### Exercise 1
 
-a. How many types of vegetables were grown in each year?
-b. How many vegetables were grown in 2020 that were not grown in 2021? 
-c. What are some of the data recording errors that can be seen by comparing vegetables grown in each year?
+Load the 2022 data, and filter on Australia. Make a quick check on the missng values, and the variables contained in the data. Here is the code to load the data:
+
+```{r}
+#| label: load-oz
+stu_2022 <- load_student(year = "2022")
+stu_2022_oz <- stu_2022 |>
+  filter(country == "AUS")
+```
 
 ::: unilur-solution
 
-```{r}
-library(gardenR)
-library(tidyverse)
-library(ggbeeswarm)
-
-data("garden_coords")
-data("garden_harvest")
-data("garden_planting")
-data("garden_spending")
-data("harvest_2021")
-data("planting_2021")
-data("spending_2021")
-```
-
-`r garden_harvest |> count(vegetable, sort=TRUE) |> nrow()` grown in 2020, and `r harvest_2021 |> count(vegetable, sort=TRUE) |> nrow()` grown in 2021.
-
-b. To work out which differ between years, use the `anti_join()` function. Because there are multiple plots of vegetables use `distinct()` to remove duplicates, and then arrange alphabetically for ease of comparison. 
+There are `r nrow(stu_2022_oz)` observations. 
 
 ```{r}
-#| label: mismatches
-in20butnot21 <- anti_join(select(garden_harvest, vegetable), select(harvest_2021, vegetable), by="vegetable") |> 
-  distinct() |> 
-  arrange(vegetable)
-in21butnot20 <- anti_join(select(harvest_2021, vegetable), select(garden_harvest, vegetable), by="vegetable") |> 
-  distinct() |> 
-  arrange(vegetable)
-in20butnot21$vegetable
-in21butnot20$vegetable
+#| label: missings
+library(naniar)
+vis_miss(stu_2022_oz, sort_miss = TRUE)
 ```
 
-c. 
-
-- `swiss chard` was grown in each year but capital "S" was used in 2020. 
-- `apples` were grown in each year, but singular name was used in 2021.
-- similarly for `pumpkins` but in reverse, singular used in 2020!
+The variables `desk`, `dishwasher` and `wealth` are completely missing. Otherwise, there are a few sporadic missings on all of the other demographic variables. The scores, schools, country, year variables are complete.
 
 ```{r}
-harvest_2020 <- garden_harvest |>
-  mutate(vegetable = tolower(vegetable),
-         variety = tolower(variety)) |>
-  mutate(vegetable = case_match(
-    vegetable,
-    "apple" ~ "apples",
-    .default = vegetable)
-  )
-harvest_2021 <- harvest_2021 |>
-  mutate(vegetable = case_match(
-    vegetable,
-    "pumpkin" ~ "pumpkins",
-    .default = vegetable)
-  )
+#| label: vars
+glimpse(stu_2022_oz)
 ```
-
-So final answer for (b) is here are the vegetables not grown both years:
-
-```{r}
-#| label: mismatches
-#| echo: false
-```
-
 
 :::
 
 ### Exercise 2
 
-a. Join the harvest, spending and planting data for the two years, after adding a new variable each, called `year`. Show your code.
-b. Make a subset containing just the tomatoes, for each set.
-c. Are the varieties of tomatoes grown each year the same?
-d. Are the tomato varieties grown in the same plots each year?
-e. When are tomatoes planted and harvested, in Lisa's garden?
+Pick one of the categorical variables, and one of the score variables. Write down the `ggplot2` code to make a plot of your chosen variables. Then answer these questions:
+
+a. What would be the obvious null hypothesis associated with your plot? That is, write out in English what it would mean to say that there is nothing interesting to see in the plot.
+b. Then what would be the alternative hypothesis?
+c. From your null hypothesis, what would be a suitable null data generating mechanism?
+d. Adjust your code to make a lineup plot, and use yourself to test whether the hull hypothesis can be rejected or not.
 
 ::: unilur-solution
 
-a.
-
 ```{r}
-harvest_2020 <- garden_harvest |>
-  mutate(year = "2020")
-harvest_2021 <- harvest_2021 |>
-  mutate(year = "2021")
-harvest <- bind_rows(harvest_2020, harvest_2021)
-
-spending_2020 <- garden_spending |>
-  mutate(year = "2020")
-spending_2021 <- spending_2021 |>
-  mutate(year = "2021")
-spending <- bind_rows(spending_2020, spending_2021)
-
-planting_2020 <- garden_planting |>
-  mutate(year = "2020")
-planting_2021 <- planting_2021 |>
-  mutate(year = "2021")
-planting <- bind_rows(planting_2020, planting_2021)
+#| label: ggplot-code
+#| eval: false
+ggplot(stu_2022_oz, aes(x=television, 
+                        y=read)) +
+  geom_quasirandom(alpha=0.5) +
+  stat_summary(colour = "red")
 ```
 
-b.
+a. The null hypothesis would be that there is no relationship between number of TVs in the household and the reading scores.
+b. The alternative hypothesis is that there is a relationship.
+c. A suitable null generating mechanism is the permute one of the variables. It could be either.
+d. 
 
 ```{r}
-harvest_toms <- harvest |> filter(vegetable == "tomatoes")
-spending_toms <- spending |> filter(vegetable == "tomatoes")
-planting_toms <- planting |> filter(vegetable == "tomatoes")
+#| label: lineup
+#| fig-width: 8
+#| fig-height: 7
+#| out-width: 100%
+set.seed(906)
+ggplot(lineup(null_permute("read"), stu_2022_oz), 
+    aes(x=television, 
+        y=read)) +
+  geom_quasirandom(alpha=0.5) +
+  stat_summary(colour = "red") +
+  facet_wrap(~.sample)
 ```
 
-c. 
-
-```{r}
-tom_smry <- harvest_toms |> 
-  count(variety, year) |> 
-  pivot_wider(names_from = year, values_from = n)
-tom_smry
-n_complete <- tom_smry |> mutate(m=`2020`+`2021`) |> filter(!is.na(m)) |> nrow()
-```
-
-There are a lot of varieties of tomatoes grown, only `r n_complete` are grown in both years.
-
-d. Use only the varieties grown in both years. 
-
-```{r}
-#| code-fold: true
-tom_both_yrs <- tom_smry |> mutate(m=`2020`+`2021`) |> filter(!is.na(m)) 
-planting_toms |> 
-  filter(variety %in% tom_both_yrs$variety) |>
-  count(variety, plot, year) |>
-  pivot_wider(names_from = plot, values_from = n)
-```
-
-Not a single variety is grown in the same plot each year. This might cause problems, if the plots are not equally good for growing tomatoes.
-
-e. Again, just use the tomatoes that are grown in each year. 
-
-```{r}
-#| code-fold: true
-planting_toms_sub <- planting_toms |>
-  filter(variety %in% tom_both_yrs$variety) |>
-  mutate(type = "planting") |>
-  select(variety, date, type, year)
-harvest_toms_sub <- harvest_toms |>
-  filter(variety %in% tom_both_yrs$variety) |>
-  mutate(type = "harvest") |>
-  select(variety, date, type, year)
-tom_variety_order <- harvest_toms_sub |>
-  group_by(variety) |>
-  summarise(date = min(date)) |>
-  arrange(date)
-p_h_tom <- bind_rows(planting_toms_sub, harvest_toms_sub) |>
-  mutate(day_yr = yday(date)) |>
-  mutate(variety = factor(variety, tom_variety_order$variety))
-ggplot(p_h_tom) +
-  geom_point(aes(x=day_yr, y=year, colour=type)) +
-  facet_wrap(~variety, ncol=4, scales="free_x") +
-  scale_colour_brewer("", palette="Dark2") +
-  xlab("day of year") + ylab("") +
-  theme(legend.position="bottom")
-```
-
-Planting is usually in late May, and it is consistent for all the varieties. 
-
-Harvesting starts around 50 days after planting. 2020 had an earlier harvest than 2021 for all varieties. Big Beef tends to be harvested first, and Black Kim later. Old German had a poor harvest in 2021 relative to 2022.
+For this example, we can see the difference between the means across the number of TVs in one plot but not the others, and when you run the `decrypt` line it matches the data plot. So here we would reject the null hypothesis and conclude that there is a relationship between reading scores and number of TVs.
 
 :::
 
-### Exercise 3 Try to answer the original question. 
+### Exercise 3
 
-a. How should you calibrate weight of harvest by amount of seeds planted?
+This question is to assess if your choice of plot type might affect the ability to detect the difference. Whatever your conclusion from the activity in the previous question, think about an alternative plot design. 
 
-b. Which variety produces the most return on investment?
+1. Make the lineup with the different plot design. (You might use a new position - by not setting a seed and re-generating the lineup - every time you show someone, so if they hear another class mate say a number it won't influence the next person.)
+2. Show half of your class mates, the new design, and half the old design. 
+3. Record how many of them chose the data plot. 
 
 ::: unilur-solution
 
-a. We'll divide the weight by number of seeds planted. An interesting observation is that so few tomato seeds were planted! Packets of tomato seeds have lots of seeds.
+Here I am generating the same plot, without the mean summary overlaid. I think it is harder to see the difference between plots. 
 
 ```{r}
-#| code-fold: true
+#| label: plot-type1
 #| fig-width: 8
-#| fig-height: 6
+#| fig-height: 7
 #| out-width: 100%
-planting_smry <- planting_toms |>
-  filter(variety %in% tom_both_yrs$variety) |>
-  select(variety, date, year, number_seeds_planted, number_seeds_exact) |>
-  group_by(variety, year) |>
-  summarise(nseeds = sum(number_seeds_planted))
-harvest_smry <- harvest_toms |>
-  filter(variety %in% tom_both_yrs$variety) |>
-  group_by(variety, year) |>
-  summarise(weight = sum(weight))
-tom_weight <- left_join(planting_smry, harvest_smry) |>
-  mutate(wgt_ps = weight/nseeds)
-
-ggplot(tom_weight, aes(
-  x = fct_reorder(variety, wgt_ps),
-  y = wgt_ps,
-  colour = year)) +
-  geom_point() + 
-  coord_flip() +
-  xlab("") + ylab("weight per seed") +
-  scale_colour_brewer("", palette="Dark2")
+ggplot(lineup(null_permute("read"), stu_2022_oz), 
+    aes(x=television, 
+        y=read)) +
+  geom_quasirandom(alpha=0.5) +
+  stat_summary(colour = "red") +
+  facet_wrap(~.sample)
 ```
 
-b. 
+```{r}
+#| label: plot-type2
+#| fig-width: 8
+#| fig-height: 7
+#| out-width: 100%
+ggplot(lineup(null_permute("read"), stu_2022_oz), 
+    aes(x=television, 
+        y=read)) +
+  geom_quasirandom(alpha=0.5) +
+  #stat_summary(colour = "red") +
+  facet_wrap(~.sample)
+```
 
-Big Beef is a consistently high performer, over these two years. Old German is the most varied, top by weight in 2020 but failed in 2021.
+This comparison actually raises an important question: are these two plots testing the same null hypothesis?
+
+Technically, the answer is NO, emphatically! when you overlay the mean, with a coloured point, the plot is now focusing on the differences between means. A more appropriate comparison is to change the way the mean is represented: 
+
+```{r}
+#| label: plot-type3
+#| fig-width: 8
+#| fig-height: 7
+#| out-width: 100%
+ggplot(lineup(null_permute("read"), stu_2022_oz), 
+    aes(x=television, 
+        y=read)) +
+  geom_quasirandom(alpha=0.5) +
+  stat_summary(geom = "crossbar", width = 0.5,
+    colour = "red") +
+  facet_wrap(~.sample)
+```
+
+:::
+
+### Exercise 4
+
+The PISA data is actually an example of survey data, which means each observation is associated with a weight (`stu_wgt`). We need to work out how this should be incorporated in the the analysis. 
+
+a. Find out what you can about this variable and how it should be used in an analysis, using AI if needed, or reading the documentation.
+b. How would you calculate a mean, for survey data like this that has a weight variable?
+c. What plotting methods can accommodate weights?
+
+::: unilur-solution
+
+Here is a small summary of the weights by gender and school. We can see that they are varied. 
+
+```{r}
+stu_2022_oz |> 
+  group_by(gender, school_id) |>
+  summarise(m = mean(stu_wgt, na.rm=TRUE),
+            s = sd(stu_wgt, na.rm=TRUE)) |>
+  ggplot(aes(x=gender, y=m)) +
+    geom_quasirandom(alpha = 0.5)
+```
+
+a. The weight variable takes various survey design features into account, so that any estimates might better reflect the population. The population is all school children of this age group being tested. The weight accommodates school sampling, and sampling of students within the school, along with demographics like gender, and year level relative to age. 
+
+b. You would use a `weighted_mean()` function instead of `mean()`.
+
+c. There are a few geoms for single variable plots that can use the weight appropriately, e.g. `geom_density()`. Make the plot with and without adjusting with the weight. Explain any difference.
+
+```{r}
+#| label: weights
+#| fig-width: 10
+#| fig-height: 5
+#| out-width: 100%
+library(ggridges)
+library(patchwork)
+p1 <- ggplot(stu_2022_oz, 
+    aes(x=read, 
+        y=television)) +
+  geom_density_ridges(
+    fill = "red", 
+    colour = "red",
+    alpha = 0.5) 
+    
+p2 <- ggplot(stu_2022_oz, 
+    aes(x=read, 
+        y=television, 
+        weight=stu_wgt)) +
+  geom_density_ridges(
+    fill = "red", 
+    colour = "red",
+    alpha = 0.5) 
+
+p1 + p2 + plot_layout(ncol=2)
+```
+
+There is a small amount of difference in the density plots made here. It might be argued that it is not large enough to change any decisions.
 
 :::
 

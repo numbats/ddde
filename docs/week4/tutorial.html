@@ -4248,7 +4248,7 @@ color: #C8008F;
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">ETC5521 Tutorial 4</h1>
-<p class="subtitle lead">Initial data analysis</p>
+<p class="subtitle lead">Computational evidence</p>
 </div>
 
 
@@ -4273,14 +4273,14 @@ color: #C8008F;
 
 <section id="objectives" class="level2">
 <h2 class="anchored" data-anchor-id="objectives">🎯 Objectives</h2>
-<p>Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns.</p>
+<p>Practice conducting using computational tools to assess significance of patterns.</p>
 </section>
 <section id="preparation" class="level2">
 <h2 class="anchored" data-anchor-id="preparation">🔧 Preparation</h2>
 <p>The reading for this week is <a href="https://vita.had.co.nz/papers/inference-infovis.pdf">Wickham et al. (2010) Graphical inference for Infovis</a>.<br>
-- Complete the weekly quiz, before the deadline! - Make sure you have this list of R packages installed:</p>
+- Make sure you have this package installed from github:</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;tidyverse&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;kevinwang09/learningtower&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Open your RStudio Project for this unit, (the one you created in week 1, <code>ETC5521</code>). Create a <code>.qmd</code> document for this weeks activities.</li>
@@ -4288,31 +4288,41 @@ color: #C8008F;
 </section>
 <section id="exercises" class="level2">
 <h2 class="anchored" data-anchor-id="exercises">📥 Exercises</h2>
-<p>This tutorial focuses on IDA for the <code>gardenR</code> data, with the goal to answer this question:</p>
-<p><strong>Which variety of tomato produces the most return on investment, as measured by weight?</strong></p>
 <section id="exercise-1" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-1">Exercise 1</h3>
-<ol type="a">
-<li>How many types of vegetables were grown in each year?</li>
-<li>How many vegetables were grown in 2020 that were not grown in 2021?</li>
-<li>What are some of the data recording errors that can be seen by comparing vegetables grown in each year?</li>
-</ol>
+<p>Load the 2022 data, and filter on Australia. Make a quick check on the missng values, and the variables contained in the data. Here is the code to load the data:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>stu_2022 <span class="ot">&lt;-</span> <span class="fu">load_student</span>(<span class="at">year =</span> <span class="st">&quot;2022&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>stu_2022_oz <span class="ot">&lt;-</span> stu_2022 <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">&quot;AUS&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="exercise-2" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2">Exercise 2</h3>
+<p>Pick one of the categorical variables, and one of the score variables. Write down the <code>ggplot2</code> code to make a plot of your chosen variables. Then answer these questions:</p>
 <ol type="a">
-<li>Join the harvest, spending and planting data for the two years, after adding a new variable each, called <code>year</code>. Show your code.</li>
-<li>Make a subset containing just the tomatoes, for each set.</li>
-<li>Are the varieties of tomatoes grown each year the same?</li>
-<li>Are the tomato varieties grown in the same plots each year?</li>
-<li>When are tomatoes planted and harvested, in Lisa’s garden?</li>
+<li>What would be the obvious null hypothesis associated with your plot? That is, write out in English what it would mean to say that there is nothing interesting to see in the plot.</li>
+<li>Then what would be the alternative hypothesis?</li>
+<li>From your null hypothesis, what would be a suitable null data generating mechanism?</li>
+<li>Adjust your code to make a lineup plot, and use yourself to test whether the hull hypothesis can be rejected or not.</li>
 </ol>
 </section>
-<section id="exercise-3-try-to-answer-the-original-question." class="level3">
-<h3 class="anchored" data-anchor-id="exercise-3-try-to-answer-the-original-question.">Exercise 3 Try to answer the original question.</h3>
+<section id="exercise-3" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3">Exercise 3</h3>
+<p>This question is to assess if your choice of plot type might affect the ability to detect the difference. Whatever your conclusion from the activity in the previous question, think about an alternative plot design.</p>
+<ol type="1">
+<li>Make the lineup with the different plot design. (You might use a new position - by not setting a seed and re-generating the lineup - every time you show someone, so if they hear another class mate say a number it won’t influence the next person.)</li>
+<li>Show half of your class mates, the new design, and half the old design.</li>
+<li>Record how many of them chose the data plot.</li>
+</ol>
+</section>
+<section id="exercise-4" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-4">Exercise 4</h3>
+<p>The PISA data is actually an example of survey data, which means each observation is associated with a weight (<code>stu_wgt</code>). We need to work out how this should be incorporated in the the analysis.</p>
 <ol type="a">
-<li><p>How should you calibrate weight of harvest by amount of seeds planted?</p></li>
-<li><p>Which variety produces the most return on investment?</p></li>
+<li>Find out what you can about this variable and how it should be used in an analysis, using AI if needed, or reading the documentation.</li>
+<li>How would you calculate a mean, for survey data like this that has a weight variable?</li>
+<li>What plotting methods can accommodate weights?</li>
 </ol>
 </section>
 </section>

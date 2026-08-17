@@ -145,6 +145,45 @@ For **each distinct problem** you find, create a **separate GitHub issue** on th
 
 The most complete list of *distinct, genuine* issues, each with a clear issue write-up, as decided by your tutor, wins the prize! Your tutor's decision is final!
 
+::: unilur-solution
+
+Genuine issues confirmed in the data (there may be more than this):
+
+- **Missing values**: `gouldian_finch` is missing `month` (2 rows) and `day` (17 rows); `manta_rays` is missing `obs_state` (8 rows); `weather_stations` is missing `address`/`stn_city`/`stn_state` (2 rows); `weather` has substantial missingness in `temp`/`min`/`max`/`dewp`/`rh`/`prcp`/`wind_speed`/`max_speed`.
+- **Blank/incomplete rows**: `tourism_region` has 3 rows where `state`, `region`, `sa2` and `sa2_code_tra` are *all* `NA` (only `lon`/`lat`/`ws_id` are populated).
+- **Type mismatch breaking a join**: `tourism_activity$sa2_code_tra` and `tourism_reason$sa2_code_tra` are integer, while `tourism_region$sa2_code_tra` is character -- a direct join errors until one side is coerced.
+- **Incomplete join (real absence, worth flagging)**: once types are matched, every `sa2_code_tra` in `tourism_activity`/`tourism_reason` matches `tourism_region`, but 66 of the 2351 distinct regions in `tourism_region` never appear in `tourism_activity` at all.
+- **Missing contiguous time points**: the weather station `956410-99999` (one of the orchid stations) is missing all 365 days of 2022, even though its other years (2014-2024) are complete.
+- **Name/text mismatches**: `tourism_region$state` records "ACT" for the Australian Capital Territory, while every other row spells out the full state name (and `weather_stations$stn_state` also uses "Australian Capital Territory"). Separately, Norfolk Island is recorded under state "New South Wales" / region "Outback NSW", and the Cocos (Keeling) Islands are recorded under state "Tasmania" -- both are external territories, not part of either state.
+
+```{r}
+#| eval: false
+library(ecotourism)
+library(tidyverse)
+
+# missing values
+colSums(is.na(tourism_region))
+colSums(is.na(gouldian_finch))
+
+# type mismatch on the join key
+tourism_activity |> anti_join(tourism_region, by = "sa2_code_tra")  # errors!
+tourism_activity |>
+  mutate(sa2_code_tra = as.character(sa2_code_tra)) |>
+  anti_join(tourism_region, by = "sa2_code_tra")                    # 0 rows once fixed
+
+# missing days in a station's daily weather record
+weather |>
+  group_by(ws_id) |>
+  summarise(n_obs = n(),
+            n_expected = as.integer(max(date) - min(date)) + 1L) |>
+  filter(n_obs != n_expected)
+
+# inconsistent state labels
+tourism_region |> distinct(state)
+weather_stations |> distinct(stn_state)
+```
+
+:::
 
 ## 👌 Finishing up
 

@@ -18,144 +18,795 @@ code-fold: true
 
 ```{r include=FALSE}
 knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.height = 4,
-  fig.align = "center",
-  out.width = "100%",
-  code.line.numbers = FALSE,
-  fig.retina = 4,
-  echo = TRUE,
-  message = FALSE,
-  warning = FALSE,
-  error = FALSE,
-  cache = FALSE,
-  dev.args = list(pointsize = 11)
+  fig.width  = 9,
+  fig.height = 6,
+  fig.align  = "center",
+  out.width  = "100%",
+  echo       = TRUE,
+  message    = FALSE,
+  warning    = FALSE,
+  error      = FALSE,
+  cache      = FALSE
 )
+
 library(tidyverse)
-library(ggbeeswarm)
 library(nullabor)
-library(broom)
-library(conflicted)
 
-conflicts_prefer(dplyr::filter)
-conflicts_prefer(dplyr::select)
-conflicts_prefer(dplyr::slice)
+# penguins is available directly in R >= 4.5.0
+# Variable names are shorter than in palmerpenguins:
+#   bill_len, bill_dep, flipper_len, body_mass (no units suffix)
+data(penguins)
 
-options(
-  digits = 2,
-  width = 80,
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill = "viridis",
-  ggplot2.discrete.colour = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
-  ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
-)
-theme_set(theme_bw(base_size = 14) +
-   theme(
-     aspect.ratio = 1,
-     plot.background = element_rect(fill = 'transparent', colour = NA),
-     plot.title.position = "plot",
-     plot.title = element_text(size = 24),
-     panel.background = element_rect(fill = 'transparent', colour = NA),
-     legend.background = element_rect(fill = 'transparent', colour = NA),
-     legend.key = element_rect(fill = 'transparent', colour = NA)
-   )
+theme_set(
+  theme_bw(base_size = 12) +
+    theme(
+      plot.title.position = "plot",
+      plot.background     = element_rect(fill = "transparent", colour = NA),
+      panel.background    = element_rect(fill = "transparent", colour = NA),
+      strip.background    = element_rect(fill = "grey92"),
+      panel.grid.minor    = element_blank(),
+      aspect.ratio        = 1   # square panels; important for reading scatterplots
+    )
 )
 ```
 
-## 🎯 Objectives
+## Packages and preparation
 
-Practice conducting initial data analyses, and make a start on learning how to assess significance of patterns. 
+This worksheet requires R version 4.5.0 or later (so that `penguins` is
+available without any extra package) plus three packages. Install them once
+from CRAN if you have not already done so:
 
-```{r}
-#| code-fold: true
+```{r install-pkgs}
 #| eval: false
-penguins_nona <- penguins |>
-  select(bill_len, bill_dep, 
-         flipper_len, body_mass, 
-         species, sex) |>
-  na.omit()
-penguins_fit <- lm(body_mass~flipper_len,
-                   data=penguins_nona)
-tidy(penguins_fit)
-glance(penguins_fit)
-penguins_m <- augment(penguins_fit, penguins_nona)
-#ggplot(penguins_m, aes(x=flipper_len, y=.resid)) +
-#  geom_hline(yintercept=1, colour="grey70") +
-#  geom_point() +
-#  theme(aspect.ratio=1)
+install.packages(c("tidyverse", "nullabor", "MASS"))
 ```
 
-## 🧩 Tasks 
+Then load them at the start of your session:
 
-#### Can we believe what we see?
-
-a. In the previous week's worksheet we subjectively evaluated the residual plot to determine if the model was a good fit or not. We'll use randomisation to check any observations we made from the residual plot. The code below makes a lineup of the true plot against plots made with rotation residuals (nulls/good). When you run the code you will get a line `decrypt("....")`, which you can copy and paste back in to the console window to get the location of the true plot (in case you forgot which it is). Does the true plot look like the null plots? If not, describe how it differs.
-
-```{r resid-check}
+```{r load-pkgs}
 #| eval: false
-ggplot(lineup(null_lm(body_mass~flipper_len, method="rotate"),
-              penguins_m),
-       aes(x=flipper_len, y=.resid)) +
-  geom_point() +
-  facet_wrap(~.sample, ncol=5) +
-  theme_void() +
-  theme(axis.text = element_blank(), 
-        panel.border = element_rect(fill=NA, colour="black"))
-
-# Alternatively, we can use permutation
-ggplot(lineup(null_permute("flipper_len"),
-              penguins_m),
-       aes(x=flipper_len, y=.resid)) +
-  geom_point() +
-  facet_wrap(~.sample, ncol=5) +
-  theme_void() +
-  theme(axis.text = element_blank(), 
-        panel.border = element_rect(fill=NA, colour="black"))
-
-ggplot(penguins_m, aes(x=flipper_len, y=.resid, colour=species)) +
-  geom_hline(yintercept=1, colour="grey70") +
-  geom_point() +
-  theme(aspect.ratio=1)
-
+library(tidyverse)   # ggplot2, dplyr, and friends
+library(nullabor)    # lineup(), rorschach(), pvisual(), null_permute(), null_lm()
+library(MASS)        # mvrnorm() — multivariate normal simulation (Exercise 3 only)
 ```
 
-b. Pick one group, males or females, and one of Adelie, Chinstrap or Gentoo, and choose two of the four measurements. Fit a linear model, and do a lineup of the residuals. Can you tell which is the true plot? Show your lineup to your tutorial partner or someone else nearby and ask them 
+| Package | Role in this worksheet | Version used |
+|---------|----------------------|--------------|
+| **tidyverse** [@Wickham2019] | Data wrangling (`dplyr`, `tidyr`) and plotting (`ggplot2`) | ≥ 2.0 |
+| **nullabor** [@Buja2009] | Lineup and Rorschach protocols, null-generating functions, `pvisual()` | ≥ 0.3.10 |
+| **MASS** [@Venables2002] | `mvrnorm()` for bivariate normal simulation in Exercise 3 | ≥ 7.3 |
 
- - to pick the plot that is most different.
- - explain why they picked that plot.
- 
-Using your `decrypt()` code locate the true plot. Is the true plot different from the nulls?
+The `penguins` dataset is part of the **datasets** package that ships with
+base R (≥ 4.5.0) [@Kaye2025], so no additional install is needed for the data.
 
-Did you or your friend choose the data plot? Was it identifiable from the lineup or indistinguishable from the null plots?
+---
+
+
+
+> *"The most important maxim for data analysis ... is that it is better to look
+> at the data than to stare at the output of a statistical test."*
+> — John W. Tukey
+
+A **lineup** is a way of making this idea rigorous. You hide the real data
+among a set of plots generated under the assumption that nothing interesting
+is happening (the **null hypothesis**), then ask an observer — you, your
+classmates, or anyone — to identify which plot is real. If the real data is
+easy to find, that is evidence something interesting is happening. If it
+blends in with the rest, the data are consistent with the null hypothesis.
+
+Before we put real data in a lineup, we need to know what "nothing interesting"
+looks like. That is what the **Rorschach** protocol is for: it shows a set of
+plots that are *all* generated under the null, with no real data at all. This
+calibrates your eye.
+
+This worksheet introduces both protocols using the `penguins` dataset, which
+has been part of base R since version 4.5.0. No extra packages are needed to
+load the data.
+
+> **R version note.** The base R `penguins` dataset uses shorter variable names
+> than the `palmerpenguins` package version. The names used in this worksheet
+> are: `bill_len`, `bill_dep`, `flipper_len`, and `body_mass` (without unit
+> suffixes).
+
+---
+
+## 🎯 Learning Objectives
+
+By the end of this worksheet you should be able to:
+
+1. Explain the purpose of the **Rorschach protocol** and use it to calibrate
+   your eye to natural random variation.
+2. Explain the purpose of the **lineup protocol** and use it to decide whether
+   a pattern in data is surprising.
+3. Choose an appropriate **null-generating mechanism** (`null_permute`,
+   `null_dist`, or `null_lm`) given a description of the plot and the
+   hypothesis being tested.
+4. Construct a lineup using `nullabor::lineup()` and display it with
+   `facet_wrap()`.
+5. Compute a **visual p-value** with `pvisual()` and state a conclusion.
+
+---
+
+## Setup: meet the data
+
+```{r data-peek}
+# The data loads automatically in R >= 4.5.0
+glimpse(penguins)
+```
+
+There are three species of penguin — Adélie, Chinstrap, and Gentoo — measured
+on four physical variables (`bill_len`, `bill_dep`, `flipper_len`, `body_mass`)
+along with `sex`, `island`, and `year`.
+
+---
+
+## Exercise 1 — The Rorschach: what does nothing look like?
+
+### Background
+
+Before you can judge whether a pattern in your data is real, you need to know
+what patterns arise **by chance alone**. The Rorschach protocol generates
+several plots that are all pure noise — no real data anywhere. Looking at them
+trains your eye before you see a lineup.
+
+The question for this exercise is: *do the three penguin species have different
+flipper lengths?* The plot we will use is a boxplot of `flipper_len` by
+`species`.
+
+The null hypothesis is: **species labels are exchangeable** — knowing which
+species a penguin belongs to tells you nothing about its flipper length. We
+generate null data by randomly shuffling (`permuting`) the `species` column,
+so each penguin keeps its actual flipper length but gets a randomly assigned
+species label.
+
+### The null-generating function
+
+`null_permute("species")` generates one dataset where the species labels have
+been randomly shuffled. We call `lineup()` in Rorschach mode (no real data)
+to get 20 such shuffled datasets.
+
+
+**a.** In every panel, the species labels are randomly shuffled, so any
+difference between the three boxes is pure chance. Do the three boxes look
+roughly the same height in most panels, or do they vary quite a bit?
+
+**b.** Find a panel where one species looks noticeably higher or lower than
+the others. Write down the panel number. Would you have been suspicious of
+that panel if you had seen it alone, without the other 19?
+
+**c.** Now think about what the *real* data would have to look like to stand
+out from these panels. Describe in one sentence what you would need to see in
+the real data plot for it to be clearly distinguishable from the null panels.
 
 ::: unilur-solution
-a. The true plot looks a little different from the nulls. It has more of a V shape, which might suggest that the model fits poorly, that the smaller penguins have a different relationship than the larger penguins. It is evidence to support fitting separate models to the sexes and species.
 
-b. Something like the following
 
-```{r lineup-ex}
-#| eval: false
-penguins_f_adelie <- penguins_nona |>
-  filter(species == "Adelie",
-         sex == "female")
-penguins_f_adelie_bl_bd_fit <- 
-  lm(bill_dep ~ bill_len,
-     data=penguins_f_adelie)
-penguins_f_adelie_bl_bd_m <-
-  augment(penguins_f_adelie_bl_bd_fit)
-ggplot(lineup(null_lm(bill_dep ~ 
-                        bill_len,
-                      method="rotate"),
-              penguins_f_adelie_bl_bd_m),
-       aes(x=bill_len, y=.resid)) +
-  geom_point() +
-  facet_wrap(~.sample, ncol=5) +
-  theme_void() +
-  theme(axis.text = element_blank(), 
-        panel.border = element_rect(fill=NA, colour="black"))
+```{r rorschach-plot}
+#| fig-height: 7
+#| fig-alt: "A 4×5 grid of 20 boxplots of flipper length (mm) by species (Adélie orange, Chinstrap purple, Gentoo blue). Every panel has randomly shuffled species labels, so any difference between the three boxes is pure chance. Across most panels the three medians sit at similar heights with modest random variation; occasionally one panel shows a slightly larger gap between species, but no panel shows a systematic pattern where one species is consistently separated from the others."
+set.seed(840)
+
+# Remove rows with missing flipper_len for clean plots
+penguins_flip <- penguins |>
+  filter(!is.na(flipper_len), !is.na(species))
+
+# Generate 20 null datasets — all pure chance, no real data
+rorschach_data <- lineup(
+  method  = null_permute("species"),
+  true    = penguins_flip,
+  n       = 20,
+  pos     = 1        # ignored in Rorschach; all panels are null
+) |>
+  # Overwrite every panel with a fresh permutation (Rorschach mode)
+  group_by(.sample) |>
+  mutate(species = sample(species)) |>
+  ungroup()
+
+ggplot(rorschach_data,
+       aes(x      = species,
+           y      = flipper_len,
+           fill   = species)) +
+  geom_boxplot(show.legend = FALSE, outlier.size = 0.5) +
+  scale_fill_manual(
+    values = c(Adelie    = "#FF8C00",
+               Chinstrap = "#9400D3",
+               Gentoo    = "#009ACD")
+  ) +
+  facet_wrap(~ .sample, ncol = 5) +
+  labs(
+    title    = "Rorschach: 20 plots of shuffled species labels",
+    subtitle = "Every panel is pure chance — no real data anywhere",
+    x        = NULL,
+    y        = NULL
+  ) +
+  theme(
+    axis.text  = element_blank(),
+    strip.text   = element_text(size = 7)
+  )
 ```
 
-I would not be able to distinguish which is the true plot in this lineup.
+**a.** In most panels the three boxes are fairly similar in height (median and
+IQR), with small random differences between species. Occasionally one panel
+shows a larger gap than others, purely by chance. The overall impression is
+that random shuffling produces modest, inconsistent differences — the three
+boxes bob around a shared centre.
+
+**b.** Answers will vary by seed. The point is that any individual "suspicious"
+panel is entirely explainable by chance — we generated it that way. Seeing one
+plot in isolation, without the Rorschach context, would give a distorted
+impression of how unusual that pattern is.
+
+**c.** To stand out clearly, the real data would need to show one or more
+species with a median noticeably *outside* the range of medians seen in the
+null panels — for instance, one box sitting substantially higher than both
+others, in a way that no null panel replicates. Differences that appear in
+some null panels are not convincing evidence; the real data needs to show
+something that the null panels never (or very rarely) produce.
 
 :::
 
+## Exercise 2 — The lineup: do species differ in flipper length?
+
+### Background
+
+Now we embed the **real** penguin data among 19 null panels generated by the
+same permutation mechanism. This is the lineup protocol.
+
+**a.** Look carefully at all 20 panels. Write down which panel you think
+contains the real data and the specific feature that identified it.
+
+**b.** The null hypothesis being tested is: *species labels are exchangeable —
+flipper length does not differ between species.* What does it mean for the real
+panel to stand out clearly from the null panels, in terms of this hypothesis?
+
+**c.** Decrypt the lineup to reveal the true position.
+Were you correct?
+
+**d.** Suppose this lineup was shown to 16 students and 14 of them correctly
+identified the real panel. Compute the visual p-value and state your conclusion.
+The lineup has $m = 20$ panels.
+
+**e.** Describe what the p-value means in plain language, without using the
+word "probability". Use the lineup panels to explain your answer.
+
+
+::: unilur-solution
+
+```{r flipper-lineup}
+#| fig-height: 7
+#| fig-alt: "A 4×5 grid of 20 boxplots of flipper length (mm) by species (Adélie orange, Chinstrap purple, Gentoo blue). Nineteen panels show shuffled species labels with three similar-height boxes. One panel — the real data — stands out clearly: Gentoo (blue) has a substantially higher median and narrower interquartile range than Adélie and Chinstrap, and all three species are well separated, a pattern not replicated in any of the null panels."
+set.seed(1035)
+
+lineup_flip <- lineup(
+  method = null_permute("species"),
+  true   = penguins_flip,
+  n      = 20
+)
+
+ggplot(lineup_flip,
+       aes(x    = species,
+           y    = flipper_len,
+           fill = species)) +
+  geom_boxplot(show.legend = FALSE, outlier.size = 0.5) +
+  scale_fill_manual(
+    values = c(Adelie    = "#FF8C00",
+               Chinstrap = "#9400D3",
+               Gentoo    = "#009ACD")
+  ) +
+  facet_wrap(~ .sample, ncol = 5) +
+  labs(
+    title    = "Lineup: which panel contains the real penguin data?",
+    subtitle = "One panel is real; 19 have shuffled species labels",
+    x        = NULL,
+    y        = NULL
+  ) +
+  theme(
+    axis.text = element_blank(),
+    strip.text  = element_text(size = 7)
+  )
+```
+
+
+```{r decrypt-flip}
+attr(lineup_flip, "pos")
+```
+
+
+```{r pvisual-flip}
+pvisual(x = 14, K = 16, m = 20)
+```
+
+
+
+**a.** The real data panel should have Gentoo penguins with a noticeably higher
+median flipper length than Adélie and Chinstrap, and all three species clearly
+separated — a pattern not reproduced in any null panel, where the three medians
+sit at similar heights because species labels have been shuffled.
+
+**b.** If the real panel clearly stands out, it means the species-level
+differences in flipper length are larger and more consistent than what chance
+shuffling of species labels would produce. In other words, the pattern is
+*surprising* under the null hypothesis — it would rarely arise if species truly
+made no difference.
+
+**c.**
+
+```{r}
+attr(lineup_flip, "pos")
+```
+
+**d.**
+
+```{r}
+pvisual(x = 14, K = 16, m = 20)
+```
+
+With 14 of 16 students identifying the correct panel, the simulated p-value
+is very small (well below 0.05). We reject the null hypothesis and conclude
+there is strong visual evidence that flipper lengths differ between species.
+
+**e.** The p-value tells us how often students would pick the *same* panel by
+pure guessing, if the real panel were indistinguishable from the nulls. If
+guessing randomly, each student has a 1-in-20 chance of picking any particular
+panel. Getting 14 out of 16 students to all point to the same panel by chance
+alone would be extraordinary — the lineup shows us exactly why, because the
+real panel looks nothing like the 19 null panels that everyone can also see.
+
+:::
+
+## Exercise 3 — Is bill length and depth jointly normal for Adélie penguins?
+
+### Background
+
+When we plot two continuous variables against each other in a scatter plot, we
+are often implicitly asking whether their joint distribution follows a
+particular shape. A **bivariate normal distribution** is the two-dimensional
+generalisation of the familiar bell curve: it produces elliptically shaped
+scatter plots with no outliers or curved structure.
+
+The code below will make a plot of bill length (`bill_len`) against bill depth (`bill_dep`)
+for Adélie penguins.
+
+```{r adelie-scatter}
+#| fig-alt: "Scatterplot of bill length (x-axis, 32–55 mm) vs bill depth (y-axis, 15–21 mm) for Adélie penguins, with points in orange at 60% opacity. The points form a roughly elliptical cloud with a slight positive association — penguins with longer bills tend to have slightly deeper bills. There are no dramatic outliers or obvious curvature; the scatter looks broadly consistent with a bivariate normal distribution."
+#| eval: false
+adelie <- penguins |>
+  filter(species == "Adelie",
+         !is.na(bill_len), !is.na(bill_dep))
+
+ggplot(adelie, aes(x = bill_len, y = bill_dep)) +
+  geom_point(colour = "#FF8C00", alpha = 0.6, size = 2) +
+  labs(
+    title = "Adélie penguins: bill length vs bill depth",
+    x     = "Bill length (mm)",
+    y     = "Bill depth (mm)"
+  )
+```
+
+### Choosing the null-generating mechanism
+
+To test whether this scatter plot is consistent with a bivariate normal
+distribution, we need to generate null datasets that *are* bivariate normal
+with the same means, variances, and correlation as the observed data.
+
+The `null_dist()` function in nullabor can generate data from a named
+distribution, but it works on one variable at a time. For a bivariate normal
+we use `null_lm()` — not because we are fitting a regression, but because
+regressing `bill_dep` on `bill_len` and rotating the residuals generates
+null scatter plots that preserve the linear relationship's strength while
+removing any non-normal structure.
+
+Alternatively, and more directly, we can write our own null-generating function
+that simulates from a bivariate normal with parameters estimated from the data.
+
+```{r bvn-null}
+library(MASS)  # for mvrnorm()
+
+adelie <- penguins |>
+  filter(species == "Adelie",
+         !is.na(bill_len), !is.na(bill_dep))
+
+# Estimate bivariate normal parameters from the data
+bvn_params <- list(
+  mu    = c(mean(adelie$bill_len), mean(adelie$bill_dep)),
+  Sigma = cov(cbind(adelie$bill_len, adelie$bill_dep))
+)
+
+# Null-generating function: simulate one bivariate normal dataset
+null_bvn <- function(data) {
+  n    <- nrow(data)
+  sims <- mvrnorm(n, mu = bvn_params$mu, Sigma = bvn_params$Sigma)
+  data.frame(bill_len = sims[, 1],
+             bill_dep = sims[, 2])
+}
+```
+
+**a.** Why is it important that the simulated null data have the *same* means,
+variances, and correlation as the observed data? What would go wrong if we
+simulated from a standard bivariate normal with mean 0 and variance 1?
+
+**b.** The lineup below uses `null_bvn` as the null-generating function. Before
+looking at the panels, predict: if the real data are *consistent* with a
+bivariate normal, how hard should it be to find the real panel?
+
+**c.** Write down which panel you think is the real data and what feature (if
+any) made it stand out. If you genuinely cannot tell, write that down too —
+that is also a valid and informative result.
+
+**d.** Decrypt.
+
+**e.** Suppose 6 out of 18 students found the real panel. Compute the visual
+p-value. What does the result tell you about whether the bivariate normal is
+an adequate model for Adélie bill measurements?
+
+**f.** The null here is `null_bvn` — simulation from a bivariate normal.
+Contrast this with Exercise 2, where the null was `null_permute("species")`.
+In your own words, what is the key difference in what these two null mechanisms
+*destroy* or *preserve*?
+
+::: unilur-solution
+
+**a.** If we simulated from a standard bivariate normal (mean 0, variance 1),
+the null scatter plots would be centred at the origin and have a much smaller
+scale than the real data, which has bill lengths around 38–46 mm and bill
+depths around 15–21 mm. The real panel would immediately stand out because of
+its location and scale, not because of its shape. By matching the parameters
+to the data, we ensure that any visual difference between the real panel and
+the null panels must be due to *shape* (non-normality) rather than location or
+scale.
+
+**b.** If the bivariate normal is a good model, the real data panel should look
+like any of the null panels — roughly elliptical scatter with similar density
+and no obvious outliers or curvature. It should be hard to find. If it is easy
+to find, that is evidence of non-normality.
+
+**c–d.**
+
+
+```{r bvn-lineup}
+#| fig-height: 7
+#| fig-alt: "A 4×5 grid of 20 scatterplots of bill length vs bill depth for Adélie penguins. Nineteen panels show bivariate normal simulations and one panel contains the real data. All panels show roughly elliptical orange point clouds of similar size, shape, and orientation, making the real panel difficult to identify — which is the expected result if the Adélie bill measurements are consistent with a bivariate normal distribution."
+set.seed(904)
+
+lineup_bvn <- lineup(
+  method = null_bvn,
+  true   = adelie[, c("bill_len", "bill_dep")],
+  n      = 20
+)
+
+ggplot(lineup_bvn,
+       aes(x = bill_len, y = bill_dep)) +
+  geom_point(colour = "#FF8C00", alpha = 0.5, size = 0.8) +
+  facet_wrap(~ .sample, ncol = 5) +
+  labs(
+    title    = "Lineup: are all the scatterplots consistent with bivariate normal samples?",
+    subtitle = "One panel is real; 19 are bivariate normal simulations",
+    x        = NULL,
+    y        = NULL
+  ) +
+  theme(strip.text = element_text(size = 7),
+        axis.text  = element_blank())
+```
+
+If you can use the `decrypt` line it is better than this approach.
+
+```{r decrypt-bvn}
+attr(lineup_bvn, "pos")
+```
+
+
+Adélie bill measurements are generally quite well-described by a bivariate
+normal, so the real panel may be genuinely hard to identify. Students who
+cannot find it are learning something useful: the data are consistent with the
+null model.
+
+**e.**
+
+```{r pvisual-bvn}
+pvisual(x = 6, K = 18, m = 20)
+```
+
+With 6 out of 18 students finding the real panel, the p-value is large (well
+above 0.05 — finding the real panel at this rate is not surprising even by
+chance, given 20 panels and 18 observers). We **fail to reject** the null
+hypothesis: the data are consistent with a bivariate normal distribution. This
+does not prove the bivariate normal is correct — only that the data do not
+provide evidence against it.
+
+**f.** `null_permute("species")` shuffles a column of labels, destroying the
+relationship between `species` and `flipper_len` while keeping all the actual
+values. `null_bvn` generates entirely new data from a parametric model — it
+does not use the original observations at all. The permutation null asks "is
+this group difference real?" The simulation null asks "does this shape of
+scatter match this distributional model?" One tests a relationship between
+variables; the other tests a distributional assumption.
+
+:::
+
+---
+
+## Exercise 4 — Is there a linear relationship between body mass and flipper length for Gentoo penguins?
+
+### Background
+
+A scatter plot of two continuous variables with a smooth line through it is
+implicitly asking: *is there a linear trend, or is the relationship flat?*
+The null hypothesis is that there is no linear relationship — any apparent
+slope is just random variation.
+
+The standard null-generating mechanism for this question is `null_lm()`. It
+fits a linear model to the data, then generates null datasets by **rotating**
+the residuals — a technique that preserves the marginal distributions of both
+variables and the overall spread, while destroying any systematic linear
+relationship between them.
+
+```{r gentoo-scatter}
+#| fig-alt: "Scatterplot of flipper length (x-axis, 203–232 mm) vs body mass (y-axis, 3500–6300 g) for Gentoo penguins, with blue points at 60% opacity and a blue linear regression line with a shaded 95% confidence band. The points track closely along the line, which has a clear positive slope — penguins with longer flippers tend to be heavier. The scatter is fairly tight with no obvious outliers or curvature."
+#| eval: false
+gentoo <- penguins |>
+  filter(species == "Gentoo",
+         !is.na(body_mass), !is.na(flipper_len))
+
+ggplot(gentoo,
+       aes(x = flipper_len, y = body_mass)) +
+  geom_point(colour = "#009ACD", alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm", se = TRUE,
+              colour = "#009ACD", fill = "#009ACD", alpha = 0.2) +
+  labs(
+    title = "Gentoo penguins: flipper length vs body mass",
+    x     = "Flipper length (mm)",
+    y     = "Body mass (g)"
+  )
+```
+
+### Choosing the null
+
+For this question the null-generating mechanism is:
+
+```r
+null_lm(body_mass ~ flipper_len, method = "rotate")
+```
+
+`method = "rotate"` rotates the residuals from the fitted model, which
+creates new response values that are close to the fitted values but with no
+systematic linear trend remaining.
+
+**a.** Before generating the lineup: look at the scatter plot above. Does the
+relationship between flipper length and body mass look roughly linear? Are
+there any obvious outliers or curves?
+
+**b.** Why is `null_permute("flipper_len")` *not* a good null for this
+question, even though it would also destroy the linear relationship?
+
+*Hint: think about what permuting `flipper_len` does to its marginal
+distribution and whether values of 180 mm and 230 mm are equally plausible
+for the same penguin.*
+
+Now generate the lineup.
+
+**c.** Look at the 20 panels. Write down which panel you think is real and the
+visual feature that led you there.
+
+**d.** Decrypt.
+
+**e.** Suppose 15 out of 17 students found the real panel. Compute the visual
+p-value and state your conclusion.
+
+**f.** The lineup includes a `geom_smooth(method = "lm")` line in every panel,
+including the null panels. Explain why this is useful rather than misleading.
+What does the slope of the line in the null panels tell you?
+
+**g.** Review all three lineups in this worksheet and complete the table below:
+
+| Exercise | Question | Null mechanism | What the null destroys |
+|----------|----------|----------------|----------------------|
+| 2 | Do species differ in flipper length? | `null_permute("species")` | |
+| 3 | Are bill dims jointly normal for Adélie? | Custom `null_bvn()` | |
+| 4 | Is there a linear relationship (Gentoo)? | `null_lm(..., "rotate")` | |
+
+::: unilur-solution
+
+**a.** The relationship looks clearly positive and roughly linear — penguins
+with longer flippers also tend to have greater body mass. The scatter is fairly
+tight around the line with no obvious curvature. There may be a slight fan
+shape (more spread at higher flipper lengths) but no dramatic outliers.
+
+**b.** Permuting `flipper_len` would assign actual observed flipper lengths
+randomly to penguins — so a penguin might end up with a flipper length of
+180 mm even if no Gentoo in the dataset had such a short flipper, or 235 mm
+when most cluster between 210–230 mm. This distorts the *marginal distribution*
+of `flipper_len`: some permuted values would be implausible given the realistic
+range for Gentoo penguins. The null panels would look structurally different
+from real Gentoo data in ways unrelated to the linear relationship, making the
+real panel easier to spot for the wrong reason. `null_lm` with residual
+rotation preserves the marginal distributions of both variables exactly,
+so differences between panels can only be due to the presence or absence of
+a linear trend.
+
+**c–d.**
+
+
+```{r linear-lineup}
+#| fig-height: 7
+#| fig-alt: "A 4×5 grid of 20 scatterplots of flipper length vs body mass for Gentoo penguins, each with a fitted linear regression line in blue. Nineteen panels show rotated residuals where the regression lines are nearly flat or slightly positive by chance. One panel — the real data — stands out with a noticeably steeper positive slope where the points track closely along the line, a pattern clearly distinguishable from the null panels."
+gentoo <- penguins |>
+  filter(species == "Gentoo",
+         !is.na(body_mass), !is.na(flipper_len))
+
+set.seed(1145)
+
+lineup_lm <- lineup(
+  method = null_lm(body_mass ~ flipper_len, method = "rotate"),
+  true   = gentoo[, c("flipper_len", "body_mass")],
+  n      = 20
+)
+
+ggplot(lineup_lm,
+       aes(x = flipper_len, y = body_mass)) +
+  geom_point(colour = "#009ACD", alpha = 0.4, size = 0.7) +
+  geom_smooth(method = "lm", se = FALSE,
+              colour  = "#009ACD",
+              linewidth = 0.5) +
+  facet_wrap(~ .sample, ncol = 5) +
+  labs(
+    title    = "Lineup: which plot has the strongest linear trend?",
+    subtitle = "One panel is real; 19 have rotated residuals (no linear trend)",
+    x        = NULL,
+    y        = NULL
+  ) +
+  theme(strip.text = element_text(size = 7),
+        axis.text  = element_blank())
+```
+
+Use the `decrypt` line, if possible.
+
+```{r}
+attr(lineup_lm, "pos")
+```
+
+The real panel should have the steepest, most consistent positive slope with
+points tracking closely along the line. In the null panels, the regression
+lines will have slopes close to zero (or randomly positive/negative) because
+the residual rotation removes the linear signal.
+
+**e.**
+
+```{r}
+pvisual(x = 15, K = 17, m = 20)
+```
+
+With 15 of 17 students finding the real panel, the simulated p-value is very
+small. We reject the null hypothesis and conclude there is strong visual
+evidence of a positive linear relationship between flipper length and body mass
+for Gentoo penguins.
+
+**f.** Adding `geom_smooth(method = "lm")` to every panel — real and null alike
+— is a useful design choice because it makes the *slope* the key visual feature
+to compare, rather than the scatter of points. In the null panels (where
+residuals have been rotated), the slope will be close to flat, and students can
+see directly that "a line with a slope this steep" essentially never arises by
+chance. This focuses attention on exactly the right quantity: the steepness of
+the linear trend. It would be misleading only if the lines in the null panels
+were forced to be flat — adding a data-driven smooth to each panel is honest
+because each null dataset gets its own fitted line.
+
+**g.**
+
+| Exercise | Question | Null mechanism | What the null destroys |
+|----------|----------|----------------|----------------------|
+| 2 | Do species differ in flipper length? | `null_permute("species")` | The link between species label and flipper length — any group difference |
+| 3 | Are bill dims jointly normal for Adélie? | Custom `null_bvn()` | All the original data values — replaces them with bivariate normal draws |
+| 4 | Is there a linear relationship (Gentoo)? | `null_lm(..., "rotate")` | The linear trend between flipper length and body mass, while preserving marginal distributions |
+
+:::
+
+---
+
+## Summary
+
+| Protocol | What it is | When to use it |
+|----------|-----------|----------------|
+| **Rorschach** | All panels are null — no real data | Before a lineup, to calibrate your eye to what chance looks like |
+| **Lineup** | One real panel hidden among null panels | To test whether a pattern in your data is surprising |
+
+| Null mechanism | Use when... | What it does |
+|----------------|-------------|--------------|
+| `null_permute("x")` | Testing whether group differences or correlations are real | Shuffles one column, breaking its relationship with other variables |
+| `null_dist("x", dist, params)` | Testing whether one variable follows a specific distribution | Simulates new values from the named distribution |
+| Custom function | Testing a bivariate or multivariate distributional assumption | You define how to simulate from the null model |
+| `null_lm(y ~ x, "rotate")` | Testing whether a linear trend is real | Rotates residuals to remove the linear signal while preserving marginal distributions |
+
+**The three steps of a lineup test:**
+
+1. **Decide what you want to test** — state the null hypothesis in plain language.
+2. **Choose a null-generating mechanism** that matches the null hypothesis.
+3. **Show the lineup to observers**, record how many find the real panel, and
+   compute `pvisual(x, K, m)`.
+
+---
+
+## References
+
+::: {#refs}
+:::
+
+```{=html}
+<!-- References are managed via the YAML bibliography field below.
+     Add the following to the YAML header to enable automatic citation rendering:
+
+bibliography: references.bib
+
+And create references.bib containing the entries below.
+-->
+```
+
+### R packages
+
+Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G,
+Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K,
+Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D, Wilke C, Woo
+K, Yutani H (2019). "Welcome to the tidyverse." *Journal of Open Source
+Software*, **4**(43), 1686. <https://doi.org/10.21105/joss.01686>
+
+Buja A, Cook D, Hofmann H, Lawrence M, Lee E, Swayne DF, Wickham H (2009).
+"Statistical inference for exploratory data analysis and model diagnostics."
+*Philosophical Transactions of the Royal Society A*, **367**(1906), 4361–4383.
+<https://doi.org/10.1098/rsta.2009.0120>
+
+Cook D, Wickham H, Roy Chowdhury N, Hofmann H, Thulin M (2024). *nullabor:
+Tools for Graphical Inference*. R package version 0.3.15.
+<https://dicook.github.io/nullabor/>
+
+Venables WN, Ripley BD (2002). *Modern Applied Statistics with S*, 4th ed.
+Springer, New York. ISBN 0-387-95457-0.
+<https://www.stats.ox.ac.uk/pub/MASS4/>
+
+### Data
+
+Kaye E, Turner H, Gorman KB, Horst AM, Presmanes Hill A (2025). "Preparing
+the Palmer Penguins data for the datasets package in R." Zenodo.
+<https://doi.org/10.5281/zenodo.14902740>
+
+Horst AM, Presmanes Hill A, Gorman KB (2022). "Palmer Archipelago penguins
+data in the palmerpenguins R package — an alternative to Anderson's irises."
+*The R Journal*, **14**(1), 244–254.
+<https://doi.org/10.32614/RJ-2022-020>
+
+Gorman KB, Williams TD, Fraser WR (2014). "Ecological sexual dimorphism and
+environmental variability within a community of Antarctic penguins (genus
+*Pygoscelis*)." *PLOS ONE*, **9**(3), e90081.
+<https://doi.org/10.1371/journal.pone.0090081>
+
+### Visual inference methodology
+
+Wickham H, Cook D, Hofmann H, Buja A (2010). "Graphical inference for
+infovis." *IEEE Transactions on Visualization and Computer Graphics*,
+**16**(6), 973–979. <https://doi.org/10.1109/TVCG.2010.161>
+
+Majumder M, Hofmann H, Cook D (2013). "Validation of visual statistical
+inference, applied to linear models." *Journal of the American Statistical
+Association*, **108**(503), 942–956.
+<https://doi.org/10.1080/01621459.2013.808157>
+
+Hofmann H, Follett L, Majumder M, Cook D (2012). "Graphical tests for power
+comparison of competing designs." *IEEE Transactions on Visualization and
+Computer Graphics*, **18**(12), 2441–2448.
+<https://doi.org/10.1109/TVCG.2012.230>
+
+---
+
+## Licence
+
+This worksheet is released under a
+[Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/)
+licence.
+
+[![CC BY-SA 4.0](https://licensebuttons.net/l/by-sa/4.0/88x31.png)](https://creativecommons.org/licenses/by-sa/4.0/)
+
+You are free to **share** (copy and redistribute in any medium or format) and
+**adapt** (remix, transform, and build upon) this material for any purpose,
+even commercially, provided you:
+
+- give **appropriate credit** and a link to the licence,
+- **indicate if changes were made**, and
+- distribute your contributions under the **same licence** as the original.
