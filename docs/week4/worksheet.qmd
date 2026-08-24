@@ -162,8 +162,8 @@ species label.
 ### The null-generating function
 
 `null_permute("species")` generates one dataset where the species labels have
-been randomly shuffled. We call `lineup()` in Rorschach mode (no real data)
-to get 20 such shuffled datasets.
+been randomly shuffled. We call `rorschach()`, which repeats this shuffling
+`n` times to produce 20 such datasets — no real data anywhere.
 
 
 **a.** In every panel, the species labels are randomly shuffled, so any
@@ -191,16 +191,11 @@ penguins_flip <- penguins |>
   filter(!is.na(flipper_len), !is.na(species))
 
 # Generate 20 null datasets — all pure chance, no real data
-rorschach_data <- lineup(
-  method  = null_permute("species"),
-  true    = penguins_flip,
-  n       = 20,
-  pos     = 1        # ignored in Rorschach; all panels are null
-) |>
-  # Overwrite every panel with a fresh permutation (Rorschach mode)
-  group_by(.sample) |>
-  mutate(species = sample(species)) |>
-  ungroup()
+rorschach_data <- rorschach(
+  method = null_permute("species"),
+  true   = penguins_flip,
+  n      = 20
+)
 
 ggplot(rorschach_data,
        aes(x      = species,
