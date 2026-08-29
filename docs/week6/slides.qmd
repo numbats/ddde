@@ -23,10 +23,13 @@ format:
 ---
 
 ```{r, include = FALSE, echo=FALSE}
+#| label: setup
+#| code-fold: true
 source("../setup.R")
 ```
 
 ```{r DT-options, include = FALSE}
+#| code-fold: true
 toggle_select <- DT::JS(
   "table.on('click.dt', 'tbody tr', function() {",
   "$(this).toggleClass('selected');",
@@ -131,6 +134,7 @@ If the relationship is not linear, call it [association]{.monash-orange2}, and a
 ## Features of a pair of continuous variables [(1/3)]{.smallest}
 
 ```{r}
+#| code-fold: true
 #| label: scatterplots
 #| echo: false
 #| eval: false
@@ -232,6 +236,7 @@ d_strength |>
 ```
 
 ```{r}
+#| code-fold: true
 #| label: feature-table
 #| echo: false
 tribble(
@@ -261,6 +266,7 @@ tribble(
 ## Features of a pair of continuous variables [(2/3)]{.smallest}
 
 ```{r}
+#| code-fold: true
 #| label: scatterplots2
 #| echo: false
 #| eval: false
@@ -369,6 +375,7 @@ d_gaps |>
 ```
 
 ```{r}
+#| code-fold: true
 #| label: feature-table2
 #| echo: false
 tribble(
@@ -397,6 +404,7 @@ tribble(
 ## Features of a pair of continuous variables [(3/3)]{.smallest}
 
 ```{r}
+#| code-fold: true
 #| label: scatterplots3
 #| echo: false
 #| include: false 
@@ -483,6 +491,7 @@ weighted |>
 
 
 ```{r}
+#| code-fold: true
 #| label: feature-table3
 #| echo: false
 tribble(
@@ -526,6 +535,7 @@ tribble(
 **Anscombe's quartet**
 
 ```{r}
+#| code-fold: true
 #| label: anscombe
 #| echo: false
 #| fig-width: 6
@@ -577,6 +587,7 @@ $s_y$ = `r round(sd(d$dino_y),0)`, $r$ = `r round(cor(d$dino_x, d$dino_y),2)`.
 
 
 ```{r}
+#| code-fold: true
 #| label: dinosaur
 #| echo: false
 #| out-width: 30%
@@ -595,6 +606,7 @@ datasaurus_dozen |>
 
 
 ```{r}
+#| code-fold: true
 #| label: datasaurus
 #| echo: false
 #| fig-height: 7
@@ -634,126 +646,47 @@ Make sure you don't fall into the trap of failing to control aspect ratio.
 
 
 
-## Case study: Olympics
+## Activity: Olympics {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+1. Load the individual athlete data for the Summer 2012 Olympic Games (downloaded from the Guardian's [London 2012 Olympics data](https://www.theguardian.com/sport/series/london-2012-olympics-data))
+
+```{r}
+#| label: oly-data
+#| code-fold: false
+data(oly12, package = "VGAMdata")
+```
+
+2. Make a scatterplot of `Height` vs `Weight`. You'll see a warning about missing values being removed -- what features do you notice? Look for a linear relationship, outliers, discretization, and overplotting (there are more than 10,000 athletes)
+
+3. Are there sport(s) where you would expect a different relationship between height and weight?
+
+4. Count how many athletes compete in each `Sport`. Are the categories well organised, or would you group some of them together?
+
+:::
+
+```{r}
+#| echo: false
+countdown::countdown(9, 53)
+```
 
 ::: {.panel-tabset}
 
-## 🖼
-
-:::: {.columns}
-::: {.column}
+## Code
 
 ```{r}
-#| label: 2012-olympics-plot1
-#| echo: false
-#| fig-width: 6.4
-data(oly12, package = "VGAMdata")
+#| label: oly-activity-answer
+#| code-fold: true
+#| eval: false
 ggplot(oly12, aes(x = Height, y = Weight, label = Sport)) +
   geom_point()
-```
 
-:::
-::: {.column style="font-size:80%;"}
-
-* Note: `Warning message: Removed 1346 rows containing missing values (geom_point)`
-* Features:
-    - linear relationship (expected, more than?)
-    - outliers
-    - discretization
-* Substantial overplotting, >10000 athletes. 
-* What is interesting? Are there some sport(s) where you would expect specific relationships?
-
-
-:::
-::::
-
-## data
-
-Individual data for the Summer 2012 Olympic Games. Downloaded from http://www.guardian.co.uk/sport/series/london-2012-olympics-data in 2013-03; more recently it has changed to https://www.theguardian.com/sport/series/london-2012-olympics-data.
-
-::: {.vscroll style="font-size:60%;"}
-
-```{r}
 skimr::skim(oly12)
-```
 
-:::
-
-## R
-
-```{r}
-#| label: 2012-olympics-plot1
-#| echo: true
-#| eval: false
-```
-
-:::
-
-## 🧩 Try this 
-
-::: {.info}
-Interactivity can be a useful tool for exploring relationships.
-:::
-
-[Cut and paste the code]{.monash-blue2} into your R console, and the resulting plot to examine the sport of the athlete. 
-
-
-```{r}
-#| eval: false
-#| echo: true
-library(tidyverse) 
-library(plotly) 
-data(oly12, package = "VGAMdata") 
-p <- ggplot(oly12, aes(x = Height, y = Weight, label = Sport)) + 
-  geom_point() 
-ggplotly(p) 
-```
-
-## How many athletes in the different sports? 
-
-:::: {.columns}
-::: {.column width=70%}
-
-::: {style="font-size: 70%;"}
-
-```{r oly_smry}
-#| echo: false
 oly12 |>
-  count(Sport, sort = TRUE) |>
-  DT::datatable(
-    rownames = FALSE,
-    escape = FALSE,
-    width = "900px",
-    options = table_options(
-      scrollY = "500px",
-      title = "",
-      csv = "oly12"
-    ),
-    callback = toggle_select
-  )
-```
+  count(Sport, sort = TRUE)
 
-:::
-:::
-
-::: {.column width=30%}
-
-Categories need re-working: 
-
-- so many different events grouped into athletics
-- cycling split among many categories
-
-:::
-
-::::
-
-## Consolidate factor levels
-
-There are several cycling events that are reasonable to combine into one category. Similarly for gymnastics and athletics. 
-
-<br>
-
-```{r oly_cat, echo=TRUE}
+# Consolidate factor levels
 oly12 <- oly12 |>
   mutate(Sport = as.character(Sport)) |>
   mutate(Sport = ifelse(grepl("Cycling", Sport), 
@@ -766,91 +699,14 @@ oly12 <- oly12 |>
     "Athletics", Sport
   )) |>
   mutate(Sport = as.factor(Sport))
-```
 
-
-
-## Drill down the by sport
-
-::: {.panel-tabset}
-## 🖼
-
-```{r} 
-#| label: oly_facet
-#| out-width: 70%
-#| fig-width: 12
-#| fig-height: 7
-#| echo: false
+# Drill down by sport
 ggplot(oly12, aes(x = Height, y = Weight)) +
   geom_point(alpha = 0.5) + 
   facet_wrap(~Sport, ncol = 8) +
   theme(aspect.ratio = 1) 
-```
 
-
-
-## learn
-
-:::: {.columns}
-::: {.column style="font-size: 80%;"}
-
-What is interesting?
-
-
-- Some sports have no data for height, weight
-- The positive association between height and weight is visible across sports
-- Nonlinear in wrestling?
-- An outlier in judo, and football, and archery
-- Maybe flatter among swimmers
-- Taller in basketball, volleyball and handball
-- Shorter in athletics, weightlifting and wrestling
-- Little variance in tennis players
-- [*There's a lot to digest*]{.monash-blue2}
-
-:::
-
-::: {.column style="font-size: 80%;"}
-
-::: {.fragment}
-
-[Refine plots to make comparisons easier:]{.monash-blue2}
-
-- Remove sports with missings
-- Overlay model to assess linear relationships
-- Drill down into other strata, eg male/female athletes
-- Compare in small chunks, one group against the rest
-
-:::
-
-:::
-::::
-
-## R
-
-```{r}
-#| label: oly_facet
-#| echo: true
-#| eval: false
-```
-
-<br>
-<br>
-Note: alpha transparency, and aspect ratio
-
-:::
-
-## Remove missings, explore difference by sex 
-
-::: {.panel-tabset}
-
-## 🖼️
-
-```{r}
-#| label: oly_women
-#| out-width: 70%
-#| fig-width: 12
-#| fig-height: 7
-#| echo: false
+# Handle missings, and examine by demographics
 oly12 |>
   filter(!(Sport %in% c("Boxing", "Gymnastics", "Synchronised Swimming", "Taekwondo", "Trampoline"))) |>
   mutate(Sport = fct_drop(Sport)) |>
@@ -862,40 +718,43 @@ oly12 |>
 ```
 
 
+## Learn
 
-## learn
+::: {.vscroll-small style="font-size:60%;"}
 
-:::: {.columns}
-::: {.column}
+Did you notice these interesting patterns?
+
+- Some sports have no data for height, weight
+- The positive association between height and weight is visible across sports
+- Nonlinear in wrestling?
+- An outlier in judo, and football, and archery
+- Maybe flatter among swimmers
+- Taller in basketball, volleyball and handball
+- Shorter in athletics, weightlifting and wrestling
+- Little variance in tennis players
+
+[Refine plots to make comparisons easier:]{.monash-blue2}
+
+- Remove sports with missings
+- Overlay model to assess linear relationships
+- Drill down into other strata, eg male/female athletes
+- Compare in small chunks, one group against the rest
 
 [Note: Because the focus is now on males vs females association shape within sport, make plots scale separately.]{.monash-orange2}
 
 - Athletics category should have been broken into several more categories like track, field: a shot-putter has a very different physique to a sprinter.
 - Generally, clustering of male/female athletes
-
-
-:::
-
-::: {.column}
 - Outliers: a tall skinny male archer, a medium height very light female athletics athlete, tall light female weightlifter, tall light male volleyballer
 - Canoe slalom athletes, divers, cyclists are tiny.
-:::
-
-::::
-
-## R
-
-```{r}
-#| label: oly_women
-#| echo: true 
-#| eval: false
-```
 
 :::
 
-## Common ways to augment scatterplots
+:::
+
+## Common ways to augment scatterplots [(1/2)]{.smallest}
 
 ```{r}
+#| code-fold: true
 #| label: generate_data
 #| echo: false
 set.seed(2222)
@@ -910,11 +769,13 @@ df <- tibble(x = c(rnorm(500) * 0.2, runif(300) + 1)) |>
     y3 = c(
       -2 * (x2[1:500]) + rnorm(500) * 2,
       2 * (x2[501:800]) + rnorm(300) * 0.5
-    )
+    ),
+    w = runif(800)
   )
 ```
 
 ```{r}
+#| code-fold: true
 #| label: scatmodify
 #| echo: false
 #| eval: false
@@ -1012,9 +873,11 @@ ggplot(df, aes(x = x, y = y1, colour = y2)) +
     axis.line.x = element_line(color = "black", size = 2),
     axis.line.y = element_line(color = "black", size = 2)
   )
+
 ```
 
 ```{r}
+#| code-fold: true
 #| label: feature-table4
 #| echo: false
 tribble(
@@ -1040,22 +903,137 @@ tribble(
         "../images/scatmodify-7.png"), width=250, height=200))
 ```
 
-
-## Comparing association
+## Common ways to augment scatterplots [(2/2)]{.smallest}
 
 ::: {.panel-tabset}
 
 ## 🖼️
 
 :::: {.columns}
-::: {.column}
+::: {.column style="width:33%; font-size: 70%;"}
 
-```{r} 
-#| label: oly_model
+**Hexagon binning**
+
+```{r}
+#| code-fold: true
+#| label: hexbin-example
 #| echo: false
-#| out-width: 100%
-#| fig-width: 10
-#| fig-height: 8
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: 80%
+ggplot(df, aes(x = x2, y = y3)) +
+  geom_hex(bins = 15) +
+  scale_fill_continuous_sequential(palette = "YlGnBu") +
+  theme(aspect.ratio = 1, legend.position = "none")
+```
+
+Colour maps to the count of points falling in each hexagonal bin, alleviating overplotting.
+
+:::
+::: {.column style="width:33%; font-size: 70%;"}
+
+**Bubble plot**
+
+```{r}
+#| code-fold: true
+#| label: bubble-example
+#| echo: false
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: 80%
+library(survey)
+data(api)
+ggplot(apiclus2, 
+  aes(x=hsg, 
+      y=pct.resp, 
+      size=pw)) + 
+  geom_point() +
+  ylab("Response %") +
+  xlab("Parent high school grad %") +
+  theme(aspect.ratio = 1, legend.position = "none")
+```
+
+Size of each point maps to an extra (weight) variable.
+
+:::
+::: {.column style="width:34%; font-size: 70%;"}
+
+**High density regions**
+
+```{r}
+#| code-fold: true
+#| label: hdr-example
+#| echo: false
+#| fig-width: 5
+#| fig-height: 4
+#| out-width: 90%
+# install.packages("remotes")
+# remotes::install_github("Sayani07/gghdr")
+library(gghdr)
+ggplot(data = faithful, 
+    aes(x = waiting, 
+        y = eruptions)) +
+  geom_point(aes(colour = hdr_bin(x = waiting, y = eruptions))) +
+  #geom_hdr_rug() +
+  scale_colour_viridis_d(direction = -1) +
+  theme(aspect.ratio = 1, legend.position = "none")
+```
+
+The `gghdr` package colours points by highest density regions (HDRs), revealing modes and labelling outliers beyond the largest region.
+
+:::
+::::
+
+## R
+
+```{r}
+#| code-fold: true
+#| label: hexbin-example
+#| echo: true
+#| eval: false
+```
+
+```{r}
+#| code-fold: true
+#| label: bubble-example
+#| echo: true
+#| eval: false
+```
+
+```{r}
+#| code-fold: true
+#| label: hdr-example
+#| echo: true
+#| eval: false
+```
+
+:::
+
+## Activity: Comparing association and spread {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+1. Using `oly12`, filter to female athletes in Swimming, Archery, Basketball, Handball, Hockey, Tennis, Weightlifting, and Wrestling. Fit a linear trend of `Weight` on `Height` for each `Sport` and plot them together. How does the *association* between height and weight differ across sports?
+
+2. Now filter to female athletes in Shooting, Modern Pentathlon, and Basketball, and overlay density contours of `Height` and `Weight` by `Sport`. How does the *spread* of the relationship differ across sports?
+
+3. Some of this association may be due to unmeasured (lurking) variables. For example, "Athletics" combines throwing and running events, which have quite different body types. If you were only given `Height` and `Weight`, without `Sport`, could you have detected this hidden structure? What pattern might reveal it?
+
+4. Make a scatterplot and overlaid density contours (try a couple of different bandwidths) of `Height` vs `Weight` for `Sport == "Athletics"` only. Can you detect any multimodality that would hint at the hidden sport subgroup structure?
+:::
+
+```{r}
+#| echo: false
+countdown::countdown(5, 22)
+```
+
+::: {.panel-tabset}
+
+## Code
+
+```{r}
+#| label: oly-activity2-answer
+#| code-fold: true
+#| eval: false
 oly12 |>
   filter(Sport %in% c(
     "Swimming", "Archery", "Basketball",
@@ -1065,124 +1043,31 @@ oly12 |>
   filter(Sex == "F") |>
   mutate(Sport = fct_drop(Sport), Sex = fct_drop(Sex)) |>
   ggplot(aes(x = Height, y = Weight, colour = Sport)) +
-  geom_smooth(method = "lm", se = FALSE) + 
+  geom_smooth(method = "lm", se = FALSE) +
   scale_color_discrete_divergingx(palette = "Zissou 1") +
   theme(
     legend.title = element_blank(),
     legend.position = "bottom",
     legend.direction = "horizontal"
   )
-```
-
-:::
-::: {.column}
-
-<br><br>
-
-- Weightlifters are much heavier relative to height
-- Swimmers are leaner relative to height
-- Tennis players are a bit mixed, shorter tend to be heavier, taller tend to be lighter
-
-:::
-::::
-
-## R
-
-```{r}
-#| label: oly_model
-#| echo: true
-#| eval: false
-```
-
-
-:::
-
-
-## Comparing spread
-
-::: {.panel-tabset}
-
-## 🖼️
-
-:::: {.columns}
-::: {.column}
-
-```{r}
-#| label: oly_density
-#| echo: false
-#| out-width: 100%
-#| fig.width: 10
-#| fig-height: 8
 
 oly12 |>
-  filter(Sport %in% c("Shooting", "Modern Pentathlon", "Basketball")) |> 
+  filter(Sport %in% c("Shooting", "Modern Pentathlon", "Basketball")) |>
   filter(Sex == "F") |>
   mutate(Sport = fct_drop(Sport), Sex = fct_drop(Sex)) |>
   ggplot(aes(x = Height, y = Weight, colour = Sport)) +
-  geom_density2d() + 
+  geom_density2d() +
   scale_color_discrete_divergingx(palette = "Zissou 1") +
   theme(
     legend.title = element_blank(),
     legend.position = "bottom",
     legend.direction = "horizontal"
   )
-```
 
-:::
-::: {.column}
-
-<br><br>
-
-- Modern pentathlon athletes are uniformly height and weight related
-- Shooters are quite varied in body type
-
-:::
-::::
-
-## R
-
-```{r}
-#| label: oly_density
-#| echo: true
-#| eval: false
-```
-
-
-:::
-
-## Case study: Olympics
-
-We learned that association between height and weight is different strata, defined by categorical variables: sport, gender, and possibly country and age, too. 
-
-Some of the association may be due to unmeasured variables, for example, "Athletics" is masking different body types in throwing vs running. This is a **lurking** variable. 
-
-<br><br>
-If you were just given the `Height` and `Weight` in this data could you have detected the presence of conditional relationships?
-
-::: {.fragment}
-It may appear as [multimodality.]{.monash-blue2}
-:::
-
-
-## Can you see conditional dependencies?
-
-::: {.panel-tabset}
-
-## 🖼
-
-:::: {.columns}
-::: {.column}
-
-```{r}
-#| label: oly_canyousee
-#| echo: false
-#| fig-width: 8
-#| fig-height: 8
-#| out-width: 70%
 p1 <- oly12 |>
   filter(Sport == "Athletics") |>
   ggplot(aes(x = Height, y = Weight)) +
-  geom_point(alpha = 0.2, size = 4) 
+  geom_point(alpha = 0.2, size = 4)
 p2 <- oly12 |>
   filter(Sport == "Athletics") |>
   ggplot(aes(x = Height, y = Weight)) +
@@ -1191,7 +1076,7 @@ p2 <- oly12 |>
 p3 <- oly12 |>
   filter(Sport == "Athletics") |>
   ggplot(aes(x = Height, y = Weight)) +
-  geom_density2d(binwidth = 0.01) 
+  geom_density2d(binwidth = 0.01)
 p4 <- oly12 |>
   filter(Sport == "Athletics") |>
   ggplot(aes(x = Height, y = Weight)) +
@@ -1201,27 +1086,16 @@ p4 <- oly12 |>
 grid.arrange(p1, p3, p2, p4, ncol = 2)
 ```
 
+## Learn
+
+::: {.vscroll-small style="font-size:60%;"}
+
+- Weightlifters are much heavier relative to height, swimmers are leaner, and tennis players are mixed (shorter athletes tend to be heavier, taller athletes tend to be lighter): the *association* between height and weight differs by sport.
+- Modern pentathlon athletes are uniformly related in height and weight, while shooters are quite varied in body type: the *spread* of the relationship also differs by sport.
+- Some of the association is due to unmeasured variables. For example, "Athletics" masks different body types in throwing vs running events — this is a **lurking** variable.
+- With only `Height` and `Weight`, the hidden structure is hard to detect directly, but it may appear as [multimodality]{.monash-blue2} in the joint distribution — as seen (faintly) in the density contours for Athletics. It's not easy to detect the presence of the additional variable, and thus accurately describe the relationship between height and weight among Olympic athletes.
+
 :::
-::: {.column}
-
-<br>
-<br>
-
-There is a barely hint of multimodality.
-
-It's not easy to detect the presence of the additional variable, and thus accurately describe the relationship between height and weight among Olympic athletes.
-
-:::
-::::
-
-## R
-
-```{r}
-#| label: oly_canyousee
-#| echo: true
-#| eval: false
-```
-
 
 :::
 
@@ -1236,6 +1110,7 @@ It's not easy to detect the presence of the additional variable, and thus accura
 ::: {.column}
 
 ```{r}
+#| code-fold: true
 #| label: oly_tennis
 #| fig-width: 6
 #| fig-height: 6
@@ -1265,6 +1140,7 @@ What is surprising here?
 ## R
 
 ```{r}
+#| code-fold: true
 #| label: oly_tennis
 #| echo: true
 #| eval: false
@@ -1284,6 +1160,7 @@ What is surprising here?
 ::: {.column}
 
 ```{r}
+#| code-fold: true
 #| label: oly_wrestling
 #| fig-width: 6
 #| fig-height: 6
@@ -1314,6 +1191,7 @@ What is surprising here?
 ## R
 
 ```{r}
+#| code-fold: true
 #| label: oly_wrestling
 #| echo: true
 #| eval: false
@@ -1350,6 +1228,8 @@ $$t=\frac{r}{\sqrt{1-r^2}}\sqrt{n-2}$$
 ::: {.column}
 
 ```{r}
+#| label: correlation
+#| code-fold: true
 #| echo: false
 #| out-width: 80%
 set.seed(45)
@@ -1366,10 +1246,14 @@ d1_p
 ::: {.column}
 
 ```{r}
+#| label: correlation-2
+#| code-fold: true
 cor(d1$x, d1$y)
 ```
 
 ```{r echo=TRUE, highlight.output = c(5)}
+#| label: correlation-3
+#| code-fold: true
 cor.test(d1$x, d1$y)
 ```
 
@@ -1382,6 +1266,8 @@ cor.test(d1$x, d1$y)
 ::: {.column}
 
 ```{r}
+#| label: problems-with-correlation-1-2
+#| code-fold: true
 #| echo: false
 d2 <- tibble(x = runif(200) - 0.5) |>
   mutate(y = x^2 + rnorm(200) * 0.01)
@@ -1396,10 +1282,14 @@ d2_p
 ::: {.column}
 
 ```{r}
+#| label: problems-with-correlation-1-2-2
+#| code-fold: true
 cor(d2$x, d2$y)
 ```
 
 ```{r highlight.output = c(5)}
+#| label: problems-with-correlation-1-2-3
+#| code-fold: true
 cor.test(d2$x, d2$y)
 ```
 
@@ -1415,6 +1305,8 @@ It does not summarise non-linear associations.
 ::: {.column width=33%}
 
 ```{r}
+#| label: problems-with-correlation-2-2
+#| code-fold: true
 #| echo: false
 d3 <- tibble(x = c(rnorm(200), 10)) |>
   mutate(y = c(rnorm(200), 10))
@@ -1431,6 +1323,8 @@ d3_p
 All observations
 
 ```{r echo=FALSE, highlight.output = c(2,3,9,10)}
+#| label: problems-with-correlation-2-2-2
+#| code-fold: true
 cor.test(d3$x, d3$y)[c(4, 1, 3)]
 ```
 :::
@@ -1439,6 +1333,8 @@ cor.test(d3$x, d3$y)[c(4, 1, 3)]
 Without outlier
 
 ```{r echo=FALSE, highlight.output = c(2,3,9,10)}
+#| label: problems-with-correlation-2-2-3
+#| code-fold: true
 cor.test(d3$x[1:200], d3$y[1:200])[c(4, 1, 3)]
 ```
 
@@ -1462,6 +1358,7 @@ It is affected by extreme values.
 :::
 
 ```{r}
+#| code-fold: true
 #| label: simcor
 #| echo: false
 #| fig-width: 10
@@ -1549,6 +1446,8 @@ grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, ncol = 4)
 ::: {style="font-size: 70%;"}
 
 ```{r}
+#| label: answers
+#| code-fold: true
 #| echo: false
 #| fig-width: 4
 #| fig-height: 2
@@ -1623,6 +1522,7 @@ When someone says [*correlation is 0.5* it sounds impressive]{.monash-blue2}. BU
 ## R
 
 ```{r} 
+#| code-fold: true
 #| label: simcor
 #| echo: true
 #| eval: false
@@ -1646,6 +1546,8 @@ When someone says [*correlation is 0.5* it sounds impressive]{.monash-blue2}. BU
 :::
 
 ```{r}
+#| label: robust-correlation-measures-1-2
+#| code-fold: true
 set.seed(60)
 df <- tibble(
   x = c(round(rnorm(5), 1), 3, 10),
@@ -1659,12 +1561,16 @@ df
 ::: {.column}
 
 ```{r echo=TRUE}
+#| label: robust-correlation-measures-1-2-2
+#| code-fold: true
 cor(df$x, df$y)
 cor(df$xr, df$yr)
 cor(df$x, df$y, method = "spearman")
 ```
 
 ```{r}
+#| label: robust-correlation-measures-1-2-3
+#| code-fold: true
 #| fig-width: 3
 #| fig-height: 3
 #| out-width: 40%
@@ -1693,6 +1599,8 @@ $$\tau = \frac{n_c-n_d}{\frac12 n(n-1)}$$
 ::: {.column width=33%}
 
 ```{r}
+#| label: robust-correlation-measures-2-2
+#| code-fold: true
 #| echo: false
 #| fig-width: 3
 #| fig-height: 3
@@ -1708,6 +1616,8 @@ ggplot(df, aes(x = x, y = y)) +
 ::: {.column width=33%}
 
 ```{r}
+#| label: robust-correlation-measures-2-2-2
+#| code-fold: true
 #| echo: false
 df
 ```
@@ -1716,6 +1626,8 @@ df
 ::: {.column width=33%}
 
 ```{r echo=TRUE}
+#| label: robust-correlation-measures-2-2-3
+#| code-fold: true
 cor(df$x, df$y)
 cor(df$x, df$y, method = "kendall")
 ```
@@ -1727,6 +1639,7 @@ cor(df$x, df$y, method = "kendall")
 ## Comparison of correlation measures
 
 ```{r}
+#| code-fold: true
 #| label: diffscatter
 #| echo: false
 #| eval: false
@@ -1756,6 +1669,7 @@ d3_p +
 ```
 
 ```{r}
+#| code-fold: true
 #| label: corr-table
 #| echo: false
 tribble(
@@ -1803,6 +1717,7 @@ Robust calculation corrects outlier problems, but nothing measures the non-linea
 ::: {.column}
 
 ```{r}
+#| code-fold: true
 #| label: movies
 #| fig-width: 6
 #| fig-height: 6
@@ -1862,6 +1777,7 @@ What about causation? association? outliers?  clusters? gaps? barrier? condition
 ## R
 
 ```{r}
+#| code-fold: true
 #| label: movies
 #| echo: true
 #| eval: false
@@ -1880,6 +1796,7 @@ What about causation? association? outliers?  clusters? gaps? barrier? condition
 ::: {.column}
 
 ```{r}
+#| code-fold: true
 #| label: logmovies
 #| echo: false
 #| fig-width: 6
@@ -1911,6 +1828,7 @@ Some positive association between two variables only for large number of votes.
 ## R
 
 ```{r}
+#| code-fold: true
 #| label: logmovies
 #| echo: true
 #| eval: false
@@ -1935,6 +1853,7 @@ Correlation between [raw variables]{.monash-blue2} is `r round(cor(movies$votes,
 ::: {.column}
 
 ```{r}
+#| code-fold: true
 #| label: cars
 #| echo: false
 #| fig-width: 6
@@ -1973,6 +1892,7 @@ Describe the relationship between horsepower and mpg.
 ## R
 
 ```{r}
+#| code-fold: true
 #| label: cars
 #| echo: true
 #| eval: false
@@ -1991,6 +1911,7 @@ Describe the relationship between horsepower and mpg.
 ::: {.column}
 
 ```{r}
+#| code-fold: true
 #| label: logcars
 #| echo: false
 #| fig-width: 6
@@ -2024,6 +1945,7 @@ Log transforming `mpg` linearised the relationship between horsepower and mpg.
 ## R
 
 ```{r}
+#| code-fold: true
 #| label: logcars
 #| echo: true
 #| eval: false
@@ -2048,6 +1970,7 @@ for skewness, heteroskedasticity and linearising relationships, and to emphasize
 ::: {.column}
 
 ```{r}
+#| code-fold: true
 #| label: circleoftrans
 #| echo: false
 #| fig-width: 5
@@ -2102,19 +2025,113 @@ If there is heteroskedasticity, try transforming $y$, may or may not help
 :::
 ::::
 
-## Scatterplot case studies {.transition-slide .center style="text-align: center;"}
+## Activity: Fisherman's Reach crabs {.activity-slide}
 
+:::: {.columns}
+::: {.column width="70%"}
 
+::: {.callout-tip title="Your turn"}
+1. Load the [Fisherman's Reach crabs data](https://ddde.numbat.space/data/fr-crab.csv), collected by measuring 62 mud crabs.
 
-##  Case study: Soils [(1/4)]{.smaller}
+2. Make a scatterplot of `Wgt` by `Length.NSW`. Describe the relationship. (Which variable should be the dependent variable, on the $y$ axis?)
+
+3. Fit a linear model of `Wgt` on `Length.NSW` and plot the residuals. Is there evidence of nonlinearity or heteroskedasticity?
+
+4. Using the circle of transformations, try transforming `Wgt` (e.g. cube root, square root, log10) to linearise the relationship. Which works best, and why?
+
+5. Is there possibly a lurking variable, that can explain the nonlinearity?
+:::
+
+:::
+::: {.column width="30%"}
+
+![](../images/mud-crab.jpg)
+
+:::
+::::
+
+```{r}
+#| echo: false
+countdown::countdown(5, 27)
+```
+
+::: {.panel-tabset}
+
+## Code
+
+```{r}
+#| label: crabs-activity-answer
+#| code-fold: true
+#| eval: false
+library(broom)
+
+fr_crabs <- read_csv("https://ddde.numbat.space/data/fr-crab.csv") |>
+  mutate(Sex = factor(Sex, levels = c(1, 2), labels = c("m", "f")))
+
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point()
+
+# Fit a linear model, and check the residuals
+cr_lm <- lm(Wgt ~ Length.NSW, data = fr_crabs)
+fr_crabs <- augment(cr_lm, fr_crabs)
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+ggplot(fr_crabs, aes(x = Length.NSW, y = .resid)) +
+  geom_point()
+
+# Try transformations of Wgt to linearise the relationship
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt^(1 / 3))) +
+  geom_point() +
+  ylab("Cube root Wgt")
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point() +
+  scale_y_sqrt() +
+  ylab("Square root Wgt")
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point() +
+  scale_y_log10() +
+  ylab("Log10 Wgt")
+
+# Check for a lurking variable
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt, colour = Sex)) +
+  geom_point() +
+  scale_colour_brewer(palette = "Dark2") +
+  theme(legend.position = "bottom")
+
+# Fit the cube root model to males only
+fr_crabs_m <- fr_crabs |>
+  filter(Sex == "m")
+cr_m_lm <- lm(Wgt^(1 / 3) ~ Length.NSW, data = fr_crabs_m)
+fr_crabs_m <- augment(cr_m_lm, fr_crabs_m)
+coefs <- tidy(cr_m_lm)
+ggplot(fr_crabs_m, aes(x = Length.NSW, y = Wgt^(1 / 3))) +
+  geom_point() +
+  geom_abline(intercept = coefs$estimate[1], slope = coefs$estimate[2])
+```
+
+## Learn
+
+::: {.vscroll-small style="font-size:60%;"}
+
+- Weight is the dependent variable: it should be on the $y$ axis, because weight is related to the volume of the crab, which scales with length$^p$, not the reverse.
+- The raw scatterplot is positive, strong, and a little nonlinear. Fitting a linear model and examining the residuals reveals a U-shape and clear heteroskedasticity, confirming the nonlinearity.
+- Cube root, square root, and log10 transformations of `Wgt` all reduce the curvature to varying degrees, consistent with a physical model where weight scales roughly with length-cubed.
+- Colouring by `Sex` reveals a **lurking variable**: males and females follow somewhat different Length-Weight relationships, and restricting to males and using a cube root transformation gives the best-fitting, most linear relationship — matching the physical intuition that weight is proportional to length$^3$.
+
+:::
+
+:::
+
+##  Interference between skewness and association
 
 
 :::: {.columns}
 ::: {.column}
 
 ```{r}
+#| code-fold: true
 #| label: baker
-#| echo: false
 #| fig-width: 5
 #| fig-height: 5
 #| out-width: 80%
@@ -2129,6 +2146,10 @@ ggMarginal(p, type = "density")
 :::
 ::: {.column style="font-size: 70%;"}
 
+::: {.panel-tabset}
+
+## Explanation
+
 Interplay between skewness and association
 
 Data is from a soil chemical analysis of a farm field in Iowa. Is there a relationship between Yield and Boron?
@@ -2139,17 +2160,11 @@ You can get a marginal plot of each variable added to the scatterplot using `ggM
 <br>
 Boron is right-skewed Yield is left-skewed. With skewed distributions in marginal variables it is [hard]{.monash-orange2} to assess the relationship between the two. Make a transformation to fix, first.
 
-:::
-::::
-
-##  Case study: Soils [(2/4)]{.smaller}
-
-:::: {.columns}
-::: {.column}
+## Transform
 
 ```{r}
+#| code-fold: true
 #| label: transfbaker
-#| echo: false
 #| fig-width: 5
 #| fig-height: 5
 #| out-width: 80%
@@ -2165,78 +2180,126 @@ ggMarginal(p, type = "density")
 ```
 
 :::
-::: {.column}
-
-<br>
-<br>
-
-```{r}
-#| label: transfbaker
-#| echo: true
-#| eval: false
-```
 
 :::
 ::::
 
-##  Case study: Soils [(3/4)]{.smaller}
 
+## Checking it with visual inference lineup
 
-:::: {.columns}
-::: {.column}
+::: {.panel-tabset}
+
+## Soils
 
 ```{r}
-#| label: bakeriron
+#| code-fold: true
+#| label: soils-lineup
 #| echo: false
-#| fig-width: 5
-#| fig-height: 5
+#| fig-width: 12
+#| fig-height: 6
 #| out-width: 80%
+set.seed(932)
+ggplot(
+  lineup(null_permute("Corn97BU"), baker, n = 24),
+  aes(x = B, y = Corn97BU)
+) +
+  geom_point(size=1) +
+  facet_wrap(~.sample, ncol = 8)
+```
+
+## R
+
+```{r}
+#| code-fold: true
+#| label: soils-lineup
+#| echo: true
+#| eval: false
+```
+
+All but one of the panels have had the [association broken]{.monash-orange2} by [permuting]{.monash-orange2} one variable. [There is no association]{.monash-blue2} in these data sets, and hence plots. Does the data plot stand out as being different from the null (no association) plots?
+
+## Olympics
+
+```{r}
+#| code-fold: true
+#| label: oly-lineup
+#| echo: false
+#| fig-width: 12
+#| fig-height: 6
+#| out-width: 80%
+set.seed(933)
+data(oly12, package = "VGAMdata")
+oly12_sub <- oly12 |>
+  filter(Sport %in% c(
+    "Swimming", "Archery",
+    "Hockey", "Tennis"
+  )) |>
+  filter(Sex == "F") |>
+  mutate(Sport = fct_drop(Sport), Sex = fct_drop(Sex))
+
+ggplot(
+  lineup(null_permute("Sport"), oly12_sub, n = 24),
+  aes(x = Height, y = Weight, colour = Sport)
+) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_colour_brewer("", palette = "Dark2") +
+  facet_wrap(~.sample, ncol = 8) +
+  theme(legend.position = "none")
+```
+
+## R
+
+
+```{r}
+#| code-fold: true
+#| label: oly-lineup
+#| echo: true
+#| eval: false
+```
+
+::: {style="font-size: 70%;"}
+All but one of the panels have had the [association broken]{.monash-orange2} by [permuting]{.monash-orange2} the Sport label. [There is no difference in the association between weight and height across sports]{.monash-blue2} in these data sets, and hence plots. Does the data plot stand out as being different from the null (no association difference between sports) plots?
+:::
+
+:::
+
+## Activity: Case study: Soils {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+1. Using the `baker` soils data, make a scatterplot (with marginal densities, and a 2D density overlay) of Corn Yield$^2$ (`Corn97BU^2`) against Iron (`Fe`). Is there a relationship? Could there be a lurking variable?
+
+2. Colour the points by whether Calcium (`Ca`) is high (> 5200 ppm) or low. How does this change your interpretation of the relationship between Iron and Yield?
+:::
+
+```{r}
+#| echo: false
+countdown::countdown(9, 53)
+```
+
+::: {.panel-tabset}
+
+## Code
+
+```{r}
+#| label: soils-activity-answer
+#| code-fold: true
+#| eval: false
 p <- ggplot(
   baker,
   aes(x = Fe, y = Corn97BU^2)
 ) +
   geom_density2d(colour = "orange") +
   geom_point() +
-  xlab("Iron (ppm)") + 
+  xlab("Iron (ppm)") +
   ylab("Corn Yield^2 (bushells)")
 ggMarginal(p, type = "density")
-```
 
-:::
-::: {.column}
-
-<br>
-Lurking variable?
-
-<br>
-<br>
-
-```{r}
-#| label: bakeriron
-#| echo: true
-#| eval: false
-```
-
-:::
-::::
-
-##  Case study: Soils [(4/4)]{.smaller}
-
-:::: {.columns}
-::: {.column width=40%}
-
-```{r}
-#| label: bakerironca
-#| echo: false
-#| fig-width: 5
-#| fig-height: 5
-#| out-width: 100%
 ggplot(baker, aes(
   x = Fe, y = Corn97BU^2,
-  colour = ifelse(Ca > 5200, 
+  colour = ifelse(Ca > 5200,
     "high", "low"
   )
-)) + 
+)) +
   geom_point() +
   xlab("Iron (ppm)") +
   ylab("Corn Yield^2 (bushells)") +
@@ -2248,24 +2311,18 @@ ggplot(baker, aes(
   )
 ```
 
-:::
-::: {.column width=60%}
+## Learn
 
-Colour high calcium (>5200ppm) calcium values
+::: {.vscroll-small style="font-size:60%;"}
 
-
-```{r}
-#| label: bakerironca
-#| echo: true
-#| eval: false
-```
-
-If calcium levels in the soil are high, yield is consistently high. If calcium levels are low, then there is a positive relationship between yield and iron, with higher iron leading to higher yields.
+- The raw scatterplot of Yield$^2$ against Iron appears to have two different patterns — this hints at a **lurking variable**.
+- Colouring by high vs low Calcium (> 5200 ppm) reveals the structure: if calcium levels in the soil are high, yield is consistently high regardless of iron. If calcium levels are low, there is a positive relationship between yield and iron, with higher iron leading to higher yields.
 
 :::
-::::
 
-## Case study: COVID-19
+:::
+
+## Scales, benchmarks, calibration matter
 
 
 ::: {.panel-tabset}
@@ -2273,6 +2330,7 @@ If calcium levels in the soil are high, yield is consistently high. If calcium l
 ## 🖼️
 
 ```{r}
+#| code-fold: true
 #| label: prepdata
 #| echo: false
 #| eval: false
@@ -2297,6 +2355,7 @@ save(nyt_county_total, file = "../data/nyt_covid.rda")
 ```
 
 ```{r}
+#| code-fold: true
 #| label: usacovid
 #| echo: false
 #| fig-width: 10
@@ -2326,50 +2385,28 @@ ggplot() +
 ```
 
 
-## info
+## about
 
 <br><br><br>
-Bubble plots, size of point is mapped to another variable.
 
 This bubble plot here shows total count of COVID-19 incidence (as of Aug 30, 2020) for every county in the USA, inspired by the [New York Times coverage](https://www.nytimes.com/news-event/coronavirus).
 
 ## R
 
 ```{r}
+#| code-fold: true
 #| label: usacovid
 #| echo: true
 #| eval: false
 ```
 
-:::
+## Learn
 
 
-## Scales matter
-
-:::: {.columns}
-::: {.column}
-<br>
-<br>
-
-```{r}
-#| label: usacovid
-#| echo: false
-#| eval: true
-#| fig-width: 10
-#| fig-height: 6.7
-#| out-width: 70%
-```
-
-:::
-::: {.column}
-<br>
-<br>
 Where has COVID-19 hit the hardest?
 <br>
 
 Where are there more people?
-<br>
-<br>
 <br>
 
 ::: {.fragment}
@@ -2381,12 +2418,9 @@ This plot tells you NOTHING except where the population centres are in the USA.
 To understand [relative incidence/risk]{.monash-blue2}, report COVID numbers relative the population. For example, [number of cases per 100,000 people]{.monash-blue2}.
 
 :::
-
 :::
-::::
 
 ## Beyond quantitative variables {.transition-slide .center style="text-align: center;"}
-
 
 
 ## When variables are not quantitative
@@ -2398,10 +2432,295 @@ What do you do if the variables are not continuous/quantitative?
 
 - [Continuous and categorical]{.monash-blue2}: side-by-side boxplots, side-by-side density plots
 - [Both categorical]{.monash-blue2}: faceted bar charts, stacked bar charts, [mosaic plots]{.monash-orange2}, [double decker plots]{.monash-orange2}
-
-<br> <br>
-Stay tuned!
 :::
+
+## Mosaic plots [(1/2)]{.smallest}
+
+:::: {.columns}
+::: {.column width="45%" .smaller}
+
+::: {.panel-tabset}
+
+## Explain
+
+- Built from a [contingency table]{.monash-blue2} of two (or more) categorical variables.
+- The plot area is recursively split into tiles:
+    - Split [horizontally]{.monash-orange2} by the first variable, with widths proportional to its marginal counts.
+    - Split each column [vertically]{.monash-orange2} by the second variable, with heights proportional to the conditional counts.
+- Tile [area]{.monash-blue2} $\propto$ cell count $\Rightarrow$ area encodes joint frequency.
+
+<!--
+- Can be [shaded]{.monash-orange2} by the Pearson residual from a model of independence, to highlight cells with more/fewer observations than expected.
+
+Use when: you have [two or more categorical variables]{.monash-blue2} and want to see both the joint distribution and evidence of association between them.
+-->
+
+## Plot
+
+- Column widths show mother's education level 4 (finished upper secondary) is the most common in this sample; level 1 is rare.
+- Within each column, the split shows the [conditional]{.monash-blue2} distribution of books-at-home category, given mother's education.
+- Students whose mothers have more education more often report `>100` books at home, but with only 47 students, tiles are [unshaded]{.monash-orange2} (grey) — the residuals from independence aren't large enough to be notable at this sample size.
+
+Read off the proportions of one variable relative to the other.
+
+## Data
+
+Number of `book`s at home by mother's education (1 = less than ISCED 1, ..., 4 = ISCED 3A), for 2022 PISA students in Turkey [(learningtower package)]{.smaller}.
+
+- ISCED 1: Elementary/primary school completed
+- ISCED 2: Middle school / junior high completed
+- ISCED 3A: Academic high school diploma
+:::
+:::
+::: {.column width="55%"}
+
+```{r}
+#| code-fold: true
+#| label: mosaic-twovars
+#| echo: true
+#| fig-width: 7
+#| fig-height: 5.5
+#| out-width: 90%
+library(vcd)
+library(ggmosaic)
+load(here::here("data/student_turkey.rda"))
+
+tur_book <- student_tur |>
+  filter(!is.na(book), 
+         !is.na(mother_educ),
+         !is.na(gender),
+         !is.na(computer),
+         !is.na(room)) |>
+  mutate(book = as.character(book)) |>
+  mutate(book = ifelse(book %in% c("0", "1-10"), "<=10", book)) |>
+  mutate(
+    book = factor(book, levels = c("<=10", "11-25",
+      "26-100", "101-200", "201-500", "More than 500"),
+      labels = c("<=10", "11-25",
+      "26-100", "101-200", "201-500", ">500")),
+    mother_educ = factor(mother_educ,
+      levels = c("less than ISCED1", "ISCED 1", "ISCED 2", "ISCED 3A"),
+      labels = c("1", "2", "3", "4")
+    )
+  )
+
+ggplot(tur_book) +
+  geom_mosaic(aes(x = product(book, mother_educ), 
+    fill = book)) +
+   scale_fill_discrete("books", palette = "Greens") +
+  theme_mosaic()
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+#tur_tbl <- xtabs(~ mother_educ + book, data = tur_book)
+#vcd::mosaic(tur_tbl,
+#  shade = TRUE, legend = FALSE,
+#  labeling_args = list(gp_labels = grid::gpar(fontsize = 11))
+#)
+```
+
+:::
+::::
+
+## Mosaic plots [(2/2)]{.smallest}
+
+:::: {.columns}
+::: {.column width="45%" .smaller}
+
+The third variable would be interleaved on the horizontal axis.
+
+A fourth variable would be interleaved on the vertical axis.
+
+But it gets increasingly difficult to digest the different proportions.
+
+:::
+::: {.column width="55%" .smaller}
+
+::: {.panel-tabset}
+
+## 3
+
+```{r}
+#| code-fold: true
+#| label: mosaic-threevars
+#| echo: true
+#| fig-width: 7
+#| fig-height: 5.5
+#| out-width: 90%
+ggplot(tur_book) +
+  geom_mosaic(aes(x = product(gender, book, 
+         mother_educ), 
+    fill = gender), 
+    ) +
+   scale_fill_discrete("Gender", palette = "Greens") +
+  theme_mosaic() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+## 4
+
+
+```{r}
+#| code-fold: true
+#| label: mosaic-fourvars
+#| echo: true
+#| fig-width: 7
+#| fig-height: 5.5
+#| out-width: 90%
+ggplot(tur_book) +
+  geom_mosaic(aes(x = product(gender, room, book, 
+         mother_educ), 
+    fill = gender), 
+    ) +
+   scale_fill_discrete("Gender", palette = "Greens") +
+  theme_mosaic() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+:::
+:::
+::::
+
+## Double decker plots 
+
+:::: {.columns}
+::: {.column width="45%"}
+
+::: {.panel-tabset}
+
+## Explain
+
+::: {.smaller}
+
+- A [double decker plot]{.monash-blue2} is a mosaic plot where one variable is treated as the [response]{.monash-orange2}, plotted last.
+- Explanatory (predictor) categorical variables are combined and shown side by side, with widths proportional to their combined counts.
+- Within each combination of explanatory variables, a single bar is split (and coloured) by the response, showing the [conditional probability]{.monash-orange2} of each response category.
+
+Use when: you have a couple of categorical [predictors]{.monash-blue2} and one categorical [response]{.monash-blue2}, and want to compare how the response's conditional distribution changes across combinations of predictors.
+:::
+
+## Plot
+
+::: {.smaller}
+
+- Column [width]{.monash-blue2} encodes how many students are in that gender / mother's-education combination; relatively few students had mothers who had not finished Year 12.
+- The [response]{.monash-orange2} is heavily [imbalanced]{.monash-orange2}: almost all students report having their own room, so most of each bar is orange regardless of group.
+- With only 45 students and just 3 without their own room, the small grey slivers (e.g. 1 male student with a mother who didn't finish Year 12) reflect a handful of individuals — not a reliable estimate of any group difference.
+
+Compared to a mosaic plot, a double decker plot makes it easier to focus on [one response variable]{.monash-blue2} at a time, at the cost of not showing area for the response split as clearly.
+
+:::
+
+## Data
+
+Whether a student has their `own room` (grey = no) by `gender` and mother's education, for 2022 PISA students in Australia.
+
+:::
+:::
+::: {.column width="55%"}
+
+::: {.panel-tabset}
+
+## 3
+
+```{r}
+#| code-fold: true
+#| label: doubledecker-three
+#| echo: true
+#| fig-width: 8
+#| fig-height: 5.5
+#| out-width: 100%
+tur_book2 <- student_tur |>
+  filter(!is.na(book), 
+         !is.na(mother_educ),
+         !is.na(gender)) |>
+  mutate(
+    book = factor(
+      case_when(
+        book %in% c("0-10", "11-25") ~ "<=25",
+        book == "26-100" ~ "26-100",
+        book == "101-200" ~ "101-200",
+        TRUE ~ ">200"
+      ),
+      levels = c("<=25", "26-100", "101-200", ">200")
+    ),
+    mother_educ = factor(mother_educ,
+      levels = c("less than ISCED1", "ISCED 1", "ISCED 2", "ISCED 3A"),
+      labels = c("1", "2", "3", "4")
+    )
+  )
+
+tur_dd_tbl <- xtabs(~ gender + mother_educ + room, data = tur_book2)
+vcd::doubledecker(tur_dd_tbl,
+  gp = grid::gpar(fill = c("grey80", "orangered")),
+  labeling_args = list(gp_labels = grid::gpar(fontsize = 10)),
+  margins = c(3, 7, 3, 3)
+)
+```
+
+## 3 reorder
+
+
+```{r}
+#| code-fold: true
+#| label: doubledecker-three2
+#| echo: true
+#| fig-width: 8
+#| fig-height: 5.5
+#| out-width: 100%
+
+tur_dd_tbl3 <- xtabs(~ mother_educ + gender + room, data = tur_book2)
+vcd::doubledecker(tur_dd_tbl3,
+  gp = grid::gpar(fill = c("grey80", "orangered")),
+  labeling_args = list(gp_labels = grid::gpar(fontsize = 10)),
+  margins = c(3, 7, 3, 3)
+)
+```
+
+## 4
+
+```{r}
+#| code-fold: true
+#| label: doubledecker-four
+#| echo: true
+#| fig-width: 8
+#| fig-height: 5.5
+#| out-width: 100%
+
+tur_dd_tbl2 <- xtabs(~ gender + mother_educ + room + computer, data = tur_book2)
+vcd::doubledecker(tur_dd_tbl2,
+  gp = grid::gpar(fill = c("grey80", "orangered")),
+  labeling_args = list(gp_labels = grid::gpar(fontsize = 10)),
+  margins = c(3, 7, 3, 3)
+)
+```
+
+## 4 reorder
+
+```{r}
+#| code-fold: true
+#| label: doubledecker-four2
+#| echo: true
+#| fig-width: 8
+#| fig-height: 5.5
+#| out-width: 100%
+
+tur_dd_tbl4 <- xtabs(~ mother_educ + computer + gender + room, data = tur_book2)
+vcd::doubledecker(tur_dd_tbl4,
+  gp = grid::gpar(fill = c("grey80", "orangered")),
+  labeling_args = list(gp_labels = grid::gpar(fontsize = 10)),
+  margins = c(3, 7, 3, 3)
+)
+```
+
+:::
+
+:::
+::::
+
 
 ## Paradoxes {.transition-slide .center style="text-align: center;"}
 
@@ -2412,6 +2731,7 @@ Stay tuned!
 There is an additional variable, which if used for conditioning, changes the association between the variables, you have a [paradox]{.monash-orange2}.
 
 ```{r}
+#| code-fold: true
 #| label: generate_more_data
 #| echo: false
 set.seed(2222)
@@ -2429,6 +2749,7 @@ df <- tibble(x = c(rnorm(500) * 0.2, runif(300) + 1)) |>
 ::: {.column}
 
 ```{r}
+#| code-fold: true
 #| label: scat
 #| echo: false
 #| fig-width: 3
@@ -2446,6 +2767,7 @@ ggplot(df, aes(x = x, y = y1)) +
 ::: {.column}
 
 ```{r}
+#| code-fold: true
 #| label: scatcol
 #| echo: false
 #| fig-width: 3
@@ -2469,6 +2791,7 @@ ggplot(df, aes(x = x, y = y1, colour = y2)) +
 
 <br>
 ```{r}
+#| code-fold: true
 #| label: berkeley
 #| echo: false
 #| fig-width: 10
@@ -2491,6 +2814,7 @@ Did Berkeley [discriminate]{.monash-orange2} against female applicants?
 ## Simpson's paradox: famous example [(2/2)]{.smallest}
 
 ```{r}
+#| code-fold: true
 #| label: berkeleydd
 #| echo: false
 #| fig-width: 10
@@ -2518,82 +2842,6 @@ Based on separately examining each department, there is [no evidence of discrimi
 [Example from Unwin (2015)]{.smallest}
 
 ## Always examine the associations in each strata {.transition-slide .center styale="text-align: center;"}
-
-## Is what you see really association? {.transition-slide .center style="text-align: center;"}
-
-
-
-## Checking association with visual inference
-
-::: {.panel-tabset}
-
-## Soils
-
-```{r}
-#| label: soils-lineup
-#| echo: false
-#| fig-width: 10
-#| fig-height: 7
-#| out-width: 60%
-ggplot(
-  lineup(null_permute("Corn97BU"), baker, n = 12),
-  aes(x = B, y = Corn97BU)
-) +
-  geom_point() +
-  facet_wrap(~.sample, ncol = 4)
-```
-
-## R
-
-```{r}
-#| label: soils-lineup
-#| echo: true
-#| eval: false
-```
-
-11 of the panels have had the [association broken]{.monash-orange2} by [permuting]{.monash-orange2} one variable. [There is no association]{.monash-blue2} in these data sets, and hence plots. Does the data plot stand out as being different from the null (no association) plots?
-
-## Olympics
-
-```{r}
-#| label: oly-lineup
-#| echo: false
-#| fig-width: 10
-#| fig-height: 7
-#| out-width: 60%
-data(oly12, package = "VGAMdata")
-oly12_sub <- oly12 |>
-  filter(Sport %in% c(
-    "Swimming", "Archery",
-    "Hockey", "Tennis"
-  )) |>
-  filter(Sex == "F") |>
-  mutate(Sport = fct_drop(Sport), Sex = fct_drop(Sex))
-
-ggplot(
-  lineup(null_permute("Sport"), oly12_sub, n = 12),
-  aes(x = Height, y = Weight, colour = Sport)
-) +
-  geom_smooth(method = "lm", se = FALSE) +
-  scale_colour_brewer("", palette = "Dark2") +
-  facet_wrap(~.sample, ncol = 4) +
-  theme(legend.position = "none")
-```
-
-## R
-
-
-```{r}
-#| label: oly-lineup
-#| echo: true
-#| eval: false
-```
-
-::: {style="font-size: 70%;"}
-11 of the panels have had the [association broken]{.monash-orange2} by [permuting]{.monash-orange2} the Sport label. [There is no difference in the association between weight and height across sports]{.monash-blue2} in these data sets, and hence plots. Does the data plot stand out as being different from the null (no association difference between sports) plots?
-:::
-
-:::
 
 ## Handling and imputing missings [(1/2)]{.smallest}
 
@@ -2733,6 +2981,7 @@ What do you do if you only receive the association information?
 For example, in the Harry Potter series of books, some characters show support and comfort to other characters at different times. (This example is from [Sam Tyner's geomnet](https://github.com/sctyner/geomnet) which was originally taken from [The Siena Program](https://www.stats.ox.ac.uk/~snijders/siena/siena.html).)
 
 ```{r}
+#| label: definition
 #| code-fold: true
 load("../data/hpchars.rda")
 glimpse(hp.chars)
@@ -2745,6 +2994,7 @@ glimpse(hp.chars)
 ::: {style="font-size: 80%;"}
 
 ```{r}
+#| label: definition-2
 #| code-fold: true
 load("../data/hpedges.rda")
 glimpse(hp.edges)
@@ -2773,6 +3023,7 @@ Any data where association between multiple pairs of variables can computed can 
 ::: {style="font-size: 70%;"}
 
 ```{r}
+#| label: school-year
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -2793,6 +3044,7 @@ What is school year in HP??
 
 ::: {style="font-size: 70%;"}
 ```{r}
+#| label: house
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -2816,6 +3068,7 @@ Most of the characters are associated with Gryffindor!!
 
 ::: {style="font-size: 70%;"}
 ```{r}
+#| label: gender
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -2838,6 +3091,7 @@ Is the book lacking in diversity?
 
 ::: {style="font-size: 70%;"}
 ```{r}
+#| label: gender-2
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -2866,6 +3120,7 @@ Just Slytherin is lacking diversity.
 ::: {style="font-size: 70%;"}
   
 ```{r}
+#| label: step-2-explore-the-edge-data
 #| code-fold: true
 #| fig-width: 15
 #| fig-height: 8
@@ -2944,6 +3199,7 @@ Similar distribution for who is providing support and who is receiving support. 
 ::: {style="font-size: 70%;"}
 
 ```{r}
+#| label: process-the-data
 #| code-fold: true
 library(tidygraph)
 library(ggraph)
@@ -3001,6 +3257,7 @@ he_allbooks_long <- he_allbooks_long |>
 ::: {style="font-size: 70%;"}
 
 ```{r}
+#| label: heatmap
 #| code-fold: true
 #| fig-width: 10
 #| fig-height: 10
@@ -3033,6 +3290,7 @@ ggplotly(p, width=600, height=600)
 ::: {style="font-size: 70%;"}
 
 ```{r}
+#| label: process-the-data-2
 #| code-fold: true
 he_connect <- he_allbooks_long |> 
   filter(n > 0) |>
@@ -3177,6 +3435,7 @@ all_books_edges <- bind_rows(book1_edges, book2_edges,
 ::: {style="font-size: 70%;"}
 
 ```{r}
+#| label: network
 #| code-fold: true
 #| fig-width: 10
 #| fig-height: 10
@@ -3203,6 +3462,14 @@ ggplotly(p2, tooltip = "label", width=900, height=600)
 :::
 
 ## Key points from today?
+
+- Scatterplots reveal form, strength, and outliers in the relationship between two continuous variables
+- Correlation is a single number summary — always look at the plot too, and consider robust measures when the relationship is non-linear or has outliers
+- Transformations can linearise a relationship and simplify its description
+- Mosaic and double decker plots extend these ideas to categorical variables
+- Watch for Simpson's paradox: check associations within subgroups, not just overall
+- Missing values need careful handling — understand *why* they're missing before imputing
+- Networks let us examine association between entities connected by relationships
 
 ## Resources
 

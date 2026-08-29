@@ -6438,13 +6438,13 @@ color: #C8008F;
 
 <section id="objectives" class="level2">
 <h2 class="anchored" data-anchor-id="objectives">🎯 Objectives</h2>
-<p>These are exercises in making scatterplots and variations to examine association between two variables, to explore association matrices and networks, and conduct inference on associations.</p>
+<p>These are exercises in making scatterplots and variations to examine association between two variables, to explore association matrices and networks.</p>
 </section>
 <section id="preparation" class="level2">
 <h2 class="anchored" data-anchor-id="preparation">🔧 Preparation</h2>
 <p>The reading for this week is <a href="https://clauswilke.com/dataviz/">Wilke (2019) Ch 12 Visualizing associations</a>. - Complete the weekly quiz, before the deadline! - Install the following R-packages if you do not have them already:</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;nullabor&quot;</span>, <span class="st">&quot;tidygraph&quot;</span>, <span class="st">&quot;ggraph&quot;</span>, <span class="st">&quot;plotly&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;tidygraph&quot;</span>, <span class="st">&quot;ggraph&quot;</span>, <span class="st">&quot;plotly&quot;</span>, <span class="st">&quot;colorspace&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Open your RStudio Project for this unit, (the one you created in week 1, <code>ETC5521</code>). Create a <code>.qmd</code> document for this weeks activities.</li>
@@ -6452,31 +6452,8 @@ color: #C8008F;
 </section>
 <section id="exercises" class="level2">
 <h2 class="anchored" data-anchor-id="exercises">📥 Exercises</h2>
-<section id="exercise-1-olympics" class="level3">
-<h3 class="anchored" data-anchor-id="exercise-1-olympics">Exercise 1: Olympics</h3>
-<p>We have seen from the lecture that the Athletics category has too many different types of athletics in it for it to be a useful group for studying height and weight. There is another variable called <code>Event</code> which contains more specific information.</p>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read-in data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(oly12, <span class="at">package =</span> <span class="st">&quot;VGAMdata&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<ol type="a">
-<li>Tabulate <code>Event</code> for just the Sport category <code>Athletics</code>, and decide which new categories to create.</li>
-</ol>
-<ol start="2" type="a">
-<li>Create the new categories, in steps, creating a new binary variable for each. The function <code>str_detect</code> is useful for searching for text patterns in a string. It also helps to know about regular expressions to work with strings like this. And there are two sites, which are great for learning: <a href="https://regexcrossword.com/challenges/beginner/puzzles/1">Regex puzzles</a>, <a href="https://regex101.com">Information and testing board</a></li>
-</ol>
-<ol start="3" type="a">
-<li>Make several plots to explore the association between height and weight for the different athletic categories, eg scatterplots faceted by sex and event type, with/without free scales, linear models for the different subsets, overlaid on the same plot, 2D density plots faceted by sex and event type, with free scales.</li>
-</ol>
-<ol start="4" type="a">
-<li>List what you learned about body types across the different athletics types and sexes.</li>
-</ol>
-<ol start="5" type="a">
-<li>If one were use visual inference to check for a different relationship between height and weight across sports how would you generate null data? Do it, and test your lineup with others in the class.</li>
-</ol>
-</section>
-<section id="exercise-2-exploring-associations" class="level3">
-<h3 class="anchored" data-anchor-id="exercise-2-exploring-associations">Exercise 2: Exploring associations</h3>
+<section id="exploring-associations-and-networks" class="level3">
+<h3 class="anchored" data-anchor-id="exploring-associations-and-networks">Exploring associations and networks</h3>
 <p>Download the <code>bike.rda</code> file from the <a href="https://github.com/sctyner/geomnet/"><code>geomnet</code> software site</a>. This network is a summary of the bike trips taken by customers of the bike sharing company Capital Bikeshare () during the second quarter of 2015. Only trips between stations in the vicinity of Rockville, MD, are included. The data is organized as a list of two datasets, vertices (stations) and edges (trips between stations), as follows:</p>
 <p>A list of two data frames:</p>
 <ul>

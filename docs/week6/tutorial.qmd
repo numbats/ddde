@@ -20,13 +20,16 @@ editor_options:
 
 ```{r include=FALSE}
 #| echo: false
-library(tidyverse)
-library(nullabor)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
 library(tidygraph)
 library(ggraph)
+library(colorspace)
 library(plotly)
-library(conflicted)
 library(ggiraph)
+library(conflicted)
 
 # Set up chunk for all slides
 knitr::opts_chunk$set(
@@ -70,7 +73,7 @@ conflicts_prefer(dplyr::slice)
 
 ## 🎯 Objectives
 
-These are exercises in making scatterplots and variations to examine association between two variables, to explore association matrices and networks, and conduct inference on associations.
+These are exercises in making scatterplots and variations to examine association between two variables, to explore association matrices and networks.
 
 ## 🔧 Preparation 
 
@@ -81,156 +84,14 @@ The reading for this week is [Wilke (2019) Ch 12 Visualizing associations](https
 ```{r}
 #| eval: false
 #| code-fold: false
-install.packages(c("nullabor", "tidygraph", "ggraph", "plotly"))
+install.packages(c("tidygraph", "ggraph", "plotly", "colorspace"))
 ```
 
 - Open your RStudio Project for this unit, (the one you created in week 1, `ETC5521`). Create a `.qmd` document for this weeks activities. 
 
 ## 📥 Exercises
 
-### Exercise 1: Olympics
-
-We have seen from the lecture that the Athletics category has too many different types of athletics in it for it to be a useful group for studying height and weight. There is another variable called `Event` which contains more specific information.
-
-```{r}
-#| echo: true
-# Read-in data
-data(oly12, package = "VGAMdata")
-```
-
-a. Tabulate `Event` for just the Sport category `Athletics`, and decide which new categories to create.
-
-::: unilur-solution
-World Athletics, the sport's governing body, defines athletics in six disciplines: track and field, road running, race walking, cross country running, mountain running, and trail running [wikipedia](https://en.wikipedia.org/wiki/Sport_of_athletics).
-
-That's not so helpful! Track and field should be two different groups. I suggest running (short, middle and long distance), throwing, jumping, walking, and Decathlon (men) or Heptathlon (women)
-:::
-
-b. Create the new categories, in steps, creating a new binary variable for each. The function `str_detect` is useful for searching for text patterns in a string. It also helps to know about regular expressions to work with strings like this. And there are two sites, which are great for learning: [Regex puzzles](https://regexcrossword.com/challenges/beginner/puzzles/1), [Information and testing board](https://regex101.com)
-
-::: unilur-solution
-```{r}
-# Give each athlete an id as unique identifier to facilitate relational joins
-oly12 <- oly12 %>%
-  mutate(id = row_number(), .before = Name)
-
-# For athletes with > 1 event, separate each event into a row
-oly12_ath <- oly12 %>%
-  filter(Sport == "Athletics") %>%
-  separate_rows(Event, sep = ", ")
-
-# Determine athlete types into 7 categories
-oly12_ath <- oly12_ath %>%
-  mutate(
-    Ath_type = case_when(
-      # 100m, 110m Hurdles, 200m, 400m, 400m hurdles, 800m, 4 x 100m relay, 4 x 400m relay,
-      str_detect(Event, "[1248]00m|Hurdles") ~ "Short distance",
-      # 1500m, 3000m Steeplechase, 5000m
-      str_detect(Event, "1500m|5000m|Steeplechase") ~ "Middle distance",
-      # 10,000m, Marathon
-      str_detect(Event, ",000m|Marathon") ~ "Long distance",
-      # 20km Race walk, Men's 50km Race walk
-      str_detect(Event, "Walk") ~ "Walking",
-      # discus throw, hammer throw, javelin throw, shot put,
-      str_detect(Event, "Throw|Put") ~ "Throwing",
-      # high jump, long jump, triple jump, pole vault
-      str_detect(Event, "Jump|Pole Vault") ~ "Jumping",
-      # decathlon (men) or heptathlon (women)
-      str_detect(Event, "Decathlon|Heptathlon") ~ "Decathlon/Heptathlon"
-    )
-  )
-
-# Remove rows with > 1 of the same athlete type
-oly12_ath <- oly12_ath %>%
-  select(-Event) %>%
-  distinct()
-
-# Add events back to each athlete
-oly12_ath <- oly12_ath %>%
-  left_join(
-    select(.data = oly12, c(Event, id)),
-    by = "id"
-  )
-```
-:::
-
-c. Make several plots to explore the association between height and weight for the different athletic categories, eg scatterplots faceted by sex and event type, with/without free scales, linear models for the different subsets, overlaid on the same plot, 2D density plots faceted by sex and event type, with free scales.
-
-::: unilur-solution
-```{r}
-library(colorspace)
-ggplot(data = oly12_ath, aes(x = Height, y = Weight)) +
-  geom_point(alpha = 0.4) +
-  facet_grid(Sex ~ Ath_type)
-
-ggplot(data = oly12_ath, aes(x = Height, y = Weight)) +
-  geom_point(alpha = 0.4) +
-  facet_grid(Sex ~ Ath_type, scales="free")
-
-ggplot(oly12_ath, aes(x = Height, y = Weight, colour = Ath_type)) +
-  geom_smooth(method = "lm", se = F) +
-  scale_colour_discrete_qualitative() +
-  facet_wrap(~Sex)
-
-ggplot(data = oly12_ath, aes(x = Height, y = Weight)) +
-  geom_density2d(alpha = 0.4) +
-  facet_grid(Sex ~ Ath_type, scales="free")
-
-```
-
-It is important to separate the sexes. Faceting by sport and sex and examining the scatterplots of height and weight in each is appropriate. Making a plot of just the regression models, faceted by sex can be useful also. A density plot is not so useful here because there isn't a lot of difference in variance between the groups.
-:::
-
-d. List what you learned about body types across the different athletics types and sexes. 
-
-::: unilur-solution
-
-Here are some examples:
-
-* From the scatter plots we learn that
-  * there are some heavy runners, especially in the shorter distances
-  * the throwers are generally taller and much heavier. 
-  * female walkers tend to be pretty small. 
-  * long distance runners are light!
-  
-* Decathlon/Heptathlon athletes are usually quite heavy; which makes sense as they have to be all-rounded
-  * if they're too light, they may not do well in throwing events
-  * if they're too heavy, they may not do well in running or jump events 
-
-* The comparisons between groups is easier from the models. 
-  * throwers are heavy! 
-  * long/middle distance runners and walkers are relatively light.
-:::
-
-e. If one were use visual inference to check for a different relationship between height and weight across sports how would you generate null data? Do it, and test your lineup with others in the class.
-
-::: unilur-solution
-
-You would permute the `Ath_type` variable, keeping sex fixed. You could still facet by sex for the lineup, and use a smaller number of nulls so it's not too over-whelming to read. Or you could separately make a full lineup of 20 for males and females separately. 
-
-```{r fig.height=6, fig.width=12, message=FALSE, warning=FALSE}
-library(nullabor)
-set.seed(141)
-ggplot(lineup(null_permute("Ath_type"),
-              true=oly12_ath, n=6), 
-       aes(x = Height, 
-           y = Weight, 
-           colour = Ath_type)) +
-  geom_smooth(method = "lm", se = F, 
-              fullrange=TRUE) +
-  scale_colour_discrete_qualitative() +
-  facet_grid(Sex~.sample) +
-  theme(legend.position="none",
-        axis.text = element_blank(),
-        axis.title = element_blank())
-```
-
-If there was no difference between the event types, the the lines would all be a bit varied in slope but intersect in a single point. (Why?) The actual data has several differences: some events have the same slope but are shifted vertically, some have different slopes and are shifted. You don't see this in the null plots.
-
-Should you re-do the nulls by forcing the intercepts to be the same in the data sample? If so, how would you do this?
-:::
-
-### Exercise 2: Exploring associations
+### Exploring associations and networks
 
 Download the `bike.rda` file from the [`geomnet` software site](https://github.com/sctyner/geomnet/). This network is a summary of the bike trips taken by customers of the bike sharing company Capital Bikeshare (\url{https://secure.capitalbikeshare.com/profile/}) during the second quarter of 2015. Only trips between stations in the vicinity of Rockville, MD, are included.
 The data is organized as a list of two datasets, vertices (stations) and edges (trips between stations),

@@ -354,3 +354,12 @@ div.info {
   overflow-x: auto;
   background-color: lightgrey;
 }
+
+.vscroll-small {
+  width: 100%;
+  height: 20%;
+  max-height: 200px;
+  overflow-x: auto;
+  background-color: lightgrey;
+  color: black; 
+}
