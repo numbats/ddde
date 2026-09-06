@@ -491,43 +491,43 @@ countdown::countdown(9, 53)
 #| label: oly-activity-answer
 #| code-fold: true
 #| eval: false
-# ggplot(oly12, aes(x = Height, y = Weight, label = Sport)) +
-#   geom_point()
-# 
-# skimr::skim(oly12)
-# 
-# oly12 |>
-#   count(Sport, sort = TRUE)
-# 
-# # Consolidate factor levels
-# oly12 <- oly12 |>
-#   mutate(Sport = as.character(Sport)) |>
-#   mutate(Sport = ifelse(grepl("Cycling", Sport),
-#     "Cycling", Sport
-#   )) |>
-#   mutate(Sport = ifelse(grepl("Gymnastics", Sport),
-#     "Gymnastics", Sport
-#   )) |>
-#   mutate(Sport = ifelse(grepl("Athletics", Sport),
-#     "Athletics", Sport
-#   )) |>
-#   mutate(Sport = as.factor(Sport))
-# 
-# # Drill down by sport
-# ggplot(oly12, aes(x = Height, y = Weight)) +
-#   geom_point(alpha = 0.5) +
-#   facet_wrap(~Sport, ncol = 8) +
-#   theme(aspect.ratio = 1)
-# 
-# # Handle missings, and examine by demographics
-# oly12 |>
-#   filter(!(Sport %in% c("Boxing", "Gymnastics", "Synchronised Swimming", "Taekwondo", "Trampoline"))) |>
-#   mutate(Sport = fct_drop(Sport)) |>
-#   ggplot(aes(x = Height, y = Weight, colour = Sex)) +
-#   geom_point(alpha = 0.5) +
-#   facet_wrap(~Sport, ncol = 7, scales = "free") +
-#   scale_colour_brewer("", palette = "Dark2") +
-#   theme(aspect.ratio = 1, axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+ggplot(oly12, aes(x = Height, y = Weight, label = Sport)) +
+  geom_point()
+
+skimr::skim(oly12)
+
+oly12 |>
+  count(Sport, sort = TRUE)
+
+# Consolidate factor levels
+oly12 <- oly12 |>
+  mutate(Sport = as.character(Sport)) |>
+  mutate(Sport = ifelse(grepl("Cycling", Sport),
+    "Cycling", Sport
+  )) |>
+  mutate(Sport = ifelse(grepl("Gymnastics", Sport),
+    "Gymnastics", Sport
+  )) |>
+  mutate(Sport = ifelse(grepl("Athletics", Sport),
+    "Athletics", Sport
+  )) |>
+  mutate(Sport = as.factor(Sport))
+
+# Drill down by sport
+ggplot(oly12, aes(x = Height, y = Weight)) +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~Sport, ncol = 8) +
+  theme(aspect.ratio = 1)
+
+# Handle missings, and examine by demographics
+oly12 |>
+  filter(!(Sport %in% c("Boxing", "Gymnastics", "Synchronised Swimming", "Taekwondo", "Trampoline"))) |>
+  mutate(Sport = fct_drop(Sport)) |>
+  ggplot(aes(x = Height, y = Weight, colour = Sex)) +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~Sport, ncol = 7, scales = "free") +
+  scale_colour_brewer("", palette = "Dark2") +
+  theme(aspect.ratio = 1, axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 
 ## ---------------------------------------------------------
@@ -1452,51 +1452,60 @@ countdown::countdown(5, 27)
 #| label: crabs-activity-answer
 #| code-fold: true
 #| eval: false
-# library(broom)
-# 
-# fr_crabs <- read_csv("https://ddde.numbat.space/data/fr-crab.csv") |>
-#   mutate(Sex = factor(Sex, levels = c(1, 2), labels = c("m", "f")))
-# 
-# ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
-#   geom_point()
-# 
-# # Fit a linear model, and check the residuals
-# cr_lm <- lm(Wgt ~ Length.NSW, data = fr_crabs)
-# fr_crabs <- augment(cr_lm, fr_crabs)
-# ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
-#   geom_point() +
-#   geom_smooth(method = "lm", se = FALSE)
-# ggplot(fr_crabs, aes(x = Length.NSW, y = .resid)) +
-#   geom_point()
-# 
-# # Try transformations of Wgt to linearise the relationship
-# ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt^(1 / 3))) +
-#   geom_point() +
-#   ylab("Cube root Wgt")
-# ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
-#   geom_point() +
-#   scale_y_sqrt() +
-#   ylab("Square root Wgt")
-# ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
-#   geom_point() +
-#   scale_y_log10() +
-#   ylab("Log10 Wgt")
-# 
-# # Check for a lurking variable
-# ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt, colour = Sex)) +
-#   geom_point() +
-#   scale_colour_brewer(palette = "Dark2") +
-#   theme(legend.position = "bottom")
-# 
-# # Fit the cube root model to males only
-# fr_crabs_m <- fr_crabs |>
-#   filter(Sex == "m")
-# cr_m_lm <- lm(Wgt^(1 / 3) ~ Length.NSW, data = fr_crabs_m)
-# fr_crabs_m <- augment(cr_m_lm, fr_crabs_m)
-# coefs <- tidy(cr_m_lm)
-# ggplot(fr_crabs_m, aes(x = Length.NSW, y = Wgt^(1 / 3))) +
-#   geom_point() +
-#   geom_abline(intercept = coefs$estimate[1], slope = coefs$estimate[2])
+library(broom)
+
+fr_crabs <- read_csv("https://ddde.numbat.space/data/fr-crab.csv") |>
+  mutate(Sex = factor(Sex, levels = c(1, 2), labels = c("m", "f")))
+
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point()
+
+# Fit a linear model, and check the residuals
+cr_lm <- lm(Wgt ~ Length.NSW, data = fr_crabs)
+fr_crabs <- augment(cr_lm, fr_crabs)
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+ggplot(fr_crabs, aes(x = Length.NSW, y = .resid)) +
+  geom_point()
+
+# Try transformations of Wgt to linearise the relationship
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt^(1 / 3))) +
+  geom_point() +
+  ylab("Cube root Wgt")
+
+cr_lm <- lm(Wgt^(1 / 3) ~ Length.NSW, data = fr_crabs)
+fr_crabs <- augment(cr_lm, fr_crabs)
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+ggplot(fr_crabs, aes(x = Length.NSW, y = .resid)) +
+  geom_point()
+
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point() +
+  scale_y_sqrt() +
+  ylab("Square root Wgt")
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt)) +
+  geom_point() +
+  scale_y_log10() +
+  ylab("Log10 Wgt")
+
+# Check for a lurking variable
+ggplot(fr_crabs, aes(x = Length.NSW, y = Wgt, colour = Sex)) +
+  geom_point() +
+  scale_colour_brewer(palette = "Dark2") +
+  theme(legend.position = "bottom")
+
+# Fit the cube root model to males only
+fr_crabs_m <- fr_crabs |>
+  filter(Sex == "m")
+cr_m_lm <- lm(Wgt^(1 / 3) ~ Length.NSW, data = fr_crabs_m)
+fr_crabs_m <- augment(cr_m_lm, fr_crabs_m)
+coefs <- tidy(cr_m_lm)
+ggplot(fr_crabs_m, aes(x = Length.NSW, y = Wgt^(1 / 3))) +
+  geom_point() +
+  geom_abline(intercept = coefs$estimate[1], slope = coefs$estimate[2])
 
 
 ## ---------------------------------------------------------
@@ -1621,31 +1630,30 @@ countdown::countdown(9, 53)
 #| label: soils-activity-answer
 #| code-fold: true
 #| eval: false
-# p <- ggplot(
-#   baker,
-#   aes(x = Fe, y = Corn97BU^2)
-# ) +
-#   geom_density2d(colour = "orange") +
-#   geom_point() +
-#   xlab("Iron (ppm)") +
-#   ylab("Corn Yield^2 (bushells)")
-# ggMarginal(p, type = "density")
-# 
-# ggplot(baker, aes(
-#   x = Fe, y = Corn97BU^2,
-#   colour = ifelse(Ca > 5200,
-#     "high", "low"
-#   )
-# )) +
-#   geom_point() +
-#   xlab("Iron (ppm)") +
-#   ylab("Corn Yield^2 (bushells)") +
-#   scale_colour_brewer("", palette = "Dark2") +
-#   theme(
-#     aspect.ratio = 1,
-#     legend.position = "bottom",
-#     legend.direction = "horizontal"
-#   )
+p <- ggplot(
+  baker,
+  aes(x = Fe, y = Corn97BU^2)) +
+  geom_density2d(colour = "orange") +
+  geom_point() +
+  xlab("Iron (ppm)") +
+  ylab("Corn Yield^2 (bushells)")
+ggMarginal(p, type = "density")
+
+ggplot(baker, aes(
+  x = Fe, y = Corn97BU^2,
+  colour = ifelse(Ca > 5200,
+    "high", "low"
+  )
+)) +
+  geom_point() +
+  xlab("Iron (ppm)") +
+  ylab("Corn Yield^2 (bushells)") +
+  scale_colour_brewer("", palette = "Dark2") +
+  theme(
+    aspect.ratio = 1,
+    legend.position = "bottom",
+    legend.direction = "horizontal"
+  )
 
 
 ## ---------------------------------------------------------
