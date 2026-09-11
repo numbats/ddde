@@ -6136,17 +6136,95 @@ color: #C8008F;
 </header>
 
 
-<section id="exercise-1-parkinsons" class="level3">
-<h3 class="anchored" data-anchor-id="exercise-1-parkinsons">Exercise 1: Parkinsons</h3>
+<section id="exercise-1-risk-taking-on-vacation" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-1-risk-taking-on-vacation">Exercise 1: Risk taking on vacation</h3>
+<p>The book “Market Segmentation Analysis - Understanding It, Doing It, and Making It Useful” by Sara Dolnicar, Bettina Grün and Friedrich Leisch has a selection of useful data sets. These can be used by installing the package:</p>
+<pre><code>install.packages(&quot;https://statistik.boku.ac.at/nachlass_leisch/MSA/packages/MSA_0.3-1.tar.gz&quot;, repos = NULL, type = &quot;source&quot;)</code></pre>
+<p>If you can’t install the package, you can download the data from <a href="https://statistik.boku.ac.at/nachlass_leisch/MSA/">the book website</a>.</p>
+<p>Load the <code>risk</code> data. This data has 563 observations and 6 variables.</p>
+<p>The data was collected by academic researchers using a permission based online panel.</p>
+<p>The sample was taken from adult Australian residents who have undertaken at least one holiday in the last year which involved staying away from home for at least four nights.</p>
+<p>The respondents were asked: “Which risks have you taken in the past?” and answered on a 5-point scale with options:</p>
+<ul>
+<li>Never (1)</li>
+<li>Rarely (2)</li>
+<li>Quite often (3)</li>
+<li>Often (4)</li>
+<li>Very often (5)</li>
+</ul>
+<p>The six types of risk, which form the variables were:</p>
+<ul>
+<li>Recreational risks (e.g., rock-climbing, scuba diving)</li>
+<li>Health risks (e.g., smoking, poor diet, high alcohol consumption)</li>
+<li>Career risks (e.g., quitting a job without another to go to)</li>
+<li>Financial risks (e.g., gambling, risky investments)</li>
+<li>Safety risks (e.g., speeding)</li>
+<li>Social risks (e.g., standing for election, publicly challenging a rule or decision)</li>
+</ul>
+<ol type="a">
+<li>Use AI to find an explanation of market segmentation. Write a few sentences to explain it.</li>
+</ol>
+<ol start="2" type="a">
+<li>What type of plots should you make for this data?</li>
+</ol>
+<ol start="3" type="a">
+<li>What this doesn’t consider is whether some customers respond similarly to other customers. How would you check this?</li>
+</ol>
+<ol start="4" type="a">
+<li>A common approach to do market segmentation is to conduct a cluster analysis (outside the scope of this class), which will divide the observations into groups. The question becomes “how many groups would be suitable to summarise the customer behaviour?” We are going to use the guided tour to help make the decision.</li>
+</ol>
+<p>This is code that will do the clustering:</p>
+<div class="cell" data-layout-align="center">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>risk_d <span class="ot">&lt;-</span> <span class="fu">apply</span>(risk, <span class="dv">2</span>, <span class="cf">function</span>(x) (x <span class="sc">-</span> <span class="fu">mean</span>(x)) <span class="sc">/</span> <span class="fu">sd</span>(x))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Clustering</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>nc <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co"># Set the number of clusters</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1145</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>r_km <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(risk_d, <span class="at">centers =</span> nc, <span class="at">iter.max =</span> <span class="dv">500</span>, <span class="at">nstart =</span> <span class="dv">5</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>r_km_d <span class="ot">&lt;-</span> risk_d <span class="sc">|&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cl =</span> <span class="fu">factor</span>(r_km<span class="sc">$</span>cluster)) <span class="sc">|&gt;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(<span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="fu">as.factor</span>(r_km<span class="sc">$</span>cluster) <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(r_km_d)[(<span class="fu">ncol</span>(r_km_d) <span class="sc">-</span> nc <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">ncol</span>(r_km_d)] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;cluster&quot;</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">:</span>nc</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>r_km_d <span class="ot">&lt;-</span> r_km_d <span class="sc">|&gt;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="fu">contains</span>(<span class="st">&quot;cluster&quot;</span>)), <span class="cf">function</span>(x) x <span class="sc">+</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Change the number of clusters <code>nc</code> starting with 2 up to maybe 5. Examine how it is breaking the data, and what the groups would mean using the 6 types of risk.</p>
+<div class="cell" data-layout-align="center">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">animate_xy</span>(r_km_d[, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>], <span class="fu">guided_tour</span>(<span class="fu">lda_pp</span>(r_km_d<span class="sc">$</span>cl)), <span class="at">col =</span> r_km_d<span class="sc">$</span>cl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="unilur">
+<p><img role="img" src="images/riskk2_cl2.png" class="img-fluid"></p>
+<p><img role="img" src="images/riskk2_cl3.png" class="img-fluid"></p>
+<p><img role="img" src="images/riskk2_cl4.png" class="img-fluid"></p>
+<p><img role="img" src="images/riskk2_cl5.png" class="img-fluid"></p>
+<p>Two and three clusters breaks the data along the main direction of association, into low and high risk taker groups. Probably we’d choose the three groups here to have low, medium and high risk.</p>
+<p>Four clusters breaks the moderate group into two, which balances recreational and social (possibly also career) against safety. This could be a useful grouping.</p>
+<p>Five clusters breaks out this group further into health against social and recerational. Possibly this is also useful.</p>
+<p>I’d tend to stick wih the three groups, as the clearest distinction between customers, but I’m not a tourism operator.</p>
+</div>
+</section>
+<section id="exercise-2-parkinsons" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2-parkinsons">Exercise 2: Parkinsons</h3>
 <p>This dataset is composed of a range of biomedical voice measurements from 31 people, 23 with Parkinson’s disease (PD). Each column in the table is a particular voice measure, and each row corresponds one of 195 voice recording from these individuals (“name” column). The main aim of the data is to discriminate healthy people from those with PD, according to “status” column which is set to 0 for healthy and 1 for PD.</p>
 <p>The data is available at <a href="https://archive.ics.uci.edu/ml/datasets/Parkinsons">The UCI Machine Learning Repository</a> in ASCII CSV format. The rows of the CSV file contain an instance corresponding to one voice recording. There are around six recordings per patient, the name of the patient is identified in the first column. There are 24 variables in the file, including the persons name in column 1.</p>
 <p>The data are originally analysed in: Max A. Little, Patrick E. McSharry, Eric J. Hunter, Lorraine O. Ramig (2008), ‘Suitability of dysphonia measurements for telemonitoring of Parkinson’s disease’, IEEE Transactions on Biomedical Engineering (to appear).</p>
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cassowaryr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(pk)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cassowaryr)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(pk)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <ol type="a">
@@ -6158,11 +6236,11 @@ color: #C8008F;
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the scagnostics on the relevant variables</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">calc_scags_wide</span>(pk[,<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>],</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">scags=</span><span class="fu">c</span>(<span class="st">&quot;outlying&quot;</span>,<span class="st">&quot;monotonic&quot;</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;clumpy2&quot;</span>))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>s</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the scagnostics on the relevant variables</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">calc_scags_wide</span>(pk[,<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>],</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">scags=</span><span class="fu">c</span>(<span class="st">&quot;outlying&quot;</span>,<span class="st">&quot;monotonic&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;clumpy2&quot;</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>s</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <ol start="3" type="a">

@@ -24,6 +24,8 @@ library(colorspace)
 library(tourr)
 library(cassowaryr)
 library(plotly)
+library(ggstats)
+library(MSA)
 library(kableExtra)
 library(conflicted)
 
@@ -67,8 +69,149 @@ conflicts_prefer(dplyr::slice)
 
 ```
 
+### Exercise 1: Risk taking on vacation
 
-### Exercise 1: Parkinsons
+The book “Market Segmentation Analysis - Understanding It, Doing It, and Making It Useful” by Sara Dolnicar, Bettina Grün and Friedrich Leisch has a selection of useful data sets. These can be used by installing the package:
+
+```
+install.packages("https://statistik.boku.ac.at/nachlass_leisch/MSA/packages/MSA_0.3-1.tar.gz", repos = NULL, type = "source")
+```
+
+If you can't install the package, you can download the data from [the book website](https://statistik.boku.ac.at/nachlass_leisch/MSA/).
+
+Load the `risk` data. This data has 563 observations and 6 variables. 
+
+The data was collected by academic researchers using a permission based online panel.
+
+The sample was taken from adult Australian residents who have undertaken at least one holiday in the last year which involved staying away from home for at least four nights.
+
+The respondents were asked: “Which risks have you taken in the past?” and answered on a 5-point scale with options:
+
+- Never (1)
+- Rarely (2)
+- Quite often (3)
+- Often (4)
+- Very often (5)
+
+The six types of risk, which form the variables were:
+
+- Recreational risks (e.g., rock-climbing, scuba diving)
+- Health risks (e.g., smoking, poor diet, high alcohol consumption)
+- Career risks (e.g., quitting a job without another to go to)
+- Financial risks (e.g., gambling, risky investments)
+- Safety risks (e.g., speeding)
+- Social risks (e.g., standing for election, publicly challenging a rule or decision)
+
+a. Use AI to find an explanation of market segmentation. Write a few sentences to explain it.
+
+::: unilur-solution
+
+Market segmentation divides customers into groups with similar characteristics so a business can serve each group more effectively. It is sometimes achieved by using cluster analysis to discover groups in the data. 
+
+Then so what is cluster analysis?
+
+:::
+
+b. What type of plots should you make for this data?
+
+::: unilur-solution
+
+Because this is categorical (ordinal) data a good choice would be to make Likert plots.
+
+```{r}
+#| label: likert
+data(risk)
+risk_f <- as_tibble(risk) |>
+  mutate_if(is.numeric, as.factor)
+risk_likert <- gglikert(
+  risk_f,
+  add_labels = FALSE,
+  add_totals = FALSE,
+  sort = "ascending"
+) +
+  scale_fill_brewer(palette = "RdBu", direction = -1) 
+risk_likert
+```
+
+:::
+
+c. What this doesn't consider is whether some customers respond similarly to other customers. How would you check this?
+
+::: unilur-solution
+
+This data can be considered to be numeric, and so we would compute the correlation.
+
+```{r}
+#| label: cor
+cor(risk)
+```
+
+Another way to look at this is using a tour.
+
+```{r}
+#| label: tour
+#| eval: false
+animate_xy(risk)
+```
+
+There is moderate association between the responses. It is strictly linear, also.
+
+:::
+
+d. A common approach to do market segmentation is to conduct a cluster analysis (outside the scope of this class), which will divide the observations into groups. The question becomes "how many groups would be suitable to summarise the customer behaviour?" We are going to use the guided tour to help make the decision.
+
+This is code that will do the clustering:
+
+```{r}
+risk_d <- apply(risk, 2, function(x) (x - mean(x)) / sd(x))
+
+# Clustering
+nc <- 2 # Set the number of clusters
+set.seed(1145)
+r_km <- kmeans(risk_d, centers = nc, iter.max = 500, nstart = 5)
+
+r_km_d <- risk_d |>
+  as_tibble() |>
+  mutate(cl = factor(r_km$cluster)) |>
+  bind_cols(model.matrix(~ as.factor(r_km$cluster) - 1))
+colnames(r_km_d)[(ncol(r_km_d) - nc + 1):ncol(r_km_d)] <- paste0(
+  "cluster",
+  1:nc
+)
+r_km_d <- r_km_d |>
+  mutate_at(vars(contains("cluster")), function(x) x + 1)
+```
+
+Change the number of clusters `nc` starting with 2 up to maybe 5. Examine how it is breaking the data, and what the groups would mean using the 6 types of risk. 
+
+```{r}
+#| label: tour-clusters
+#| eval: false
+animate_xy(r_km_d[, 1:6], guided_tour(lda_pp(r_km_d$cl)), col = r_km_d$cl)
+```
+
+::: unilur
+
+![](images/riskk2_cl2.png)
+
+![](images/riskk2_cl3.png)
+
+![](images/riskk2_cl4.png)
+
+![](images/riskk2_cl5.png)
+
+Two and three clusters breaks the data along the main direction of association, into low and high risk taker groups. Probably we'd choose the three groups here to have low, medium and high risk.
+
+Four clusters breaks the moderate group into two, which balances recreational and social (possibly also career) against safety. This could be a useful grouping.
+
+Five clusters breaks out this group further into health against social and recerational. Possibly this is also useful. 
+
+I'd tend to stick wih the three groups, as the clearest distinction between customers, but I'm not a tourism operator.
+
+:::
+
+
+### Exercise 2: Parkinsons
 
 This dataset is composed of a range of biomedical voice measurements from 31 people, 23 with Parkinson's disease (PD). Each column in the table is a particular voice measure, and each row corresponds one of 195 voice recording from these individuals ("name" column). The main aim of the data is to discriminate healthy people from those with PD, according to "status" column which is set to 0 for healthy and 1 for PD. 
 
@@ -78,6 +221,7 @@ The data are originally analysed in:
 Max A. Little, Patrick E. McSharry, Eric J. Hunter, Lorraine O. Ramig (2008), 'Suitability of dysphonia measurements for telemonitoring of Parkinson's disease', IEEE Transactions on Biomedical Engineering (to appear).
 
 ```{r}
+#| label: load-data
 #| eval: true
 #| echo: true
 library(cassowaryr)
@@ -95,9 +239,9 @@ There are 23 numeric variables in the data set, which would require `r 23*22/2` 
 b. Compute several of the scagnostics (monotonic, outlying, clumpy2) for the first five variables of variables, except for `name`. (*Note*: We are using just five for computing speed, but the scagnostics could be calculated on all variables.)
 
 ```{r}
+#| label: compute-scagnostics
 #| eval: false
 #| echo: true
-#| label: pk
 # Compute the scagnostics on the relevant variables
 s <- calc_scags_wide(pk[,2:5],
                 scags=c("outlying","monotonic",
@@ -111,7 +255,7 @@ s
 #| eval: true
 #| echo: false
 #| message: false
-#| label: pk
+#| label: compute-scagnostics
 ```
 
 :::
@@ -121,9 +265,10 @@ c. Sort the scagnostics, separately by the values on (i) monotonic (ii) outlying
 ::: unilur-solution
 
 ```{r}
+#| label: monotonic
 # Check the results for monotonic
-s %>% 
-  select(Var1, Var2, monotonic) %>% 
+s |> 
+  select(Var1, Var2, monotonic) |> 
   arrange(desc(monotonic)) 
 ggplot(data=pk, 
        aes(x=`MDVP:Fhi(Hz)`, y=`MDVP:Fo(Hz)`)) + 
@@ -139,15 +284,16 @@ d. Make an interactive scatterplot matrix. Browse over it to choose other intere
 ::: unilur-solution
 
 ```{r}
+#| label: splom
 #| message: false
 # Create an interactive splom
-s <- s %>%
+s <- s |>
   mutate(vars = paste(Var1, Var2))
-highlight_key(s) %>%
-  GGally::ggpairs(columns = 3:5, mapping = aes(label = vars)) %>%
+highlight_key(s) |>
+  GGally::ggpairs(columns = 3:5, mapping = aes(label = vars)) |>
   ggplotly(tooltip = "all", 
            width=500, 
-           height=500) %>%
+           height=500) |>
   highlight("plotly_selected") 
 ```
 
@@ -158,25 +304,26 @@ e. The scagnostics help us to find interesting associations between pairs of var
 ::: unilur-solution
 
 ```{r}
+#| label: differences
 # One way to examine difference between Parkinsons and healthy
-pk_med <- pk %>% 
-  select(-name) %>% 
-  group_by(status) %>%
-  summarise_all(list(median, sd)) %>%
+pk_med <- pk |> 
+  select(-name) |> 
+  group_by(status) |>
+  summarise_all(list(median, sd)) |>
   pivot_longer(
     cols=`MDVP:Fo(Hz)_fn1`:`PPE_fn2`,
     names_to="var", 
-    values_to="value") %>%
-  separate(var, c("var","stat"), "_") %>%
+    values_to="value") |>
+  separate(var, c("var","stat"), "_") |>
   mutate(stat = fct_recode(stat,
                            "m"="fn1",
-                           "s"="fn2")) %>%
+                           "s"="fn2")) |>
   pivot_wider(names_from=stat,
-              values_from=value) %>%
-  group_by(var) %>%
+              values_from=value) |>
+  group_by(var) |>
   summarise(
     d = (m[status==0]-m[status==1])/sqrt(s[status==0]^2+s[status==1]^2))
-pk_med %>% arrange(desc(d)) %>% head()
+pk_med |> arrange(desc(d)) |> head()
 
 ggplot(pk, aes(x=factor(status), y=`MDVP:Fo(Hz)`)) + 
   geom_boxplot()
@@ -192,6 +339,7 @@ f. Now try to do this using the scagnostics.
 ::: unilur-solution
 
 ```{r}
+#| label: pairs
 # Check the pair of variables already examined
 ggplot(data=pk, 
        aes(x=`MDVP:Fhi(Hz)`, 
@@ -204,6 +352,7 @@ ggplot(data=pk,
 ```
 
 ```{r}
+#| label: compare
 # Compute scagnostics separately for each group and compare differences
 pk_0 <- pk |>
   filter(status == 0)
@@ -229,6 +378,7 @@ s_wide <- s |>
 ```
 
 ```{r}
+#| label: top
 # Plot top pair
 ggplot(data=pk, 
        aes(x=`MDVP:Jitter(%)`, 

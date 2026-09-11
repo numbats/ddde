@@ -22,7 +22,10 @@ format:
     embed-resources: true
 ---
 
-```{r, include = FALSE, echo=FALSE}
+```{r}
+#| label: setup
+#| include: false
+#| echo: false
 source("../setup.R")
 ```
 
@@ -48,6 +51,7 @@ source("../setup.R")
 ## High-dimensional shapes: shadows and slices
 
 ```{r}
+#| label: hd-shapes-gifs
 #| eval: false
 #| echo: false
 set.seed(1156)
@@ -119,6 +123,7 @@ render_gif(hd4, grand_tour(), display_slice(axes="off"),
 ## Low-dimensional shapes in high-dimensions
 
 ```{r}
+#| label: ld-shapes-gifs
 #| eval: false
 #| echo: false
 set.seed(116)
@@ -246,6 +251,7 @@ Any of the features from 2D are patterns to find in higher dimensions.
 ::: {.column}
 
 ```{r}
+#| label: penguins-std
 #| code-fold: true
 #| code-summary: data-processing
 #library(palmerpenguins)
@@ -264,6 +270,7 @@ p_std <- penguins |>
 ```
 
 ```{r}
+#| label: penguins-grand-gif
 #| eval: false
 #| code-fold: true
 animate_xy(p_std[,1:4], axes="off")
@@ -283,6 +290,7 @@ How many clusters?
 ::: {.fragment}
 
 ```{r}
+#| label: penguins-grand-sp-gif
 #| eval: false
 #| code-fold: true
 animate_xy(p_std[,1:4], axes="off", col=p_std$species)
@@ -304,6 +312,7 @@ The clusters correspond the three species.
 ## What does linear combination of variables mean?
 
 ```{r eval=FALSE, echo=FALSE, warning=FALSE}
+#| label: penguins-linear-combo
 #| eval: false
 #| echo: false
 #| warning: false
@@ -376,6 +385,7 @@ To make a scatterplot, [two linear combinations]{.monash-orange2} are used. *Wit
 :::: {.columns}
 ::: {.column}
 ```{r}
+#| label: penguins-guided-gif
 #| eval: false
 #| code-fold: true
 set.seed(815)
@@ -416,6 +426,7 @@ render_gif(p_std[,1:4],
 :::: {.columns}
 ::: {.column}
 ```{r}
+#| label: penguins-radial-gif
 #| eval: false
 #| code-fold: true
 set.seed(829)
@@ -491,6 +502,7 @@ If different scales on different variables is meaningful, and they are in the sa
 :::: {.columns}
 ::: {.column}
 ```{r}
+#| label: scatmat-penguins
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -518,6 +530,7 @@ Plot
 ::: {.column width=60%}
 
 ```{r}
+#| label: pcp-penguins
 #| code-fold: true
 p_std |>
   pcp_select(1:5) |>  # select everything
@@ -565,6 +578,7 @@ Many relationships can only be seen when multiple variables are combined:
 ::: {.fragment}
 
 ```{r}
+#| label: laser-scatterplots
 #| echo: false
 #| fig-width: 9
 #| fig-height: 3
@@ -585,6 +599,7 @@ l1 + l2 + l3 + plot_layout(ncol=3)
 ::: {.fragment}
 
 ```{r}
+#| label: laser-gif
 #| echo: false
 #| eval: false
 set.seed(1044)
@@ -643,6 +658,7 @@ Can you see an anomaly?
 ::: {.fragment}
 
 ```{r}
+#| label: anomaly-gif
 #| echo: false
 #| eval: false
 set.seed(1104)
@@ -693,6 +709,7 @@ How many clusters?
 ::: {.fragment}
 
 ```{r}
+#| label: clusters-gif
 #| echo: false
 #| eval: false
 set.seed(1149)
@@ -730,6 +747,7 @@ RANDU[1] is a linear congruential pseudorandom number generator (LCG) used prima
 ::: {.column}
 
 ```{r}
+#| label: randu-gif
 #| code-fold: true
 #| eval: false
 set.seed(1031)
@@ -840,6 +858,7 @@ s <- df |>
 ```
 
 ```{r}
+#| label: scagnostics-table
 #| echo: false
 s |>
   kbl(booktabs = T, digits = 3) |>
@@ -953,6 +972,7 @@ Selecting points using a square "brush", using `plotly`, allows you to see where
 ::: {.column}
 
 ```{r}
+#| label: brushing-scatmat
 #| code-fold: true
 highlight_key(p_std) |>
   ggpairs(columns = 1:4) |>
@@ -965,6 +985,7 @@ highlight_key(p_std) |>
 ## Linking between a tour and a scatterplot
 
 ```{r}
+#| label: detourr-demo
 #| eval: false
 #| code-fold: true
 #| code-summary: Demo
@@ -1038,6 +1059,7 @@ This demo code is setup to learn more the penguins: a [(jittered) scatterplot]{.
 ::: {.column width=70%}
 
 ```{r}
+#| label: tb-facet-plot
 #| echo: false
 #| fig-height: 7
 #| fig-width: 10
@@ -1086,6 +1108,7 @@ Switching to [proportions]{.monash-blue2} may allow direct comparison.
 Overall counts
 
 ```{r}
+#| label: tb-table-counts
 #| echo: false
 tb_sub |>
   filter(iso3 == "AUS") |>
@@ -1109,6 +1132,7 @@ tb_sub |>
 ::: {style="font-size: 80%;"}
 
 ```{r}
+#| label: tb-table-pct
 #| echo: false
 tb_sub |>
   filter(iso3 == "AUS") |>
@@ -1146,6 +1170,7 @@ This data set provides information on the fate of passengers on the fatal maiden
 
 ::: {.column width=70%}
 ```{r}
+#| label: titanic-doubledecker
 #| code-fold: true
 #| fig-width: 10
 #| fig-height: 5
@@ -1164,6 +1189,7 @@ Order in which variables are entered can affect the conditioning.
 
 ::: {.column width=40%}
 ```{r}
+#| label: titanic-tile
 #| code-fold: true
 #| fig-width: 8
 #| fig-height: 6
@@ -1179,6 +1205,7 @@ ggplot(as_tibble(Titanic), aes(x=interaction(Sex, Age),
 :::
 ::: {.column width=40%}
 ```{r}
+#| label: titanic-point-size
 #| code-fold: true
 #| fig-width: 8
 #| fig-height: 6
@@ -1206,6 +1233,7 @@ Overall counts mapped to tiling colour or size. Big counts completely dominate.
 ::: {.column width=70%}
 
 ```{r}
+#| label: titanic-upset
 #| code-fold: true
 titanic_uncounted <- as_tibble(Titanic) |> uncount(weights = n)
 titanic_bin <- fastDummies::dummy_cols(titanic_uncounted, 
@@ -1226,7 +1254,7 @@ Combinations of categories, sorted by frequency
 
 ## Resources
 
-- Cook and Laa (2023) [Interactively exploring high-dimensional data and models in R](https://dicook.github.io/mulgar_book/)
+- Cook and Laa (2026) [Interactively exploring high-dimensional data and models in R](https://dicook.github.io/mulgar_book/)
 - Wickham et al (2011). [tourr: An R Package for Exploring
   Multivariate Data with Projections](http://www.jstatsoft.org/v40/i02/)
 - Sievert (2019) [Interactive web-based data visualization with R, plotly, and shiny](https://plotly-r.com)
