@@ -190,15 +190,15 @@ Change the number of clusters `nc` starting with 2 up to maybe 5. Examine how it
 animate_xy(r_km_d[, 1:6], guided_tour(lda_pp(r_km_d$cl)), col = r_km_d$cl)
 ```
 
-::: unilur
+::: unilur-solution
 
-![](images/riskk2_cl2.png)
+![](images/risk_cl2.png)
 
-![](images/riskk2_cl3.png)
+![](images/risk_cl3.png)
 
-![](images/riskk2_cl4.png)
+![](images/risk_cl4.png)
 
-![](images/riskk2_cl5.png)
+![](images/risk_cl5.png)
 
 Two and three clusters breaks the data along the main direction of association, into low and high risk taker groups. Probably we'd choose the three groups here to have low, medium and high risk.
 
