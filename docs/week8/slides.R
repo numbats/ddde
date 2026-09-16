@@ -270,10 +270,10 @@ p_std <- penguins |>
 #| label: penguins-radial-gif
 #| eval: false
 #| code-fold: true
-# set.seed(829)
-# animate_xy(p_std[,1:4],
-#            radial_tour(best_proj, mvar=3),
-#            axes="bottomleft", col=p_std$species)
+set.seed(829)
+animate_xy(p_std[,1:4],
+           radial_tour(best_proj, mvar=3),
+           axes="bottomleft", col=p_std$species)
 # # Generate a path that shows multiple variables being rotated ou
 # set.seed(829)
 # p_rad_fl <- save_history(p_std[,1:4],

@@ -166,7 +166,7 @@ This is code that will do the clustering:
 risk_d <- apply(risk, 2, function(x) (x - mean(x)) / sd(x))
 
 # Clustering
-nc <- 2 # Set the number of clusters
+nc <- 5 # Set the number of clusters
 set.seed(1145)
 r_km <- kmeans(risk_d, centers = nc, iter.max = 500, nstart = 5)
 
