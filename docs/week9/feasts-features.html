@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Prepared with Claude">
+<meta name="dcterms.date" content="2026-09-28">
+
+<title>Time Series Features in the feasts R Package – ETC5521: Diving Deeply into Data Exploration</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-35f8967574e6339c6be47ffc8765f34c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7d80270b191d8b179d7cd52f6bacfd5d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans|Merriweather" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3/build/web/hack-subset.css">
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">ETC5521: Diving Deeply into Data Exploration</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> <i class="bi bi-house-fill" role="img">
+</i> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-schedule" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-calendar2-fill" role="img">
+</i> 
+ <span class="menu-text">Schedule</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-schedule">    
+        <li>
+    <a class="dropdown-item" href="../week1/index.html">
+ <span class="dropdown-text">Week 1: Overview. Why this course? What is EDA?</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week2/index.html">
+ <span class="dropdown-text">Week 2: Learning from history</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week3/index.html">
+ <span class="dropdown-text">Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week4/index.html">
+ <span class="dropdown-text">Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week5/index.html">
+ <span class="dropdown-text">Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week6/index.html">
+ <span class="dropdown-text">Week 6: Bivariate dependencies and relationships, transformations to linearise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week7/index.html">
+ <span class="dropdown-text">Week 7: Making comparisons between groups and strata</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week8/index.html">
+ <span class="dropdown-text">Week 8: Going beyond two variables, exploring high dimensions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week9/index.html">
+ <span class="dropdown-text">Week 9: Exploring data having a space and time context Part I</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week10/index.html">
+ <span class="dropdown-text">Week 10: Exploring data having a space and time context Part II</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week11/index.html">
+ <span class="dropdown-text">Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week12/index.html">
+ <span class="dropdown-text">Week 12: Long help session</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://learning.monash.edu/course/view.php?id=46718"> <i class="bi bi-mortarboard-fill" role="img">
+</i> 
+<span class="menu-text">Moodle</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://edstem.org/au/courses/39520/discussion"> <i class="bi bi-people-fill" role="img">
+</i> 
+<span class="menu-text">Discussion</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../resources.html"> <i class="bi bi-book" role="img">
+</i> 
+<span class="menu-text">Resources</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/numbats/ddde"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a></li>
+  <li><a href="#stl-decompositionbased-features" id="toc-stl-decompositionbased-features" class="nav-link" data-scroll-target="#stl-decompositionbased-features"><span class="header-section-number">2</span> STL decomposition–based features</a>
+  <ul class="collapse">
+  <li><a href="#feat_stl" id="toc-feat_stl" class="nav-link" data-scroll-target="#feat_stl"><span class="header-section-number">2.1</span> <code>feat_stl()</code></a></li>
+  <li><a href="#related-decomposition-tools" id="toc-related-decomposition-tools" class="nav-link" data-scroll-target="#related-decomposition-tools"><span class="header-section-number">2.2</span> Related decomposition tools</a></li>
+  </ul></li>
+  <li><a href="#autocorrelation-based-features" id="toc-autocorrelation-based-features" class="nav-link" data-scroll-target="#autocorrelation-based-features"><span class="header-section-number">3</span> Autocorrelation-based features</a>
+  <ul class="collapse">
+  <li><a href="#feat_acf" id="toc-feat_acf" class="nav-link" data-scroll-target="#feat_acf"><span class="header-section-number">3.1</span> <code>feat_acf()</code></a></li>
+  <li><a href="#feat_pacf" id="toc-feat_pacf" class="nav-link" data-scroll-target="#feat_pacf"><span class="header-section-number">3.2</span> <code>feat_pacf()</code></a></li>
+  <li><a href="#acf-pacf-ccf" id="toc-acf-pacf-ccf" class="nav-link" data-scroll-target="#acf-pacf-ccf"><span class="header-section-number">3.3</span> <code>ACF()</code>, <code>PACF()</code>, <code>CCF()</code></a></li>
+  </ul></li>
+  <li><a href="#spectral-and-entropy-features" id="toc-spectral-and-entropy-features" class="nav-link" data-scroll-target="#spectral-and-entropy-features"><span class="header-section-number">4</span> Spectral and entropy features</a>
+  <ul class="collapse">
+  <li><a href="#feat_spectral" id="toc-feat_spectral" class="nav-link" data-scroll-target="#feat_spectral"><span class="header-section-number">4.1</span> <code>feat_spectral()</code></a></li>
+  <li><a href="#coef_hurst" id="toc-coef_hurst" class="nav-link" data-scroll-target="#coef_hurst"><span class="header-section-number">4.2</span> <code>coef_hurst()</code></a></li>
+  </ul></li>
+  <li><a href="#shape-intermittency-and-irregularity-features" id="toc-shape-intermittency-and-irregularity-features" class="nav-link" data-scroll-target="#shape-intermittency-and-irregularity-features"><span class="header-section-number">5</span> Shape, intermittency, and irregularity features</a>
+  <ul class="collapse">
+  <li><a href="#feat_intermittent" id="toc-feat_intermittent" class="nav-link" data-scroll-target="#feat_intermittent"><span class="header-section-number">5.1</span> <code>feat_intermittent()</code></a></li>
+  <li><a href="#longest_flat_spot" id="toc-longest_flat_spot" class="nav-link" data-scroll-target="#longest_flat_spot"><span class="header-section-number">5.2</span> <code>longest_flat_spot()</code></a></li>
+  <li><a href="#n_crossing_points" id="toc-n_crossing_points" class="nav-link" data-scroll-target="#n_crossing_points"><span class="header-section-number">5.3</span> <code>n_crossing_points()</code></a></li>
+  </ul></li>
+  <li><a href="#window-based-features" id="toc-window-based-features" class="nav-link" data-scroll-target="#window-based-features"><span class="header-section-number">6</span> Window-based features</a>
+  <ul class="collapse">
+  <li><a href="#var_tiled_mean-and-var_tiled_var" id="toc-var_tiled_mean-and-var_tiled_var" class="nav-link" data-scroll-target="#var_tiled_mean-and-var_tiled_var"><span class="header-section-number">6.1</span> <code>var_tiled_mean()</code> and <code>var_tiled_var()</code></a></li>
+  <li><a href="#shift_level_max-shift_var_max-shift_kl_max" id="toc-shift_level_max-shift_var_max-shift_kl_max" class="nav-link" data-scroll-target="#shift_level_max-shift_var_max-shift_kl_max"><span class="header-section-number">6.2</span> <code>shift_level_max()</code>, <code>shift_var_max()</code>, <code>shift_kl_max()</code></a></li>
+  </ul></li>
+  <li><a href="#statistical-test-features" id="toc-statistical-test-features" class="nav-link" data-scroll-target="#statistical-test-features"><span class="header-section-number">7</span> Statistical-test features</a>
+  <ul class="collapse">
+  <li><a href="#unit-root-and-stationarity" id="toc-unit-root-and-stationarity" class="nav-link" data-scroll-target="#unit-root-and-stationarity"><span class="header-section-number">7.1</span> Unit root and stationarity</a></li>
+  <li><a href="#portmanteau-autocorrelation-tests" id="toc-portmanteau-autocorrelation-tests" class="nav-link" data-scroll-target="#portmanteau-autocorrelation-tests"><span class="header-section-number">7.2</span> Portmanteau (autocorrelation) tests</a></li>
+  <li><a href="#heteroscedasticity" id="toc-heteroscedasticity" class="nav-link" data-scroll-target="#heteroscedasticity"><span class="header-section-number">7.3</span> Heteroscedasticity</a></li>
+  <li><a href="#cointegration" id="toc-cointegration" class="nav-link" data-scroll-target="#cointegration"><span class="header-section-number">7.4</span> Cointegration</a></li>
+  <li><a href="#boxcox-transformation-selection" id="toc-boxcox-transformation-selection" class="nav-link" data-scroll-target="#boxcox-transformation-selection"><span class="header-section-number">7.5</span> Box–Cox transformation selection</a></li>
+  </ul></li>
+  <li><a href="#putting-it-together" id="toc-putting-it-together" class="nav-link" data-scroll-target="#putting-it-together"><span class="header-section-number">8</span> Putting it together</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Time Series Features in the <code>feasts</code> R Package</h1>
+<p class="subtitle lead">A reference guide to feature-extraction functions for tidy time series</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Prepared with Claude </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">28 September 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1</span> Overview</h2>
+<p><code>feasts</code> (<strong>F</strong>eature <strong>E</strong>xtraction <strong>A</strong>nd <strong>S</strong>tatistics for <strong>T</strong>ime <strong>S</strong>eries) is part of the <a href="https://tidyverts.org/">tidyverts</a> ecosystem and works with <code>tsibble</code> objects. Its feature functions condense a time series into a small number of interpretable numbers describing things like trend strength, seasonality, autocorrelation structure, and irregularity. These are typically applied with <code>fabletools::features()</code>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(feasts)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>tourism <span class="sc">|&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">features</span>(Trips, <span class="fu">feature_set</span>(<span class="at">pkgs =</span> <span class="st">"feasts"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p><code>feature_set(pkgs = "feasts")</code> collects every registered feature function in the package, but each one can also be called individually, as shown throughout this report.</p>
+<p>The functions fall into a few natural groups:</p>
+<ol type="1">
+<li><strong>Decomposition-based features</strong> — derived from an STL decomposition (trend/seasonal strength, spikiness, etc.)</li>
+<li><strong>Autocorrelation-based features</strong> — from the ACF and PACF of the series and its differences</li>
+<li><strong>Spectral and entropy features</strong> — how “predictable” or noise-like a series is</li>
+<li><strong>Distributional / shape features</strong> — flat spots, crossing points, intermittency</li>
+<li><strong>Window-based features</strong> — lumpiness, stability, and structural shifts over sub-windows</li>
+<li><strong>Statistical test features</strong> — unit roots, stationarity, heteroscedasticity, cointegration</li>
+</ol>
+<hr>
+</section>
+<section id="stl-decompositionbased-features" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="stl-decompositionbased-features"><span class="header-section-number">2</span> STL decomposition–based features</h2>
+<section id="feat_stl" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="feat_stl"><span class="header-section-number">2.1</span> <code>feat_stl()</code></h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">feat_stl</span>(x, .period, <span class="at">s.window =</span> <span class="dv">11</span>, ...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Decomposes the series into trend <span class="math inline">T_t</span>, seasonal <span class="math inline">S_t</span>, and remainder <span class="math inline">R_t</span> using STL, then computes a set of descriptive statistics from those components. The main quantities are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Definition</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>trend_strength</code></td>
+<td><span class="math inline">\max\left(0,\ 1 - \dfrac{\mathrm{Var}(R_t)}{\mathrm{Var}(T_t + R_t)}\right)</span></td>
+<td>Close to 1 → strong, dominant trend</td>
+</tr>
+<tr class="even">
+<td><code>seasonal_strength</code></td>
+<td><span class="math inline">\max\left(0,\ 1 - \dfrac{\mathrm{Var}(R_t)}{\mathrm{Var}(S_t + R_t)}\right)</span></td>
+<td>Close to 1 → strong, dominant seasonality</td>
+</tr>
+<tr class="odd">
+<td><code>seasonal_peak</code></td>
+<td>Season (e.g.&nbsp;month/quarter) of the maximum of the seasonal component</td>
+<td>Timing of the seasonal high point</td>
+</tr>
+<tr class="even">
+<td><code>seasonal_trough</code></td>
+<td>Season of the minimum of the seasonal component</td>
+<td>Timing of the seasonal low point</td>
+</tr>
+<tr class="odd">
+<td><code>spikiness</code></td>
+<td>Variance of the leave-one-out variances of <span class="math inline">R_t</span></td>
+<td>Large value → remainder dominated by a few big spikes</td>
+</tr>
+<tr class="even">
+<td><code>linearity</code></td>
+<td>Coefficient on a linear term from an orthogonal-polynomial regression fit to the trend</td>
+<td>Positive → strongly increasing/decreasing trend</td>
+</tr>
+<tr class="odd">
+<td><code>curvature</code></td>
+<td>Coefficient on a quadratic term from the same regression</td>
+<td>Large magnitude → trend bends noticeably</td>
+</tr>
+<tr class="even">
+<td><code>stl_e_acf1</code></td>
+<td>First-lag autocorrelation of the remainder</td>
+<td>High value → remainder is not white noise</td>
+</tr>
+<tr class="odd">
+<td><code>stl_e_acf10</code></td>
+<td>Sum of squares of the first 10 remainder autocorrelations</td>
+<td>High value → substantial leftover structure in the remainder</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Spikiness in detail.</strong> For remainder series <span class="math inline">e_t</span> of length <span class="math inline">n</span> with sample variance <span class="math inline">\mathrm{Var}(e)</span>, the leave-one-out variance for observation <span class="math inline">i</span> is computed without refitting:</p>
+<p><span class="math display">
+d_i = (e_i - \bar e)^2, \qquad
+\mathrm{varloo}_i = \frac{\mathrm{Var}(e)(n-1) - d_i}{n-2}
+</span></p>
+<p>Spikiness is then <span class="math inline">\mathrm{Var}(\mathrm{varloo}_1, \dots, \mathrm{varloo}_n)</span>. If no single point dominates the remainder, all leave-one-out variances are similar and spikiness is near zero; a few extreme spikes make the leave-one-out variances disperse widely, inflating this feature.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>tourism <span class="sc">|&gt;</span> <span class="fu">features</span>(Trips, feat_stl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="related-decomposition-tools" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="related-decomposition-tools"><span class="header-section-number">2.2</span> Related decomposition tools</h3>
+<p>These aren’t features themselves but produce the decompositions the features above rely on, or provide alternative decompositions:</p>
+<ul>
+<li><strong><code>STL()</code></strong> — the model-fitting interface to <code>stats::stl()</code>, allowing multiple seasonal periods and Box–Cox transformation (via <code>fabletools::model()</code>).</li>
+<li><strong><code>classical_decomposition()</code></strong> — additive/multiplicative decomposition by moving averages (<span class="math inline">Y_t = T_t + S_t + e_t</span> or <span class="math inline">Y_t = T_t S_t e_t</span>).</li>
+<li><strong><code>X_13ARIMA_SEATS()</code></strong> — wraps the U.S. Census Bureau’s X-13ARIMA-SEATS program (SEATS or X-11 methods) for seasonal adjustment.</li>
+<li><strong><code>generate.stl_decomposition()</code></strong> — block-bootstraps new series from a fitted STL decomposition’s residuals.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="autocorrelation-based-features" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="autocorrelation-based-features"><span class="header-section-number">3</span> Autocorrelation-based features</h2>
+<section id="feat_acf" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="feat_acf"><span class="header-section-number">3.1</span> <code>feat_acf()</code></h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">feat_acf</span>(x, <span class="at">.period =</span> <span class="dv">1</span>, <span class="at">lag_max =</span> <span class="cn">NULL</span>, ...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Returns 6 (or 7, if seasonal) values built from the autocorrelation function of the original series, its first difference, and its second difference:</p>
+<ul>
+<li>First-lag autocorrelation and the sum of squares of the first ten autocorrelations, computed for the original series, the once-differenced series, and the twice-differenced series</li>
+<li>For seasonal data (<code>.period &gt; 1</code>), the autocorrelation at the first seasonal lag is also included</li>
+</ul>
+<p>High sums of squared autocorrelations indicate a series with strong short-term dependence; comparing the values across the original/differenced/twice-differenced versions helps identify how much differencing is needed to reach approximate white noise.</p>
+</section>
+<section id="feat_pacf" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="feat_pacf"><span class="header-section-number">3.2</span> <code>feat_pacf()</code></h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">feat_pacf</span>(x, <span class="at">.period =</span> <span class="dv">1</span>, <span class="at">lag_max =</span> <span class="cn">NULL</span>, ...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>The partial-autocorrelation analogue of <code>feat_acf()</code>: the sum of squares of the first 5 partial autocorrelations for the original, once-differenced, and twice-differenced series, plus the seasonal partial autocorrelation for seasonal data.</p>
+</section>
+<section id="acf-pacf-ccf" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="acf-pacf-ccf"><span class="header-section-number">3.3</span> <code>ACF()</code>, <code>PACF()</code>, <code>CCF()</code></h3>
+<p>Not single-number features but tidy computations of the (partial) autocorrelation or cross-correlation function, returned as a <code>tbl_cf</code> object that can be plotted with <code>autoplot()</code>. Useful for visual inspection alongside the numeric ACF/PACF-based features above.</p>
+<hr>
+</section>
+</section>
+<section id="spectral-and-entropy-features" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="spectral-and-entropy-features"><span class="header-section-number">4</span> Spectral and entropy features</h2>
+<section id="feat_spectral" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="feat_spectral"><span class="header-section-number">4.1</span> <code>feat_spectral()</code></h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">feat_spectral</span>(x, <span class="at">.period =</span> <span class="dv">1</span>, ...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Computes the <strong>spectral entropy</strong> of the series — the Shannon entropy of its (AR-estimated, Burg-method) normalized spectral density <span class="math inline">f_x(\lambda)</span>:</p>
+<p><span class="math display">
+H_s(x_t) = -\int_{-\pi}^{\pi} f_x(\lambda) \log f_x(\lambda) \, d\lambda,
+\qquad \int_{-\pi}^{\pi} f_x(\lambda)\, d\lambda = 1
+</span></p>
+<p>Values close to 0 indicate a series that is easy to forecast (its spectral power is concentrated, e.g.&nbsp;a strong single frequency or trend); values closer to 1 indicate a series closer to white noise, where power is spread evenly across frequencies.</p>
+</section>
+<section id="coef_hurst" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="coef_hurst"><span class="header-section-number">4.2</span> <code>coef_hurst()</code></h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef_hurst</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Estimates the <strong>Hurst coefficient</strong>, reflecting the degree of long-range dependence / fractional differencing in the series. Values above 0.5 suggest persistent, trending behaviour; values below 0.5 suggest anti-persistent, mean-reverting behaviour.</p>
+<hr>
+</section>
+</section>
+<section id="shape-intermittency-and-irregularity-features" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="shape-intermittency-and-irregularity-features"><span class="header-section-number">5</span> Shape, intermittency, and irregularity features</h2>
+<section id="feat_intermittent" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="feat_intermittent"><span class="header-section-number">5.1</span> <code>feat_intermittent()</code></h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">feat_intermittent</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Designed for intermittent-demand series (many zeros interspersed with non-zero values):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>zero_run_mean</code></td>
+<td>Average interval length between non-zero observations</td>
+</tr>
+<tr class="even">
+<td><code>nonzero_squared_cv</code></td>
+<td>Squared coefficient of variation of the non-zero observations</td>
+</tr>
+<tr class="odd">
+<td><code>zero_start_prop</code></td>
+<td>Proportion of the series that starts with zeros</td>
+</tr>
+<tr class="even">
+<td><code>zero_end_prop</code></td>
+<td>Proportion of the series that ends with zeros</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="longest_flat_spot" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="longest_flat_spot"><span class="header-section-number">5.2</span> <code>longest_flat_spot()</code></h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">longest_flat_spot</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Splits the range of the series into 10 equal-width bins and returns the longest run of consecutive observations sitting in the same bin — a proxy for periods where the series barely changes.</p>
+</section>
+<section id="n_crossing_points" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="n_crossing_points"><span class="header-section-number">5.3</span> <code>n_crossing_points()</code></h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n_crossing_points</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Counts how many times the series crosses its own median. Frequent crossings suggest choppier, more mean-reverting behaviour; few crossings suggest sustained runs above or below the median.</p>
+<hr>
+</section>
+</section>
+<section id="window-based-features" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="window-based-features"><span class="header-section-number">6</span> Window-based features</h2>
+<section id="var_tiled_mean-and-var_tiled_var" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="var_tiled_mean-and-var_tiled_var"><span class="header-section-number">6.1</span> <code>var_tiled_mean()</code> and <code>var_tiled_var()</code></h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var_tiled_mean</span>(x, <span class="at">.size =</span> <span class="cn">NULL</span>, <span class="at">.period =</span> <span class="dv">1</span>)   <span class="co"># "stability"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">var_tiled_var</span>(x, <span class="at">.size =</span> <span class="cn">NULL</span>, <span class="at">.period =</span> <span class="dv">1</span>)    <span class="co"># "lumpiness"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Both split the series into non-overlapping (“tiled”) windows and summarise each window with its mean or its variance:</p>
+<ul>
+<li><strong>Stability</strong> — the variance of the tile <em>means</em>. High values indicate the local level shifts a lot over time.</li>
+<li><strong>Lumpiness</strong> — the variance of the tile <em>variances</em>. High values indicate the series’ volatility itself changes over time (heteroscedasticity across chunks of the series).</li>
+</ul>
+</section>
+<section id="shift_level_max-shift_var_max-shift_kl_max" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="shift_level_max-shift_var_max-shift_kl_max"><span class="header-section-number">6.2</span> <code>shift_level_max()</code>, <code>shift_var_max()</code>, <code>shift_kl_max()</code></h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shift_level_max</span>(x, <span class="at">.size =</span> <span class="cn">NULL</span>, <span class="at">.period =</span> <span class="dv">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">shift_var_max</span>(x, <span class="at">.size =</span> <span class="cn">NULL</span>, <span class="at">.period =</span> <span class="dv">1</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">shift_kl_max</span>(x, <span class="at">.size =</span> <span class="cn">NULL</span>, <span class="at">.period =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Slide a window across the series and compare consecutive windows, returning both the size of the largest change and the time index at which it occurs:</p>
+<ul>
+<li><code>shift_level_max</code> — largest shift in the <strong>mean</strong> between adjacent windows (level/step changes)</li>
+<li><code>shift_var_max</code> — largest shift in the <strong>variance</strong> between adjacent windows (volatility changes)</li>
+<li><code>shift_kl_max</code> — largest shift in <strong>Kullback–Leibler divergence</strong> between adjacent windows (distributional changes more general than mean/variance alone)</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="statistical-test-features" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="statistical-test-features"><span class="header-section-number">7</span> Statistical-test features</h2>
+<p>These wrap classical hypothesis tests so their statistics and p-values can be used as machine-learning-style features.</p>
+<section id="unit-root-and-stationarity" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="unit-root-and-stationarity"><span class="header-section-number">7.1</span> Unit root and stationarity</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unitroot_kpss</span>(x, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"mu"</span>, <span class="st">"tau"</span>), <span class="at">lags =</span> <span class="fu">c</span>(<span class="st">"short"</span>, <span class="st">"long"</span>, <span class="st">"nil"</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unitroot_pp</span>(x, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"Z-tau"</span>, <span class="st">"Z-alpha"</span>), <span class="at">model =</span> <span class="fu">c</span>(<span class="st">"constant"</span>, <span class="st">"trend"</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unitroot_ndiffs</span>(x, <span class="at">alpha =</span> <span class="fl">0.05</span>, ...)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">unitroot_nsdiffs</span>(x, <span class="at">alpha =</span> <span class="fl">0.05</span>, ...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ul>
+<li><code>unitroot_kpss</code> — KPSS test statistic; large values point to non-stationarity (rejects the null of stationarity)</li>
+<li><code>unitroot_pp</code> — Phillips–Perron test statistic for a unit root</li>
+<li><code>unitroot_ndiffs</code> — minimum number of ordinary differences needed for stationarity, based on repeatedly applying a unit-root test (KPSS by default)</li>
+<li><code>unitroot_nsdiffs</code> — minimum number of seasonal differences needed, based by default on whether STL seasonal strength exceeds 0.64</li>
+</ul>
+</section>
+<section id="portmanteau-autocorrelation-tests" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="portmanteau-autocorrelation-tests"><span class="header-section-number">7.2</span> Portmanteau (autocorrelation) tests</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ljung_box</span>(x, <span class="at">lag =</span> <span class="dv">1</span>, <span class="at">dof =</span> <span class="dv">0</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">box_pierce</span>(x, <span class="at">lag =</span> <span class="dv">1</span>, <span class="at">dof =</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Test the null hypothesis that the series (often a residual series) is independently distributed, i.e.&nbsp;shows no autocorrelation up to the specified lag. Both return a statistic and a p-value; Ljung–Box is the small-sample-corrected version of Box–Pierce.</p>
+</section>
+<section id="heteroscedasticity" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="heteroscedasticity"><span class="header-section-number">7.3</span> Heteroscedasticity</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stat_arch_lm</span>(x, <span class="at">lags =</span> <span class="dv">12</span>, <span class="at">demean =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Computes Engle’s ARCH LM statistic — the <span class="math inline">R^2</span> from an autoregression of the squared series — as a measure of autoregressive conditional heteroscedasticity (volatility clustering).</p>
+</section>
+<section id="cointegration" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="cointegration"><span class="header-section-number">7.4</span> Cointegration</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cointegration_johansen</span>(x, ...)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cointegration_phillips_ouliaris</span>(x, ...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ul>
+<li><code>cointegration_johansen</code> — Johansen procedure (trace/eigenvalue statistics) for testing cointegration among multiple series, via <code>urca::ca.jo()</code></li>
+<li><code>cointegration_phillips_ouliaris</code> — Phillips–Ouliaris residual-based cointegration test statistic and approximate p-value, via <code>urca::ca.po()</code></li>
+</ul>
+</section>
+<section id="boxcox-transformation-selection" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="boxcox-transformation-selection"><span class="header-section-number">7.5</span> Box–Cox transformation selection</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">guerrero</span>(x, <span class="at">lower =</span> <span class="sc">-</span><span class="fl">0.9</span>, <span class="at">upper =</span> <span class="dv">2</span>, <span class="at">.period =</span> <span class="dv">2</span>L)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Not a descriptive feature but a transformation-parameter selector: chooses the Box–Cox <span class="math inline">\lambda</span> that minimises the coefficient of variation across subseries of the data (Guerrero’s method).</p>
+<hr>
+</section>
+</section>
+<section id="putting-it-together" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="putting-it-together"><span class="header-section-number">8</span> Putting it together</h2>
+<p>A typical workflow computes the full built-in feature set, then explores it — e.g.&nbsp;with PCA — to find unusual or clustered series:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(feasts)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>feat_tbl <span class="ot">&lt;-</span> tourism <span class="sc">|&gt;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">features</span>(Trips, <span class="fu">feature_set</span>(<span class="at">pkgs =</span> <span class="st">"feasts"</span>))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>feat_tbl</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Individual functions can also be combined manually for a custom, lighter-weight feature set:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tourism <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">features</span>(Trips, <span class="fu">list</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    feat_stl,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    coef_hurst,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    feat_spectral,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    unitroot_kpss</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  ))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="references" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="references"><span class="header-section-number">9</span> References</h2>
+<ul>
+<li>Hyndman, R.J., Wang, E., &amp; Laptev, N. (2015). <em>Large-scale unusual time series detection</em>. IEEE ICDM Workshops.</li>
+<li>Kang, Y., Hyndman, R.J., &amp; Smith-Miles, K. (2017). <em>Visualising forecasting algorithm performance using time series instance space</em>. International Journal of Forecasting.</li>
+<li>Hyndman, R.J. &amp; Athanasopoulos, G. <em>Forecasting: Principles and Practice</em>, “Time series features” chapter — <a href="https://otexts.com/fpp3/features.html" class="uri">https://otexts.com/fpp3/features.html</a></li>
+<li><code>feasts</code> package documentation — <a href="https://feasts.tidyverts.org/" class="uri">https://feasts.tidyverts.org/</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ddde\.numbat\.space");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

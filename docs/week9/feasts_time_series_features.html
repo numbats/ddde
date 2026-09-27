@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dianne Cook">
+
+<title>Time-series features in feasts – ETC5521: Diving Deeply into Data Exploration</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-35f8967574e6339c6be47ffc8765f34c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7d80270b191d8b179d7cd52f6bacfd5d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans|Merriweather" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3/build/web/hack-subset.css">
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">ETC5521: Diving Deeply into Data Exploration</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> <i class="bi bi-house-fill" role="img">
+</i> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-schedule" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-calendar2-fill" role="img">
+</i> 
+ <span class="menu-text">Schedule</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-schedule">    
+        <li>
+    <a class="dropdown-item" href="../week1/index.html">
+ <span class="dropdown-text">Week 1: Overview. Why this course? What is EDA?</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week2/index.html">
+ <span class="dropdown-text">Week 2: Learning from history</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week3/index.html">
+ <span class="dropdown-text">Week 3: Initial data analysis and model diagnostics: Model dependent exploration and how it differs from EDA</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week4/index.html">
+ <span class="dropdown-text">Week 4: Using computational tools to determine whether what is seen in the data can be assumed to apply more broadly</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week5/index.html">
+ <span class="dropdown-text">Week 5: Working with a single variable, making transformations, detecting outliers, using robust statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week6/index.html">
+ <span class="dropdown-text">Week 6: Bivariate dependencies and relationships, transformations to linearise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week7/index.html">
+ <span class="dropdown-text">Week 7: Making comparisons between groups and strata</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week8/index.html">
+ <span class="dropdown-text">Week 8: Going beyond two variables, exploring high dimensions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week9/index.html">
+ <span class="dropdown-text">Week 9: Exploring data having a space and time context Part I</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week10/index.html">
+ <span class="dropdown-text">Week 10: Exploring data having a space and time context Part II</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week11/index.html">
+ <span class="dropdown-text">Week 11: Sculpting data using models, checking assumptions, co-dependency and performing diagnostics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week12/index.html">
+ <span class="dropdown-text">Week 12: Long help session</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://learning.monash.edu/course/view.php?id=46718"> <i class="bi bi-mortarboard-fill" role="img">
+</i> 
+<span class="menu-text">Moodle</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://edstem.org/au/courses/39520/discussion"> <i class="bi bi-people-fill" role="img">
+</i> 
+<span class="menu-text">Discussion</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../resources.html"> <i class="bi bi-book" role="img">
+</i> 
+<span class="menu-text">Resources</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/numbats/ddde"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">0.1</span> Overview</a></li>
+  <li><a href="#what-is-a-time-series-feature" id="toc-what-is-a-time-series-feature" class="nav-link" data-scroll-target="#what-is-a-time-series-feature"><span class="header-section-number">0.2</span> What is a time-series feature?</a></li>
+  <li><a href="#extracting-features-with-features" id="toc-extracting-features-with-features" class="nav-link" data-scroll-target="#extracting-features-with-features"><span class="header-section-number">0.3</span> Extracting features with <code>features()</code></a></li>
+  <li><a href="#feature-families" id="toc-feature-families" class="nav-link" data-scroll-target="#feature-families"><span class="header-section-number">1</span> Feature families</a></li>
+  <li><a href="#stl-features-feat_stl" id="toc-stl-features-feat_stl" class="nav-link" data-scroll-target="#stl-features-feat_stl"><span class="header-section-number">2</span> STL features: <code>feat_stl()</code></a>
+  <ul class="collapse">
+  <li><a href="#trend-strength" id="toc-trend-strength" class="nav-link" data-scroll-target="#trend-strength"><span class="header-section-number">2.1</span> Trend strength</a></li>
+  <li><a href="#seasonal-strength" id="toc-seasonal-strength" class="nav-link" data-scroll-target="#seasonal-strength"><span class="header-section-number">2.2</span> Seasonal strength</a></li>
+  <li><a href="#seasonal-peak-and-trough" id="toc-seasonal-peak-and-trough" class="nav-link" data-scroll-target="#seasonal-peak-and-trough"><span class="header-section-number">2.3</span> Seasonal peak and trough</a></li>
+  <li><a href="#spikiness" id="toc-spikiness" class="nav-link" data-scroll-target="#spikiness"><span class="header-section-number">2.4</span> Spikiness</a></li>
+  <li><a href="#linearity" id="toc-linearity" class="nav-link" data-scroll-target="#linearity"><span class="header-section-number">2.5</span> Linearity</a></li>
+  <li><a href="#curvature" id="toc-curvature" class="nav-link" data-scroll-target="#curvature"><span class="header-section-number">2.6</span> Curvature</a></li>
+  <li><a href="#residual-autocorrelation" id="toc-residual-autocorrelation" class="nav-link" data-scroll-target="#residual-autocorrelation"><span class="header-section-number">2.7</span> Residual autocorrelation</a></li>
+  </ul></li>
+  <li><a href="#autocorrelation-features-feat_acf" id="toc-autocorrelation-features-feat_acf" class="nav-link" data-scroll-target="#autocorrelation-features-feat_acf"><span class="header-section-number">3</span> Autocorrelation features: <code>feat_acf()</code></a>
+  <ul class="collapse">
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">3.0.1</span> Interpretation</a></li>
+  </ul></li>
+  <li><a href="#partial-autocorrelation-feat_pacf" id="toc-partial-autocorrelation-feat_pacf" class="nav-link" data-scroll-target="#partial-autocorrelation-feat_pacf"><span class="header-section-number">4</span> Partial autocorrelation: <code>feat_pacf()</code></a></li>
+  <li><a href="#crossing-points-n_crossing_points" id="toc-crossing-points-n_crossing_points" class="nav-link" data-scroll-target="#crossing-points-n_crossing_points"><span class="header-section-number">5</span> Crossing points: <code>n_crossing_points()</code></a></li>
+  <li><a href="#flat-spots-longest_flat_spot" id="toc-flat-spots-longest_flat_spot" class="nav-link" data-scroll-target="#flat-spots-longest_flat_spot"><span class="header-section-number">6</span> Flat spots: <code>longest_flat_spot()</code></a></li>
+  <li><a href="#hurst-coefficient-coef_hurst" id="toc-hurst-coefficient-coef_hurst" class="nav-link" data-scroll-target="#hurst-coefficient-coef_hurst"><span class="header-section-number">7</span> Hurst coefficient: <code>coef_hurst()</code></a></li>
+  <li><a href="#stability-and-lumpiness" id="toc-stability-and-lumpiness" class="nav-link" data-scroll-target="#stability-and-lumpiness"><span class="header-section-number">8</span> Stability and lumpiness</a>
+  <ul class="collapse">
+  <li><a href="#stability-var_tiled_mean" id="toc-stability-var_tiled_mean" class="nav-link" data-scroll-target="#stability-var_tiled_mean"><span class="header-section-number">8.1</span> Stability: <code>var_tiled_mean()</code></a></li>
+  <li><a href="#lumpiness-var_tiled_var" id="toc-lumpiness-var_tiled_var" class="nav-link" data-scroll-target="#lumpiness-var_tiled_var"><span class="header-section-number">8.2</span> Lumpiness: <code>var_tiled_var()</code></a></li>
+  </ul></li>
+  <li><a href="#local-distributional-shifts" id="toc-local-distributional-shifts" class="nav-link" data-scroll-target="#local-distributional-shifts"><span class="header-section-number">9</span> Local distributional shifts</a>
+  <ul class="collapse">
+  <li><a href="#level-shift-shift_level_max" id="toc-level-shift-shift_level_max" class="nav-link" data-scroll-target="#level-shift-shift_level_max"><span class="header-section-number">9.1</span> Level shift: <code>shift_level_max()</code></a></li>
+  <li><a href="#variance-shift-shift_var_max" id="toc-variance-shift-shift_var_max" class="nav-link" data-scroll-target="#variance-shift-shift_var_max"><span class="header-section-number">9.2</span> Variance shift: <code>shift_var_max()</code></a></li>
+  <li><a href="#distributional-shift-shift_kl_max" id="toc-distributional-shift-shift_kl_max" class="nav-link" data-scroll-target="#distributional-shift-shift_kl_max"><span class="header-section-number">9.3</span> Distributional shift: <code>shift_kl_max()</code></a></li>
+  </ul></li>
+  <li><a href="#spectral-entropy-feat_spectral" id="toc-spectral-entropy-feat_spectral" class="nav-link" data-scroll-target="#spectral-entropy-feat_spectral"><span class="header-section-number">10</span> Spectral entropy: <code>feat_spectral()</code></a></li>
+  <li><a href="#intermittency-feat_intermittent" id="toc-intermittency-feat_intermittent" class="nav-link" data-scroll-target="#intermittency-feat_intermittent"><span class="header-section-number">11</span> Intermittency: <code>feat_intermittent()</code></a>
+  <ul class="collapse">
+  <li><a href="#zero_run_mean" id="toc-zero_run_mean" class="nav-link" data-scroll-target="#zero_run_mean"><span class="header-section-number">11.1</span> <code>zero_run_mean</code></a></li>
+  <li><a href="#nonzero_squared_cv" id="toc-nonzero_squared_cv" class="nav-link" data-scroll-target="#nonzero_squared_cv"><span class="header-section-number">11.2</span> <code>nonzero_squared_cv</code></a></li>
+  <li><a href="#zero_start_prop" id="toc-zero_start_prop" class="nav-link" data-scroll-target="#zero_start_prop"><span class="header-section-number">11.3</span> <code>zero_start_prop</code></a></li>
+  <li><a href="#zero_end_prop" id="toc-zero_end_prop" class="nav-link" data-scroll-target="#zero_end_prop"><span class="header-section-number">11.4</span> <code>zero_end_prop</code></a></li>
+  </ul></li>
+  <li><a href="#arch-statistic-stat_arch_lm" id="toc-arch-statistic-stat_arch_lm" class="nav-link" data-scroll-target="#arch-statistic-stat_arch_lm"><span class="header-section-number">12</span> ARCH statistic: <code>stat_arch_lm()</code></a></li>
+  <li><a href="#stationarity-and-differencing" id="toc-stationarity-and-differencing" class="nav-link" data-scroll-target="#stationarity-and-differencing"><span class="header-section-number">13</span> Stationarity and differencing</a>
+  <ul class="collapse">
+  <li><a href="#kpss-test-unitroot_kpss" id="toc-kpss-test-unitroot_kpss" class="nav-link" data-scroll-target="#kpss-test-unitroot_kpss"><span class="header-section-number">13.1</span> KPSS test: <code>unitroot_kpss()</code></a></li>
+  <li><a href="#phillipsperron-test-unitroot_pp" id="toc-phillipsperron-test-unitroot_pp" class="nav-link" data-scroll-target="#phillipsperron-test-unitroot_pp"><span class="header-section-number">13.2</span> Phillips–Perron test: <code>unitroot_pp()</code></a></li>
+  <li><a href="#number-of-ordinary-differences-unitroot_ndiffs" id="toc-number-of-ordinary-differences-unitroot_ndiffs" class="nav-link" data-scroll-target="#number-of-ordinary-differences-unitroot_ndiffs"><span class="header-section-number">13.3</span> Number of ordinary differences: <code>unitroot_ndiffs()</code></a></li>
+  <li><a href="#number-of-seasonal-differences-unitroot_nsdiffs" id="toc-number-of-seasonal-differences-unitroot_nsdiffs" class="nav-link" data-scroll-target="#number-of-seasonal-differences-unitroot_nsdiffs"><span class="header-section-number">13.4</span> Number of seasonal differences: <code>unitroot_nsdiffs()</code></a></li>
+  </ul></li>
+  <li><a href="#residual-autocorrelation-tests" id="toc-residual-autocorrelation-tests" class="nav-link" data-scroll-target="#residual-autocorrelation-tests"><span class="header-section-number">14</span> Residual autocorrelation tests</a>
+  <ul class="collapse">
+  <li><a href="#boxpierce-box_pierce" id="toc-boxpierce-box_pierce" class="nav-link" data-scroll-target="#boxpierce-box_pierce"><span class="header-section-number">14.1</span> Box–Pierce: <code>box_pierce()</code></a></li>
+  <li><a href="#ljungbox-ljung_box" id="toc-ljungbox-ljung_box" class="nav-link" data-scroll-target="#ljungbox-ljung_box"><span class="header-section-number">14.2</span> Ljung–Box: <code>ljung_box()</code></a></li>
+  </ul></li>
+  <li><a href="#guerreros-method-guerrero" id="toc-guerreros-method-guerrero" class="nav-link" data-scroll-target="#guerreros-method-guerrero"><span class="header-section-number">15</span> Guerrero’s method: <code>guerrero()</code></a></li>
+  <li><a href="#putting-the-features-together" id="toc-putting-the-features-together" class="nav-link" data-scroll-target="#putting-the-features-together"><span class="header-section-number">16</span> Putting the features together</a></li>
+  <li><a href="#how-to-interpret-the-feature-space" id="toc-how-to-interpret-the-feature-space" class="nav-link" data-scroll-target="#how-to-interpret-the-feature-space"><span class="header-section-number">17</span> How to interpret the feature space</a></li>
+  <li><a href="#a-compact-feature-dictionary" id="toc-a-compact-feature-dictionary" class="nav-link" data-scroll-target="#a-compact-feature-dictionary"><span class="header-section-number">18</span> A compact feature dictionary</a></li>
+  <li><a href="#practical-cautions" id="toc-practical-cautions" class="nav-link" data-scroll-target="#practical-cautions"><span class="header-section-number">19</span> Practical cautions</a>
+  <ul class="collapse">
+  <li><a href="#features-are-not-automatically-comparable" id="toc-features-are-not-automatically-comparable" class="nav-link" data-scroll-target="#features-are-not-automatically-comparable"><span class="header-section-number">19.1</span> Features are not automatically comparable</a></li>
+  <li><a href="#the-seasonal-period-matters" id="toc-the-seasonal-period-matters" class="nav-link" data-scroll-target="#the-seasonal-period-matters"><span class="header-section-number">19.2</span> The seasonal period matters</a></li>
+  <li><a href="#missing-values-matter" id="toc-missing-values-matter" class="nav-link" data-scroll-target="#missing-values-matter"><span class="header-section-number">19.3</span> Missing values matter</a></li>
+  <li><a href="#feature-extraction-is-exploratory" id="toc-feature-extraction-is-exploratory" class="nav-link" data-scroll-target="#feature-extraction-is-exploratory"><span class="header-section-number">19.4</span> Feature extraction is exploratory</a></li>
+  </ul></li>
+  <li><a href="#suggested-workflow-for-teaching-or-exploratory-analysis" id="toc-suggested-workflow-for-teaching-or-exploratory-analysis" class="nav-link" data-scroll-target="#suggested-workflow-for-teaching-or-exploratory-analysis"><span class="header-section-number">20</span> Suggested workflow for teaching or exploratory analysis</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">21</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Time-series features in <code>feasts</code></h1>
+<p class="subtitle lead">A guide to feature extraction and interpretation</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dianne Cook </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">0.1</span> Overview</h2>
+<p>The <a href="https://cran.r-project.org/package=feasts"><code>feasts</code></a> package provides feature extraction and statistical tools for tidy time-series analysis. It is designed to work with <code>tsibble</code> data and with <code>fabletools::features()</code>, making it possible to reduce each time series to a vector of numerical features that describe characteristics such as trend, seasonality, autocorrelation, intermittency, stability, and spectral structure.</p>
+<p>This report focuses on <strong>features of individual time series</strong> rather than the plotting and decomposition facilities of <code>feasts</code>.</p>
+<p>The current CRAN release used as the reference here is <strong>feasts 0.5.0</strong>.</p>
+</section>
+<section id="what-is-a-time-series-feature" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="what-is-a-time-series-feature"><span class="header-section-number">0.2</span> What is a time-series feature?</h2>
+<p>A <strong>time-series feature</strong> is a numerical summary intended to capture some characteristic of a time series.</p>
+<p>For example:</p>
+<ul>
+<li>a measure of <strong>trend strength</strong> describes how much of the variation can be associated with the trend;</li>
+<li>a measure of <strong>seasonal strength</strong> describes how strongly a repeating seasonal component contributes to the series;</li>
+<li>an <strong>autocorrelation</strong> feature describes dependence between observations separated by a particular lag;</li>
+<li><strong>spectral entropy</strong> describes how concentrated or dispersed the series’ spectral energy is across frequencies;</li>
+<li><strong>lumpiness</strong> describes how much the local variance changes over time.</li>
+</ul>
+<p>Features are therefore a form of <strong>dimension reduction for time-series data</strong>. Instead of comparing two long series point-by-point, we can compare their feature vectors.</p>
+<p>This is particularly useful in <strong>feature-based time-series analysis</strong>, where many time series are represented in a common feature space and then explored with graphics or multivariate methods.</p>
+</section>
+<section id="extracting-features-with-features" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="extracting-features-with-features"><span class="header-section-number">0.3</span> Extracting features with <code>features()</code></h2>
+<p>The usual workflow is to supply a list of feature functions to <code>fabletools::features()</code>.</p>
+<p>For example:</p>
+<p>The result contains the identifying variables from the original <code>tsibble</code> together with one or more numerical features for each series.</p>
+<p>A useful way to think about the workflow is:</p>
+<pre class="text"><code>many time series
+      |
+      v
+feature extraction
+      |
+      v
+feature matrix
+      |
+      +--&gt; visualisation
+      +--&gt; clustering
+      +--&gt; dimension reduction
+      +--&gt; classification
+      +--&gt; similarity search</code></pre>
+<p>Feature extraction does not replace looking at the original series. It provides a compact representation that can be useful for comparing many series.</p>
+</section>
+<section id="feature-families" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Feature families</h1>
+<p>The main feature families available in <code>feasts</code> can be grouped as follows.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Family</th>
+<th>Main functions</th>
+<th>What they describe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>STL decomposition</td>
+<td><code>feat_stl()</code></td>
+<td>trend, seasonality, curvature, spikes and residual dependence</td>
+</tr>
+<tr class="even">
+<td>Autocorrelation</td>
+<td><code>feat_acf()</code></td>
+<td>serial dependence in the original and differenced series</td>
+</tr>
+<tr class="odd">
+<td>Partial autocorrelation</td>
+<td><code>feat_pacf()</code></td>
+<td>direct dependence at successive lags</td>
+</tr>
+<tr class="even">
+<td>Distribution/structure</td>
+<td><code>n_crossing_points()</code>, <code>longest_flat_spot()</code></td>
+<td>crossings of the median and runs in value intervals</td>
+</tr>
+<tr class="odd">
+<td>Long-range dependence</td>
+<td><code>coef_hurst()</code></td>
+<td>persistence / fractional differencing</td>
+</tr>
+<tr class="even">
+<td>Stability</td>
+<td><code>var_tiled_mean()</code>, <code>var_tiled_var()</code></td>
+<td>change in local level and variance</td>
+</tr>
+<tr class="odd">
+<td>Change points</td>
+<td><code>shift_level_max()</code>, <code>shift_var_max()</code>, <code>shift_kl_max()</code></td>
+<td>largest local distributional changes</td>
+</tr>
+<tr class="even">
+<td>Frequency domain</td>
+<td><code>feat_spectral()</code></td>
+<td>concentration of spectral density</td>
+</tr>
+<tr class="odd">
+<td>Intermittency</td>
+<td><code>feat_intermittent()</code></td>
+<td>zero occurrence and spacing in intermittent demand</td>
+</tr>
+<tr class="even">
+<td>Conditional heteroskedasticity</td>
+<td><code>stat_arch_lm()</code></td>
+<td>ARCH-type dependence in squared observations</td>
+</tr>
+<tr class="odd">
+<td>Stationarity</td>
+<td><code>unitroot_kpss()</code>, <code>unitroot_pp()</code></td>
+<td>evidence relevant to unit roots</td>
+</tr>
+<tr class="even">
+<td>Differencing</td>
+<td><code>unitroot_ndiffs()</code>, <code>unitroot_nsdiffs()</code></td>
+<td>number of ordinary/seasonal differences indicated</td>
+</tr>
+<tr class="odd">
+<td>Residual whiteness</td>
+<td><code>box_pierce()</code>, <code>ljung_box()</code></td>
+<td>remaining autocorrelation</td>
+</tr>
+<tr class="even">
+<td>Transformation</td>
+<td><code>guerrero()</code></td>
+<td>choice of Box–Cox transformation parameter</td>
+</tr>
+</tbody>
+</table>
+<p>Some of these are more naturally thought of as <strong>statistical tests or modelling diagnostics</strong> than descriptive features. They are nevertheless available through the feature-extraction framework.</p>
+</section>
+<section id="stl-features-feat_stl" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> STL features: <code>feat_stl()</code></h1>
+<p><code>feat_stl()</code> extracts features from an STL decomposition:</p>
+<p>[ y_t = T_t + S_t + R_t, ]</p>
+<p>where (T_t) is the trend, (S_t) is the seasonal component and (R_t) is the remainder.</p>
+<p>The function requires a seasonal period, <code>.period</code>.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      trend_strength seasonal_strength_12     seasonal_peak_12 
+           0.9909550            0.9406725            7.0000000 
+  seasonal_trough_12            spikiness            linearity 
+          11.0000000            3.0277699         1325.3317266 
+           curvature           stl_e_acf1          stl_e_acf10 
+         131.0646804            0.5091751            0.9303664 </code></pre>
+</div>
+</div>
+<section id="trend-strength" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="trend-strength"><span class="header-section-number">2.1</span> Trend strength</h2>
+<p><strong><code>trend_strength</code></strong> measures the strength of the trend relative to the variance remaining after removing the seasonal component.</p>
+<p>It is scaled between 0 and 1:</p>
+<ul>
+<li>near 0: little evidence of a systematic trend;</li>
+<li>near 1: most of the remaining variation is associated with the trend.</li>
+</ul>
+<p>It is important to remember that this is a <strong>feature of the particular decomposition</strong>, not a hypothesis test for whether a trend exists.</p>
+</section>
+<section id="seasonal-strength" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="seasonal-strength"><span class="header-section-number">2.2</span> Seasonal strength</h2>
+<p><strong><code>seasonal_strength_*</code></strong> measures the strength of each seasonal component.</p>
+<p>The value is between 0 and 1:</p>
+<ul>
+<li>near 0: weak seasonality;</li>
+<li>near 1: strong seasonality.</li>
+</ul>
+<p>For a monthly series with annual seasonality, for example, the feature is based on the seasonal component with period 12.</p>
+</section>
+<section id="seasonal-peak-and-trough" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="seasonal-peak-and-trough"><span class="header-section-number">2.3</span> Seasonal peak and trough</h2>
+<p><strong><code>seasonal_peak_*</code></strong> and <strong><code>seasonal_trough_*</code></strong> identify the position in the seasonal cycle at which the seasonal component reaches its maximum and minimum.</p>
+<p>These are useful when two series have similarly strong seasonality but their peaks occur at different times of year.</p>
+<p>The interpretation of the numerical position depends on the seasonal period. For example, with <code>.period = 12</code>, the values identify positions in a 12-month cycle.</p>
+</section>
+<section id="spikiness" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="spikiness"><span class="header-section-number">2.4</span> Spikiness</h2>
+<p><strong><code>spikiness</code></strong> measures variation in the remainder variance. It is based on leave-one-out estimates of the remainder variance.</p>
+<p>A large value indicates that the series contains observations that have a large influence on the estimated remainder variance.</p>
+<p>Thus, spikiness is better interpreted as <strong>instability of the residual variance associated with unusual observations</strong>, rather than simply “the number of spikes”.</p>
+</section>
+<section id="linearity" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="linearity"><span class="header-section-number">2.5</span> Linearity</h2>
+<p><strong><code>linearity</code></strong> is obtained from a quadratic approximation to the estimated trend.</p>
+<p>It measures the linear component of the trend. A positive value indicates an increasing linear component and a negative value a decreasing component.</p>
+<p>Because it is based on the scale of the series and the index, it should generally not be compared directly across series with very different scales without appropriate standardisation.</p>
+</section>
+<section id="curvature" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="curvature"><span class="header-section-number">2.6</span> Curvature</h2>
+<p><strong><code>curvature</code></strong> is the quadratic coefficient from the same approximation.</p>
+<p>It captures whether the trend bends rather than following an approximately straight line.</p>
+</section>
+<section id="residual-autocorrelation" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="residual-autocorrelation"><span class="header-section-number">2.7</span> Residual autocorrelation</h2>
+<p><code>feat_stl()</code> also returns:</p>
+<ul>
+<li><strong><code>stl_e_acf1</code></strong> — the lag-1 autocorrelation of the STL remainder;</li>
+<li><strong><code>stl_e_acf10</code></strong> — the sum of squared autocorrelations over the first ten lags.</li>
+</ul>
+<p>These are useful for identifying series whose STL decomposition has not removed all serial dependence.</p>
+</section>
+</section>
+<section id="autocorrelation-features-feat_acf" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Autocorrelation features: <code>feat_acf()</code></h1>
+<p>Autocorrelation measures the similarity between observations separated by a given lag.</p>
+<p>The autocorrelation at lag (k) is</p>
+<p>[ <em>k = (y_t,y</em>{t-k}). ]</p>
+<p><code>feat_acf()</code> summarises autocorrelation in the original series and after first and second differencing.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>       acf1       acf10  diff1_acf1 diff1_acf10  diff2_acf1 diff2_acf10 
+  0.9480473   5.6700871   0.3028553   0.4088376  -0.1910059   0.2507803 
+season_acf1 
+  0.7603950 </code></pre>
+</div>
+</div>
+<p>The features include:</p>
+<ul>
+<li><strong><code>acf1</code></strong> — lag-1 autocorrelation of the original series;</li>
+<li><strong><code>acf10</code></strong> — sum of squared autocorrelations over the first ten lags;</li>
+<li><strong><code>diff1_acf1</code></strong> — lag-1 autocorrelation after first differencing;</li>
+<li><strong><code>diff1_acf10</code></strong> — summed squared autocorrelations after first differencing;</li>
+<li><strong><code>diff2_acf1</code></strong> — lag-1 autocorrelation after second differencing;</li>
+<li><strong><code>diff2_acf10</code></strong> — summed squared autocorrelations after second differencing.</li>
+</ul>
+<p>For seasonal data, an additional feature is returned:</p>
+<ul>
+<li><strong><code>season_acf</code></strong> — autocorrelation at the first seasonal lag.</li>
+</ul>
+<section id="interpretation" class="level3" data-number="3.0.1">
+<h3 data-number="3.0.1" class="anchored" data-anchor-id="interpretation"><span class="header-section-number">3.0.1</span> Interpretation</h3>
+<p>A large positive <code>acf1</code> indicates persistence: adjacent observations tend to be similar.</p>
+<p>A large <code>acf10</code> indicates substantial serial dependence across the first several lags.</p>
+<p>The differenced features help distinguish persistence in levels from persistence that remains after removing a trend-like component.</p>
+</section>
+</section>
+<section id="partial-autocorrelation-feat_pacf" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Partial autocorrelation: <code>feat_pacf()</code></h1>
+<p>The <strong>partial autocorrelation function (PACF)</strong> measures the association between (y_t) and (y_{t-k}) after accounting for the intermediate lags.</p>
+<p><code>feat_pacf()</code> returns summaries of the first five partial autocorrelations for:</p>
+<ul>
+<li>the original series;</li>
+<li>the first-differenced series;</li>
+<li>the second-differenced series.</li>
+</ul>
+<p>For seasonal series it also returns:</p>
+<ul>
+<li><strong><code>season_pacf</code></strong> — the partial autocorrelation at the first seasonal lag.</li>
+</ul>
+<p>The squared coefficients are summed, so larger values indicate stronger overall partial autocorrelation over the specified early lags.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      pacf5 diff1_pacf5 diff2_pacf5 season_pacf 
+  0.9670971   1.1764357   1.1541896  -0.1354311 </code></pre>
+</div>
+</div>
+<p>PACF features can therefore help distinguish series whose dependence structure is concentrated in a few direct lags from series whose dependence is more diffuse.</p>
+</section>
+<section id="crossing-points-n_crossing_points" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Crossing points: <code>n_crossing_points()</code></h1>
+<p><code>n_crossing_points()</code> counts how often the series crosses its median.</p>
+<p>Conceptually, it asks:</p>
+<blockquote class="blockquote">
+<p>How frequently does the series move from one side of its median to the other?</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>n_crossing_points 
+                7 </code></pre>
+</div>
+</div>
+<p>A high value indicates frequent oscillation around the centre of the series. A low value can occur when the series spends long periods predominantly above or below its median.</p>
+<p>This feature can be useful for distinguishing smooth, slowly changing series from rapidly fluctuating series.</p>
+</section>
+<section id="flat-spots-longest_flat_spot" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Flat spots: <code>longest_flat_spot()</code></h1>
+<p><code>longest_flat_spot()</code> divides the observed value range into ten equal-width intervals and finds the longest consecutive run within any one interval.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>longest_flat_spot 
+               18 </code></pre>
+</div>
+</div>
+<p>A large value indicates that the series spends a long time within a relatively narrow portion of its value range.</p>
+<p>The feature is therefore related to <strong>plateaus or periods of little movement</strong>, but it should not be interpreted as a direct estimate of the number of flat periods.</p>
+<p>Older versions of <code>feasts</code> used the name <code>n_flat_spots()</code>. This was renamed to <code>longest_flat_spot()</code> because the feature is a maximum run length rather than a count of flat spots.</p>
+</section>
+<section id="hurst-coefficient-coef_hurst" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Hurst coefficient: <code>coef_hurst()</code></h1>
+<p>The <strong>Hurst coefficient</strong> is intended to describe long-range dependence or persistence.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>coef_hurst 
+ 0.9992466 </code></pre>
+</div>
+</div>
+<p>The implementation is based on the fractional differencing parameter (d), with</p>
+<p>[ H = d + . ]</p>
+<p>Roughly:</p>
+<ul>
+<li>(H ): behaviour consistent with weak dependence;</li>
+<li>(H &gt; 0.5): persistent behaviour;</li>
+<li>(H &lt; 0.5): anti-persistent behaviour.</li>
+</ul>
+<p>The Hurst coefficient is not a general-purpose “trend score”. In particular, apparent long-range dependence can be confounded with nonstationarity and other forms of temporal structure.</p>
+</section>
+<section id="stability-and-lumpiness" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Stability and lumpiness</h1>
+<p><code>feasts</code> measures changes in local means and local variances using non-overlapping tiled windows.</p>
+<section id="stability-var_tiled_mean" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="stability-var_tiled_mean"><span class="header-section-number">8.1</span> Stability: <code>var_tiled_mean()</code></h2>
+<p><strong><code>var_tiled_mean()</code></strong> calculates the variance of the means of successive windows.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>var_tiled_mean 
+     0.9330704 </code></pre>
+</div>
+</div>
+<p>A large value means that the local level changes substantially across the series.</p>
+<p>This is called <strong>stability</strong> in the feature-based time-series literature: a stable series has similar local means over time.</p>
+</section>
+<section id="lumpiness-var_tiled_var" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="lumpiness-var_tiled_var"><span class="header-section-number">8.2</span> Lumpiness: <code>var_tiled_var()</code></h2>
+<p><strong><code>var_tiled_var()</code></strong> calculates the variance of the local variances.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>var_tiled_var 
+   0.01924803 </code></pre>
+</div>
+</div>
+<p>A large value means that the variability of the series changes substantially from one part of the series to another.</p>
+<p>Thus:</p>
+<ul>
+<li><strong>stability</strong> concerns changes in local level;</li>
+<li><strong>lumpiness</strong> concerns changes in local variance.</li>
+</ul>
+<p>The window size is important. When <code>.size</code> is not supplied, it is selected using <code>.period</code>.</p>
+</section>
+</section>
+<section id="local-distributional-shifts" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Local distributional shifts</h1>
+<p>Three features use sliding windows to identify the largest change between neighbouring portions of the series.</p>
+<section id="level-shift-shift_level_max" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="level-shift-shift_level_max"><span class="header-section-number">9.1</span> Level shift: <code>shift_level_max()</code></h2>
+<p><strong><code>shift_level_max()</code></strong> finds the largest difference between local means.</p>
+<p>It returns both the magnitude of the largest shift and its location.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  shift_level_max shift_level_index 
+             54.5             128.0 </code></pre>
+</div>
+</div>
+<p>A large value indicates a substantial local change in level.</p>
+</section>
+<section id="variance-shift-shift_var_max" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="variance-shift-shift_var_max"><span class="header-section-number">9.2</span> Variance shift: <code>shift_var_max()</code></h2>
+<p><strong><code>shift_var_max()</code></strong> finds the largest difference between local variances.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  shift_var_max shift_var_index 
+       2342.152         118.000 </code></pre>
+</div>
+</div>
+<p>It can identify changes from a relatively stable regime to a highly variable regime, or vice versa.</p>
+</section>
+<section id="distributional-shift-shift_kl_max" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="distributional-shift-shift_kl_max"><span class="header-section-number">9.3</span> Distributional shift: <code>shift_kl_max()</code></h2>
+<p><strong><code>shift_kl_max()</code></strong> compares neighbouring windows using a Kullback–Leibler divergence based on estimated distributions.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  shift_kl_max shift_kl_index 
+     0.1210444    122.0000000 </code></pre>
+</div>
+</div>
+<p>A large value indicates a strong change in the estimated local distribution.</p>
+<p>Unlike <code>shift_level_max()</code> and <code>shift_var_max()</code>, this is not restricted to changes in a single moment such as the mean or variance.</p>
+</section>
+</section>
+<section id="spectral-entropy-feat_spectral" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Spectral entropy: <code>feat_spectral()</code></h1>
+<p><code>feat_spectral()</code> measures the <strong>entropy of the spectral density</strong>.</p>
+<p>The spectral density describes how variation in a series is distributed over frequencies.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>spectral_entropy 
+       0.2961049 </code></pre>
+</div>
+</div>
+<p>The spectral entropy is based on Shannon entropy:</p>
+<p>[ H_s = -_j p_j (p_j), ]</p>
+<p>where (p_j) represents the normalised spectral density.</p>
+<p>The interpretation is:</p>
+<ul>
+<li><strong>low spectral entropy</strong>: spectral energy is concentrated in a relatively small number of frequencies;</li>
+<li><strong>high spectral entropy</strong>: spectral energy is spread across many frequencies.</li>
+</ul>
+<p>A strongly periodic signal therefore tends to have lower spectral entropy than a series whose variation is distributed broadly across frequencies.</p>
+<p>The current implementation estimates the spectral density using <code>stats::spec.ar()</code> with the Burg method.</p>
+</section>
+<section id="intermittency-feat_intermittent" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Intermittency: <code>feat_intermittent()</code></h1>
+<p>Intermittent time series contain many zero observations, as is common with demand data for products that are ordered only occasionally.</p>
+<p><code>feat_intermittent()</code> returns four features.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>     zero_run_mean nonzero_squared_cv    zero_start_prop      zero_end_prop 
+          2.333333           0.280000           0.200000           0.000000 </code></pre>
+</div>
+</div>
+<section id="zero_run_mean" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="zero_run_mean"><span class="header-section-number">11.1</span> <code>zero_run_mean</code></h2>
+<p>The average interval between non-zero observations.</p>
+<p>Large values indicate that demand occurs relatively infrequently.</p>
+</section>
+<section id="nonzero_squared_cv" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="nonzero_squared_cv"><span class="header-section-number">11.2</span> <code>nonzero_squared_cv</code></h2>
+<p>The squared coefficient of variation of the non-zero observations:</p>
+<p>[ CV^2 = ( {(x_{})})^2. ]</p>
+<p>It describes the variability of demand <strong>when demand occurs</strong>, rather than the variability caused by zeros.</p>
+</section>
+<section id="zero_start_prop" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="zero_start_prop"><span class="header-section-number">11.3</span> <code>zero_start_prop</code></h2>
+<p>The proportion of the series occupied by the initial run of zeros.</p>
+</section>
+<section id="zero_end_prop" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="zero_end_prop"><span class="header-section-number">11.4</span> <code>zero_end_prop</code></h2>
+<p>The proportion of the series occupied by the final run of zeros.</p>
+<p>These features are useful for characterising different kinds of intermittent demand.</p>
+</section>
+</section>
+<section id="arch-statistic-stat_arch_lm" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> ARCH statistic: <code>stat_arch_lm()</code></h1>
+<p><code>stat_arch_lm()</code> measures dependence in the squared observations using an ARCH-LM-style statistic.</p>
+<p>ARCH effects occur when the conditional variance changes over time in a way related to previous squared observations.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>stat_arch_lm 
+   0.9171945 </code></pre>
+</div>
+</div>
+<p>A larger value indicates stronger evidence of dependence in the squared series.</p>
+<p>This feature is especially relevant when the interest is in <strong>time-varying volatility</strong> rather than only changes in the mean.</p>
+</section>
+<section id="stationarity-and-differencing" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> Stationarity and differencing</h1>
+<p>Some <code>feasts</code> functions provide statistical diagnostics rather than purely descriptive features.</p>
+<section id="kpss-test-unitroot_kpss" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="kpss-test-unitroot_kpss"><span class="header-section-number">13.1</span> KPSS test: <code>unitroot_kpss()</code></h2>
+<p>The KPSS test is used to assess whether a time series is stationary around a specified deterministic component.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  kpss_stat kpss_pvalue 
+   2.739474    0.010000 </code></pre>
+</div>
+</div>
+<p>The function returns a test statistic and an associated p-value.</p>
+<p>The interpretation is test-based, so it should not be treated as a continuously scaled descriptive feature in the same way as <code>trend_strength</code> or <code>spectral_entropy</code>.</p>
+</section>
+<section id="phillipsperron-test-unitroot_pp" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="phillipsperron-test-unitroot_pp"><span class="header-section-number">13.2</span> Phillips–Perron test: <code>unitroot_pp()</code></h2>
+<p><code>unitroot_pp()</code> provides the Phillips–Perron unit-root test.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  pp_stat pp_pvalue 
+-1.844341  0.100000 </code></pre>
+</div>
+</div>
+<p>It returns the test statistic and p-value.</p>
+<p>The KPSS and Phillips–Perron tests have different null hypotheses, so their p-values should not be interpreted as interchangeable measures of stationarity.</p>
+</section>
+<section id="number-of-ordinary-differences-unitroot_ndiffs" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="number-of-ordinary-differences-unitroot_ndiffs"><span class="header-section-number">13.3</span> Number of ordinary differences: <code>unitroot_ndiffs()</code></h2>
+<p><code>unitroot_ndiffs()</code> determines the minimum number of ordinary differences required to obtain a series judged stationary according to the supplied unit-root function.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>ndiffs 
+     1 </code></pre>
+</div>
+</div>
+<p>The default procedure uses the KPSS p-value.</p>
+<p>The result is usually a small integer such as 0, 1, or 2.</p>
+</section>
+<section id="number-of-seasonal-differences-unitroot_nsdiffs" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="number-of-seasonal-differences-unitroot_nsdiffs"><span class="header-section-number">13.4</span> Number of seasonal differences: <code>unitroot_nsdiffs()</code></h2>
+<p><code>unitroot_nsdiffs()</code> similarly estimates the number of seasonal differences required.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>nsdiffs 
+      1 </code></pre>
+</div>
+</div>
+<p>The default approach uses seasonal strength from an STL decomposition rather than a formal seasonal unit-root test.</p>
+</section>
+</section>
+<section id="residual-autocorrelation-tests" class="level1" data-number="14">
+<h1 data-number="14"><span class="header-section-number">14</span> Residual autocorrelation tests</h1>
+<section id="boxpierce-box_pierce" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="boxpierce-box_pierce"><span class="header-section-number">14.1</span> Box–Pierce: <code>box_pierce()</code></h2>
+<p>The Box–Pierce test assesses whether a group of autocorrelations is jointly consistent with zero.</p>
+<p>It is commonly used as a diagnostic for model residuals.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  bp_stat bp_pvalue 
+ 129.4263    0.0000 </code></pre>
+</div>
+</div>
+</section>
+<section id="ljungbox-ljung_box" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="ljungbox-ljung_box"><span class="header-section-number">14.2</span> Ljung–Box: <code>ljung_box()</code></h2>
+<p>The Ljung–Box test is a modified version of the portmanteau test that generally has better small-sample behaviour than the original Box–Pierce statistic.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  lb_stat lb_pvalue 
+ 132.1415    0.0000 </code></pre>
+</div>
+</div>
+<p>These are better regarded as <strong>diagnostic tests</strong> than as intrinsic descriptive characteristics of a time series.</p>
+</section>
+</section>
+<section id="guerreros-method-guerrero" class="level1" data-number="15">
+<h1 data-number="15"><span class="header-section-number">15</span> Guerrero’s method: <code>guerrero()</code></h1>
+<p><code>guerrero()</code> is used to choose a Box–Cox transformation parameter.</p>
+<p>A Box–Cox transformation is</p>
+[ w_t =
+<span class="math display">\begin{cases}
+\dfrac{y_t^\lambda-1}{\lambda}, &amp; \lambda \ne 0,\\
+\log(y_t), &amp; \lambda = 0.
+\end{cases}</span>
+<p>]</p>
+<p>Guerrero’s method chooses () by seeking a transformation that makes the variability relatively stable across seasonal subseries.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>lambda_guerrero 
+      0.1107572 </code></pre>
+</div>
+</div>
+<p>This is therefore a feature-like numerical summary used to guide preprocessing rather than a direct description of the dynamics of the untransformed series.</p>
+</section>
+<section id="putting-the-features-together" class="level1" data-number="16">
+<h1 data-number="16"><span class="header-section-number">16</span> Putting the features together</h1>
+<p>A broad feature set can be extracted as follows:</p>
+<p>The result is a <strong>feature matrix</strong>, with one row for each time series.</p>
+<p>This representation can then be explored using ordinary multivariate methods.</p>
+<p>For example:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feasts_time_series_features_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Or the feature matrix can be standardised before applying dimension reduction or clustering:</p>
+</section>
+<section id="how-to-interpret-the-feature-space" class="level1" data-number="17">
+<h1 data-number="17"><span class="header-section-number">17</span> How to interpret the feature space</h1>
+<p>A feature vector should not be treated as an objective replacement for the original series.</p>
+<p>Two important considerations are:</p>
+<ol type="1">
+<li><p><strong>Features encode particular notions of similarity.</strong><br>
+Two series may have very different shapes but similar feature values, or look similar while differing on a feature that captures a property not obvious visually.</p></li>
+<li><p><strong>Many features are dependent on scale, decomposition choices, or tuning parameters.</strong><br>
+For example, STL features depend on the seasonal period; tiled features depend on window size; shift features depend on the sliding-window size.</p></li>
+</ol>
+<p>For exploratory analysis, it is therefore useful to combine:</p>
+<ul>
+<li>feature-space visualisation;</li>
+<li>plots of representative original time series;</li>
+<li>knowledge of the data-generating context;</li>
+<li>sensitivity to the feature definitions and tuning parameters.</li>
+</ul>
+</section>
+<section id="a-compact-feature-dictionary" class="level1" data-number="18">
+<h1 data-number="18"><span class="header-section-number">18</span> A compact feature dictionary</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>trend_strength</code></td>
+<td>Strength of the STL trend, from 0 to 1</td>
+</tr>
+<tr class="even">
+<td><code>seasonal_strength_*</code></td>
+<td>Strength of an STL seasonal component, from 0 to 1</td>
+</tr>
+<tr class="odd">
+<td><code>seasonal_peak_*</code></td>
+<td>Position of the seasonal peak</td>
+</tr>
+<tr class="even">
+<td><code>seasonal_trough_*</code></td>
+<td>Position of the seasonal trough</td>
+</tr>
+<tr class="odd">
+<td><code>spikiness</code></td>
+<td>Variation in the estimated remainder variance</td>
+</tr>
+<tr class="even">
+<td><code>linearity</code></td>
+<td>Linear component of the estimated trend</td>
+</tr>
+<tr class="odd">
+<td><code>curvature</code></td>
+<td>Quadratic component of the estimated trend</td>
+</tr>
+<tr class="even">
+<td><code>stl_e_acf1</code></td>
+<td>Lag-1 autocorrelation of the STL remainder</td>
+</tr>
+<tr class="odd">
+<td><code>stl_e_acf10</code></td>
+<td>Squared autocorrelation summary of the STL remainder</td>
+</tr>
+<tr class="even">
+<td><code>acf1</code></td>
+<td>Lag-1 autocorrelation</td>
+</tr>
+<tr class="odd">
+<td><code>acf10</code></td>
+<td>Squared autocorrelation summary over early lags</td>
+</tr>
+<tr class="even">
+<td><code>diff1_acf1</code></td>
+<td>Lag-1 autocorrelation after first differencing</td>
+</tr>
+<tr class="odd">
+<td><code>diff1_acf10</code></td>
+<td>Autocorrelation summary after first differencing</td>
+</tr>
+<tr class="even">
+<td><code>diff2_acf1</code></td>
+<td>Lag-1 autocorrelation after second differencing</td>
+</tr>
+<tr class="odd">
+<td><code>diff2_acf10</code></td>
+<td>Autocorrelation summary after second differencing</td>
+</tr>
+<tr class="even">
+<td><code>season_acf</code></td>
+<td>Autocorrelation at the first seasonal lag</td>
+</tr>
+<tr class="odd">
+<td><code>pacf5</code></td>
+<td>Squared PACF summary over the first five lags</td>
+</tr>
+<tr class="even">
+<td><code>diff1_pacf5</code></td>
+<td>PACF summary after first differencing</td>
+</tr>
+<tr class="odd">
+<td><code>diff2_pacf5</code></td>
+<td>PACF summary after second differencing</td>
+</tr>
+<tr class="even">
+<td><code>season_pacf</code></td>
+<td>PACF at the first seasonal lag</td>
+</tr>
+<tr class="odd">
+<td><code>n_crossing_points</code></td>
+<td>Number of crossings of the median</td>
+</tr>
+<tr class="even">
+<td><code>longest_flat_spot</code></td>
+<td>Longest run within one of ten value intervals</td>
+</tr>
+<tr class="odd">
+<td><code>coef_hurst</code></td>
+<td>Hurst coefficient / persistence measure</td>
+</tr>
+<tr class="even">
+<td><code>stability</code></td>
+<td>Variance of tiled local means</td>
+</tr>
+<tr class="odd">
+<td><code>lumpiness</code></td>
+<td>Variance of tiled local variances</td>
+</tr>
+<tr class="even">
+<td><code>shift_level_max</code></td>
+<td>Largest local mean shift</td>
+</tr>
+<tr class="odd">
+<td><code>shift_level_index</code></td>
+<td>Location of the largest level shift</td>
+</tr>
+<tr class="even">
+<td><code>shift_var_max</code></td>
+<td>Largest local variance shift</td>
+</tr>
+<tr class="odd">
+<td><code>shift_var_index</code></td>
+<td>Location of the largest variance shift</td>
+</tr>
+<tr class="even">
+<td><code>shift_kl_max</code></td>
+<td>Largest local KL-divergence shift</td>
+</tr>
+<tr class="odd">
+<td><code>shift_kl_index</code></td>
+<td>Location of the largest distributional shift</td>
+</tr>
+<tr class="even">
+<td><code>spectral_entropy</code></td>
+<td>Dispersion of spectral energy across frequencies</td>
+</tr>
+<tr class="odd">
+<td><code>zero_run_mean</code></td>
+<td>Average spacing between non-zero observations</td>
+</tr>
+<tr class="even">
+<td><code>nonzero_squared_cv</code></td>
+<td>Squared CV of non-zero observations</td>
+</tr>
+<tr class="odd">
+<td><code>zero_start_prop</code></td>
+<td>Proportion in the initial zero run</td>
+</tr>
+<tr class="even">
+<td><code>zero_end_prop</code></td>
+<td>Proportion in the final zero run</td>
+</tr>
+<tr class="odd">
+<td><code>arch_lm</code></td>
+<td>ARCH-type dependence in squared observations</td>
+</tr>
+<tr class="even">
+<td><code>kpss_stat</code> / <code>kpss_pvalue</code></td>
+<td>KPSS stationarity diagnostic</td>
+</tr>
+<tr class="odd">
+<td><code>pp_stat</code> / <code>pp_pvalue</code></td>
+<td>Phillips–Perron unit-root diagnostic</td>
+</tr>
+<tr class="even">
+<td><code>ndiffs</code></td>
+<td>Number of ordinary differences indicated</td>
+</tr>
+<tr class="odd">
+<td><code>nsdiffs</code></td>
+<td>Number of seasonal differences indicated</td>
+</tr>
+<tr class="even">
+<td><code>bp_stat</code> / <code>bp_pvalue</code></td>
+<td>Box–Pierce residual autocorrelation diagnostic</td>
+</tr>
+<tr class="odd">
+<td><code>lb_stat</code> / <code>lb_pvalue</code></td>
+<td>Ljung–Box residual autocorrelation diagnostic</td>
+</tr>
+<tr class="even">
+<td><code>lambda_guerrero</code></td>
+<td>Box–Cox parameter selected by Guerrero’s method</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="practical-cautions" class="level1" data-number="19">
+<h1 data-number="19"><span class="header-section-number">19</span> Practical cautions</h1>
+<section id="features-are-not-automatically-comparable" class="level2" data-number="19.1">
+<h2 data-number="19.1" class="anchored" data-anchor-id="features-are-not-automatically-comparable"><span class="header-section-number">19.1</span> Features are not automatically comparable</h2>
+<p>Some features are bounded and naturally comparable, while others depend on the scale of the original series.</p>
+<p>For example, <code>trend_strength</code> is bounded between 0 and 1, whereas <code>linearity</code> is not a scale-free quantity.</p>
+<p>Before clustering or computing distances between feature vectors, it is usually sensible to inspect the feature distributions and standardise appropriate variables.</p>
+</section>
+<section id="the-seasonal-period-matters" class="level2" data-number="19.2">
+<h2 data-number="19.2" class="anchored" data-anchor-id="the-seasonal-period-matters"><span class="header-section-number">19.2</span> The seasonal period matters</h2>
+<p>Several features depend explicitly on <code>.period</code>.</p>
+<p>For example:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      trend_strength seasonal_strength_12     seasonal_peak_12 
+           0.9909550            0.9406725            7.0000000 
+  seasonal_trough_12            spikiness            linearity 
+          11.0000000            3.0277699         1325.3317266 
+           curvature           stl_e_acf1          stl_e_acf10 
+         131.0646804            0.5091751            0.9303664 </code></pre>
+</div>
+</div>
+<p>and</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>     trend_strength seasonal_strength_6     seasonal_peak_6   seasonal_trough_6 
+          0.9724289           0.5264522           1.0000000           5.0000000 
+          spikiness           linearity           curvature          stl_e_acf1 
+         30.2808961        1327.3029759         126.0163956           0.5386102 
+        stl_e_acf10 
+          1.7831103 </code></pre>
+</div>
+</div>
+<p>describe different decompositions.</p>
+<p>The seasonal period should therefore be based on the temporal structure of the data rather than selected simply to make a feature extraction call run.</p>
+</section>
+<section id="missing-values-matter" class="level2" data-number="19.3">
+<h2 data-number="19.3" class="anchored" data-anchor-id="missing-values-matter"><span class="header-section-number">19.3</span> Missing values matter</h2>
+<p>Some features require contiguous observations or use specific handling of missing values. Before extracting a large feature set, it is worth checking missingness and the effective length of each series.</p>
+</section>
+<section id="feature-extraction-is-exploratory" class="level2" data-number="19.4">
+<h2 data-number="19.4" class="anchored" data-anchor-id="feature-extraction-is-exploratory"><span class="header-section-number">19.4</span> Feature extraction is exploratory</h2>
+<p>A feature such as <code>trend_strength = 0.8</code> does <strong>not</strong> mean that an 80% probability of a trend has been established.</p>
+<p>Likewise, a high <code>spectral_entropy</code> is not a hypothesis test.</p>
+<p>The numerical values describe properties induced by particular algorithms and definitions.</p>
+</section>
+</section>
+<section id="suggested-workflow-for-teaching-or-exploratory-analysis" class="level1" data-number="20">
+<h1 data-number="20"><span class="header-section-number">20</span> Suggested workflow for teaching or exploratory analysis</h1>
+<p>A useful teaching sequence is:</p>
+<ol type="1">
+<li><strong>Plot the original series.</strong></li>
+<li><strong>Identify plausible temporal structure</strong>: trend, seasonality, changing variance, intermittency and dependence.</li>
+<li><strong>Extract a small set of interpretable features.</strong></li>
+<li><strong>Visualise the feature distributions.</strong></li>
+<li><strong>Explore relationships among features.</strong></li>
+<li><strong>Use dimension reduction or clustering if there are many series.</strong></li>
+<li><strong>Return to the original time series to interpret interesting groups or outliers.</strong></li>
+</ol>
+<p>This makes the feature vector a bridge between <strong>time-series graphics and multivariate exploratory analysis</strong>, rather than treating feature extraction as an end in itself.</p>
+</section>
+<section id="references" class="level1" data-number="21">
+<h1 data-number="21"><span class="header-section-number">21</span> References</h1>
+<p>The <code>feasts</code> package documentation and source code provide the authoritative definitions of the implemented features. The feature framework is closely related to the feature-based time-series analysis literature developed by Hyndman and collaborators.</p>
+<p>For the theoretical background to the STL features, see Hyndman and Athanasopoulos, <em>Forecasting: Principles and Practice</em>, section on measuring trend and seasonality strength.</p>
+<p>For intermittent-demand features, see Kostenko and Hyndman (2006).</p>
+<p>For spectral entropy, see Gibson and Jung (2006) and Goerg (2013).</p>
+<p>For the broader feature-based approach, see Hyndman’s discussion of feature-based time-series analysis.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ddde\.numbat\.space");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -2,15 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ddde.numbat.space/week9/worksheet.html</loc>
-    <lastmod>2025-09-23T06:28:54.580Z</lastmod>
+    <lastmod>2026-09-27T06:33:39.529Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week9/worksheetsol.html</loc>
-    <lastmod>2025-09-23T06:28:54.580Z</lastmod>
+    <lastmod>2026-09-27T06:33:39.529Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week9/slides.html</loc>
-    <lastmod>2025-09-23T06:36:11.669Z</lastmod>
+    <lastmod>2026-09-27T06:30:11.821Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ddde.numbat.space/week9/feasts_time_series_features.html</loc>
+    <lastmod>2026-09-27T03:54:11.275Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week8/worksheet.html</loc>
@@ -245,15 +249,19 @@
     <lastmod>2025-09-22T00:50:39.179Z</lastmod>
   </url>
   <url>
+    <loc>https://ddde.numbat.space/week9/feasts-features.html</loc>
+    <lastmod>2026-09-27T04:47:16.892Z</lastmod>
+  </url>
+  <url>
     <loc>https://ddde.numbat.space/week9/index.html</loc>
-    <lastmod>2025-09-22T00:50:39.200Z</lastmod>
+    <lastmod>2026-09-27T06:53:43.098Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week9/tutorialsol.html</loc>
-    <lastmod>2025-09-24T09:33:12.389Z</lastmod>
+    <lastmod>2026-09-27T06:49:07.404Z</lastmod>
   </url>
   <url>
     <loc>https://ddde.numbat.space/week9/tutorial.html</loc>
-    <lastmod>2025-09-24T09:33:12.389Z</lastmod>
+    <lastmod>2026-09-27T06:49:07.404Z</lastmod>
   </url>
 </urlset>

@@ -20,25 +20,27 @@ format:
     height: 900
     margin: 0.05
     embed-resources: true
+    code-fold: true
 ---
 
-```{r, include = FALSE, echo=FALSE}
+```{r}
+#| label: setup
+#| include: false
+#| echo: false
 source("../setup.R")
 ```
 
 ## Outline
 
-- What is temporal data?
 - What is exploratory temporal data analysis?
-- Using temporal objects in R: `tsibble`
-- Data wrangling: aggregation, creating temporal components, missing values
-- Plotting conventions: connect the dots; aspect ratio, landscape or portrait
+- Using temporal objects in R: `tsibble`, and data wrangling
 - Calendar plots: arranging daily records into a calendar format
 - Visual inference for temporal data
 - tignostics: cognostics for temporal data
-- Interactive graphics for temporal data
 - Exploring longitudinal data, with the `brolgar` package
-
+- Changing focus: swapping space and time
+- Inference for spatial trends
+- Working with spatial polygon data
 
 ## Philosophy
 
@@ -72,6 +74,7 @@ Exploratory temporal analysis involves exploring and discovering temporal trend,
 ::: {.column}
 
 ```{r}
+#| label: co2-data-prep
 #| eval: false
 #| echo: false
 CO2.ptb <- read.table("https://scrippsco2.ucsd.edu/assets/data/atmospheric/stations/merged_in_situ_and_flask/monthly/monthly_merge_co2_ptb.csv", sep=",", skip=69)
@@ -115,7 +118,7 @@ p1 + p2 + plot_layout(ncol=1)
 :::
 ::::
 
-## `tsibble`: R temporal object {background-image="https://tsibble.tidyverts.org/reference/figures/logo.png" background-position="5% 15%" background-size="10%"}
+## `tsibble`: R temporal object {background-image="https://tsibble.tidyverts.org/reference/figures/logo.png" background-position="5% 20%" background-size="10%"}
 
 <br><br><br><br>
 The `tsibble` package provides a data infrastructure for tidy temporal data with wrangling tools. Adapting the tidy data principles, `tsibble` is a data- and model-oriented object. In `tsibble`:
@@ -184,7 +187,7 @@ For the airlines data, you can aggregate by multiple quantities, eg number of ar
 The US flights data already has some temporal components created, so aggregating by these is easy. Here is departure delay.
 
 ```{r}
-#| code-fold: true
+#| label: dep-delay-month
 flights_mth <- flights_ts |> 
   as_tibble() |>
   group_by(month, origin) |>
@@ -206,7 +209,7 @@ ggplot(flights_mth, aes(x=month, y=dep_delay, colour=origin)) +
 Aggregate by month, but examine arrival delays.
 
 ```{r}
-#| code-fold: true
+#| label: arr-delay-month
 flights_mth_arr <- flights_ts |> 
   as_tibble() |>
   group_by(month, origin) |>
@@ -233,7 +236,7 @@ ggplot(flights_mth_arr, aes(x=month, y=arr_delay, colour=origin)) +
 Week day vs weekend would be expected to have different patterns of delay, but this is not provided. 
 
 ```{r}
-#| code-fold: true
+#| label: weekday-delay
 #| fig-height: 8
 #| fig-width: 5
 #| out-width: 48%
@@ -259,7 +262,7 @@ ggplot(flights_wk, aes(x=wday, y=dep_delay, fill=weekend)) +
 Be careful of times!
 
 ```{r}
-#| code-fold: true
+#| label: airtime-check
 flights_airtm <- flights |>
   mutate(dep_min = dep_time %% 100,
          dep_hr = dep_time %/% 100,
@@ -273,7 +276,8 @@ flights_airtm <- flights |>
 
 fp <- flights_airtm |> 
   sample_n(3000) |>
-  ggplot(aes(x=air_time, y=air_time2, label = paste(origin, dest))) + 
+  mutate(oridst = paste(origin, dest)) |>
+  ggplot(aes(x=air_time, y=air_time2, label = oridst)) + 
     geom_abline(intercept=0, slope=1) +
     geom_point()
 ggplotly(fp, width=500, height=500)
@@ -418,7 +422,7 @@ harvest_nomiss
 
 ## 📊
 
-```{r CO2_ratio, fig.width=12, fig.height=7, out.width="80%"}
+```{r fig.width=12, fig.height=7, out.width="80%"}
 #| label: CO2-ratio
 #| fig-width: 12
 #| fig-height: 7
@@ -588,7 +592,6 @@ From ChatGPT:
 
 ```{r}
 #| label: lm-lineup
-#| code-fold: true
 #| fig-width: 10
 #| fig-height: 5
 #| out-width: 100%
@@ -641,64 +644,100 @@ ggplot(p_bourke_lineup,
 :::
 ::::
 
-## Association: permutation
+## Activity: Association via permutation {.activity-slide}
 
-:::: {.columns}
-::: {.column width=70%}
+::: {.small}
+
+This lineup permutes `origin` on `flights_mth`, to assess whether the delays are worse at some origins than others. 
+
+1. Pick the plot with the most difference between origins
+2. This NOT valid for testing "no association between `origin` and `dep_delay`". Why?
+:::
+
+
+```{r}
+#| echo: false
+countdown::countdown(8, 06)
+```
+
+::: {.panel-tabset}
+
+## Lineup: wrong
 
 ```{r}
 #| label: NYC-lineup
-#| code-fold: true
-#| fig-width: 10
-#| fig-height: 5
+#| fig-width: 14
+#| fig-height: 3
 #| out-width: 100%
 set.seed(514)
-ggplot(lineup(null_permute("origin"), true=flights_mth, n=12), 
+ggplot(lineup(null_permute("origin"), true=flights_mth, n=14), 
        aes(x=month, y=dep_delay, colour=origin)) +
   geom_point() +
   geom_smooth(se=F) +
-  facet_wrap(~.sample, ncol=4) +
+  facet_wrap(~.sample, ncol=7) +
   theme(aspect.ratio = 0.5, 
         legend.position = "none",
         axis.text = element_blank(),
         axis.title = element_blank())
 ```
+
+## right
 
 ```{r}
-#| eval: false
-#| echo: false
-# Correct code
-flights_mth_s1 <- flights_ts |> 
-  as_tibble() |>
-  group_by(month) |>
-  mutate(origin = sample(origin)) |>
-  ungroup() |>
-  group_by(month, origin) |>
-  summarise(dep_delay = mean(dep_delay, na.rm=TRUE)) |>
-  as_tsibble(key=origin, index=month)
+#| label: NYC-lineup-answer
+#| fig-width: 14
+#| fig-height: 3
+#| out-width: 100%
+# Correct code: permute origin on the raw flights, within each month,
+# then re-aggregate -- build the lineup by hand, one panel is the real data
+set.seed(514)
+pos <- sample(1:14)
+flights_lineup <- bind_cols(.sample = rep(pos[1], nrow(flights_mth)), 
+                             as_tibble(flights_mth))
+for (i in 1:13) {
+  flights_mth_s <- flights_ts |> 
+    as_tibble() |>
+    group_by(month) |>
+    mutate(origin = sample(origin)) |>
+    ungroup() |>
+    group_by(month, origin) |>
+    summarise(dep_delay = mean(dep_delay, na.rm=TRUE))
+  x <- bind_cols(.sample = rep(pos[i + 1], nrow(flights_mth_s)), 
+                 flights_mth_s)
+  flights_lineup <- bind_rows(flights_lineup, x)
+}
 
-ggplot(flights_mth_s1, 
+ggplot(flights_lineup, 
        aes(x=month, y=dep_delay, colour=origin)) +
   geom_point() +
   geom_smooth(se=F) +
+  facet_wrap(~.sample, ncol=7) +
   theme(aspect.ratio = 0.5, 
         legend.position = "none",
         axis.text = element_blank(),
         axis.title = element_blank())
 ```
-:::
-::: {.column width=30%}
 
-Break association between variables. Here `origin` is permuted which breaks association with `dep_delay`, while keeping `month` fixed.
-<br><br>
 
-*Which plot has the biggest difference between the three groups?*
+## explanation
+
+::: {style="font-size: 70%;"}
+
+`null_permute("origin")` shuffles the `origin` column across all 36 rows of the *already-aggregated* `flights_mth` table (it has no notion of `month` as a blocking variable). Two things go wrong at once:
+
+- **Wrong blocking**: a permuted `origin` label can now land on a completely different month's mean, when the only thing that should vary is which `origin` a flight belongs to *within* its own month.
+- **Wrong level of aggregation**: the 36 numbers being shuffled are already-computed monthly means. Relabelling them doesn't introduce any new sampling variability -- the same 36 values just get reassigned to different origins, so the nulls don't reflect the real variability that comes from ~336,000 individual flight-level delays.
+
+The correct permutation (`NYC-lineup-answer`) shuffles `origin` across the *individual flights within each month*, preserving the number of flights per origin per month, and only then re-computes the monthly averages. This reflects the null hypothesis -- "no association between `origin` and `dep_delay`" -- at the resolution the data was actually generated.
+
+General rule: permute at the same resolution as the original randomness in the data, before any aggregation or summarising -- not after.
+
 :::
-::::
+:::
 
 ## Tignostics {.transition-slide .center style="text-align: center;"}
 
-## `feasts`: time series features {background-image="https://feasts.tidyverts.org/reference/figures/logo.png" background-position="5% 15%" background-size="10%"}
+## `feasts`: time series features {background-image="https://feasts.tidyverts.org/reference/figures/logo.png" background-position="5% 20%" background-size="10%"}
 
 :::: {.columns}
 ::: {.column style="font-size: 80%;"}
@@ -726,9 +765,9 @@ Compute [tignostics]{.monash-blue2} for each series, for example,
 #| fig-width: 4
 #| fig-height: 4
 #| out-width: 80%
-#| code-fold: true
 tourism_feat <- tourism |>
-  features(Trips, feat_stl)
+  mutate(sTrips = (Trips - mean(Trips))/sd(Trips)) |>
+  features(sTrips, feat_stl)
 tourism_feat |>
   ggplot(aes(x = trend_strength, y = seasonal_strength_year)) +
   geom_point()  
@@ -737,6 +776,26 @@ tourism_feat |>
 :::
 ::::
 
+## STL decomposition–based features
+
+`feat_stl()`: Decomposes the series into trend $T_t$, seasonal $S_t$, and remainder $R_t$ using STL, then computes a set of descriptive statistics from those components.
+
+::: {.smallest}
+
+| Feature | Definition | Interpretation |
+|---|---|---|
+| `trend_strength` | $\max\left(0,\ 1 - \dfrac{\mathrm{Var}(R_t)}{\mathrm{Var}(T_t + R_t)}\right)$ | Close to 1 → strong, dominant trend |
+| `seasonal_strength` | $\max\left(0,\ 1 - \dfrac{\mathrm{Var}(R_t)}{\mathrm{Var}(S_t + R_t)}\right)$ | Close to 1 → strong, dominant seasonality |
+| `seasonal_peak` | Season (e.g. month/quarter) of the maximum of the seasonal component | Timing of the seasonal high point |
+| `seasonal_trough` | Season of the minimum of the seasonal component | Timing of the seasonal low point |
+| `spikiness` | Variance of the leave-one-out variances of $R_t$ | Large value → remainder dominated by a few big spikes |
+| `linearity` | Coefficient on a linear term from an orthogonal-polynomial regression fit to the trend | Positive → strongly increasing/decreasing trend |
+| `curvature` | Coefficient on a quadratic term from the same regression | Large magnitude → trend bends noticeably |
+| `stl_e_acf1` | First-lag autocorrelation of the remainder | High value → remainder is not white noise |
+| `stl_e_acf10` | Sum of squares of the first 10 remainder autocorrelations | High value → substantial leftover structure in the remainder |
+
+:::
+
 ## Interactivity {.transition-slide .center style="text-align: center;"}
 
 
@@ -744,28 +803,32 @@ tourism_feat |>
 
 ```{r}
 #| label: tsibbletalk1
-#| code-fold: true
 #| fig-height: 5
 #| fig-width: 10
 #| out-width: 100%
+# Click on lines or points to highlight
 tourism_shared <- tourism |>
   as_shared_tsibble(spec = (State / Region) * Purpose)
 
 tourism_feat <- tourism_shared |>
-  features(Trips, feat_stl)
+  mutate(sTrips = (Trips - mean(Trips))/sd(Trips)) |>
+  features(sTrips, feat_stl)
 
 p1 <- tourism_shared |>
   ggplot(aes(x = Quarter, y = Trips)) +
   geom_line(aes(group = Region), alpha = 0.5) +
+  geom_point(size = 0.01, alpha = 0) +
+  ylab("Trips") +
   facet_wrap(~ Purpose, scales = "free_y") 
 p2 <- tourism_feat |>
   ggplot(aes(x = trend_strength, y = seasonal_strength_year)) +
-  geom_point(aes(group = Region))
+  geom_point(aes(group = Region)) 
   
 subplot(
     ggplotly(p1, tooltip = "Region", width = 1400, height = 700),
     ggplotly(p2, tooltip = "Region", width = 1200, height = 600),
-    nrows = 1, widths=c(0.5, 0.5), heights=1) |>
+    nrows = 1, widths=c(0.5, 0.5), heights=1,
+    titleX = TRUE, titleY = TRUE) |>
   highlight(dynamic = FALSE)
   
 ```
@@ -878,7 +941,6 @@ Log(wages) of 888 individuals, measured at various times in their employment [US
 
 ```{r}
 #| label: wages-trend1  
-#| code-fold: true
 #| fig-width: 6
 #| fig-height: 4
 #| out-width: 100%
@@ -901,7 +963,6 @@ Wages tend to increase as time in the workforce gets longer, on average.
 
 ```{r}
 #| label: wages-trend2  
-#| code-fold: true
 #| fig-width: 8
 #| fig-height: 4
 #| out-width: 100%
@@ -944,7 +1005,6 @@ The higher the education level achieved, the higher overall wage, on average.
 
 ```{r}
 #| label: sample-n1
-#| code-fold: true
 set.seed(753)
 wages |>
   sample_n_keys(size = 10) |> 
@@ -963,7 +1023,6 @@ wages |>
 
 ```{r}
 #| label: sample-n2
-#| code-fold: true
 set.seed(749)
 wages |>
   sample_n_keys(size = 10) |> 
@@ -982,7 +1041,6 @@ wages |>
 
 ```{r}
 #| label: sample-n3
-#| code-fold: true
 set.seed(757)
 wages |>
   sample_n_keys(size = 10) |> 
@@ -1027,7 +1085,6 @@ Compute [longnostics]{.monash-blue2} for each subject, for example,
 
 ```{r}
 #| label: increasing
-#| code-fold: true
 wages_slope <- wages |>   
   add_n_obs() |>
   filter(n_obs > 4) |>
@@ -1055,7 +1112,6 @@ wages_slope |>
 
 ```{r}
 #| label: decreasing
-#| code-fold: true
 wages_slope |> 
   filter(.slope_xp < (-0.4)) |> 
   ggplot(aes(x = xp, 
@@ -1074,7 +1130,6 @@ wages_slope |>
 
 ```{r}
 #| label: small-sigma
-#| code-fold: true
 wages_spread |> 
   filter(sd < 0.1) |> 
   ggplot(aes(x = xp, 
@@ -1093,7 +1148,6 @@ wages_spread |>
 
 ```{r}
 #| label: large-sigma
-#| code-fold: true
 wages_spread |> 
   filter(sd > 0.8) |> 
   ggplot(aes(x = xp, 
@@ -1131,7 +1185,6 @@ Find those individuals who are [representative]{.monash-blue2} of the min, media
 
 ```{r}
 #| label: five-number
-#| code-fold: true
 #| fig-width: 8
 #| fig-height: 5
 wages_fivenum <- wages |>   
@@ -1171,7 +1224,6 @@ Summary of the fit
 
 ```{r}
 #| label: model-fit
-#| code-fold: true
 #| fig-width: 8
 #| fig-height: 4
 wages_fit_int <- 
@@ -1210,7 +1262,6 @@ Diagnosing the fit: each individual model
 
 ```{r}
 #| label: model-diag
-#| code-fold: true
 #| fig-width: 8
 #| fig-height: 7
 #| out-width: 80%
@@ -1230,6 +1281,1059 @@ wages_aug |> add_n_obs() |> filter(n_obs > 4) |>
 :::
 ::::
 
+## Spatiotemporal data {.transition-slide .center style="text-align: center;"}
+
+## Approach
+
+With spatiotemporal data, you need to be able to pivot to focus on (1) time, (2) space, and (3) both together, although this latter task is harder.
+
+The `cubble` object in the [cubble]() R package, makes these operations easier.
+
+## Example: Temperature change
+
+:::: {.columns}
+::: {.column style="font-size: 80%;"}
+
+6 years of monthly measurements of a 24x24 spatial grid from Central America collated by Paul Murrell, U. Auckland.
+
+```{r}
+#| label: nasa
+#| echo: false
+data(nasa)
+glimpse(nasa)
+```
+
+:::
+::: {.column style="font-size: 80%;"}
+
+::: {.fragment}
+
+```{r}
+#| label: cubble-object
+nasa_cb <- as_cubble(as_tibble(nasa), 
+                     key=id, 
+                     index=time, 
+                     coords=c(long, lat))
+nasa_cb
+```
+
+<img src="https://huizezhang-sherry.github.io/cubble/reference/figures/cubble-operations.png" style="width:500px">
+
+:::
+:::
+::::
+
+## Spatial and temporal
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| label: spatial
+#| fig-width: 6
+#| fig-height: 6
+#| out-width: 90%
+ggplot() + 
+  geom_point(data=nasa_cb, aes(x=long, y=lat)) +
+  geom_point(data=dplyr::filter(nasa_cb, 
+       id == "5-20"),
+       aes(x=long, y=lat),
+       colour="orange", size=4) +
+  geom_point(data=dplyr::filter(nasa_cb, 
+       id == "20-2"),
+       aes(x=long, y=lat),
+       colour="turquoise", size=4)
+```
+
+:::
+::: {.column}
+
+```{r}
+#| label: temporal
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: 90%
+nasa_cb_f <- nasa_cb |> 
+  face_temporal() 
+ggplot(nasa_cb_f) + 
+  geom_line(aes(x=date, 
+                 y=surftemp, 
+                 group=id), alpha=0.2) +
+  geom_line(data=filter(nasa_cb_f , 
+       id=="5-20"),
+       aes(x=date, 
+                 y=surftemp, 
+                 group=id),
+       colour="orange", linewidth=2) +
+  geom_line(data=filter(nasa_cb_f , 
+       id=="20-2"),
+       aes(x=date, 
+                 y=surftemp, 
+                 group=id),
+       colour="turquoise", linewidth=2) +
+  theme(aspect.ratio = 0.5)
+```
+
+:::
+::::
+
+## Pre-processing of time and space
+
+:::: {.columns}
+::: {.column}
+
+::: {.info}
+
+Think of time and space as ordered categorical variables.
+:::
+
+:::
+::: {.column}
+
+- Time may need to be converted to categories. 
+- Spatial variable *might* need to be discretised, or gridded.
+
+<br>
+This data is already gridded. Time is an integer from 1 to 72 (6 years of 12 months), as well as a date, and month and year. Space is a 24x24 grid of longitude and latitude, and also provided as an integer 1 to 24 in both x and y. 
+:::
+::::
+
+## Focus on spatial [(1/2)]{.smallest}
+
+::: {.panel-tabset}
+
+## 🖼️
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| label: raster
+#| fig-width: 6
+#| fig-height: 6
+#| out-width: 80%
+#| echo: false
+# Get the map
+sth_america <- map_data("world") |>
+  filter(between(long, -115, -53), between(lat, -20.5, 41))
+
+nasa_cb |> 
+  face_temporal() |>
+  filter(month == "Jan", year == 1995) |>
+  select(id, time, surftemp) |>
+  unfold(long, lat) |>
+  ggplot() + 
+  geom_tile(aes(x=long, y=lat, fill=surftemp)) +
+  geom_path(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            colour="white", linewidth=1) +
+  scale_fill_viridis_c("", option = "magma") +
+  ggtitle("January 1995") +
+  theme_map() +
+  theme(legend.position = "bottom", 
+        plot.title = element_text(size = 24)) 
+```
+
+:::
+::: {.column}
+
+<br><br>
+
+Slice one month, and show gridded temperatures as a tiled display on spatial coordinates.
+
+:::
+::::
+
+## Learn
+
+In January 2005, temperatures are
+
+- cool over land in the north 
+- cool over the Andes in south america
+- warm on the equator, and along the coastline
+
+There are 12*6=72 maps to make!! No problem. 
+
+
+## Code
+
+```{r}
+#| label: raster
+#| eval: false
+#| echo: true
+```
+
+:::
+
+
+## Focus on spatial [(2/2)]{.smallest}
+
+::: {.panel-tabset}
+
+## 🖼️
+
+```{r}
+#| label: space-time
+#| fig-width: 10
+#| fig-height: 6
+#| out-width: 75%
+#| echo: false
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
+  ggplot() + 
+  geom_tile(aes(x=long, y=lat, fill=surftemp)) +
+  facet_grid(year~month) +
+  scale_fill_viridis_c("", option = "magma") +
+  theme_map() +
+  theme(legend.position = "bottom") 
+```
+
+
+## Learn
+
+- Exploring spatial trend over time is obtained by .monash-blue2[faceting the maps by time].
+
+- Can you see El Nino in 1997? Can you see the summer vs winter in the different hemispheres?
+
+## Code
+
+```{r}
+#| label: space-time
+#| eval: false
+#| echo: true
+```
+
+:::
+
+## Focus on temporal [(1/4)]{.smallest}
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| label: time-space1
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 90%
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
+  ggplot() +
+    geom_polygon(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            fill="#014221", alpha=0.2, colour="#ffffff") +
+    cubble::geom_glyph_box(data=nasa, 
+                           aes(x_major = long, 
+                               x_minor = date,
+                               y_major = lat, 
+                               y_minor = surftemp), fill=NA) +
+    cubble::geom_glyph(data=nasa, 
+                       aes(x_major = long, 
+                           x_minor = date,
+                           y_major = lat, 
+                           y_minor = surftemp)) +
+    theme_map() 
+
+```
+
+:::
+::: {.column}
+
+::: {.info}
+A **glyphmap** shows a (small) time series at each spatial location.
+:::
+
+- Several [scaling choices]{.monash-blue2}: 
+    - [global]{.monash-blue2}: overall min and max used to scale all locations
+    - [local]{.monash-blue2}: each location scaled on it's own min/max 
+
+<br>
+
+- Global scale used here
+- Can see differences in the overall magnitude, particularly north to south.
+
+:::
+::::
+
+## Focus on temporal [(2/4)]{.smallest}
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| label: time-space2
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 90%
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
+  ggplot() +
+    geom_polygon(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            fill="#014221", alpha=0.2, colour="#ffffff") +
+    cubble::geom_glyph_box(data=nasa, 
+                           aes(x_major = long, 
+                               x_minor = date,
+                               y_major = lat, 
+                               y_minor = surftemp), fill=NA) +
+    cubble::geom_glyph(data=nasa, 
+                       aes(x_major = long, 
+                           x_minor = date,
+                           y_major = lat, 
+                           y_minor = surftemp), 
+                       global_rescale = FALSE) +
+    theme_map() 
+```
+:::
+::: {.column}
+
+- Note: Local scale used, min/max for each spatial location
+
+- El Nino year in equatorial region may be visible.
+- Notice also odd patterns on the west (Andes mountains) of South America.
+
+:::
+::::
+
+## Focus on temporal [(3/4)]{.smallest}
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| label: time-space3
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: 90%
+nasa_cb |> face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
+  ggplot() +
+    geom_polygon(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            fill="#014221", alpha=0.2, colour="#ffffff") +
+    cubble::geom_glyph(data=nasa, 
+                       aes(x_major = long, 
+                           x_minor = date,
+                           y_major = lat, 
+                           y_minor = surftemp), 
+                       global_rescale = FALSE,
+                       polar = TRUE) +
+    theme_map() 
+```
+:::
+::: {.column}
+
+- Note: Local scale used, min/max for each spatial location, and [polar coordinates]{.monash-blue2} used
+
+
+:::
+::::
+
+## Focus on temporal [(4/4)]{.smallest}
+
+:::: {.columns}
+::: {.column}
+
+```{r}
+#| label: time-space4
+#| fig-width: 6
+#| fig-height: 6
+#| out-width: 90%
+nasa_mth <- nasa_cb |> 
+  face_temporal() |>
+  select(id, time, month, year, surftemp) |>
+  unfold(long, lat) |>
+  as_tibble() |>
+  group_by(id, month) |>
+  dplyr::summarise(tmin = min(surftemp),
+            tmax = max(surftemp), 
+            long = min(long),
+            lat = min(lat)) |>
+  ungroup() |>
+  mutate(month = as.numeric(month))
+ggplot() +
+    geom_polygon(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            fill="#014221", alpha=0.2, colour="#ffffff") +
+    geom_glyph_ribbon(data = nasa_mth, 
+                      aes(x_major = long, 
+                          x_minor = month,
+                          y_major = lat, 
+                          ymin_minor = tmin,
+                          ymax_minor = tmax), 
+                          width = 2) +
+    theme_map() 
+```
+
+:::
+::: {.column}
+Seasonality can be the focus in the glyphs.
+
+Here monthly min and max temperature over the 6 years is shown, as ribbon glyphs. 
+:::
+::::
+
+## Activity: Adding interaction {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+1. Run the code below to link a map of the NASA grid locations to their surface temperature time series, the same way we linked the tourism panels earlier in the lecture.
+2. Click/brush a few points on the map -- does the corresponding time series highlight?
+3. Now click/brush a line on the time series panel instead -- does the corresponding point highlight on the map? 
+4. Can you find the spatial areas where El Nino occurs? Can you find any other strange temporal patterns at some locations?
+:::
+
+```{r}
+#| label: nasa-tsibbletalk-demo
+#| eval: false
+library(dplyr)
+library(ggplot2)
+library(tsibble)
+library(tsibbletalk)
+library(lubridate)
+library(plotly)
+sth_america <- map_data("world") |>
+  filter(between(long, -115, -53), between(lat, -20.5, 41))
+
+nasa_shared <- nasa |> 
+  mutate(date = ymd(date)) |>
+  select(long, lat, date, surftemp, id) |>
+  as_tsibble(index=date, key=id) |>
+  as_shared_tsibble()
+sp1 <- ggplot() +
+  geom_polygon(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            colour="#ffffff", alpha=0.2, fill="#014221") +
+  geom_point(data=nasa_shared, aes(x = long, 
+         y = lat, group = id)) 
+sp2 <- nasa_shared |>
+  ggplot(aes(x = date, y = surftemp)) +
+  geom_line(aes(group = id), alpha = 0.5) +
+  geom_point(size = 0.01, alpha = 0)
+subplot(
+    ggplotly(sp1, tooltip = "Region"),
+    ggplotly(sp2, tooltip = "Region"),
+    nrows = 1, widths=c(0.3, 0.7)) |>
+  highlight(dynamic = TRUE)
+```
+
+```{r}
+#| echo: false
+countdown::countdown(3, 28)
+```
+
+## Activity: Seasonal tignostics {.activity-slide}
+
+::: {.smaller}
+
+We are going to use tignostics to examine the seasonal troughs across locations:
+
+1. Build a tsibble from `nasa`, keyed by `id`, with a proper monthly time index (hint: combine `year` and `month` with `tsibble::yearmonth()`, since `time` alone is just an integer 1-72 and won't be recognised as an annual cycle).
+2. Compute `feat_stl` tignostics for `surftemp`, and keep the `id` and `seasonal_trough_year` columns.
+3. Join the tignostic back onto each location's coordinates, and map it, colouring points by `seasonal_trough_year`.
+4. Does the spatial pattern in the timing of the seasonal trough match what you'd expect, given latitude and hemisphere?
+
+:::
+
+
+```{r}
+#| echo: false
+countdown::countdown(3, 7)
+```
+
+::: {.panel-tabset}
+
+## Code
+
+```{r}
+#| label: nasa-trough-activity
+#| eval: false
+nasa_feat <- nasa |> 
+  mutate(yrmth = yearmonth(paste(year, month))) |>
+  as_tsibble(index = yrmth, key = id) |>
+  features(surftemp, feat_stl) |>
+  select(id, seasonal_trough_year)
+
+nasa_trough <- nasa |> 
+  distinct(id, long, lat) |> 
+  left_join(nasa_feat, by = "id")
+
+ggplot() +
+  geom_polygon(data = sth_america, 
+            aes(x = long, y = lat, group = group), 
+            fill = "#014221", alpha = 0.2, colour = "#ffffff") +
+  geom_point(data = nasa_trough, 
+             aes(x = long, y = lat, colour = factor(seasonal_trough_year))) +
+  scale_colour_viridis_d("month of\nseasonal trough") +
+  theme_map()
+```
+
+## Learn
+
+::: {.smaller}
+
+The map shows a fairly sharp split: locations in the north of the domain (roughly lat > 20, closer to the US/Mexico border) trough in Jan-Mar, matching Northern Hemisphere winter.
+
+The band nearer the equator and further south (lat < 0, towards Ecuador/Peru) troughs much later, around Oct-Dec -- not the Jun-Aug we'd expect from a simple hemisphere flip. This is a reminder that:
+
+- near the equator the annual temperature cycle is weak (low `seasonal_strength_year`), so a single "trough month" is less meaningful and more sensitive to other drivers, e.g. El Nino/ENSO, cloud cover, ocean currents
+- a tignostic is a useful *screening* tool for finding where patterns are worth a closer look, but it can be summarising a noisy or weak signal -- always check `seasonal_strength_year` (or just look at the series) before trusting `seasonal_trough_year` alone.
+
+:::
+:::
+
+## Inference for spatial trend
+
+
+```{r}
+#| label: spatial-inference-demo
+#| eval: false
+#| echo: false
+#| results: hide
+library(gstat)
+nasa_jan95 <- nasa |>
+  filter(year == 1995, month == "Jan") |>
+  select(id, long, lat, surftemp, cloudlow, cloudmid, cloudhigh, ozone)
+row.names(nasa_jan95) <- nasa_jan95[,1]
+nasa_jan95_sf <- SpatialPointsDataFrame(nasa_jan95[,2:3],
+                   nasa_jan95[,4:8])
+g <- gstat(formula = surftemp~1,
+           data=nasa_jan95_sf)
+plot(variogram(g))
+vgm1 <- variogram(surftemp~1, nasa_jan95_sf, cloud=TRUE)
+plot(vgm1)
+# Set up model
+vgm_mod <- vgm(psill=10, model = "Sph", range=20, nmax=60)
+g_dummy <- gstat(formula = surftemp~1, dummy=TRUE, beta=295,
+           data=nasa_jan95_sf, model=vgm_mod)
+g_null <- predict(g_dummy, nasa_jan95_sf, nsim=11)
+g_null_df1 <- tibble(long = g_null@coords[,1],
+                     lat = g_null@coords[,2],
+                     surftemp1 = g_null@data$sim1,
+                     surftemp2 = g_null@data$sim2,
+                     surftemp3 = g_null@data$sim3)
+p_data <- nasa_cb |> 
+  face_temporal() |>
+  filter(month == "Jan", year == 1995) |>
+  select(id, time, surftemp) |>
+  unfold(long, lat) |>
+  ggplot() + 
+  geom_tile(aes(x=long, y=lat, fill=surftemp)) +
+  geom_path(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            colour="white", linewidth=1) +
+  scale_fill_viridis_c("", option = "magma") +
+  #ggtitle("January 1995") +
+  theme_map() +
+  theme(legend.position = "bottom", 
+        plot.title = element_text(size = 24)) 
+p_null1 <- ggplot() +
+  geom_tile(data=g_null_df1, 
+            aes(x=long, y=lat, fill=surftemp1)) +
+  geom_path(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            colour="white", linewidth=1) +
+  scale_fill_viridis_c("", option = "magma") +
+  #ggtitle("January 1995") +
+  theme_map() +
+  theme(legend.position = "bottom", 
+        plot.title = element_text(size = 24)) 
+p_null2 <- ggplot() +
+  geom_tile(data=g_null_df1, 
+            aes(x=long, y=lat, fill=surftemp2)) +
+  geom_path(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            colour="white", linewidth=1) +
+  scale_fill_viridis_c("", option = "magma") +
+  #ggtitle("January 1995") +
+  theme_map() +
+  theme(legend.position = "bottom", 
+        plot.title = element_text(size = 24)) 
+p_null3 <- ggplot() +
+  geom_tile(data=g_null_df1, 
+            aes(x=long, y=lat, fill=surftemp3)) +
+  geom_path(data=sth_america, 
+            aes(x=long, y=lat, group=group), 
+            colour="white", linewidth=1) +
+  scale_fill_viridis_c("", option = "magma") +
+  #ggtitle("January 1995") +
+  theme_map() +
+  theme(legend.position = "bottom", 
+        plot.title = element_text(size = 24)) 
+p_data + p_null1 + p_null2 + p_null3 + plot_layout(ncol=2)
+```
+
+:::: {.columns}
+::: {.column style="font-size: 80%;"}
+
+```{r toy-spatial, out.width = "80%"}
+#| code-summary: generate-data
+#| results: hide
+# Set up a simple example
+set.seed(945)
+x <- 1:24
+y <- 1:24
+xy <- expand.grid(x, y)
+d <- tibble(x=xy$Var1, y=xy$Var2) |>
+  mutate(v = x+2*y) 
+d_sf <- SpatialPointsDataFrame(d[,1:2],
+                   data.frame(d[,3]))
+vgm_mod <- vgm(psill=5, model = "Sph", range=20, nmax=30)
+d_dummy <- gstat(formula = v~1, dummy=TRUE, beta=0,
+           model=vgm_mod)
+d_err <- predict(d_dummy, d_sf, nsim=1)
+d <- d |>
+  mutate(e = d_err@data$sim1*3) |>
+  mutate(ve = v+e)
+```
+
+```{r}
+#| label: plot-simple example
+#| code-summary: plot
+#| fig-width: 12
+#| fig-height: 4
+#| out-width: 100%
+obs <- ggplot(d, aes(x, y, fill = ve)) +
+  geom_tile() +
+  scale_fill_viridis_c("") +
+  theme(aspect.ratio = 1) +
+  ggtitle("Observed") +
+  theme(legend.position = "none",
+              axis.text = element_blank(),
+              axis.title = element_blank())
+trend <- ggplot(d, aes(x, y, fill = v)) +
+  geom_tile() +
+  scale_fill_viridis_c("", option = "magma") +
+  theme(aspect.ratio = 1) +
+  ggtitle("Trend") +
+  theme(legend.position = "none",
+              axis.text = element_blank(),
+              axis.title = element_blank())
+err <- ggplot(d, aes(x, y, fill = e)) +
+  geom_tile() +
+  scale_fill_distiller("", palette = "PRGn") +
+  theme(aspect.ratio = 1) +
+  ggtitle("Residual") +
+  theme(legend.position = "none",
+              axis.text = element_blank(),
+              axis.title = element_blank())
+obs + trend + err + plot_layout(ncol=3)
+```
+
+:::
+::: {.column}
+
+::: {.fragment}
+
+Generate nulls by simulating from the spatial dependence model
+
+```{r}
+#| label: gen-nulls
+#| code-summary: generate-nulls
+#| results: hide
+#| fig-width: 9
+#| fig-height: 6
+#| out-width: 100%
+set.seed(953)
+d_null <- predict(d_dummy, d_sf, nsim=5)
+pos <- sample(1:6, 1)
+lineup_plots <- list()
+j <- 1
+for (i in 1:6) {
+  if (pos == i) { # plot data
+    p <- ggplot(d, aes(x, y, fill = scale(ve))) +
+           geom_tile() 
+  } 
+  else { # plot nulls
+    null_df <- tibble(x=d$x, y=d$y, v=d_null@data[,j])
+    p <- ggplot(null_df, aes(x, y, fill = scale(v))) +
+           geom_tile() 
+   j <- j + 1
+  }
+  p <- p +
+        scale_fill_viridis_c("", option = "magma") +
+        theme(legend.position = "none",
+              axis.text = element_blank(),
+              axis.title = element_blank())
+    
+  lineup_plots[[paste(i)]] <- p
+}
+wrap_plots(lineup_plots, ncol = 3)
+```
+:::
+
+:::
+::::
+
+## Spatial data needs maps {.transition-slide .center style="text-align: center;"}
+
+## Spatial polygon data
+
+::: {style="font-size: 60%;"}
+```{r}
+#| label: world-map-table
+#| echo: false
+world_map <- map_data("world")
+world_map |> 
+  filter(region %in% c("Australia", "New Zealand")) |> 
+      DT::datatable(width=1150, height=100)
+```
+:::
+
+## Spatial polygon data
+
+```{r}
+#| label: mappolygon
+#| fig-width: 12
+#| fig-height: 4
+#| out-width: 100%
+oz <- world_map |> 
+  filter(region == "Australia") |>
+  filter(lat > -50)
+m1 <- ggplot(oz, aes(x = long, y = lat)) + 
+  geom_point(size=0.2) + #<<
+  coord_map() +
+  ggtitle("Points")
+m2 <- ggplot(oz, aes(x = long, y = lat, 
+               group = group)) + #<<
+  geom_path() + #<<
+  coord_map() +
+  ggtitle("Path")
+m3 <- ggplot(oz, aes(x = long, y = lat, 
+               group = group)) + #<<
+  geom_polygon(fill = "#607848", colour = "#184848") + #<<
+  coord_map() +
+  ggtitle("Filled polygon")
+m1 + m2 + m3
+```
+
+::: {.info}
+Spatial polygon data, includes measured values (variables) associated with a spatial polygon. 
+:::
+
+
+## Spatial polygon data 
+
+::: {.info}
+`sf`: Simple spatial polygon objects in R
+:::
+
+Has a [coordinate system]{.monash-blue2} (projection), and bounding box. Supports [technically accurate distance calculations]{.monash-blue2} between coordinates (on a sphere).
+
+<br>
+
+::: {style="font-size: 70%;"}
+```{r}
+#| label: sfobject
+#| echo: false
+#| results: hide
+library(sf)
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
+nc |> slice_head(n=5) 
+```
+:::
+
+::: {.info}
+STEP 1: Thin your map!
+:::
+
+Most spatial polygon data is large, with high resolution on the polygons.
+
+This makes them SLOW to plot.
+
+For data analysis needs fast plotting, and resolution can be smaller.
+
+`rmapshaper::ms_simplify()` is the best function.
+
+## Activity: thinning map data {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+We are going to look at the effect of thinning a spatial polygon data set, in terms of time to draw and appearance of the map. 
+
+1. Download the postcode shape file from [ABS](https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-3-july-2021-june-2026/access-and-downloads/digital-boundary-files/POA_2021_AUST_GDA2020_SHP.zip)
+2. Unzip it, to get a folder `data/POA_2021_AUST_GDA2020_SHP/`
+3. Run the code to use `rmapshaper::ms_simplify()` to thin the map, compute the object sizes, time to draw, and make the plots.
+4. How much smaller is the map after thinning? How much difference in time to plot? Can you see a difference between the two maps?
+:::
+
+
+```{r}
+#| echo: false
+countdown::countdown(5, 45)
+```
+
+::: {.panel-tabset}
+
+## Code
+
+```{r}
+#| label: thin-nsw-postcode
+#| eval: false
+# 1. Read data
+poa <- st_read("data/POA_2021_AUST_GDA2020_SHP/POA_2021_AUST_GDA2020.shp")
+poa_nsw <- poa |>
+  filter(!is.na(suppressWarnings(as.numeric(POA_CODE21)))) |>
+  filter(as.numeric(POA_CODE21) >= 1000 & as.numeric(POA_CODE21) <= 2999) |>
+  filter(!POA_CODE21 %in% c("2898", "2899")) # drop Lord Howe & Norfolk Island
+nrow(poa_nsw)          # sanity check on feature count
+object.size(poa_nsw)   # size of the full-resolution object
+
+# 2. Simplify with rmapshaper ------------------------------------------
+# keep = fraction of vertices to retain (0.05 = keep 5%, aggressive simplification)
+poa_nsw_simplified <- ms_simplify(poa_nsw, keep = 0.01, keep_shapes = TRUE)
+
+object.size(poa_nsw_simplified)  # compare size
+
+# 3. Time the plotting ---------------------------------------------------
+# Use a fresh graphics device each time so rendering isn't cached/reused
+time_full <- system.time({
+  ggplot(poa_nsw) +
+    geom_sf(colour = "white", fill = "grey70") +
+    theme_map()
+})
+time_full
+
+time_simplified <- system.time({
+  ggplot(poa_nsw_simplified) +
+    geom_sf(colour = "white", fill = "grey70") +
+    theme_map()
+})
+
+time_simplified
+
+```
+
+## Plot
+
+```{r}
+#| label: plot-nsw-postcode
+#| eval: false
+#| fig-width: 8
+#| fig-height: 8
+
+mp1 <- ggplot(poa_nsw) +
+    geom_sf(colour = "white", fill = "grey70") +
+    ggtitle("Full") +
+    theme_map()
+
+mp2 <- ggplot(poa_nsw_simplified) +
+    geom_sf(colour = "white", fill = "grey70") +
+    ggtitle("Simplified") +
+    theme_map()
+
+mp1 + mp2 + plot_layout(ncol=2)
+```
+
+:::
+
+## Choropleth maps
+
+:::: {.columns}
+::: {.column style="font-size: 80%;"}
+
+A choropleth map is used to show a [measured variable]{.monash-blue2} associated with a political or geographic [region]{.monash-blue2}. Polygons for the region are filled with colour. 
+
+The purpose is to examine the spatial distribution of a variable.
+
+
+```{r}
+#| label: setup-choro
+#| echo: false
+library(sf)
+library(sugarbag)
+
+invthm <- theme_map() + 
+  theme(
+    panel.background = element_rect(fill = "black", colour = NA), 
+    plot.background = element_rect(fill = "black", colour = NA),
+    legend.background = element_rect(fill = "transparent", colour = NA),
+    legend.key = element_rect(fill = "transparent", colour = NA),
+    text = element_text(colour = "white"),
+    axis.text = element_blank()
+  )
+
+# function to allocate colours to regions
+aus_colours <- function(sir_p50){
+  value <- case_when(
+    sir_p50 <  0.74 ~ "#33809d",
+    sir_p50 >= 0.74 & sir_p50 < 0.98 ~ "#aec6c7",
+    sir_p50 >= 0.98 & sir_p50 < 1.05 ~ "#fff4bc",
+    sir_p50 >= 1.05 & sir_p50 < 1.45 ~ "#ff9a64",
+    sir_p50 >= 1.45 ~ "#ff3500",
+    TRUE ~ "#FFFFFF")
+  return(value)
+}
+```
+
+```{r }
+#| label: thyroiddata
+#| eval: false
+sa2 <- strayr::read_absmap("sa22011") |> 
+  filter(!st_is_empty(geometry)) |> 
+  filter(!state_name_2011 == "Other Territories") |> 
+  filter(!sa2_name_2011 == "Lord Howe Island")
+sa2 <- sa2 |> rmapshaper::ms_simplify(keep = 0.5, keep_shapes = TRUE) # Simplify the map!!!
+SIR <- read_csv(here::here("data/SIR Downloadable Data.csv")) |> 
+  filter(SA2_name %in% sa2$sa2_name_2011) |> 
+  dplyr::select(Cancer_name, SA2_name, Sex_name, p50) |> 
+  filter(Cancer_name == "Thyroid", Sex_name == "Females")
+ERP <- read_csv(here::here("data/ERP.csv")) |>
+  filter(REGIONTYPE == "SA2", Time == 2011, Region %in% SIR$SA2_name) |> 
+  dplyr::select(Region, Value)
+# Alternative maps
+# Join with sa2 sf object
+sa2thyroid_ERP <- SIR |> 
+  left_join(sa2, ., by = c("sa2_name_2011" = "SA2_name")) |>
+  left_join(., ERP |> 
+              dplyr::select(Region, 
+              Population = Value), by = c("sa2_name_2011"= "Region")) |> 
+  filter(!st_is_empty(geometry))
+sa2thyroid_ERP <- sa2thyroid_ERP |> 
+  #filter(!is.na(Population)) |> 
+  filter(!sa2_name_2011 == "Lord Howe Island") |> 
+  mutate(SIR = map_chr(p50, aus_colours)) |> 
+  st_as_sf() 
+save(sa2, file="data/sa2.rda")
+save(sa2thyroid_ERP, file="data/sa2thyroid_ERP.rda")
+```
+
+:::
+::: {.column style="font-size: 80%;"}
+
+```{r}
+#| label: choro
+#| fig-width: 10
+#| fig-height: 8
+#| out-width: 100%
+# Plot the choropleth
+load("../data/sa2thyroid_ERP.rda")
+aus_ggchoro <- ggplot(sa2thyroid_ERP) + 
+  geom_sf(aes(fill = SIR), size = 0.1) + 
+  scale_fill_identity() + invthm
+aus_ggchoro
+```
+
+:::
+::::
+
+## The problem with choropleth maps
+
+The problem is that [high density population areas may be very small geographically]{.monash-blue2}. They can [disappear]{.monash-orange2} in a choropleth map, which means that we get a biased sense of the spatial distribution of a variable.
+
+
+## Cartograms
+
+:::: {.columns}
+::: {.column}
+
+A [cartogram](https://www.r-graph-gallery.com/cartogram.html) transforms the [geographic shape to match the value of a statistic or the population]{.monash-blue2}. Its a useful exploratory technique for examining the spatial distribution of a measured variable. 
+
+<br>
+<br>
+BUT they [don't work for Australia]{.monash-orange2}.
+:::
+::: {.column}
+
+```{r}
+#| label: cartogram
+#| fig-width: 6
+#| fig-height: 10
+#| out-width: 60%
+# transform to NAD83 / UTM zone 16N
+nc <- nc |>
+  mutate(lBIR79 = log(BIR79))
+nc_utm <- st_transform(nc, 26916)
+
+orig <- ggplot(nc) + 
+  geom_sf(aes(fill = lBIR79)) +
+  ggtitle("original") +
+  theme_map() +
+  theme(legend.position = "none")
+
+nc_utm_carto <- cartogram_cont(nc_utm, weight = "BIR74", itermax = 5)
+
+carto <- ggplot(nc_utm_carto) + 
+  geom_sf(aes(fill = lBIR79)) +
+  ggtitle("cartogram") +
+  theme_map() +
+  theme(legend.position = "none")
+
+nc_utm_dorl <- cartogram_dorling(nc_utm, weight = "BIR74")
+
+dorl <- ggplot(nc_utm_dorl) + 
+  geom_sf(aes(fill = lBIR79)) +
+  ggtitle("dorling") +
+  theme_map() +
+  theme(legend.position = "none")
+
+orig + carto + dorl + plot_layout(ncol=1)
+```
+
+:::
+::::
+
+## Hexagon tile
+
+:::: {.columns}
+::: {.column}
+A hexagon tile map represents every spatial polygon with an equal sized hexagon. In dense areas these will be tesselated, but separated hexagons are placed at centroids of the remote spatial regions.
+
+<br>
+
+It's not perfect, but now the higher incidence in Perth suburbs, some melbourne suburbs, and Sydney are more visible.
+:::
+::: {.column}
+
+```{r}
+#| label: hexmap
+#| fig-width: 10
+#| fig-height: 8
+#| out-width: 100%
+if (!file.exists(here::here("data/aus_hexmap.rda"))) {
+  
+## Create centroids set
+centroids <- sa2 |> 
+  create_centroids(., "sa2_name_2011")
+## Create hexagon grid
+grid <- create_grid(centroids = centroids,
+                    hex_size = 0.2,
+                    buffer_dist = 5)
+## Allocate polygon centroids to hexagon grid points
+aus_hexmap <- allocate(
+  centroids = centroids,
+  hex_grid = grid,
+  sf_id = "sa2_name_2011",
+  ## same column used in create_centroids
+  hex_size = 0.2,
+  ## same size used in create_grid
+  hex_filter = 10,
+  focal_points = capital_cities,
+  width = 35,
+  verbose = FALSE
+)
+save(aus_hexmap, 
+     file = here::here("data/aus_hexmap.rda")) 
+}
+
+load(here::here("data/aus_hexmap.rda"))
+## Prepare to plot
+fort_hex <- fortify_hexagon(data = aus_hexmap,
+                            sf_id = "sa2_name_2011",
+                            hex_size = 0.2) |> 
+            left_join(sa2thyroid_ERP |> select(sa2_name_2011, SIR, p50))
+## Make a plot
+aus_hexmap_plot <- ggplot() +
+  geom_sf(data=sa2thyroid_ERP, fill=NA, colour="grey60", size=0.1) +
+  geom_polygon(data = fort_hex, aes(x = long, y = lat, group = hex_id, fill = SIR)) +
+  scale_fill_identity() +
+  invthm 
+aus_hexmap_plot  
+```
+
+:::
+::::
 
 ## Resources
 
@@ -1238,3 +2342,10 @@ wages_aug |> add_n_obs() |> filter(n_obs > 4) |>
 - O'Hara-Wild, Hyndman, Wang (2020). [fabletools: Core Tools for Packages in the 'fable' Framework](https://CRAN.R-project.org/package=fabletools)
 - O'Hara-Wild, Hyndman, Wang (2024). [feasts: Feature Extraction and Statistics for Time Series](https://feasts.tidyverts.org)
 - Tierney, Cook, Prvan (2020) [Browse Over Longitudinal Data Graphically and Analytically in R](https://github.com/njtierney/brolgar)
+- [cubble](https://huizezhang-sherry.github.io/cubble): A Vector Spatio-Temporal Data Structure for Data Analysis
+- [sf](https://r-spatial.github.io/sf/): Simple Features for R
+- [Healy (2018) Data Visualization](https://socviz.co/maps.html#maps)
+- [Visualising spatial data using R](https://rspatialdata.github.io)
+- Kobakian et al [Hexagon tile map](https://journal.r-project.org/articles/RJ-2023-021/)
+- Wikle, Zammit-Mangion, Cressie (2018) [Spatio-Temporal Statistics with R](https://spacetimewithr.org)
+- [Moraga, Paula. (2019). Geospatial Health Data](https://www.paulamoraga.com/book-geospatial/index.html)
