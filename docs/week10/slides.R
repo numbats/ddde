@@ -1,745 +1,1239 @@
-## ----include = FALSE, echo=FALSE---------------------------------
+## -----------------------------------------------------------------------
+#| label: setup
+#| include: false
+#| echo: false
+#| message: false
+#| warning: false
+
 source("../setup.R")
 
+required_packages <- c("ggplot2", "sf", "gstat", "dplyr")
+missing_packages <- required_packages[
+  !vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)
+]
 
-## ----nasa--------------------------------------------------------
-#| label: nasa
-#| echo: false
-data(nasa)
-glimpse(nasa)
-
-
-## ----------------------------------------------------------------
-#| code-fold: true
-nasa_cb <- as_cubble(as_tibble(nasa), 
-                     key=id, 
-                     index=time, 
-                     coords=c(long, lat))
-nasa_cb
-
-
-## ----------------------------------------------------------------
-#| label: spatial
-#| fig-width: 6
-#| fig-height: 6
-#| out-width: 90%
-#| code-fold: true
-ggplot() + 
-  geom_point(data=nasa_cb, aes(x=long, y=lat)) +
-  geom_point(data=dplyr::filter(nasa_cb, 
-       id == "5-20"),
-       aes(x=long, y=lat),
-       colour="orange", size=4) +
-  geom_point(data=dplyr::filter(nasa_cb, 
-       id == "20-2"),
-       aes(x=long, y=lat),
-       colour="turquoise", size=4)
-
-
-## ----------------------------------------------------------------
-#| label: temporal
-#| fig-width: 8
-#| fig-height: 4
-#| out-width: 90%
-#| code-fold: true
-nasa_cb_f <- nasa_cb |> 
-  face_temporal() 
-ggplot(nasa_cb_f) + 
-  geom_line(aes(x=date, 
-                 y=surftemp, 
-                 group=id), alpha=0.2) +
-  geom_line(data=filter(nasa_cb_f , 
-       id=="5-20"),
-       aes(x=date, 
-                 y=surftemp, 
-                 group=id),
-       colour="orange", linewidth=2) +
-  geom_line(data=filter(nasa_cb_f , 
-       id=="20-2"),
-       aes(x=date, 
-                 y=surftemp, 
-                 group=id),
-       colour="turquoise", linewidth=2) +
-  theme(aspect.ratio = 0.5)
-
-
-## ----------------------------------------------------------------
-#| label: raster
-#| fig-width: 6
-#| fig-height: 6
-#| out-width: 80%
-#| echo: false
-# Get the map
-sth_america <- map_data("world") |>
-  filter(between(long, -115, -53), between(lat, -20.5, 41))
-
-nasa_cb |> 
-  face_temporal() |>
-  filter(month == "Jan", year == 1995) |>
-  select(id, time, surftemp) |>
-  unfold(long, lat) |>
-  ggplot() + 
-  geom_tile(aes(x=long, y=lat, fill=surftemp)) +
-  geom_path(data=sth_america, 
-            aes(x=long, y=lat, group=group), 
-            colour="white", linewidth=1) +
-  scale_fill_viridis_c("", option = "magma") +
-  ggtitle("January 1995") +
-  theme_map() +
-  theme(legend.position = "bottom", 
-        plot.title = element_text(size = 24)) 
-
-
-## ----------------------------------------------------------------
-#| label: raster
-#| eval: false
-#| echo: true
-# # Get the map
-# sth_america <- map_data("world") |>
-#   filter(between(long, -115, -53), between(lat, -20.5, 41))
-# 
-# nasa_cb |>
-#   face_temporal() |>
-#   filter(month == "Jan", year == 1995) |>
-#   select(id, time, surftemp) |>
-#   unfold(long, lat) |>
-#   ggplot() +
-#   geom_tile(aes(x=long, y=lat, fill=surftemp)) +
-#   geom_path(data=sth_america,
-#             aes(x=long, y=lat, group=group),
-#             colour="white", linewidth=1) +
-#   scale_fill_viridis_c("", option = "magma") +
-#   ggtitle("January 1995") +
-#   theme_map() +
-#   theme(legend.position = "bottom",
-#         plot.title = element_text(size = 24))
-
-
-## ----------------------------------------------------------------
-#| label: space-time
-#| fig-width: 10
-#| fig-height: 6
-#| out-width: 75%
-#| echo: false
-nasa_cb |> face_temporal() |>
-  select(id, time, month, year, surftemp) |>
-  unfold(long, lat) |>
-  ggplot() + 
-  geom_tile(aes(x=long, y=lat, fill=surftemp)) +
-  facet_grid(year~month) +
-  scale_fill_viridis_c("", option = "magma") +
-  theme_map() +
-  theme(legend.position = "bottom") 
-
-
-## ----------------------------------------------------------------
-#| label: space-time
-#| eval: false
-#| echo: true
-# nasa_cb |> face_temporal() |>
-#   select(id, time, month, year, surftemp) |>
-#   unfold(long, lat) |>
-#   ggplot() +
-#   geom_tile(aes(x=long, y=lat, fill=surftemp)) +
-#   facet_grid(year~month) +
-#   scale_fill_viridis_c("", option = "magma") +
-#   theme_map() +
-#   theme(legend.position = "bottom")
-
-
-## ----------------------------------------------------------------
-#| label: time-space1
-#| fig-width: 8
-#| fig-height: 8
-#| out-width: 90%
-#| code-fold: true
-nasa_cb |> face_temporal() |>
-  select(id, time, month, year, surftemp) |>
-  unfold(long, lat) |>
-  ggplot() +
-    geom_polygon(data=sth_america, 
-            aes(x=long, y=lat, group=group), 
-            fill="#014221", alpha=0.2, colour="#ffffff") +
-    cubble::geom_glyph_box(data=nasa, 
-                           aes(x_major = long, 
-                               x_minor = date,
-                               y_major = lat, 
-                               y_minor = surftemp), fill=NA) +
-    cubble::geom_glyph(data=nasa, 
-                       aes(x_major = long, 
-                           x_minor = date,
-                           y_major = lat, 
-                           y_minor = surftemp)) +
-    theme_map() 
-
-
-
-## ----------------------------------------------------------------
-#| label: time-space2
-#| fig-width: 8
-#| fig-height: 8
-#| out-width: 90%
-#| code-fold: true
-nasa_cb |> face_temporal() |>
-  select(id, time, month, year, surftemp) |>
-  unfold(long, lat) |>
-  ggplot() +
-    geom_polygon(data=sth_america, 
-            aes(x=long, y=lat, group=group), 
-            fill="#014221", alpha=0.2, colour="#ffffff") +
-    cubble::geom_glyph_box(data=nasa, 
-                           aes(x_major = long, 
-                               x_minor = date,
-                               y_major = lat, 
-                               y_minor = surftemp), fill=NA) +
-    cubble::geom_glyph(data=nasa, 
-                       aes(x_major = long, 
-                           x_minor = date,
-                           y_major = lat, 
-                           y_minor = surftemp), 
-                       global_rescale = FALSE) +
-    theme_map() 
-
-
-## ----------------------------------------------------------------
-#| label: time-space3
-#| fig-width: 8
-#| fig-height: 8
-#| out-width: 90%
-#| code-fold: true
-nasa_cb |> face_temporal() |>
-  select(id, time, month, year, surftemp) |>
-  unfold(long, lat) |>
-  ggplot() +
-    geom_polygon(data=sth_america, 
-            aes(x=long, y=lat, group=group), 
-            fill="#014221", alpha=0.2, colour="#ffffff") +
-    cubble::geom_glyph(data=nasa, 
-                       aes(x_major = long, 
-                           x_minor = date,
-                           y_major = lat, 
-                           y_minor = surftemp), 
-                       global_rescale = FALSE,
-                       polar = TRUE) +
-    theme_map() 
-
-
-## ----------------------------------------------------------------
-#| label: time-space4
-#| fig-width: 6
-#| fig-height: 6
-#| out-width: 90%
-#| code-fold: true
-nasa_mth <- nasa_cb |> 
-  face_temporal() |>
-  select(id, time, month, year, surftemp) |>
-  unfold(long, lat) |>
-  as_tibble() |>
-  group_by(id, month) |>
-  dplyr::summarise(tmin = min(surftemp),
-            tmax = max(surftemp), 
-            long = min(long),
-            lat = min(lat)) |>
-  ungroup() |>
-  mutate(month = as.numeric(month))
-ggplot() +
-    geom_polygon(data=sth_america, 
-            aes(x=long, y=lat, group=group), 
-            fill="#014221", alpha=0.2, colour="#ffffff") +
-    geom_glyph_ribbon(data = nasa_mth, 
-                      aes(x_major = long, 
-                          x_minor = month,
-                          y_major = lat, 
-                          ymin_minor = tmin,
-                          ymax_minor = tmax), 
-                          width = 2) +
-    theme_map() 
-
-
-## ----------------------------------------------------------------
-#| eval: false
-#| code-fold: true
-#| code-summary: DEMO
-# library(tsibble)
-# library(tsibbletalk)
-# library(lubridate)
-# library(plotly)
-# nasa_shared <- nasa |>
-#   mutate(date = ymd(date)) |>
-#   select(long, lat, date, surftemp, id) |>
-#   as_tsibble(index=date, key=id) |>
-#   as_shared_tsibble()
-# p1 <- ggplot() +
-#   geom_polygon(data=sth_america,
-#             aes(x=long, y=lat, group=group),
-#             colour="#ffffff", alpha=0.2, fill="#014221") +
-#   geom_point(data=nasa_shared, aes(x = long,
-#          y = lat, group = id))
-# p2 <- nasa_shared |>
-#   ggplot(aes(x = date, y = surftemp)) +
-#   geom_line(aes(group = id), alpha = 0.5)
-# subplot(
-#     ggplotly(p1, tooltip = "Region"),
-#     ggplotly(p2, tooltip = "Region"),
-#     nrows = 1, widths=c(0.3, 0.7)) |>
-#   highlight(dynamic = TRUE)
-
-
-## ----------------------------------------------------------------
-#| code-fold: true
-#| eval: false
-#| echo: false
-#| results: hide
-# library(gstat)
-# nasa_jan95 <- nasa |>
-#   filter(year == 1995, month == "Jan") |>
-#   select(id, long, lat, surftemp, cloudlow, cloudmid, cloudhigh, ozone)
-# row.names(nasa_jan95) <- nasa_jan95[,1]
-# nasa_jan95_sf <- SpatialPointsDataFrame(nasa_jan95[,2:3],
-#                    nasa_jan95[,4:8])
-# g <- gstat(formula = surftemp~1,
-#            data=nasa_jan95_sf)
-# plot(variogram(g))
-# vgm1 <- variogram(surftemp~1, nasa_jan95_sf, cloud=TRUE)
-# plot(vgm1)
-# # Set up model
-# vgm_mod <- vgm(psill=10, model = "Sph", range=20, nmax=60)
-# g_dummy <- gstat(formula = surftemp~1, dummy=TRUE, beta=295,
-#            data=nasa_jan95_sf, model=vgm_mod)
-# g_null <- predict(g_dummy, nasa_jan95_sf, nsim=11)
-# g_null_df1 <- tibble(long = g_null@coords[,1],
-#                      lat = g_null@coords[,2],
-#                      surftemp1 = g_null@data$sim1,
-#                      surftemp2 = g_null@data$sim2,
-#                      surftemp3 = g_null@data$sim3)
-# p_data <- nasa_cb |>
-#   face_temporal() |>
-#   filter(month == "Jan", year == 1995) |>
-#   select(id, time, surftemp) |>
-#   unfold(long, lat) |>
-#   ggplot() +
-#   geom_tile(aes(x=long, y=lat, fill=surftemp)) +
-#   geom_path(data=sth_america,
-#             aes(x=long, y=lat, group=group),
-#             colour="white", linewidth=1) +
-#   scale_fill_viridis_c("", option = "magma") +
-#   #ggtitle("January 1995") +
-#   theme_map() +
-#   theme(legend.position = "bottom",
-#         plot.title = element_text(size = 24))
-# p_null1 <- ggplot() +
-#   geom_tile(data=g_null_df1,
-#             aes(x=long, y=lat, fill=surftemp1)) +
-#   geom_path(data=sth_america,
-#             aes(x=long, y=lat, group=group),
-#             colour="white", linewidth=1) +
-#   scale_fill_viridis_c("", option = "magma") +
-#   #ggtitle("January 1995") +
-#   theme_map() +
-#   theme(legend.position = "bottom",
-#         plot.title = element_text(size = 24))
-# p_null2 <- ggplot() +
-#   geom_tile(data=g_null_df1,
-#             aes(x=long, y=lat, fill=surftemp2)) +
-#   geom_path(data=sth_america,
-#             aes(x=long, y=lat, group=group),
-#             colour="white", linewidth=1) +
-#   scale_fill_viridis_c("", option = "magma") +
-#   #ggtitle("January 1995") +
-#   theme_map() +
-#   theme(legend.position = "bottom",
-#         plot.title = element_text(size = 24))
-# p_null3 <- ggplot() +
-#   geom_tile(data=g_null_df1,
-#             aes(x=long, y=lat, fill=surftemp3)) +
-#   geom_path(data=sth_america,
-#             aes(x=long, y=lat, group=group),
-#             colour="white", linewidth=1) +
-#   scale_fill_viridis_c("", option = "magma") +
-#   #ggtitle("January 1995") +
-#   theme_map() +
-#   theme(legend.position = "bottom",
-#         plot.title = element_text(size = 24))
-# p_data + p_null1 + p_null2 + p_null3 + plot_layout(ncol=2)
-
-
-## ----toy-spatial, out.width = "80%"------------------------------
-#| code-fold: true
-#| code-summary: generate-data
-#| results: hide
-# Set up a simple example
-set.seed(945)
-x <- 1:24
-y <- 1:24
-xy <- expand.grid(x, y)
-d <- tibble(x=xy$Var1, y=xy$Var2) |>
-  mutate(v = x+2*y) 
-d_sf <- SpatialPointsDataFrame(d[,1:2],
-                   data.frame(d[,3]))
-vgm_mod <- vgm(psill=5, model = "Sph", range=20, nmax=30)
-d_dummy <- gstat(formula = v~1, dummy=TRUE, beta=0,
-           model=vgm_mod)
-d_err <- predict(d_dummy, d_sf, nsim=1)
-d <- d |>
-  mutate(e = d_err@data$sim1*3) |>
-  mutate(ve = v+e)
-
-
-## ----------------------------------------------------------------
-#| label: plot-simple example
-#| code-fold: true
-#| code-summary: plot
-#| fig-width: 12
-#| fig-height: 4
-#| out-width: 100%
-obs <- ggplot(d, aes(x, y, fill = ve)) +
-  geom_tile() +
-  scale_fill_viridis_c("") +
-  theme(aspect.ratio = 1) +
-  ggtitle("Observed") +
-  theme(legend.position = "none",
-              axis.text = element_blank(),
-              axis.title = element_blank())
-trend <- ggplot(d, aes(x, y, fill = v)) +
-  geom_tile() +
-  scale_fill_viridis_c("", option = "magma") +
-  theme(aspect.ratio = 1) +
-  ggtitle("Trend") +
-  theme(legend.position = "none",
-              axis.text = element_blank(),
-              axis.title = element_blank())
-err <- ggplot(d, aes(x, y, fill = e)) +
-  geom_tile() +
-  scale_fill_distiller("", palette = "PRGn") +
-  theme(aspect.ratio = 1) +
-  ggtitle("Residual") +
-  theme(legend.position = "none",
-              axis.text = element_blank(),
-              axis.title = element_blank())
-obs + trend + err + plot_layout(ncol=3)
-
-
-## ----------------------------------------------------------------
-#| label: gen-nulls
-#| code-fold: true
-#| code-summary: generate-nulls
-#| results: hide
-#| fig-width: 9
-#| fig-height: 6
-#| out-width: 100%
-set.seed(953)
-d_null <- predict(d_dummy, d_sf, nsim=5)
-pos <- sample(1:6, 1)
-lineup_plots <- list()
-j <- 1
-for (i in 1:6) {
-  if (pos == i) { # plot data
-    p <- ggplot(d, aes(x, y, fill = scale(ve))) +
-           geom_tile() 
-  } 
-  else { # plot nulls
-    null_df <- tibble(x=d$x, y=d$y, v=d_null@data[,j])
-    p <- ggplot(null_df, aes(x, y, fill = scale(v))) +
-           geom_tile() 
-   j <- j + 1
-  }
-  p <- p +
-        scale_fill_viridis_c("", option = "magma") +
-        theme(legend.position = "none",
-              axis.text = element_blank(),
-              axis.title = element_blank())
-    
-  lineup_plots[[paste(i)]] <- p
+if (length(missing_packages) > 0) {
+  stop(
+    "Missing required package(s): ",
+    paste(missing_packages, collapse = ", "),
+    ". Install them before rendering this lecture."
+  )
 }
-wrap_plots(lineup_plots, ncol = 3)
 
+set.seed(5521)
 
-## ----------------------------------------------------------------
-#| label: plot-margins
-#| code-fold: true
-#| code-summary: plot
-#| fig-width: 8
-#| fig-height: 4
-#| out-width: 100%
-long <- ggplot(d, aes(x, y=ve)) +
-  geom_point() +
-  geom_smooth(se=F) +
-  ylab("obs") +
-  theme(aspect.ratio = 1)
-lat <- ggplot(d, aes(y, y=ve)) +
-  geom_point() +
-  ylab("obs") +
-  geom_smooth(se=F) +
-  theme(aspect.ratio = 1)
-long + lat + plot_layout(ncol=2)
+# -------------------------------------------------------------------------
+# Shared Mavis Downs tutorial dataset
+# -------------------------------------------------------------------------
+# Week 10 qmd files live in root/week10. Shared data live under root/data.
+data_root <- "../data"
+all_data_files <- list.files(data_root, recursive = TRUE, full.names = TRUE)
 
+find_data_file <- function(filename) {
+  hits <- all_data_files[basename(all_data_files) == filename]
+  if (length(hits) == 0) {
+    stop("Could not find required file under ../data: ", filename)
+  }
+  if (length(hits) > 1) {
+    stop("Found more than one copy of ", filename, " under ../data.")
+  }
+  hits[[1]]
+}
 
-## ----------------------------------------------------------------
-#| echo: false
-fabric_drawing(cid = "twoway", 
-               cwidth = 700, 
-               cheight = 700, 
-               cfill = "whitesmoke", 
-               drawingWidth = 3, 
-               gumSize = 10)
-fabric_text_add(cid = "twoway", textId = "txt1",
-                text = " 1  2  3",
-                left = 10, top = 10, 
-                fontFamily = "Courier", fontSize = 18)
-fabric_text_add(cid = "twoway", textId = "txt2",
-                text = " 4  5  6",
-                left = 10, top = 40, 
-                fontFamily = "Courier", fontSize = 18)
-fabric_text_add(cid = "twoway", textId = "txt3",
-                text = " 7  8  9",
-                left = 10, top = 70, 
-                fontFamily = "Courier", fontSize = 18)
+# AGD84 / AMG Zone 55
+target_crs <- 20355
 
+borehole_data <- read.csv(
+  find_data_file("synthetic_l_seam_rc_v4.csv"),
+  check.names = FALSE
+)
 
-## ----------------------------------------------------------------
-#| code-fold: true
-#| fig-width: 8
-#| fig-height: 4
-#| out-width: 100%
-library(tukeyedar)
-d_pol <- eda_pol(d, row = x, col = y, val = ve, plot=FALSE)
-long <- ggplot(d, aes(x, y=ve)) +
-  geom_point() +
-  geom_smooth(se=F) +
-  geom_point(data = d_pol$row, aes(x=x, 
-                       y=effect + d_pol$global), 
-    colour = "#D93F00", size=3) +
-  ylab("obs") +
-  theme(aspect.ratio = 1)
-lat <- ggplot(d, aes(y, y=ve)) +
-  geom_point() +
-  ylab("obs") +
-  geom_smooth(se=F) +
-  geom_point(data = d_pol$col, aes(x=y, 
-                      y=effect + d_pol$global), 
-    colour = "#D93F00", size=3) +
-  theme(aspect.ratio = 1)
-long + lat + plot_layout(ncol=2)
+boreholes <- sf::st_as_sf(
+  borehole_data,
+  coords = c("Easting", "Northing"),
+  crs = target_crs,
+  remove = FALSE
+)
 
+ash_breaks <- c(-Inf, 10, 11, 12, 13, 14, 15, 18, Inf)
+ash_labels <- c(
+  "<10%", "10-<11%", "11-<12%", "12-<13%",
+  "13-<14%", "14-<15%", "15-<18%", "≥18%"
+)
+ash_palette <- c(
+  "<10%" = "#2166AC",
+  "10-<11%" = "#4393C3",
+  "11-<12%" = "#92C5DE",
+  "12-<13%" = "#FEE090",
+  "13-<14%" = "#FDAE61",
+  "14-<15%" = "#F46D43",
+  "15-<18%" = "#D73027",
+  "≥18%" = "#7F0000"
+)
 
-## ----------------------------------------------------------------
-#| code-fold: true
-#| fig-width: 8
-#| fig-height: 4
-#| out-width: 100%
-pol_res <- ggplot(d_pol$long, aes(x, y, fill = ve)) +
-  geom_tile() +
-  scale_fill_distiller("", palette = "PRGn") +
-  theme(aspect.ratio = 1) +
-  ggtitle("Polish Residuals") +
-  theme(legend.position = "none",
-              axis.text = element_blank(),
-              axis.title = element_blank())
-err <- err +
-  theme(legend.position = "none",
-              axis.text = element_blank(),
-              axis.title = element_blank()) 
-err + pol_res + plot_layout(ncol=2)
+class_ash <- function(x) {
+  cut(
+    x,
+    breaks = ash_breaks,
+    labels = ash_labels,
+    include.lowest = TRUE,
+    right = FALSE,
+    ordered_result = TRUE
+  )
+}
 
+boreholes$ash_class <- class_ash(boreholes$Ash_ad_pct)
 
-## ----------------------------------------------------------------
-#| echo: false
-world_map <- map_data("world")
-world_map |> 
-  filter(region %in% c("Australia", "New Zealand")) |> 
-      DT::datatable(width=1150, height=100)
+leases <- sf::st_read(
+  find_data_file("MLpermitgranted_wkid_GDA94MGAZone55.shp"),
+  quiet = TRUE
+) |>
+  sf::st_transform(target_crs)
 
+domain_faults <- sf::st_read(
+  find_data_file("mav_lu_sr_domain_faults.shp"),
+  quiet = TRUE
+) |>
+  sf::st_zm(drop = TRUE) |>
+  sf::st_transform(target_crs)
 
-## ----------------------------------------------------------------
-#| label: mappolygon
-#| code-fold: true
-#| fig-width: 12
-#| fig-height: 4
-#| out-width: 100%
-oz <- world_map |> 
-  filter(region == "Australia") |>
-  filter(lat > -50)
-m1 <- ggplot(oz, aes(x = long, y = lat)) + 
-  geom_point(size=0.2) + #<<
-  coord_map() +
-  ggtitle("Points")
-m2 <- ggplot(oz, aes(x = long, y = lat, 
-               group = group)) + #<<
-  geom_path() + #<<
-  coord_map() +
-  ggtitle("Path")
-m3 <- ggplot(oz, aes(x = long, y = lat, 
-               group = group)) + #<<
-  geom_polygon(fill = "#607848", colour = "#184848") + #<<
-  coord_map() +
-  ggtitle("Filled polygon")
-m1 + m2 + m3
+seismic_faults <- sf::st_read(
+  find_data_file("mav_lu_sr_3dseis_faults.shp"),
+  quiet = TRUE
+) |>
+  sf::st_zm(drop = TRUE) |>
+  sf::st_transform(target_crs)
 
+point_bbox <- sf::st_bbox(boreholes)
+map_buffer <- 520
+map_xlim <- c(unname(point_bbox["xmin"]) - map_buffer, unname(point_bbox["xmax"]) + map_buffer)
+map_ylim <- c(unname(point_bbox["ymin"]) - map_buffer, unname(point_bbox["ymax"]) + map_buffer)
 
-## ----------------------------------------------------------------
-#| label: sfobject
-#| echo: false
-#| results: hide
-library(sf)
-nc <- st_read(system.file("shape/nc.shp", package="sf"))
-nc |> slice_head(n=5) 
+map_window <- sf::st_as_sfc(
+  sf::st_bbox(c(xmin = map_xlim[1], xmax = map_xlim[2], ymin = map_ylim[1], ymax = map_ylim[2]), crs = sf::st_crs(target_crs))
+)
 
+leases_plot <- suppressWarnings(sf::st_crop(leases, sf::st_bbox(map_window)))
+domain_faults_plot <- suppressWarnings(sf::st_crop(domain_faults, sf::st_bbox(map_window)))
+seismic_faults_plot <- suppressWarnings(sf::st_crop(seismic_faults, sf::st_bbox(map_window)))
 
-## ----------------------------------------------------------------
-#| label: setup-choro
-#| echo: false
-library(sf)
-library(sugarbag)
+monash_blue <- "#0072B2"
+monash_orange <- "#D55E00"
 
-invthm <- theme_map() + 
-  theme(
-    panel.background = element_rect(fill = "black", colour = NA), 
-    plot.background = element_rect(fill = "black", colour = NA),
-    legend.background = element_rect(fill = "transparent", colour = NA),
-    legend.key = element_rect(fill = "transparent", colour = NA),
-    text = element_text(colour = "white"),
-    axis.text = element_blank()
+map_theme <- function(base_size = 13) {
+  ggplot2::theme_bw(base_size = base_size) +
+    ggplot2::theme(
+      panel.grid.major = ggplot2::element_line(colour = "grey90", linewidth = 0.25),
+      panel.grid.minor = ggplot2::element_blank(),
+      legend.position = "right",
+      legend.title = ggplot2::element_text(size = base_size - 1, face = "bold"),
+      legend.text = ggplot2::element_text(size = base_size - 2)
+    )
+}
+
+map_background_layers <- function() {
+  list(
+    ggplot2::geom_sf(data = leases_plot, fill = "grey98", colour = NA)
+  )
+}
+
+map_overlay_layers <- function() {
+  list(
+    ggplot2::geom_sf(data = leases_plot, fill = NA, colour = "grey70", linewidth = 0.45),
+    ggplot2::geom_sf(data = seismic_faults_plot, colour = "grey35", linewidth = 0.35, linetype = "dashed"),
+    ggplot2::geom_sf(data = domain_faults_plot, colour = "black", linewidth = 0.85)
+  )
+}
+
+coord_mavis <- function() {
+  ggplot2::coord_sf(
+    xlim = map_xlim,
+    ylim = map_ylim,
+    expand = FALSE,
+    datum = sf::st_crs(target_crs)
+  )
+}
+
+plot_mavis_points <- function(show_candidates = FALSE, show_outliers = FALSE) {
+  p <- ggplot2::ggplot() +
+    map_background_layers() +
+    ggplot2::geom_sf(
+      data = boreholes,
+      ggplot2::aes(fill = ash_class),
+      shape = 21,
+      colour = "black",
+      size = 2.35,
+      stroke = 0.28
+    ) +
+    ggplot2::scale_fill_manual(
+      values = ash_palette,
+      limits = ash_labels,
+      breaks = ash_labels,
+      drop = FALSE,
+      name = "Ash (%)"
+    ) +
+    map_overlay_layers() +
+    coord_mavis() +
+    ggplot2::labs(x = "Easting (m)", y = "Northing (m)") +
+    map_theme(13)
+
+  if (show_outliers && exists("global_outliers")) {
+    p <- p +
+      ggplot2::geom_sf(data = global_outliers, shape = 21, fill = NA, colour = "red4", size = 5.0, stroke = 1.1) +
+      ggplot2::geom_sf_text(data = global_outliers, ggplot2::aes(label = Borehole_Name), nudge_y = 100, colour = "red4", size = 3.2)
+  }
+
+  if (show_candidates) {
+    p <- p +
+      ggplot2::geom_sf(data = candidate_sites_sf, shape = 23, fill = "red3", colour = "black", size = 3.9, stroke = 0.45) +
+      ggplot2::geom_text(data = candidate_sites, ggplot2::aes(x = label_x, y = label_y, label = Site), fontface = "bold", size = 4.2, colour = "red4")
+  }
+
+  p
+}
+
+# -------------------------------------------------------------------------
+# Global and local outlier diagnostics
+# -------------------------------------------------------------------------
+ash_q1 <- stats::quantile(boreholes$Ash_ad_pct, 0.25)
+ash_q3 <- stats::quantile(boreholes$Ash_ad_pct, 0.75)
+ash_iqr <- ash_q3 - ash_q1
+upper_fence <- ash_q3 + 1.5 * ash_iqr
+lower_fence <- ash_q1 - 1.5 * ash_iqr
+
+global_outliers <- boreholes |>
+  dplyr::filter(Ash_ad_pct < lower_fence | Ash_ad_pct > upper_fence) |>
+  dplyr::arrange(dplyr::desc(Ash_ad_pct))
+
+distance_matrix <- units::drop_units(sf::st_distance(boreholes))
+diag(distance_matrix) <- Inf
+nearest_index <- apply(distance_matrix, 1, which.min)
+
+nn_residuals <- sf::st_drop_geometry(boreholes) |>
+  dplyr::mutate(
+    nearest_neighbor = boreholes$Borehole_Name[nearest_index],
+    nearest_distance_m = distance_matrix[cbind(seq_len(nrow(boreholes)), nearest_index)],
+    nearest_ash = boreholes$Ash_ad_pct[nearest_index],
+    nn_residual = Ash_ad_pct - nearest_ash
   )
 
-# function to allocate colours to regions
-aus_colours <- function(sir_p50){
-  value <- case_when(
-    sir_p50 <  0.74 ~ "#33809d",
-    sir_p50 >= 0.74 & sir_p50 < 0.98 ~ "#aec6c7",
-    sir_p50 >= 0.98 & sir_p50 < 1.05 ~ "#fff4bc",
-    sir_p50 >= 1.05 & sir_p50 < 1.45 ~ "#ff9a64",
-    sir_p50 >= 1.45 ~ "#ff3500",
-    TRUE ~ "#FFFFFF")
-  return(value)
+resid_center <- stats::median(nn_residuals$nn_residual, na.rm = TRUE)
+resid_scale <- stats::mad(nn_residuals$nn_residual, center = resid_center, constant = 1.4826, na.rm = TRUE)
+if (!is.finite(resid_scale) || resid_scale == 0) resid_scale <- stats::sd(nn_residuals$nn_residual, na.rm = TRUE)
+
+nn_residuals <- nn_residuals |>
+  dplyr::mutate(
+    robust_z = (nn_residual - resid_center) / resid_scale,
+    spatial_flag = abs(robust_z) >= 2
+  )
+
+spatial_flags_sf <- boreholes |>
+  dplyr::filter(Borehole_Name %in% nn_residuals$Borehole_Name[nn_residuals$spatial_flag])
+
+# -------------------------------------------------------------------------
+# Variogram and prediction surfaces
+# -------------------------------------------------------------------------
+fit_variogram_bundle <- function(data_sf, lag_width = 250, cutoff = 3000) {
+  empirical <- gstat::variogram(Ash_ad_pct ~ 1, data = data_sf, cutoff = cutoff, width = lag_width)
+  sample_var <- stats::var(data_sf$Ash_ad_pct, na.rm = TRUE)
+  initial_model <- gstat::vgm(
+    psill = max(sample_var * 0.65, 0.1),
+    model = "Sph",
+    range = max(cutoff / 3, lag_width * 2),
+    nugget = max(sample_var * 0.25, 0.05)
+  )
+  fitted_model <- try(gstat::fit.variogram(empirical, initial_model, fit.method = 2), silent = TRUE)
+  if (inherits(fitted_model, "try-error") || anyNA(fitted_model$psill)) fitted_model <- initial_model
+  fitted_model$psill <- pmax(fitted_model$psill, 0)
+  nugget <- if ("Nug" %in% fitted_model$model) fitted_model$psill[fitted_model$model == "Nug"][1] else 0
+  partial_sill <- sum(fitted_model$psill[fitted_model$model != "Nug"])
+  total_sill <- nugget + partial_sill
+  range_value <- max(fitted_model$range[fitted_model$model != "Nug"], na.rm = TRUE)
+  structured_pct <- ifelse(total_sill > 0, 100 * partial_sill / total_sill, NA_real_)
+  list(
+    empirical = empirical,
+    model = fitted_model,
+    stats = data.frame(
+      nugget = nugget,
+      partial_sill = partial_sill,
+      total_sill = total_sill,
+      range_m = range_value,
+      structured_pct = structured_pct
+    )
+  )
 }
 
+vgm_default <- fit_variogram_bundle(boreholes, lag_width = 250, cutoff = 3000)
 
-## ----------------------------------------------------------------
-#| label: thyroiddata
-#| code-fold: true
-#| eval: false
-# sa2 <- strayr::read_absmap("sa22011") |>
-#   filter(!st_is_empty(geometry)) |>
-#   filter(!state_name_2011 == "Other Territories") |>
-#   filter(!sa2_name_2011 == "Lord Howe Island")
-# sa2 <- sa2 |> rmapshaper::ms_simplify(keep = 0.5, keep_shapes = TRUE) # Simplify the map!!!
-# SIR <- read_csv(here::here("data/SIR Downloadable Data.csv")) |>
-#   filter(SA2_name %in% sa2$sa2_name_2011) |>
-#   dplyr::select(Cancer_name, SA2_name, Sex_name, p50) |>
-#   filter(Cancer_name == "Thyroid", Sex_name == "Females")
-# ERP <- read_csv(here::here("data/ERP.csv")) |>
-#   filter(REGIONTYPE == "SA2", Time == 2011, Region %in% SIR$SA2_name) |>
-#   dplyr::select(Region, Value)
-# # Alternative maps
-# # Join with sa2 sf object
-# sa2thyroid_ERP <- SIR |>
-#   left_join(sa2, ., by = c("sa2_name_2011" = "SA2_name")) |>
-#   left_join(., ERP |>
-#               dplyr::select(Region,
-#               Population = Value), by = c("sa2_name_2011"= "Region")) |>
-#   filter(!st_is_empty(geometry))
-# sa2thyroid_ERP <- sa2thyroid_ERP |>
-#   #filter(!is.na(Population)) |>
-#   filter(!sa2_name_2011 == "Lord Howe Island") |>
-#   mutate(SIR = map_chr(p50, aus_colours)) |>
-#   st_as_sf()
-# save(sa2, file="data/sa2.rda")
-# save(sa2thyroid_ERP, file="data/sa2thyroid_ERP.rda")
+plot_variogram <- function(bundle, title_text = NULL) {
+  model_line <- gstat::variogramLine(bundle$model, maxdist = max(bundle$empirical$dist, na.rm = TRUE), n = 300)
+  ggplot2::ggplot(bundle$empirical, ggplot2::aes(x = dist, y = gamma)) +
+    ggplot2::geom_line(colour = "grey70", linewidth = 0.45) +
+    ggplot2::geom_point(shape = 21, size = 2.8, stroke = 0.35, fill = monash_blue, colour = "white") +
+    ggplot2::geom_line(data = model_line, ggplot2::aes(x = dist, y = gamma), inherit.aes = FALSE, colour = "#D7191C", linewidth = 1.1) +
+    ggplot2::labs(title = title_text, x = "Lag distance (m)", y = "Semivariance") +
+    ggplot2::theme_bw(base_size = 15) +
+    ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+}
 
-
-## ----------------------------------------------------------------
-#| label: choro
-#| code-fold: true
-#| fig-width: 10
-#| fig-height: 8
-#| out-width: 100%
-# Plot the choropleth
-load("../data/sa2thyroid_ERP.rda")
-aus_ggchoro <- ggplot(sa2thyroid_ERP) + 
-  geom_sf(aes(fill = SIR), size = 0.1) + 
-  scale_fill_identity() + invthm
-aus_ggchoro
-
-
-## ----------------------------------------------------------------
-#| label: cartogram
-#| code-fold: true
-#| fig-width: 6
-#| fig-height: 10
-#| out-width: 60%
-# transform to NAD83 / UTM zone 16N
-nc <- nc |>
-  mutate(lBIR79 = log(BIR79))
-nc_utm <- st_transform(nc, 26916)
-
-orig <- ggplot(nc) + 
-  geom_sf(aes(fill = lBIR79)) +
-  ggtitle("original") +
-  theme_map() +
-  theme(legend.position = "none")
-
-nc_utm_carto <- cartogram_cont(nc_utm, weight = "BIR74", itermax = 5)
-
-carto <- ggplot(nc_utm_carto) + 
-  geom_sf(aes(fill = lBIR79)) +
-  ggtitle("cartogram") +
-  theme_map() +
-  theme(legend.position = "none")
-
-nc_utm_dorl <- cartogram_dorling(nc_utm, weight = "BIR74")
-
-dorl <- ggplot(nc_utm_dorl) + 
-  geom_sf(aes(fill = lBIR79)) +
-  ggtitle("dorling") +
-  theme_map() +
-  theme(legend.position = "none")
-
-orig + carto + dorl + plot_layout(ncol=1)
-
-
-## ----------------------------------------------------------------
-#| label: hexmap
-#| code-fold: true
-#| fig-width: 10
-#| fig-height: 8
-#| out-width: 100%
-if (!file.exists(here::here("data/aus_hexmap.rda"))) {
-  
-## Create centroids set
-centroids <- sa2 |> 
-  create_centroids(., "sa2_name_2011")
-## Create hexagon grid
-grid <- create_grid(centroids = centroids,
-                    hex_size = 0.2,
-                    buffer_dist = 5)
-## Allocate polygon centroids to hexagon grid points
-aus_hexmap <- allocate(
-  centroids = centroids,
-  hex_grid = grid,
-  sf_id = "sa2_name_2011",
-  ## same column used in create_centroids
-  hex_size = 0.2,
-  ## same size used in create_grid
-  hex_filter = 10,
-  focal_points = capital_cities,
-  width = 35,
-  verbose = FALSE
+prediction_cellsize <- 75
+prediction_xy <- expand.grid(
+  X = seq(map_xlim[1], map_xlim[2], by = prediction_cellsize),
+  Y = seq(map_ylim[1], map_ylim[2], by = prediction_cellsize)
 )
-save(aus_hexmap, 
-     file = here::here("data/aus_hexmap.rda")) 
+prediction_points <- sf::st_as_sf(prediction_xy, coords = c("X", "Y"), crs = target_crs, remove = FALSE)
+
+invisible(utils::capture.output(
+  idw_surface_sf <- gstat::idw(
+    Ash_ad_pct ~ 1,
+    locations = boreholes,
+    newdata = prediction_points,
+    idp = 2,
+    nmax = 8
+  )
+))
+idw_surface <- cbind(sf::st_drop_geometry(idw_surface_sf), sf::st_coordinates(idw_surface_sf))
+names(idw_surface)[(ncol(idw_surface)-1):ncol(idw_surface)] <- c("X", "Y")
+idw_surface$ash_class <- class_ash(idw_surface$var1.pred)
+
+invisible(utils::capture.output(
+  kriging_surface_sf <- gstat::krige(
+    Ash_ad_pct ~ 1,
+    locations = boreholes,
+    newdata = prediction_points,
+    model = vgm_default$model
+  )
+))
+kriging_surface <- cbind(sf::st_drop_geometry(kriging_surface_sf), sf::st_coordinates(kriging_surface_sf))
+names(kriging_surface)[(ncol(kriging_surface)-1):ncol(kriging_surface)] <- c("X", "Y")
+kriging_surface$kriging_se <- sqrt(pmax(kriging_surface$var1.var, 0))
+kriging_surface$ash_class <- class_ash(kriging_surface$var1.pred)
+
+# Coordinate-based ML example. If ranger is available, use a random forest;
+# otherwise fall back to a single regression tree so the slide still renders.
+ml_model_label <- "Coordinate random forest"
+if (requireNamespace("ranger", quietly = TRUE)) {
+  rf_model <- ranger::ranger(
+    Ash_ad_pct ~ Easting + Northing,
+    data = borehole_data,
+    num.trees = 300,
+    seed = 5521
+  )
+  ml_prediction <- stats::predict(rf_model, data = data.frame(Easting = prediction_xy$X, Northing = prediction_xy$Y))$predictions
+} else if (requireNamespace("rpart", quietly = TRUE)) {
+  ml_model_label <- "Coordinate regression tree"
+  tree_model <- rpart::rpart(
+    Ash_ad_pct ~ Easting + Northing,
+    data = borehole_data,
+    control = rpart::rpart.control(cp = 0.002, minsplit = 6)
+  )
+  ml_prediction <- stats::predict(tree_model, newdata = data.frame(Easting = prediction_xy$X, Northing = prediction_xy$Y))
+} else {
+  ml_model_label <- "Coordinate smooth surrogate"
+  smooth_model <- stats::loess(Ash_ad_pct ~ Easting + Northing, data = borehole_data, span = 0.45)
+  ml_prediction <- stats::predict(smooth_model, newdata = data.frame(Easting = prediction_xy$X, Northing = prediction_xy$Y))
 }
 
-load(here::here("data/aus_hexmap.rda"))
-## Prepare to plot
-fort_hex <- fortify_hexagon(data = aus_hexmap,
-                            sf_id = "sa2_name_2011",
-                            hex_size = 0.2) |> 
-            left_join(sa2thyroid_ERP |> select(sa2_name_2011, SIR, p50))
-## Make a plot
-aus_hexmap_plot <- ggplot() +
-  geom_sf(data=sa2thyroid_ERP, fill=NA, colour="grey60", size=0.1) +
-  geom_polygon(data = fort_hex, aes(x = long, y = lat, group = hex_id, fill = SIR)) +
-  scale_fill_identity() +
-  invthm 
-aus_hexmap_plot  
+ml_surface <- data.frame(
+  X = prediction_xy$X,
+  Y = prediction_xy$Y,
+  pred = ml_prediction
+)
+ml_surface$ash_class <- class_ash(ml_surface$pred)
+
+# -------------------------------------------------------------------------
+# Generic synthetic spatial demo used in lecture examples
+# -------------------------------------------------------------------------
+# This is deliberately not the Mavis tutorial case. It is a synthetic
+# isotropic spatial field with a clear sill/range story plus one local low
+# and one local high for teaching nearest-neighbour residuals.
+set.seed(733)
+demo_pts <- data.frame(
+  x = c(runif(42, 0.05, 0.95), 0.34, 0.69),
+  y = c(runif(42, 0.08, 0.92), 0.36, 0.69)
+)
+
+spherical_gamma_xy <- function(h, nugget = 0.12, psill = 1.05, range = 0.42) {
+  nugget + psill * ifelse(
+    h < range,
+    1.5 * (h / range) - 0.5 * (h / range)^3,
+    1
+  )
+}
+
+demo_dmat <- as.matrix(stats::dist(demo_pts[, c("x", "y")]))
+demo_cov <- 1.6 - spherical_gamma_xy(demo_dmat, nugget = 0.12, psill = 1.05, range = 0.42)
+diag(demo_cov) <- 1.6
+
+demo_field <- if (requireNamespace("MASS", quietly = TRUE)) {
+  as.numeric(MASS::mvrnorm(1, mu = rep(0, nrow(demo_pts)), Sigma = demo_cov))
+} else {
+  stats::rnorm(nrow(demo_pts))
+}
+
+demo_pts$value <- 8.9 + (demo_field - min(demo_field)) / (max(demo_field) - min(demo_field)) * (11.9 - 8.9)
+demo_pts$value[43] <- 8.0
+demo_pts$value[44] <- 12.6
+demo_outlier_ids <- c(43, 44)
+
+demo_breaks <- c(-Inf, 8.75, 9.5, 10.25, 11.0, 11.75, Inf)
+demo_labels <- c("<8.75", "8.75-9.5", "9.5-10.25", "10.25-11", "11-11.75", "≥11.75")
+demo_palette <- c(
+  "<8.75" = "#2166AC",
+  "8.75-9.5" = "#67A9CF",
+  "9.5-10.25" = "#D1E5F0",
+  "10.25-11" = "#FFD92F",
+  "11-11.75" = "#FDB863",
+  "≥11.75" = "#D73027"
+)
+demo_class <- function(x) {
+  cut(x, breaks = demo_breaks, labels = demo_labels, include.lowest = TRUE, right = FALSE, ordered_result = TRUE)
+}
+demo_pts$value_class <- demo_class(demo_pts$value)
+
+demo_grid <- expand.grid(
+  x = seq(0.02, 0.98, length.out = 90),
+  y = seq(0.02, 0.98, length.out = 90)
+)
+
+idw_predict_xy <- function(train, newdata, idp = 2, nmax = 8) {
+  vapply(seq_len(nrow(newdata)), function(i) {
+    d <- sqrt((train$x - newdata$x[i])^2 + (train$y - newdata$y[i])^2)
+    if (any(d == 0)) return(train$value[which.min(d)])
+    idx <- order(d)[seq_len(min(nmax, length(d)))]
+    w <- 1 / (d[idx]^idp)
+    sum(w * train$value[idx]) / sum(w)
+  }, numeric(1))
+}
+
+demo_grid$idw <- idw_predict_xy(demo_pts, demo_grid, idp = 2, nmax = 8)
+demo_grid$idw_class <- demo_class(demo_grid$idw)
+
+demo_smooth_model <- stats::lm(
+  value ~ x + y + I(x^2) + I(y^2) + I(x * y),
+  data = demo_pts
+)
+demo_grid$smooth <- as.vector(stats::predict(demo_smooth_model, newdata = demo_grid))
+demo_grid$smooth_class <- demo_class(demo_grid$smooth)
+
+demo_pts$trend_pred <- as.vector(stats::predict(demo_smooth_model, newdata = demo_pts))
+demo_pts$trend_resid <- demo_pts$value - demo_pts$trend_pred
+
+make_variogram_cloud_xy <- function(dat, value_col) {
+  pair_index <- utils::combn(seq_len(nrow(dat)), 2)
+  zi <- dat[[value_col]][pair_index[1, ]]
+  zj <- dat[[value_col]][pair_index[2, ]]
+  dx <- dat$x[pair_index[1, ]] - dat$x[pair_index[2, ]]
+  dy <- dat$y[pair_index[1, ]] - dat$y[pair_index[2, ]]
+  data.frame(
+    i = pair_index[1, ],
+    j = pair_index[2, ],
+    dist = sqrt(dx^2 + dy^2),
+    gamma = 0.5 * (zi - zj)^2
+  )
+}
+
+make_empirical_variogram <- function(cloud, width = 0.12, cutoff = 1.35) {
+  cloud2 <- cloud[is.finite(cloud$dist) & cloud$dist <= cutoff, ]
+  breaks <- seq(0, cutoff + width, by = width)
+  cloud2$lag <- cut(cloud2$dist, breaks = breaks, include.lowest = TRUE, right = FALSE)
+  emp <- stats::aggregate(cbind(dist, gamma) ~ lag, cloud2, mean)
+  np <- stats::aggregate(gamma ~ lag, cloud2, length)
+  emp$np <- np$gamma
+  emp
+}
+
+demo_cloud <- make_variogram_cloud_xy(demo_pts, "value")
+demo_empirical <- make_empirical_variogram(demo_cloud)
+
+# Highlight relatively short-distance pair contrasts in the cloud.
+short_pair_cutoff <- stats::quantile(demo_cloud$dist, 0.45, na.rm = TRUE)
+high_gamma_cutoff <- stats::quantile(demo_cloud$gamma, 0.92, na.rm = TRUE)
+demo_cloud$pair_type <- ifelse(
+  demo_cloud$dist <= short_pair_cutoff & demo_cloud$gamma >= high_gamma_cutoff,
+  "short-distance high semivariance",
+  "other pairs"
+)
+
+fit_spherical_variogram_xy <- function(emp) {
+  dat <- emp[is.finite(emp$dist) & is.finite(emp$gamma), ]
+  nug0 <- max(min(dat$gamma, na.rm = TRUE) * 0.5, 0.001)
+  psill0 <- max(max(dat$gamma, na.rm = TRUE) - nug0, 0.05)
+  range0 <- stats::quantile(dat$dist, 0.70, na.rm = TRUE)
+  fit <- try(
+    stats::nls(
+      gamma ~ nugget + psill * ifelse(
+        dist < range,
+        1.5 * (dist / range) - 0.5 * (dist / range)^3,
+        1
+      ),
+      data = dat,
+      start = list(nugget = nug0, psill = psill0, range = range0),
+      algorithm = "port",
+      lower = c(nugget = 0, psill = 0.001, range = 0.10),
+      upper = c(nugget = Inf, psill = Inf, range = 1.50)
+    ),
+    silent = TRUE
+  )
+  if (inherits(fit, "try-error")) {
+    pars <- c(nugget = nug0, psill = psill0, range = as.numeric(range0))
+  } else {
+    pars <- stats::coef(fit)
+  }
+  pars["sill"] <- pars["nugget"] + pars["psill"]
+  pars
+}
+
+demo_vgm_pars <- fit_spherical_variogram_xy(demo_empirical)
+demo_model_line <- data.frame(dist = seq(0, max(demo_empirical$dist, na.rm = TRUE), length.out = 300))
+demo_model_line$gamma <- with(
+  as.list(demo_vgm_pars),
+  nugget + psill * ifelse(
+    demo_model_line$dist < range,
+    1.5 * (demo_model_line$dist / range) - 0.5 * (demo_model_line$dist / range)^3,
+    1
+  )
+)
+
+trend_resid_cloud <- make_variogram_cloud_xy(demo_pts, "trend_resid")
+trend_resid_empirical <- make_empirical_variogram(trend_resid_cloud)
+
+demo_d <- as.matrix(stats::dist(demo_pts[, c("x", "y")]))
+diag(demo_d) <- Inf
+demo_nn <- apply(demo_d, 1, which.min)
+demo_pts$nn <- demo_nn
+demo_pts$nn_value <- demo_pts$value[demo_nn]
+demo_pts$resid <- demo_pts$value - demo_pts$nn_value
+demo_pts$flag <- FALSE
+demo_flag_ids <- order(abs(demo_pts$resid), decreasing = TRUE)[1:2]
+demo_pts$flag[demo_flag_ids] <- TRUE
+demo_flags <- demo_pts[demo_pts$flag, ]
+demo_flags$xend <- demo_pts$x[demo_flags$nn]
+demo_flags$yend <- demo_pts$y[demo_flags$nn]
+demo_flags$label <- ifelse(demo_flags$resid > 0, "flagged local high", "flagged local low")
+demo_flags <- demo_flags[order(demo_flags$resid, decreasing = TRUE), ]
+demo_flags$label_x <- c(max(0.16, demo_flags$x[1] - 0.04), min(0.60, demo_flags$x[2] + 0.18))
+demo_flags$label_y <- c(min(0.93, demo_flags$y[1] + 0.10), min(0.90, demo_flags$y[2] + 0.14))
+
+# -------------------------------------------------------------------------
+# Spatial cross-validation demo
+# -------------------------------------------------------------------------
+calc_pred_metrics <- function(train, test, idp = 2, nmax = 8) {
+  pred <- idw_predict_xy(train, test, idp = idp, nmax = nmax)
+  data.frame(
+    MAE = mean(abs(test$value - pred)),
+    RMSE = sqrt(mean((test$value - pred)^2))
+  )
+}
+
+set.seed(5522)
+demo_pts$rand_split <- "Train"
+rand_test_idx <- sample(seq_len(nrow(demo_pts)), size = ceiling(0.30 * nrow(demo_pts)))
+demo_pts$rand_split[rand_test_idx] <- "Test"
+
+demo_pts$spatial_split <- ifelse(demo_pts$x > 0.68, "Test", "Train")
+
+split_plot_df <- rbind(
+  data.frame(demo_pts[, c("x", "y")], Split = demo_pts$rand_split, Scheme = "Random split"),
+  data.frame(demo_pts[, c("x", "y")], Split = demo_pts$spatial_split, Scheme = "Spatial split")
+)
+
+rand_metrics <- calc_pred_metrics(
+  demo_pts[demo_pts$rand_split == "Train", ],
+  demo_pts[demo_pts$rand_split == "Test", ]
+)
+rand_metrics$Strategy <- "Random 70/30 split"
+
+spatial_metrics <- calc_pred_metrics(
+  demo_pts[demo_pts$spatial_split == "Train", ],
+  demo_pts[demo_pts$spatial_split == "Test", ]
+)
+spatial_metrics$Strategy <- "Spatial CV"
+
+set.seed(5523)
+random_results <- do.call(rbind, lapply(seq_len(150), function(i) {
+  idx <- sample(seq_len(nrow(demo_pts)), size = ceiling(0.30 * nrow(demo_pts)))
+  out <- calc_pred_metrics(demo_pts[-idx, ], demo_pts[idx, ])
+  out$Strategy <- "Random 70/30 split"
+  out$Fold <- NA_character_
+  out
+}))
+
+spatial_fold_breaks <- c(0, 0.25, 0.50, 0.75, 1.00)
+demo_pts$spatial_fold <- cut(
+  demo_pts$x,
+  breaks = spatial_fold_breaks,
+  include.lowest = TRUE,
+  labels = paste("Block", 1:4)
+)
+
+spatial_results <- do.call(rbind, lapply(levels(demo_pts$spatial_fold), function(fold) {
+  test <- demo_pts[demo_pts$spatial_fold == fold, ]
+  train <- demo_pts[demo_pts$spatial_fold != fold, ]
+  out <- calc_pred_metrics(train, test)
+  out$Strategy <- "Spatial CV"
+  out$Fold <- fold
+  out
+}))
+
+validation_results <- rbind(random_results, spatial_results)
+validation_results$Strategy <- factor(validation_results$Strategy, levels = c("Random 70/30 split", "Spatial CV"))
+validation_summary <- do.call(rbind, lapply(split(validation_results, validation_results$Strategy), function(x) {
+  data.frame(
+    Strategy = unique(as.character(x$Strategy)),
+    Median_MAE = median(x$MAE),
+    Median_RMSE = median(x$RMSE)
+  )
+}))
+
+# Candidate sites from the tutorial. These are not answers; they are options
+# that force trade-offs between geology, step-out drilling, infill and model uncertainty.
+candidate_sites <- data.frame(
+  Site = LETTERS[1:12],
+  Easting = c(633650, 633700, 633050, 631900, 632550, 630950,
+              632150, 631050, 630350, 632900, 631950, 629900),
+  Northing = c(7565400, 7564350, 7563000, 7565150, 7564700, 7563950,
+               7566800, 7566950, 7565850, 7566100, 7563600, 7566750),
+  dx = c(95, 95, 95, 90, 90, -90, 0, 0, -90, 95, -90, 0),
+  dy = c(105, 95, -110, 105, -110, 95, 110, 110, 95, 95, -110, 110)
+) |>
+  dplyr::mutate(label_x = Easting + dx, label_y = Northing + dy)
+
+candidate_sites_sf <- sf::st_as_sf(candidate_sites, coords = c("Easting", "Northing"), crs = target_crs, remove = FALSE)
+
+plot_idw_surface <- function(show_flags = FALSE) {
+  p <- ggplot2::ggplot() +
+    map_background_layers() +
+    ggplot2::geom_tile(data = idw_surface, ggplot2::aes(x = X, y = Y, fill = ash_class), width = prediction_cellsize, height = prediction_cellsize) +
+    ggplot2::scale_fill_manual(values = ash_palette, limits = ash_labels, breaks = ash_labels, drop = FALSE, name = "IDW Ash (%)") +
+    ggplot2::geom_sf(data = boreholes, shape = 21, fill = "black", colour = "white", size = 1.65, stroke = 0.24) +
+    map_overlay_layers() +
+    coord_mavis() +
+    ggplot2::labs(x = "Easting (m)", y = "Northing (m)") +
+    map_theme(13)
+  if (show_flags) {
+    p <- p + ggplot2::geom_sf(data = spatial_flags_sf, shape = 21, fill = NA, colour = "black", size = 5.0, stroke = 1.1)
+  }
+  p
+}
+
+plot_kriging_surface <- function(show_candidates = FALSE) {
+  p <- ggplot2::ggplot() +
+    map_background_layers() +
+    ggplot2::geom_tile(data = kriging_surface, ggplot2::aes(x = X, y = Y, fill = ash_class), width = prediction_cellsize, height = prediction_cellsize) +
+    ggplot2::scale_fill_manual(values = ash_palette, limits = ash_labels, breaks = ash_labels, drop = FALSE, name = "Kriging Ash (%)") +
+    ggplot2::geom_sf(data = boreholes, shape = 21, fill = "black", colour = "white", size = 1.55, stroke = 0.24) +
+    map_overlay_layers() +
+    coord_mavis() +
+    ggplot2::labs(x = "Easting (m)", y = "Northing (m)") +
+    map_theme(13)
+  if (show_candidates) {
+    p <- p +
+      ggplot2::geom_sf(data = candidate_sites_sf, shape = 23, fill = "red3", colour = "black", size = 4.0, stroke = 0.45) +
+      ggplot2::geom_text(data = candidate_sites, ggplot2::aes(x = label_x, y = label_y, label = Site), fontface = "bold", size = 4.0, colour = "red4")
+  }
+  p
+}
+
+plot_kriging_se <- function(show_candidates = FALSE) {
+  p <- ggplot2::ggplot() +
+    map_background_layers() +
+    ggplot2::geom_tile(data = kriging_surface, ggplot2::aes(x = X, y = Y, fill = kriging_se), width = prediction_cellsize, height = prediction_cellsize) +
+    ggplot2::scale_fill_viridis_c(option = "C", direction = -1, name = "Kriging\nSE") +
+    ggplot2::geom_sf(data = boreholes, shape = 21, fill = "black", colour = "white", size = 1.55, stroke = 0.24) +
+    map_overlay_layers() +
+    coord_mavis() +
+    ggplot2::labs(x = "Easting (m)", y = "Northing (m)") +
+    map_theme(13)
+  if (show_candidates) {
+    p <- p +
+      ggplot2::geom_sf(data = candidate_sites_sf, shape = 23, fill = "red3", colour = "black", size = 4.0, stroke = 0.45) +
+      ggplot2::geom_text(data = candidate_sites, ggplot2::aes(x = label_x, y = label_y, label = Site), fontface = "bold", size = 4.0, colour = "red4")
+  }
+  p
+}
+
+plot_ml_surface <- function() {
+  ggplot2::ggplot() +
+    map_background_layers() +
+    ggplot2::geom_tile(data = ml_surface, ggplot2::aes(x = X, y = Y, fill = ash_class), width = prediction_cellsize, height = prediction_cellsize) +
+    ggplot2::scale_fill_manual(values = ash_palette, limits = ash_labels, breaks = ash_labels, drop = FALSE, name = "Predicted\nAsh (%)") +
+    ggplot2::geom_sf(data = boreholes, shape = 21, fill = "black", colour = "white", size = 1.55, stroke = 0.24) +
+    map_overlay_layers() +
+    coord_mavis() +
+    ggplot2::labs(x = "Easting (m)", y = "Northing (m)") +
+    map_theme(13)
+}
+
+
+## -----------------------------------------------------------------------
+#| label: spatial-data-types-v20
+#| echo: false
+#| fig-width: 7.2
+#| fig-height: 4.7
+#| out-width: "100%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+set.seed(122)
+pts_type <- data.frame(x = runif(18), y = runif(18), type = "Points")
+line_type <- data.frame(x = seq(0.08, 0.92, length.out = 80))
+line_type$y <- 0.45 + 0.22 * sin(line_type$x * 7)
+line_type$type <- "Lines"
+poly_type <- data.frame(
+  x = c(0.12, 0.45, 0.82, 0.70, 0.28, 0.12),
+  y = c(0.20, 0.12, 0.38, 0.78, 0.86, 0.20),
+  type = "Polygons"
+)
+rast_type <- expand.grid(x = seq(0.04, 0.96, length.out = 22), y = seq(0.04, 0.96, length.out = 22))
+rast_type$z <- with(rast_type, x + 0.5 * y + 0.18 * sin(8 * x))
+rast_type$type <- "Rasters"
+
+ggplot2::ggplot() +
+  ggplot2::geom_raster(data = rast_type, ggplot2::aes(x, y, fill = z)) +
+  ggplot2::geom_polygon(data = poly_type, ggplot2::aes(x, y), fill = "#A6CEE3", colour = monash_blue, linewidth = 1.0) +
+  ggplot2::geom_path(data = line_type, ggplot2::aes(x, y), colour = "#D55E00", linewidth = 1.25) +
+  ggplot2::geom_point(data = pts_type, ggplot2::aes(x, y), shape = 21, fill = monash_blue, colour = "white", size = 3.2, stroke = 0.3) +
+  ggplot2::facet_wrap(~type, nrow = 2) +
+  ggplot2::scale_fill_viridis_c(option = "C", guide = "none") +
+  ggplot2::coord_equal(xlim = c(0, 1), ylim = c(0, 1), expand = FALSE) +
+  ggplot2::theme_void(base_size = 13) +
+  ggplot2::theme(strip.text = ggplot2::element_text(face = "bold", size = 14))
+
+
+## -----------------------------------------------------------------------
+#| label: same-values-different-map-v20
+#| echo: false
+#| fig-width: 8.0
+#| fig-height: 4.8
+#| out-width: "100%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+set.seed(5521)
+n_demo <- 48
+same_values <- sort(c(rnorm(n_demo - 4, 10, 0.9), 12.5, 12.8, 8.1, 8.3))
+random_arrangement <- data.frame(
+  x = runif(n_demo),
+  y = runif(n_demo),
+  value = sample(same_values),
+  pattern = "Random arrangement"
+)
+structured_arrangement <- data.frame(
+  x = runif(n_demo),
+  y = runif(n_demo)
+)
+structured_arrangement$value <- 8.2 + 4.8 * structured_arrangement$x + rnorm(n_demo, 0, 0.35)
+structured_arrangement$value <- sort(same_values)[rank(structured_arrangement$value, ties.method = "first")]
+structured_arrangement$pattern <- "Spatially structured"
+arrangements <- rbind(random_arrangement, structured_arrangement)
+
+ggplot2::ggplot(arrangements, ggplot2::aes(x, y, fill = value)) +
+  ggplot2::geom_point(shape = 21, colour = "grey20", size = 4.1, stroke = 0.3) +
+  ggplot2::facet_wrap(~pattern, nrow = 1) +
+  ggplot2::scale_fill_viridis_c(option = "C", name = "Value") +
+  ggplot2::coord_equal(xlim = c(0, 1), ylim = c(0, 1), expand = FALSE) +
+  ggplot2::labs(x = NULL, y = NULL) +
+  ggplot2::theme_bw(base_size = 13) +
+  ggplot2::theme(
+    panel.grid.minor = ggplot2::element_blank(),
+    axis.text = ggplot2::element_blank(),
+    axis.ticks = ggplot2::element_blank(),
+    strip.text = ggplot2::element_text(face = "bold")
+  )
+
+
+## -----------------------------------------------------------------------
+#| label: conventional-eda-ggplot-v15
+#| echo: false
+#| fig-width: 6.8
+#| fig-height: 4.3
+#| out-width: "100%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+set.seed(25)
+schem_vals <- data.frame(value = c(stats::rnorm(55, 10, 1.1), 15.8))
+p_hist <- ggplot2::ggplot(schem_vals, ggplot2::aes(x = value)) +
+  ggplot2::geom_histogram(bins = 12, fill = "#A6CEE3", colour = "white") +
+  ggplot2::labs(title = "Histogram", x = "Value", y = "Count") +
+  ggplot2::theme_bw(base_size = 12) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+p_box <- ggplot2::ggplot(schem_vals, ggplot2::aes(x = "", y = value)) +
+  ggplot2::geom_boxplot(fill = "#A6CEE3", width = 0.35, outlier.colour = "red4") +
+  ggplot2::labs(title = "Boxplot", x = NULL, y = "Value") +
+  ggplot2::theme_bw(base_size = 12) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), axis.text.x = ggplot2::element_blank(), axis.ticks.x = ggplot2::element_blank())
+grid::grid.newpage()
+grid::pushViewport(grid::viewport(layout = grid::grid.layout(2, 1, heights = grid::unit(c(1.4, 1), "null"))))
+print(p_hist, vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
+print(p_box, vp = grid::viewport(layout.pos.row = 2, layout.pos.col = 1))
+
+
+## -----------------------------------------------------------------------
+#| label: trend-eda-plots-v15
+#| echo: false
+#| fig-width: 10.5
+#| fig-height: 5.0
+#| out-width: "82%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+trend_long <- rbind(
+  data.frame(coord = "x coordinate", coord_value = demo_pts$x, value = demo_pts$value),
+  data.frame(coord = "y coordinate", coord_value = demo_pts$y, value = demo_pts$value)
+)
+
+ggplot2::ggplot(trend_long, ggplot2::aes(coord_value, value)) +
+  ggplot2::geom_point(shape = 21, fill = "grey85", colour = "grey25", size = 2.8, stroke = 0.25) +
+  ggplot2::geom_smooth(method = "lm", se = FALSE, colour = "grey35", linewidth = 0.9, linetype = "dashed", formula = y ~ x) +
+  ggplot2::geom_smooth(method = "loess", se = FALSE, colour = monash_blue, linewidth = 1.15, formula = y ~ x) +
+  ggplot2::facet_wrap(~coord, scales = "free_x", nrow = 1) +
+  ggplot2::labs(x = "Coordinate value", y = "Observed value", caption = "Dashed = linear trend; blue = loess trend") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), strip.text = ggplot2::element_text(face = "bold"), plot.caption = ggplot2::element_text(size = 11, colour = "grey35"))
+
+
+## -----------------------------------------------------------------------
+#| label: trend-surface-v15
+#| echo: false
+#| fig-width: 7.4
+#| fig-height: 5.0
+#| out-width: "100%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot() +
+  ggplot2::geom_raster(data = demo_grid, ggplot2::aes(x = x, y = y, fill = smooth_class)) +
+  ggplot2::geom_point(data = demo_pts, ggplot2::aes(x = x, y = y), shape = 21, fill = "black", colour = "white", size = 2.1, stroke = 0.22) +
+  ggplot2::scale_fill_manual(values = demo_palette, limits = demo_labels, drop = FALSE, name = "Trend\nvalue") +
+  ggplot2::coord_equal(expand = FALSE) +
+  ggplot2::labs(x = NULL, y = NULL, title = "Generic 2D trend surface") +
+  ggplot2::theme_bw(base_size = 13) +
+  ggplot2::theme(panel.grid = ggplot2::element_blank(), axis.text = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: spatial-dependence-schematic-v18
+#| echo: false
+#| fig-width: 10.0
+#| fig-height: 4.6
+#| out-width: "70%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ellipse <- function(cx, cy, a, b, angle = 0, n = 200) {
+  t <- seq(0, 2 * pi, length.out = n)
+  x <- a * cos(t)
+  y <- b * sin(t)
+  xr <- cx + x * cos(angle) - y * sin(angle)
+  yr <- cy + x * sin(angle) + y * cos(angle)
+  data.frame(x = xr, y = yr)
+}
+iso <- ellipse(0.30, 0.56, 0.15, 0.15)
+ani <- ellipse(0.74, 0.56, 0.24, 0.085, angle = 0.62)
+centres <- data.frame(x = c(0.30, 0.74), y = c(0.56, 0.56))
+
+ggplot2::ggplot() +
+  ggplot2::geom_polygon(data = iso, ggplot2::aes(x, y), fill = "#D1E5F0", colour = "#2166AC", linewidth = 1.2) +
+  ggplot2::geom_polygon(data = ani, ggplot2::aes(x, y), fill = "#FEE08B", colour = "#D55E00", linewidth = 1.2) +
+  ggplot2::geom_point(data = centres, ggplot2::aes(x, y), size = 5, shape = 21, fill = "white", colour = "grey20", stroke = 0.4) +
+  ggplot2::annotate("label", x = 0.30, y = 0.16, label = "Isotropic\nDistance only", size = 4.2, fontface = "bold", lineheight = 0.95, label.size = 0, fill = "white") +
+  ggplot2::annotate("label", x = 0.74, y = 0.16, label = "Anisotropic\nDirection matters", size = 4.2, fontface = "bold", lineheight = 0.95, label.size = 0, fill = "white") +
+  ggplot2::coord_equal(xlim = c(0.02, 0.98), ylim = c(0.00, 1.00), expand = FALSE) +
+  ggplot2::theme_void()
+
+
+## -----------------------------------------------------------------------
+#| label: variogram-why-pairs-v18
+#| echo: false
+#| fig-width: 6.6
+#| fig-height: 4.8
+#| out-width: "100%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+pair_short <- demo_cloud[which.min(abs(demo_cloud$dist - stats::quantile(demo_cloud$dist, 0.08))), ]
+pair_long <- demo_cloud[which.min(abs(demo_cloud$dist - stats::quantile(demo_cloud$dist, 0.85))), ]
+pair_seg <- rbind(
+  data.frame(x = demo_pts$x[pair_short$i], y = demo_pts$y[pair_short$i], xend = demo_pts$x[pair_short$j], yend = demo_pts$y[pair_short$j], Pair = "near pair"),
+  data.frame(x = demo_pts$x[pair_long$i], y = demo_pts$y[pair_long$i], xend = demo_pts$x[pair_long$j], yend = demo_pts$y[pair_long$j], Pair = "far pair")
+)
+
+ggplot2::ggplot(demo_pts, ggplot2::aes(x, y)) +
+  ggplot2::geom_point(ggplot2::aes(fill = value_class), shape = 21, colour = "grey20", size = 3.5, stroke = 0.30) +
+  ggplot2::geom_segment(data = pair_seg, ggplot2::aes(x = x, y = y, xend = xend, yend = yend, colour = Pair), inherit.aes = FALSE, linewidth = 1.25) +
+  ggplot2::scale_fill_manual(values = demo_palette, limits = demo_labels, drop = FALSE, name = "Value") +
+  ggplot2::scale_colour_manual(values = c("near pair" = monash_blue, "far pair" = "#D55E00"), name = NULL) +
+  ggplot2::coord_equal(xlim = c(0, 1), ylim = c(0, 1)) +
+  ggplot2::labs(x = "x", y = "y") +
+  ggplot2::theme_bw(base_size = 13) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: variogram-cloud-v18
+#| echo: false
+#| fig-width: 9.8
+#| fig-height: 5.2
+#| out-width: "80%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot(demo_cloud, ggplot2::aes(x = dist, y = gamma)) +
+  ggplot2::geom_point(data = subset(demo_cloud, pair_type == "other pairs"), alpha = 0.22, colour = "grey45", size = 1.35) +
+  ggplot2::geom_point(data = subset(demo_cloud, pair_type != "other pairs"), colour = "#D55E00", alpha = 0.85, size = 2.1) +
+  ggplot2::annotate("label", x = 0.42, y = max(demo_cloud$gamma, na.rm = TRUE) * 0.82, label = "nearby pairs with unexpectedly high difference", colour = "#D55E00", fill = "white", label.size = 0.25, size = 4.0) +
+  ggplot2::labs(x = "Lag distance between sample pairs", y = "Semivariance", title = "Each point is one pair of samples") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: empirical-variogram-v18
+#| echo: false
+#| fig-width: 9.8
+#| fig-height: 5.2
+#| out-width: "80%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot() +
+  ggplot2::geom_point(data = demo_cloud, ggplot2::aes(x = dist, y = gamma), alpha = 0.13, colour = "grey45", size = 1.15) +
+  ggplot2::geom_line(data = demo_empirical, ggplot2::aes(x = dist, y = gamma), colour = monash_blue, linewidth = 1.15) +
+  ggplot2::geom_point(data = demo_empirical, ggplot2::aes(x = dist, y = gamma, size = np), shape = 21, fill = monash_blue, colour = "white", stroke = 0.35) +
+  ggplot2::scale_size_continuous(name = "Pairs", range = c(2.8, 6.4)) +
+  ggplot2::labs(x = "Lag distance", y = "Mean semivariance", title = "Empirical variogram = binned variogram cloud") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: fit-variogram-model-v18
+#| echo: false
+#| fig-width: 7.8
+#| fig-height: 5.0
+#| out-width: "100%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot() +
+  ggplot2::geom_point(data = demo_empirical, ggplot2::aes(x = dist, y = gamma, size = np), shape = 21, fill = monash_blue, colour = "white", stroke = 0.35) +
+  ggplot2::geom_line(data = demo_model_line, ggplot2::aes(x = dist, y = gamma), colour = "#D7191C", linewidth = 1.25) +
+  ggplot2::scale_size_continuous(name = "Pairs", range = c(2.8, 6.2)) +
+  ggplot2::labs(x = "Lag distance", y = "Semivariance", title = "Fitted variogram model") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: variogram-anatomy-v18
+#| echo: false
+#| fig-width: 10.5
+#| fig-height: 5.5
+#| out-width: "84%"
+#| message: false
+#| warning: false
+
+nugget_v <- unname(demo_vgm_pars["nugget"])
+sill_v <- unname(demo_vgm_pars["sill"])
+range_v <- unname(demo_vgm_pars["range"])
+
+ggplot2::ggplot() +
+  ggplot2::geom_point(data = demo_empirical, ggplot2::aes(x = dist, y = gamma, size = np), shape = 21, fill = monash_blue, colour = "white", stroke = 0.35, alpha = 0.85) +
+  ggplot2::geom_line(data = demo_model_line, ggplot2::aes(x = dist, y = gamma), colour = "#D7191C", linewidth = 1.35) +
+  ggplot2::geom_hline(yintercept = sill_v, linetype = "dashed", colour = "grey35") +
+  ggplot2::geom_hline(yintercept = nugget_v, linetype = "dotted", colour = "grey35") +
+  ggplot2::geom_vline(xintercept = range_v, linetype = "dashed", colour = "#D55E00") +
+  ggplot2::annotate("label", x = max(demo_model_line$dist) * 0.86, y = sill_v, label = "sill", size = 4.5, fontface = "bold", fill = "white", label.size = 0.2) +
+  ggplot2::annotate("label", x = max(demo_model_line$dist) * 0.18, y = nugget_v, label = "nugget", size = 4.5, fontface = "bold", fill = "white", label.size = 0.2) +
+  ggplot2::annotate("label", x = range_v, y = max(demo_model_line$gamma, na.rm = TRUE) * 0.45, label = "range", size = 4.5, fontface = "bold", colour = "#D55E00", fill = "white", label.size = 0.2) +
+  ggplot2::scale_size_continuous(name = "Pairs", range = c(2.8, 6.2)) +
+  ggplot2::labs(x = "Lag distance", y = "Semivariance") +
+  ggplot2::theme_bw(base_size = 15) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: spatial-eda-global-pattern-v23
+#| echo: false
+#| fig-width: 9.4
+#| fig-height: 4.9
+#| out-width: "76%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot() +
+  ggplot2::geom_raster(data = demo_grid, ggplot2::aes(x = x, y = y, fill = smooth), alpha = 0.88) +
+  ggplot2::geom_point(data = demo_pts, ggplot2::aes(x = x, y = y), shape = 21, fill = "black", colour = "white", size = 2.4, stroke = 0.22) +
+  ggplot2::scale_fill_viridis_c(option = "C", name = "Broad trend") +
+  ggplot2::coord_equal(xlim = c(0, 1), ylim = c(0, 1), expand = FALSE) +
+  ggplot2::labs(x = "x", y = "y", title = "A smoother can reveal broad spatial structure") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: spatial-eda-domain-map-v23
+#| echo: false
+#| fig-width: 9.4
+#| fig-height: 4.9
+#| out-width: "76%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+spatial_domains <- data.frame(
+  xmin = c(0, 0.5), xmax = c(0.5, 1), ymin = 0, ymax = 1,
+  domain = c("Spatial domain A", "Spatial domain B")
+)
+
+ggplot2::ggplot() +
+  ggplot2::geom_rect(data = spatial_domains, ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = domain), alpha = 0.18, colour = "grey35", linewidth = 0.6) +
+  ggplot2::geom_point(data = demo_pts, ggplot2::aes(x = x, y = y, fill = value_class), shape = 21, colour = "grey20", size = 3.4, stroke = 0.35) +
+  ggplot2::annotate("label", x = 0.25, y = 0.94, label = "Domain A", fontface = "bold", fill = "white", label.size = 0.2, size = 4.1) +
+  ggplot2::annotate("label", x = 0.75, y = 0.94, label = "Domain B", fontface = "bold", fill = "white", label.size = 0.2, size = 4.1) +
+  ggplot2::scale_fill_manual(values = c("Spatial domain A" = "#D1E5F0", "Spatial domain B" = "#FDB863", demo_palette), breaks = demo_labels, name = "Value class") +
+  ggplot2::coord_equal(xlim = c(0, 1), ylim = c(0, 1), expand = FALSE) +
+  ggplot2::labs(x = "x", y = "y", title = "Spatial domains change the comparison being made") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: schematic-nn-residuals-v16
+#| echo: false
+#| fig-width: 9.0
+#| fig-height: 4.9
+#| out-width: "76%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot(demo_pts, ggplot2::aes(x, y)) +
+  ggplot2::geom_segment(data = demo_flags, ggplot2::aes(xend = xend, yend = yend), colour = "grey45", linewidth = 1.0) +
+  ggplot2::geom_point(ggplot2::aes(fill = value_class), shape = 21, colour = "grey20", size = 4.6, stroke = 0.35) +
+  ggplot2::geom_point(data = demo_flags, shape = 21, fill = NA, colour = "red4", size = 7.2, stroke = 1.35) +
+  ggplot2::geom_curve(
+    data = demo_flags,
+    ggplot2::aes(x = label_x, y = label_y, xend = x, yend = y),
+    inherit.aes = FALSE,
+    curvature = 0.12,
+    colour = "red4",
+    linewidth = 0.8,
+    arrow = grid::arrow(length = grid::unit(0.08, "inches"))
+  ) +
+  ggplot2::geom_label(
+    data = demo_flags,
+    ggplot2::aes(x = label_x, y = label_y, label = label),
+    inherit.aes = FALSE,
+    fill = "white",
+    colour = "red4",
+    size = 3.6,
+    label.size = 0.25,
+    label.r = grid::unit(0.12, "lines")
+  ) +
+  ggplot2::scale_fill_manual(values = demo_palette, limits = demo_labels, drop = FALSE, name = "Value class") +
+  ggplot2::coord_equal(xlim = c(0, 1), ylim = c(0, 1), clip = "off") +
+  ggplot2::labs(x = "x", y = "y") +
+  ggplot2::theme_bw(base_size = 15) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: eda-clustering-gaps-v20
+#| echo: false
+#| fig-width: 9.2
+#| fig-height: 4.6
+#| out-width: "72%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot(demo_pts, ggplot2::aes(x, y)) +
+  ggplot2::geom_point(shape = 21, fill = "grey80", colour = "grey25", size = 3.4, stroke = 0.35) +
+  ggplot2::annotate("rect", xmin = 0.03, xmax = 0.48, ymin = 0.57, ymax = 0.96, fill = NA, colour = monash_blue, linewidth = 1.0, linetype = "dashed") +
+  ggplot2::annotate("label", x = 0.25, y = 0.93, label = "sparse / gap", colour = monash_blue, fill = "white", fontface = "bold", size = 4.0, label.size = 0.2) +
+  ggplot2::annotate("rect", xmin = 0.58, xmax = 0.97, ymin = 0.08, ymax = 0.84, fill = NA, colour = "#D55E00", linewidth = 1.0, linetype = "dashed") +
+  ggplot2::annotate("label", x = 0.78, y = 0.16, label = "clustered sampling", colour = "#D55E00", fill = "white", fontface = "bold", size = 4.0, label.size = 0.2) +
+  ggplot2::coord_equal(xlim = c(0, 1), ylim = c(0, 1), expand = FALSE) +
+  ggplot2::labs(x = "x", y = "y") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: generic-prediction-surfaces-v15
+#| echo: false
+#| fig-width: 6.9
+#| fig-height: 4.1
+#| out-width: "100%"
+#| message: false
+#| warning: false
+
+surf_plot_df <- rbind(
+  data.frame(demo_grid[, c("x", "y")], class = demo_grid$idw_class, Surface = "Exact IDW"),
+  data.frame(demo_grid[, c("x", "y")], class = demo_grid$smooth_class, Surface = "Trend surface")
+)
+
+ggplot2::ggplot(surf_plot_df, ggplot2::aes(x = x, y = y, fill = class)) +
+  ggplot2::geom_raster() +
+  ggplot2::geom_point(data = demo_pts, ggplot2::aes(x = x, y = y), inherit.aes = FALSE, shape = 21, fill = "black", colour = "white", size = 1.8, stroke = 0.22) +
+  ggplot2::facet_wrap(~Surface, nrow = 1) +
+  ggplot2::scale_fill_manual(values = demo_palette, limits = demo_labels, drop = FALSE, name = "Value") +
+  ggplot2::coord_equal(expand = FALSE) +
+  ggplot2::labs(x = NULL, y = NULL) +
+  ggplot2::theme_bw(base_size = 12) +
+  ggplot2::theme(panel.grid = ggplot2::element_blank(), strip.text = ggplot2::element_text(face = "bold"), axis.text = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: idw-weighting-example-image-v26
+#| echo: false
+#| message: false
+#| warning: false
+#| out-width: "100%"
+#| fig-align: center
+
+idw_img_candidates <- c(
+  "../images/idw_weighting_example.png",
+  "images/idw_weighting_example.png",
+  "idw_weighting_example.png",
+  "../assets/idw_weighting_example.png"
+)
+idw_img <- idw_img_candidates[file.exists(idw_img_candidates)][1]
+if (is.na(idw_img)) {
+  stop(
+    "Could not find idw_weighting_example.png. Put it in either root/images or week10/images."
+  )
+}
+knitr::include_graphics(idw_img)
+
+
+## -----------------------------------------------------------------------
+#| label: exact-idw-v15
+#| echo: false
+#| fig-width: 6.6
+#| fig-height: 5.0
+#| out-width: "100%"
+#| message: false
+#| warning: false
+
+ggplot2::ggplot() +
+  ggplot2::geom_raster(data = demo_grid, ggplot2::aes(x = x, y = y, fill = idw_class)) +
+  ggplot2::geom_point(data = demo_pts, ggplot2::aes(x = x, y = y), shape = 21, fill = "black", colour = "white", size = 2.3, stroke = 0.22) +
+  ggplot2::geom_point(data = demo_flags, ggplot2::aes(x = x, y = y), shape = 21, fill = NA, colour = "red4", size = 5.2, stroke = 1.0) +
+  ggplot2::scale_fill_manual(values = demo_palette, limits = demo_labels, drop = FALSE, name = "IDW value") +
+  ggplot2::coord_equal(expand = FALSE) +
+  ggplot2::labs(x = "x", y = "y", title = "Exact IDW diagnostic surface") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: spatial-cv-splits-plot-v15
+#| echo: false
+#| fig-width: 10.2
+#| fig-height: 5.1
+#| out-width: "82%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot(split_plot_df, ggplot2::aes(x = x, y = y)) +
+  ggplot2::geom_point(ggplot2::aes(fill = Split), shape = 21, colour = "grey20", size = 4.2, stroke = 0.25) +
+  ggplot2::geom_vline(data = data.frame(Scheme = "Spatial split", xint = 0.68), ggplot2::aes(xintercept = xint), linetype = "dashed", linewidth = 0.7, colour = "grey35", inherit.aes = FALSE) +
+  ggplot2::facet_wrap(~Scheme, nrow = 1) +
+  ggplot2::scale_fill_manual(values = c(Train = "grey75", Test = "#D55E00"), drop = FALSE) +
+  ggplot2::coord_equal(xlim = c(0, 1), ylim = c(0, 1)) +
+  ggplot2::labs(x = NULL, y = NULL, fill = NULL) +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), axis.text = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank(), strip.text = ggplot2::element_text(face = "bold"), legend.position = "right")
+
+
+## -----------------------------------------------------------------------
+#| label: spatial-cv-metric-plot-v15
+#| echo: false
+#| fig-width: 7.2
+#| fig-height: 4.8
+#| out-width: "100%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot(validation_results, ggplot2::aes(x = Strategy, y = MAE, fill = Strategy)) +
+  ggplot2::geom_boxplot(width = 0.55, outlier.alpha = 0.35) +
+  ggplot2::geom_jitter(width = 0.08, alpha = 0.30, size = 1.4, colour = "grey25") +
+  ggplot2::scale_fill_manual(values = c("Random 70/30 split" = "#A6CEE3", "Spatial CV" = "#FB9A99"), guide = "none") +
+  ggplot2::labs(x = NULL, y = "Mean absolute error") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: fit-trend-first-v15
+#| echo: false
+#| fig-width: 10.5
+#| fig-height: 5.0
+#| out-width: "82%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot(demo_pts, ggplot2::aes(x = trend_pred, y = value)) +
+  ggplot2::geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "grey40") +
+  ggplot2::geom_point(shape = 21, fill = "#A6CEE3", colour = "grey20", size = 3.2, stroke = 0.25) +
+  ggplot2::labs(x = "Fitted trend value", y = "Observed value", title = "Trend model fit") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: residual-map-v15
+#| echo: false
+#| fig-width: 8.5
+#| fig-height: 5.2
+#| out-width: "74%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot(demo_pts, ggplot2::aes(x = x, y = y, colour = trend_resid)) +
+  ggplot2::geom_point(size = 4.2) +
+  ggplot2::scale_colour_gradient2(low = "#2166AC", mid = "white", high = "#D73027", midpoint = 0, name = "Residual") +
+  ggplot2::coord_equal(xlim = c(0, 1), ylim = c(0, 1)) +
+  ggplot2::labs(x = "x", y = "y", title = "Residuals from the trend model") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+
+
+## -----------------------------------------------------------------------
+#| label: residual-variogram-v15
+#| echo: false
+#| fig-width: 9.5
+#| fig-height: 5.0
+#| out-width: "78%"
+#| fig-align: center
+#| message: false
+#| warning: false
+
+ggplot2::ggplot() +
+  ggplot2::geom_point(data = trend_resid_cloud, ggplot2::aes(x = dist, y = gamma), alpha = 0.16, colour = "grey45", size = 1.2) +
+  ggplot2::geom_line(data = trend_resid_empirical, ggplot2::aes(x = dist, y = gamma), colour = monash_blue, linewidth = 1.1) +
+  ggplot2::geom_point(data = trend_resid_empirical, ggplot2::aes(x = dist, y = gamma, size = np), shape = 21, fill = monash_blue, colour = "white", stroke = 0.35) +
+  ggplot2::scale_size_continuous(name = "Pairs", range = c(2.5, 6.2)) +
+  ggplot2::labs(x = "Lag distance", y = "Residual semivariance", title = "Did the model leave spatial dependence behind?") +
+  ggplot2::theme_bw(base_size = 14) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
 

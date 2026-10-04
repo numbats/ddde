@@ -1146,7 +1146,9 @@ The goal is to identify large-scale structure, sampling artefacts and possible g
 
 ## Conventional EDA is still the starting point
 
-::: {.absolute top=135 left=70 width=700 style="font-size: 72%;"}
+:::: {.columns}
+::: {.column .smaller}
+
 ### What it does well
 
 Conventional EDA helps us understand:
@@ -1158,9 +1160,10 @@ Conventional EDA helps us understand:
 - differences between **known groups/domains**
 
 The limitation is not EDA itself. The limitation is using EDA **without asking where samples are, and what they are near**.
+
 :::
 
-::: {.absolute top=145 left=820 width=700}
+::: {.column}
 ```{r}
 #| label: conventional-eda-ggplot-v15
 #| echo: false
@@ -1189,8 +1192,9 @@ print(p_hist, vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
 print(p_box, vp = grid::viewport(layout.pos.row = 2, layout.pos.col = 1))
 ```
 :::
+::::
 
-::: {.info style="position:absolute; left:80px; top:740px; width:1380px; font-size: 80%;"}
+::: {.info}
 A histogram or boxplot can flag a value as unusual; it cannot tell you whether it is isolated, supported by nearby samples, or part of a separate group or process.
 :::
 
@@ -1227,7 +1231,8 @@ Trend is part of EDA. If the mean changes through space, we need to recognise th
 
 ## A spatial trend can be two-dimensional
 
-::: {.absolute top=125 left=70 width=570 style="font-size: 78%;"}
+:::: {.columns}
+::: {.column}
 A simple trend surface is not the final spatial model.
 
 It is a diagnostic question:
@@ -1239,7 +1244,8 @@ It is a diagnostic question:
 This is why EDA comes before spatial modelling.
 :::
 
-::: {.absolute top=125 left=705 width=820}
+::: {.column}
+
 ```{r}
 #| label: trend-surface-v15
 #| echo: false
@@ -1259,7 +1265,9 @@ ggplot2::ggplot() +
   ggplot2::theme_bw(base_size = 13) +
   ggplot2::theme(panel.grid = ggplot2::element_blank(), axis.text = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank())
 ```
+
 :::
+::::
 
 ## Spatial relationships can depend on direction
 
@@ -1806,7 +1814,9 @@ A cluster may give detailed local information while adding little coverage elsew
 ## Spatial prediction
 
 ::: {.info style="font-size: 125%; text-align: center; margin-top: 2.4em;"}
+
 Use spatial structure to estimate values between observations.
+
 ::: 
 
 ## Why spatial prediction?
@@ -1817,8 +1827,10 @@ Spatial prediction algorithms try to **infill between observations** using the a
 near samples are more informative than far samples.
 :::
 
-::: {.absolute top=245 left=70 width=610 style="font-size: 76%;"}
-### Common choices
+:::: {.columns}
+::: {.column}
+
+**Common choices**
 
 - **IDW:** distance-weighted average
 - **Kriging:** distance plus variogram model
@@ -1827,7 +1839,8 @@ near samples are more informative than far samples.
 The method changes, but the spatial construct is the same: **neighbourhood matters**.
 :::
 
-::: {.absolute top=245 left=750 width=760}
+::: {.column}
+
 ```{r}
 #| label: generic-prediction-surfaces-v15
 #| echo: false
@@ -1853,6 +1866,7 @@ ggplot2::ggplot(surf_plot_df, ggplot2::aes(x = x, y = y, fill = class)) +
   ggplot2::theme(panel.grid = ggplot2::element_blank(), strip.text = ggplot2::element_text(face = "bold"), axis.text = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank())
 ```
 :::
+::::
 
 ## IDW: the simplest spatial interpolator
 

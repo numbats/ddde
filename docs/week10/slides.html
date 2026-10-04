@@ -1419,8 +1419,9 @@ Compact code example
 </section>
 <section id="conventional-eda-is-still-the-starting-point" class="slide level2">
 <h2>Conventional EDA is still the starting point</h2>
-<section id="what-it-does-well" class="absolute" style="font-size: 72%;top: 135px; left: 70px; width: 700px; ">
-<h3>What it does well</h3>
+<div class="columns">
+<div class="column smaller">
+<h3 id="what-it-does-well">What it does well</h3>
 <p>Conventional EDA helps us understand:</p>
 <ul>
 <li>distributions and skew</li>
@@ -1430,8 +1431,7 @@ Compact code example
 <li>differences between <strong>known groups/domains</strong></li>
 </ul>
 <p>The limitation is not EDA itself. The limitation is using EDA <strong>without asking where samples are, and what they are near</strong>.</p>
-</section>
-<div class="absolute" style="top: 145px; left: 820px; width: 700px; ">
+</div><div class="column">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1441,8 +1441,8 @@ Compact code example
 </div>
 </div>
 </div>
-</div>
-<div class="info" style="position:absolute; left:80px; top:740px; width:1380px; font-size: 80%;">
+</div></div>
+<div class="info">
 <p>A histogram or boxplot can flag a value as unusual; it cannot tell you whether it is isolated, supported by nearby samples, or part of a separate group or process.</p>
 </div>
 </section>
@@ -1455,7 +1455,8 @@ Compact code example
 </section>
 <section id="a-spatial-trend-can-be-two-dimensional" class="slide level2">
 <h2>A spatial trend can be two-dimensional</h2>
-<div class="absolute" style="font-size: 78%;top: 125px; left: 70px; width: 570px; ">
+<div class="columns">
+<div class="column">
 <p>A simple trend surface is not the final spatial model.</p>
 <p>It is a diagnostic question:</p>
 <ul>
@@ -1464,8 +1465,7 @@ Compact code example
 <li>are apparent anomalies partly trend effects?</li>
 </ul>
 <p>This is why EDA comes before spatial modelling.</p>
-</div>
-<div class="absolute" style="top: 125px; left: 705px; width: 820px; ">
+</div><div class="column">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1475,7 +1475,7 @@ Compact code example
 </div>
 </div>
 </div>
-</div>
+</div></div>
 </section>
 <section id="spatial-relationships-can-depend-on-direction" class="slide level2">
 <h2>Spatial relationships can depend on direction</h2>
@@ -1744,16 +1744,16 @@ R code
 <div class="info" style="font-size: 115%; text-align: center;">
 <p>near samples are more informative than far samples.</p>
 </div>
-<section id="common-choices" class="absolute" style="font-size: 76%;top: 245px; left: 70px; width: 610px; ">
-<h3>Common choices</h3>
+<div class="columns">
+<div class="column">
+<p><strong>Common choices</strong></p>
 <ul>
 <li><strong>IDW:</strong> distance-weighted average</li>
 <li><strong>Kriging:</strong> distance plus variogram model</li>
 <li><strong>Trend + residual spatial model:</strong> covariates first, residual dependence second</li>
 </ul>
 <p>The method changes, but the spatial construct is the same: <strong>neighbourhood matters</strong>.</p>
-</section>
-<div class="absolute" style="top: 245px; left: 750px; width: 760px; ">
+</div><div class="column">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1763,7 +1763,7 @@ R code
 </div>
 </div>
 </div>
-</div>
+</div></div>
 </section>
 <section id="idw-the-simplest-spatial-interpolator" class="slide level2">
 <h2>IDW: the simplest spatial interpolator</h2>
