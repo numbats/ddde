@@ -1,19 +1,19 @@
 ---
-title: "ETC5521 Worksheet Week 10"
+title: "ETC5521 Tutorial 10"
 subtitle: "When Location Matters: The Hidden Traps of Spatial Data"
 author: "Kane Maxwell"
 quarto-required: ">=1.8.0"
 format:
-    unilur-html:
-        output-file: worksheet.html
-        embed-resources: true
-        css: "../assets/tutorial.css"
-    unilur-html+solution:
-        output-file: worksheetsol.html
-        embed-resources: true
-        css: "../assets/tutorial.css"
-        show-solution: true
-code-fold: true
+  unilur-html:
+    output-file: tutorial.html
+    embed-resources: false
+    keep-md: true
+    css: "../assets/tutorial.css"
+  unilur-html+solution:
+    output-file: tutorialsol.html
+    embed-resources: true
+    css: "../assets/tutorial.css"
+    show-solution: true
 ---
 
 ```{r}
@@ -670,7 +670,7 @@ candidate_sites_sf <- st_as_sf(
 )
 ```
 
-# 🎯 Objective
+# 🎯 Tutorial objective
 
 You are part of a resource geology team reviewing exploration drilling at the **Mavis Downs** coal deposit in Queensland's Bowen Basin. The original case study is based on publicly available pre-mining exploration data. For this tutorial, the real spatial/geological setting has been retained, but the drilling dataset has been expanded and coal-quality values have been modified to create a controlled teaching example.
 

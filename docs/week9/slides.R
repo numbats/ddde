@@ -1040,35 +1040,35 @@ ggplot() +
 ## ---------------------------------------------------------
 #| label: nasa-tsibbletalk-demo
 #| eval: false
-# library(dplyr)
-# library(ggplot2)
-# library(tsibble)
-# library(tsibbletalk)
-# library(lubridate)
-# library(plotly)
-# sth_america <- map_data("world") |>
-#   filter(between(long, -115, -53), between(lat, -20.5, 41))
-# 
-# nasa_shared <- nasa |>
-#   mutate(date = ymd(date)) |>
-#   select(long, lat, date, surftemp, id) |>
-#   as_tsibble(index=date, key=id) |>
-#   as_shared_tsibble()
-# sp1 <- ggplot() +
-#   geom_polygon(data=sth_america,
-#             aes(x=long, y=lat, group=group),
-#             colour="#ffffff", alpha=0.2, fill="#014221") +
-#   geom_point(data=nasa_shared, aes(x = long,
-#          y = lat, group = id))
-# sp2 <- nasa_shared |>
-#   ggplot(aes(x = date, y = surftemp)) +
-#   geom_line(aes(group = id), alpha = 0.5) +
-#   geom_point(size = 0.01, alpha = 0)
-# subplot(
-#     ggplotly(sp1, tooltip = "Region"),
-#     ggplotly(sp2, tooltip = "Region"),
-#     nrows = 1, widths=c(0.3, 0.7)) |>
-#   highlight(dynamic = TRUE)
+library(dplyr)
+library(ggplot2)
+library(tsibble)
+library(tsibbletalk)
+library(lubridate)
+library(plotly)
+sth_america <- map_data("world") |>
+  filter(between(long, -115, -53), between(lat, -20.5, 41))
+
+nasa_shared <- nasa |>
+  mutate(date = ymd(date)) |>
+  select(long, lat, date, surftemp, id) |>
+  as_tsibble(index=date, key=id) |>
+  as_shared_tsibble()
+sp1 <- ggplot() +
+  geom_polygon(data=sth_america,
+            aes(x=long, y=lat, group=group),
+            colour="#ffffff", alpha=0.2, fill="#014221") +
+  geom_point(data=nasa_shared, aes(x = long,
+         y = lat, group = id))
+sp2 <- nasa_shared |>
+  ggplot(aes(x = date, y = surftemp)) +
+  geom_line(aes(group = id), alpha = 0.5) +
+  geom_point(size = 0.01, alpha = 0)
+subplot(
+    ggplotly(sp1, tooltip = "Region"),
+    ggplotly(sp2, tooltip = "Region"),
+    nrows = 1, widths=c(0.3, 0.7)) |>
+  highlight(dynamic = TRUE)
 
 
 ## ---------------------------------------------------------

@@ -4,81 +4,97 @@ subtitle: "When Location Matters: The Hidden Traps of Spatial Data"
 author: "Kane Maxwell"
 quarto-required: ">=1.8.0"
 format:
-    unilur-html:
-        output-file: worksheet.html
-        embed-resources: true
-        css: "../assets/tutorial.css"
-    unilur-html+solution:
-        output-file: worksheetsol.html
-        embed-resources: true
-        css: "../assets/tutorial.css"
-        show-solution: true
+  unilur-html:
+    output-file: worksheet.html
+    embed-resources: true
+    css: "../assets/tutorial.css"
+  unilur-html+solution:
+    output-file: worksheetsol.html
+    embed-resources: true
+    css: "../assets/tutorial.css"
+    show-solution: true
 code-fold: true
 ---
 
+# Before you start
+
+This worksheet is your working document for the Week 10 tutorial. It contains the background, supplied analysis and questions in one place.
+
+Only edit R code where the worksheet explicitly asks you to **MODIFY** a value or selection. All code is supplied and folded by default. Each code chunk has a short prompt explaining what it does and what it should produce.
+
+# Setup
+
+Run the three setup chunks below before beginning the spatial analysis. They install and load the required packages, read the supplied data, and prepare the spatial objects and helper functions used throughout the worksheet.
+
+
+Run this chunk to install any missing packages and load the R packages used throughout the worksheet. It should finish without producing a plot.
+
 ```{r}
-#| label: setup
+#| label: packages
 #| code-fold: true
-#| include: false
+#| message: true
+#| warning: false
 
-source("../setup.R")
+required_packages <- c(
+  "sf", "ggplot2", "dplyr", "gstat", "units", "tibble", "knitr"
+)
 
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+missing_packages <- required_packages[
+  !required_packages %in% rownames(installed.packages())
+]
+
+if (length(missing_packages) > 0) {
+  install.packages(missing_packages, repos = "https://cloud.r-project.org")
+}
 
 library(sf)
 library(ggplot2)
 library(dplyr)
 library(gstat)
+library(units)
+library(tibble)
+library(knitr)
+```
 
-# -----------------------------------------------------------------------------
-# Project structure
-# -----------------------------------------------------------------------------
-data_root <- "../data"
 
-all_data_files <- list.files(
-  data_root,
-  recursive = TRUE,
-  full.names = TRUE
-)
+Run this chunk to load the borehole CSV and the three supplied spatial layers. It creates the raw data objects used by the setup chunk below.
 
-find_data_file <- function(filename) {
-  hits <- all_data_files[basename(all_data_files) == filename]
+```{r}
+#| label: load-data
+#| code-fold: true
+#| message: false
+#| warning: false
 
-  if (length(hits) == 0) {
-    stop("Could not find required file under ../data: ", filename)
-  }
-
-  if (length(hits) > 1) {
-    stop(
-      "Found more than one copy of ", filename,
-      " under ../data. Keep only one copy or specify the path explicitly."
-    )
-  }
-
-  hits[[1]]
-}
-
-# -----------------------------------------------------------------------------
-# Teaching data
-# -----------------------------------------------------------------------------
 teaching_data <- read.csv(
-  find_data_file("synthetic_l_seam_rc_v4.csv"),
+  "../data/synthetic_l_seam_rc_v4.csv",
   check.names = FALSE
 )
 
-required_columns <- c(
-  "Borehole_Name", "Easting", "Northing",
-  "Ash_ad_pct", "RD_is", "Seam"
+leases <- st_read(
+  "../data/spatial/MLpermitgranted_wkid_GDA94MGAZone55.shp",
+  quiet = TRUE
 )
 
-missing_columns <- setdiff(required_columns, names(teaching_data))
+domain_faults <- st_read(
+  "../data/spatial/mav_lu_sr_domain_faults.shp",
+  quiet = TRUE
+)
 
-if (length(missing_columns) > 0) {
-  stop(
-    "synthetic_l_seam_rc_v4.csv is missing required column(s): ",
-    paste(missing_columns, collapse = ", ")
-  )
-}
+seismic_faults <- st_read(
+  "../data/spatial/mav_lu_sr_3dseis_faults.shp",
+  quiet = TRUE
+)
+```
+
+Run this chunk to convert the borehole data to spatial objects, set the map and colour conventions, and create the helper functions and derived objects used throughout the worksheet. It prepares the analysis but does not produce a visible plot.
+
+```{r}
+#| label: analysis-setup
+#| code-fold: true
+#| warning: false
+#| message: false
+
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 # AGD84 / AMG Zone 55
 target_crs <- 20355
@@ -90,10 +106,6 @@ boreholes <- st_as_sf(
   remove = FALSE
 )
 
-# Ordered ash classes for mapping.
-# Keep categorical mapping for readability and direct comparison between maps,
-# but split the upper tail so the very high fault-associated observation does
-# not disappear inside one broad >=15% class.
 ash_breaks <- c(-Inf, 10, 11, 12, 13, 14, 15, 18, Inf)
 ash_labels <- c(
   "<10%", "10-<11%", "11-<12%", "12-<13%",
@@ -125,34 +137,23 @@ boreholes <- boreholes |>
 # -----------------------------------------------------------------------------
 # Spatial context
 # -----------------------------------------------------------------------------
-leases <- st_read(
-  find_data_file("MLpermitgranted_wkid_GDA94MGAZone55.shp"),
-  quiet = TRUE
-) |>
+leases <- leases |>
   st_transform(target_crs)
 
-domain_faults <- st_read(
-  find_data_file("mav_lu_sr_domain_faults.shp"),
-  quiet = TRUE
-) |>
+domain_faults <- domain_faults |>
   st_zm(drop = TRUE) |>
   st_transform(target_crs)
 
-seismic_faults <- st_read(
-  find_data_file("mav_lu_sr_3dseis_faults.shp"),
-  quiet = TRUE
-) |>
+seismic_faults <- seismic_faults |>
   st_zm(drop = TRUE) |>
   st_transform(target_crs)
 
 point_bbox <- st_bbox(boreholes)
 map_buffer <- 450
-
 map_xlim <- c(
   unname(point_bbox["xmin"]) - map_buffer,
   unname(point_bbox["xmax"]) + map_buffer
 )
-
 map_ylim <- c(
   unname(point_bbox["ymin"]) - map_buffer,
   unname(point_bbox["ymax"]) + map_buffer
@@ -161,10 +162,8 @@ map_ylim <- c(
 map_window <- st_as_sfc(
   st_bbox(
     c(
-      xmin = map_xlim[1],
-      xmax = map_xlim[2],
-      ymin = map_ylim[1],
-      ymax = map_ylim[2]
+      xmin = map_xlim[1], xmax = map_xlim[2],
+      ymin = map_ylim[1], ymax = map_ylim[2]
     ),
     crs = st_crs(target_crs)
   )
@@ -177,19 +176,12 @@ seismic_faults_plot <- suppressWarnings(st_crop(seismic_faults, st_bbox(map_wind
 # -----------------------------------------------------------------------------
 # Sampling-pattern comparison
 # -----------------------------------------------------------------------------
-# Compare the observed drilling with an idealised, regularly spaced reference
-# pattern inside the same convex hull. The reference grid is not a proposed
-# drilling design; it is a visual baseline for recognising clustering, gaps,
-# preferred directions and uneven coverage in the observed drilling.
 sampling_hull <- boreholes |>
   st_union() |>
   st_convex_hull()
 
 sampling_hull_sf <- st_sf(geometry = sampling_hull)
 
-# Choose square-grid spacing so the reference pattern has approximately the
-# same point density as the observed 90-hole program, then retain only grid
-# centres that fall within the observed drilling footprint.
 reference_spacing <- sqrt(
   as.numeric(st_area(sampling_hull)) / nrow(boreholes)
 )
@@ -269,7 +261,6 @@ map_theme <- theme_bw(base_size = 12) +
     legend.position = "right"
   )
 
-# Consistent styling for all diagnostic boxplots
 boxplot_fill <- "#A6CEE3"
 boxplot_width <- 0.28
 flag_colour <- "red4"
@@ -401,10 +392,6 @@ plot_variogram <- function(bundle, title_text) {
 # -----------------------------------------------------------------------------
 # Prediction helpers
 # -----------------------------------------------------------------------------
-# The surface is evaluated on a regular grid and then masked to a buffered
-# convex hull around the drilling. The important plotting detail is that the
-# lease fill is drawn BEFORE the surface, with only lease/fault outlines drawn
-# over it. Otherwise the lease polygons hide the kriging surface.
 grid_cellsize <- 75
 
 study_area <- boreholes |>
@@ -457,12 +444,8 @@ run_kriging <- function(data_sf, model) {
 }
 
 # -----------------------------------------------------------------------------
-# Spatial anomaly diagnostic: nearest-neighbour leave-one-out residuals
+# Nearest-neighbour spatial anomaly diagnostic
 # -----------------------------------------------------------------------------
-# For anomaly screening we deliberately use only the single nearest neighbour.
-# The question is not "what is the best interpolator?" but "is this hole very
-# different from the closest local support available to it?" This is a
-# deliberately sensitive EDA screen, not a formal hypothesis test.
 loocv_idw <- function(data_sf, nmax = 1, idp = 2) {
   distance_matrix <- units::drop_units(st_distance(data_sf))
   diag(distance_matrix) <- Inf
@@ -501,8 +484,6 @@ loocv_idw <- function(data_sf, nmax = 1, idp = 2) {
 
 loocv_results <- loocv_idw(boreholes, nmax = 1, idp = 2)
 
-# Robust residual standardisation. R's mad() returns a robust estimate of
-# standard deviation after multiplying the median absolute deviation by 1.4826.
 cv_resid_center <- median(loocv_results$residual, na.rm = TRUE)
 cv_resid_scale <- stats::mad(
   loocv_results$residual,
@@ -531,16 +512,14 @@ spatial_cv_outliers_sf <- boreholes |>
   filter(Borehole_Name %in% spatial_cv_outliers$Borehole_Name) |>
   left_join(
     spatial_cv_outliers |>
-      select(Borehole_Name, observed, nearest_neighbor, nearest_distance_m, predicted, residual, robust_z),
+      select(Borehole_Name, observed, nearest_neighbor, nearest_distance_m,
+             predicted, residual, robust_z),
     by = "Borehole_Name"
   )
 
 # -----------------------------------------------------------------------------
 # Exact IDW diagnostic surface
 # -----------------------------------------------------------------------------
-# IDW is used here as an EDA visualisation, not as the final prediction model.
-# It is exact at observations and therefore deliberately exposes local
-# sample influence and "bullseye" behaviour that kriging tends to smooth.
 run_idw_surface <- function(data_sf, idp = 2, nmax = 8) {
   idw_points <- NULL
   invisible(capture.output(
@@ -576,29 +555,9 @@ run_idw_surface <- function(data_sf, idp = 2, nmax = 8) {
 }
 
 idw_plot_data <- run_idw_surface(boreholes, idp = 2, nmax = 8)
-
-# Use the conventional high outlier as the fault-related modelling case.
 focus_anomaly_name <- main_boxplot_outlier
 
-# Pre-computed default variogram bundles for solution text and comparison.
-default_bundle_with_high <- fit_variogram_bundle(boreholes, lag_width = 250, cutoff = 3000)
-default_bundle_without_high <- fit_variogram_bundle(
-  boreholes |>
-    filter(Borehole_Name != focus_anomaly_name),
-  lag_width = 250,
-  cutoff = 3000
-)
-
-variogram_comparison <- bind_rows(
-  default_bundle_with_high$stats |>
-    mutate(Model = "High value retained"),
-  default_bundle_without_high$stats |>
-    mutate(Model = "High value excluded")
-) |>
-  select(Model, everything())
-
 # -----------------------------------------------------------------------------
-# Candidate sites for the final six-hole selection
 # -----------------------------------------------------------------------------
 candidate_sites <- data.frame(
   Site = LETTERS[1:12],
@@ -606,54 +565,6 @@ candidate_sites <- data.frame(
               632150, 631050, 630350, 632900, 631950, 629900),
   Northing = c(7565400, 7564350, 7563000, 7565150, 7564700, 7563950,
                7566800, 7566950, 7565850, 7566100, 7563600, 7566750),
-  Target_type = c(
-    "Down-dip step-out",
-    "Down-dip step-out",
-    "Southern infill / edge candidate near mapped fault",
-    "Internal infill",
-    "Near-fault candidate",
-    "Statistically attractive but geologically invalid",
-    "Down-dip / northern step-out",
-    "Northern down-dip infill",
-    "Western internal infill",
-    "Close north-eastern infill",
-    "Redundant internal infill",
-    "Northern continuity / infill"
-  ),
-  Lecturer_assessment = c(
-    "Strong", "Strong", "Conditional - fault proximity", "Strong",
-    "Lower priority - fault proximity", "Reject on geology", "Strong",
-    "Strong to moderate", "Lower priority - on mapped fault", "Deliberately weak",
-    "Deliberately weak", "Moderate"
-  ),
-  Why_consider = c(
-    "Extends down-dip coverage into sparse drilling and tests continuation of the regional trend.",
-    "Fills an eastern gap while still acting as a down-dip step-out; useful for trend definition.",
-    "Adds useful southern infill/edge support where coverage is weaker, but the fixed location is only about 8 m from a mapped fault.",
-    "Provides strong internal infill where kriging standard error remains relatively high despite otherwise reasonable drill coverage.",
-    "Could only be justified if resolving very local structural behaviour were an explicit objective.",
-    "Looks statistically attractive because it occupies an apparent support gap and may have high model uncertainty if geology is ignored.",
-    "Extends support into the sparse northern-eastern area and tests regional continuity.",
-    "Fills the broad northern gap between L and G and adds a sensible down-dip infill point within the interpreted coal-bearing side of the deposit.",
-    "Adds local support within the western part of the corridor, but the fixed location is placed directly on a mapped fault.",
-    "Could refine a local north-eastern area if a specific operational/geological question existed.",
-    "Could add another local data point within the established corridor if there were a specific operational reason to drill there.",
-    "Tests northern continuity and provides some additional infill support."
-  ),
-  Why_not = c(
-    "Step-out risk is greater than for internal infill; value depends on whether extending down dip is a priority.",
-    "Still a step-out, so some uncertainty is exploration risk rather than merely a gap to fill.",
-    "The fixed site is only about 8 m from a mapped fault. For coal-quality drilling this adds structural uncertainty; it would be a much stronger southern infill candidate if moved farther from the fault.",
-    "It is an infill rather than a footprint-extension hole, but the relatively high kriging error in this locally well-drilled area makes it a strong candidate for reducing internal prediction uncertainty.",
-    "It is close to existing drilling and faulting, so it is weak for regional coal-quality coverage and may introduce additional structural uncertainty.",
-    "Reject: it lies west of the western bounding fault, where the L seam has cropped out and the target coal is not expected to exist. This is the deliberate example of a statistically attractive but geologically meaningless target.",
-    "Can be higher-risk than infill because it extends beyond dense support into a sparse area.",
-    "It is useful down-dip infill rather than a major new step-out, so it may add less new footprint than A, B or G if pure extension is the priority.",
-    "Existing western support is already comparatively good, and the site is directly on a mapped fault. For this coal-quality program the fault proximity adds another source of uncertainty, making it lower priority than cleaner infill or step-out options.",
-    "Very close to existing support; deliberately included as a tempting but spatially redundant option.",
-    "Poor choice for this exercise: it sits in an already well-covered area and is not close enough to the mapped fault to justify the redundancy as a fault-definition hole.",
-    "Useful but competes with stronger eastern/down-dip and internal-gap targets for a limited six-hole budget."
-  ),
   dx = c(90, 90, 90, -110, 90, -90, 0, 0, -90, 90, -90, 0),
   dy = c(105, 95, -110, 105, -110, 95, 110, 115, 95, 95, -110, 110)
 ) |>
@@ -670,15 +581,19 @@ candidate_sites_sf <- st_as_sf(
 )
 ```
 
-# 🎯 Objective
+# 🎯 Exercise objective
 
-You are part of a resource geology team reviewing exploration drilling at the **Mavis Downs** coal deposit in Queensland's Bowen Basin. The original case study is based on publicly available pre-mining exploration data. For this tutorial, the real spatial/geological setting has been retained, but the drilling dataset has been expanded and coal-quality values have been modified to create a controlled teaching example.
+You are part of a resource geology team reviewing exploration drilling at the **Mavis Downs** coal deposit in Queensland's Bowen Basin. The original case study is based on publicly available pre-mining exploration data. For this exercise, the real spatial/geological setting has been retained, but the drilling dataset has been expanded and coal-quality values have been modified to create a controlled teaching example.
 
 The task is deliberately practical:
 
 > **You have funding for only six additional drill holes. Where would you drill them, and why?**
 
-You will not write a geostatistical workflow from scratch. Run the supplied code, inspect the outputs, and discuss what they mean for the drilling decision.
+You will not write a geostatistical workflow from scratch. Run the supplied code, inspect the outputs, discuss what they mean, and record your group's reasoning directly in this document.
+
+::: {.callout-note title="How this worksheet works"}
+Each section introduces a spatial problem, asks you to run supplied code, explains what the output represents, and then asks you to record your interpretation. The code is provided; your job is to understand what the output means for the drilling decision.
+:::
 
 ## Where is Mavis Downs?
 
@@ -688,14 +603,9 @@ Before zooming in to drill-hole coordinates, orient yourself geographically. **M
 
 ## Meet the study area
 
-Now zoom in to the deposit itself. This is the local map you will use throughout the tutorial. For the moment, just learn the symbols and the overall drilling pattern:
+Now zoom in to the deposit itself. The first map will orient you to the local study area used throughout the worksheet.
 
-- **open circles:** the 90 existing drill holes;
-- **solid black lines:** major/domain faults;
-- **dashed grey lines:** faults interpreted from 3D seismic data;
-- **light grey boundaries:** mining-lease boundaries.
-
-The geological primer below explains what these structures mean and why the major western bounding fault is especially important to the drilling decision.
+Run this chunk to plot the study area, existing drilling and mapped faults. It produces the first local map and confirms that the spatial data have loaded correctly.
 
 ```{r}
 #| label: study-area-map
@@ -732,6 +642,16 @@ study_area_map <- ggplot() +
 
 study_area_map
 ```
+
+The map shows the local study area you will use throughout the worksheet:
+
+- **open circles:** the 90 existing drill holes;
+- **solid black lines:** major/domain faults;
+- **dashed grey lines:** faults interpreted from 3D seismic data;
+- **light grey boundaries:** mining-lease boundaries.
+
+The geological primer below explains what these structures mean and why the major western bounding fault is especially important to the drilling decision.
+
 
 ## Geological primer: what are we actually modelling?
 
@@ -772,7 +692,7 @@ Faults are also one reason geologists may deliberately drill several closely spa
 
 ### What does Ash mean?
 
-One of the main variables in this tutorial is **Ash (%)**. Coal contains combustible organic material together with non-combustible mineral matter. In a standard laboratory test, the mineral residue left after the coal is heated is reported as **Ash**.
+One of the main variables in this worksheet is **Ash (%)**. Coal contains combustible organic material together with non-combustible mineral matter. In a standard laboratory test, the mineral residue left after the coal is heated is reported as **Ash**.
 
 For the metallurgical coal considered here, **lower Ash is generally better** because unwanted mineral material ultimately adds to the material that must be handled and removed during processing and ironmaking. Ash is therefore an important coal-quality variable.
 
@@ -784,7 +704,7 @@ A low-Ash area that is already well understood may tell us little if drilled aga
 
 ### Geological setting for the drilling decision
 
-You do not need to become a coal geologist to complete the tutorial. Keep these facts in mind when reading the maps:
+You do not need to become a coal geologist to complete the worksheet. Keep these facts in mind when reading the maps:
 
 - the target is one coal seam within a layered sedimentary deposit;
 - the target seam reaches the surface, or **crops out**, against the major western bounding fault;
@@ -794,7 +714,7 @@ You do not need to become a coal geologist to complete the tutorial. Keep these 
 - drilling is denser in some structurally important areas because closely spaced holes can answer geological questions;
 - on the maps, **solid black lines** are the major/domain faults and **dashed lines** are faults interpreted from 3D seismic data.
 
-This gives us an important rule for the rest of the tutorial:
+This gives us an important rule for the rest of the worksheet:
 
 > **A statistically attractive location is not automatically a geologically valid drilling target, and a dense cluster is not automatically poor sampling.**
 
@@ -807,14 +727,14 @@ The key question is not simply **"Where should we drill?"** It is **"What would 
 ::: {.callout-tip title="Before doing any analysis"}
 Look at the existing drilling pattern and faults. If you had to choose six new holes **right now**, where would you put them?
 
-You do not need to record an answer yet. Keep your first impression in mind and return to it at the end of the tutorial after you have examined the coal-quality data, spatial structure, prediction and uncertainty.
+You do not need to record an answer yet. Keep your first impression in mind and return to it at the end of the worksheet after you have examined the coal-quality data, spatial structure, prediction and uncertainty.
 :::
 
 # 1. How has the deposit been sampled?
 
-Before looking at coal quality, start with the **sampling geometry**. The left panel shows the actual drilling. The right panel is an idealised **regular reference pattern**: equally spaced points on a square grid, clipped to the same general drilling footprint. Its spacing is chosen to give approximately the same overall point density as the 90 observed holes.
+Before looking at coal quality, start with the **sampling geometry**. Uneven spacing, clustering, gaps and preferred drilling directions can all affect how much independent spatial information the dataset contains. Some clustering may also be deliberate, particularly where drilling is intended to investigate faults or other geological structures.
 
-The regular grid is **not a recommended drilling design**. It is simply a visual baseline. Against regular coverage, clustering, gaps, preferred directions and changes in sampling density in the real drilling should be much easier to recognise.
+Run this chunk to compare the observed drilling with a regular reference pattern of similar overall density. It produces a two-panel map for comparing sampling geometry.
 
 ```{r}
 #| label: sampling-map
@@ -865,6 +785,11 @@ sampling_map <- ggplot() +
 sampling_map
 ```
 
+The left panel shows the actual drilling. The right panel is an idealised **regular reference pattern**: equally spaced points on a square grid, clipped to the same general drilling footprint. Its spacing is chosen to give approximately the same overall point density as the 90 observed holes.
+
+The regular grid is **not a recommended drilling design**. It is simply a visual baseline. Against regular coverage, clustering, gaps, preferred directions and changes in sampling density in the real drilling should be much easier to recognise.
+
+
 ::: {.callout-note title="What about time?"}
 Real exploration programs usually evolve through time. Early holes may test a broad concept, followed by infill drilling, step-outs, and targeted drilling around structures. Some clustering can therefore reflect the **sequence of exploration**, not just spatial design. A drilling-date field is not available in this teaching dataset, so temporal sampling patterns are outside the scope of this exercise.
 :::
@@ -873,25 +798,17 @@ Real exploration programs usually evolve through time. Early holes may test a br
 
 **What does the actual drilling pattern tell you about how this deposit has been sampled?** Consider clustering, gaps, preferred directions/corridors, changes in sampling density, and whether some clustering near faults could be deliberate.
 
-::: unilur-solution
-### Lecturer answer / comments
-A strong answer should identify several of the following:
+### Your answer
 
-- The real drilling follows an elongated **NW-SE exploration corridor** rather than resembling regular spatial coverage.
-- The western/shallow and central parts of the deposit are comparatively well drilled, while coverage becomes **sparser toward the eastern/down-dip side**.
-- The observed design contains recognisable **local clusters** and closely spaced holes that stand out clearly against the regular reference grid.
-- Some dense drilling occurs around mapped faults. Given the geological primer, students should recognise that this can be purposeful structural drilling rather than accidental duplication.
-- The real pattern contains meaningful **internal gaps and edge gaps** where interpolation will depend on more distant observations.
-- The major western fault is a **hard geological constraint**: an apparent statistical gap west of the fault is not necessarily a valid drilling target because the target seam is not expected there.
+**Type your response below:**
 
-The regular grid is deliberately artificial. It is **not** being presented as the preferred way to drill the deposit. It gives students a simple visual baseline for seeing where the real exploration program departs from approximately even spatial coverage.
-
-**Lecturer point:** the number of observations is not the same thing as the amount of independent spatial information. At the same time, geological questions can make deliberately clustered drilling valuable.
-:::
+*Replace this text with your answer.*
 
 # 2. Conventional EDA: what do we see if we ignore location?
 
 Start exactly as you might with a non-spatial dataset: look at the distribution and potential outliers.
+
+Run this chunk to plot the overall Ash distribution without using location. It produces a histogram of Ash (%).
 
 ```{r}
 #| label: ash-histogram
@@ -913,6 +830,8 @@ ggplot(st_drop_geometry(boreholes), aes(x = Ash_ad_pct)) +
   ) +
   theme_bw(base_size = 12)
 ```
+
+Run this chunk to apply a conventional Tukey boxplot screen to Ash. It produces a boxplot and labels the whole-dataset outlier.
 
 ```{r}
 #| label: ash-boxplot
@@ -956,33 +875,25 @@ ggplot(boxplot_df, aes(x = 1, y = Ash_ad_pct)) +
   theme(plot.margin = margin(5.5, 60, 5.5, 5.5))
 ```
 
+Together, the histogram and boxplot are conventional **non-spatial** summaries. They show the overall distribution and a global outlier screen, but they do not tell you where any borehole is located or whether nearby observations support one another.
+
+
 
 ## Question
 
 **What do the histogram and boxplot tell you about the overall Ash distribution and potential outliers? What important information is still missing because location has been ignored?**
 
-::: unilur-solution
-### Lecturer answer / comments
-The conventional EDA is useful as a first pass. Students should recognise:
+### Your answer
 
-- the approximate centre and spread of the data;
-- the overall range of ash values;
-- the shape of the distribution;
-- one **clear high conventional outlier**, `r main_boxplot_outlier`, under the usual 1.5 × IQR boxplot rule.
+**Type your response below:**
 
-What is missing is the spatial context. The histogram and boxplot cannot tell us:
-
-- whether the high value is isolated or part of a local geological feature;
-- whether other values are unusual **relative to nearby holes** even though they are not globally extreme;
-- whether patterns relate to drilling density, faults, boundaries, or direction;
-- whether observations close together are spatially correlated.
-
-**Useful prompt:** ask the class, *"If I handed you only this boxplot, would you delete the labelled point? What would you want to know first?"*
-:::
+*Replace this text with your answer.*
 
 # 3. Global outlier, domain outlier, or something geological?
 
-Now add location and geological context back into the problem. The same borehole identified by the conventional boxplot is labelled on the map, and the boreholes are coloured by their Ash values.
+Now add location and geological context back into the problem.
+
+Run this chunk to map observed Ash values and the conventional outlier in geological context. It produces the observed-Ash map with faults and the flagged borehole.
 
 ```{r}
 #| label: ash-map
@@ -1042,26 +953,18 @@ ash_map <- ggplot() +
 ash_map
 ```
 
+The same borehole identified by the conventional boxplot is now labelled in its spatial context, and all boreholes are coloured by their Ash values.
+
+
 ## Question
 
 **The boxplot identifies MD_SYN_042 as the global outlier. What changes when you see where this borehole is located? If fault-affected coal represented a different geological domain, would a whole-deposit outlier rule still be appropriate? What else does this map show that the histogram and boxplot missed?**
 
-::: unilur-solution
-### Lecturer answer / comments
-There is no single sentence students must produce, but a strong answer should make two distinctions.
+### Your answer
 
-First, `r main_boxplot_outlier` is no longer just a number at the end of a distribution. It lies in a structurally complicated/faulted part of the deposit. That does **not** prove the value is valid, but it makes a geological explanation plausible and means automatic deletion would be poorly justified. If the fault-affected coal is genuinely a different population, the relevant comparison may be **within that geological domain**, not against the whole deposit.
+**Type your response below:**
 
-Second, the map reveals patterns that ordinary EDA cannot:
-
-- broad spatial continuity in ash;
-- local groups of elevated or lower values;
-- changes close to faulting;
-- areas where a value may be locally surprising even though it sits comfortably inside the global boxplot range;
-- the effect of clustered versus sparse drilling on how convincing a pattern appears.
-
-**Key teaching link:** think of three different comparisons: **global** (whole dataset), **domain** (geologically comparable population), and **spatial/local** (nearby support). A value can be ordinary under one comparison and unusual under another.
-:::
+*Replace this text with your answer.*
 
 # 4. Spatial outliers: how different is a hole from its nearest neighbour?
 
@@ -1072,6 +975,8 @@ Recall from the lecture: a residual is **observed value - predicted value**.
 Here we leave each hole out in turn and predict it from its **single nearest neighbouring hole** using one-neighbour IDW. With one neighbour, the prediction is simply that neighbour's value. The residual therefore answers a very intuitive question: **how different is this hole from the closest information available to it?**
 
 We use a robust MAD-based residual scale and flag observations with **|robust z| ≥ 2**. This is a deliberately sensitive **screening diagnostic**, not a formal rule for deleting samples.
+
+Run this chunk to display the nearest-neighbour leave-one-out residuals and screening thresholds. It produces a residual boxplot with flagged holes labelled.
 
 ```{r}
 #| label: loocv-residual-boxplot
@@ -1121,6 +1026,8 @@ ggplot(loocv_results, aes(x = 1, y = residual)) +
   theme(plot.margin = margin(5.5, 85, 5.5, 5.5))
 ```
 
+Run this chunk to list the boreholes flagged by the nearest-neighbour screen. It produces a compact table of observed values, nearest neighbours, distances, residuals and robust z-scores.
+
 ```{r}
 #| label: loocv-residual-table
 #| code-fold: true
@@ -1141,6 +1048,8 @@ spatial_cv_outliers |>
     )
   )
 ```
+
+Run this chunk to map the nearest-neighbour flags. It produces an Ash map with flagged boreholes outlined and labelled.
 
 ```{r}
 #| label: loocv-residual-map
@@ -1203,38 +1112,26 @@ loocv_map <- ggplot() +
 loocv_map
 ```
 
+The boxplot and table show the magnitude of the local disagreements; the map shows where those flagged boreholes sit relative to the Ash pattern, existing drilling and faults.
+
+
 ## Question
 
 **Why can the conventional boxplot and the nearest-neighbour residual screen flag different observations? Which spatially unusual observations would you investigate first, and does this screen tell you which data should be deleted?**
 
-::: unilur-solution
-### Lecturer answer / comments
-The two approaches answer different questions:
+### Your answer
 
-- the conventional boxplot asks whether a value is unusual relative to the **whole dataset**;
-- the nearest-neighbour residual asks whether it is unusual relative to its **closest local support**.
+**Type your response below:**
 
-So several holes can be spatially surprising even though their absolute ash values sit comfortably inside the global boxplot range. These are exactly the observations conventional EDA can miss.
-
-**What I would look for in a strong answer:**
-
-- identify the largest positive/negative local residuals rather than treating all flags as equally important;
-- recognise that a high positive residual means the hole is much higher ash than its nearest neighbour, while a large negative residual means much lower ash;
-- relate the flagged holes back to faults, drilling density, and local gradients on the map;
-- explicitly state that the screen is a prompt for investigation, **not an instruction to delete data**.
-
-A particularly useful teaching point is that if two very close holes strongly disagree, **both can be flagged**. The diagnostic says there is a local discontinuity; it cannot tell us which observation is wrong, or whether either is wrong.
-
-Useful follow-up information includes core/log review, seam correlation, recovery, laboratory QA/QC, repeat assay if appropriate, structural position, and whether nearby holes lie on the same side of a fault.
-
-The nearest-neighbour residual is intentionally simple and sensitive. It tells us where two nearby observations disagree strongly. The next section asks whether those local disagreements are also visually obvious when the data are propagated with an exact interpolator.
-:::
+*Replace this text with your answer.*
 
 # 5. Exact-interpolator visual check
 
 A useful spatial EDA check is to interpolate the observations with an **exact interpolator**. Here we use IDW. Unlike kriging, IDW does not smooth away the observed values, so strongly influential individual samples often appear as local **bullseyes**.
 
 This is not being presented as the final prediction surface. It is a diagnostic map designed to make local sample influence obvious.
+
+Run this chunk to create the exact IDW diagnostic surface. It produces a map designed to reveal local sample influence and bullseyes.
 
 ```{r}
 #| label: idw-diagnostic-map
@@ -1298,33 +1195,17 @@ idw_map
 
 **Which features look like broad spatial structure, and which look dominated by individual samples? Do the nearest-neighbour residual flags correspond to visible bullseyes? Does a bullseye prove that a value is bad data?**
 
-::: unilur-solution
-### Lecturer answer / comments
-Students should see that an exact interpolator makes local sample influence much more obvious than a smoothed kriging map. Look for:
+### Your answer
 
-- the very high fault-associated observation producing a conspicuous local high;
-- other local highs/lows that appear as compact patches around individual holes;
-- broader zones that persist across several observations and therefore look more like genuine spatial structure;
-- correspondence between some of the nearest-neighbour residual flags and visually strong bullseyes.
+**Type your response below:**
 
-A bullseye is **not evidence by itself that the sample is wrong**. It tells us that an observation is exerting strong local influence under an exact interpolator. The appropriate next questions are geological and data-quality questions: is the observation verified, is it supported by nearby data, is it related to faulting or another domain, and should that local behaviour be allowed to propagate into the regional model?
-
-The map also suggests something broader that the global boxplot and single-nearest-neighbour screen do not capture very well. There appears to be:
-
-- a broad **lower-ash southern population**;
-- a relatively **higher-ash central population**; and
-- another **lower-ash northern population**.
-
-These are **hypotheses, not defined geological domains**. In real work, any domain boundary should be supported independently by geology, structure, stratigraphy, seam splitting or other relevant evidence rather than being drawn simply to make the Ash map look tidy. But the visual pattern is enough to ask an important EDA question: **would some observations that look ordinary in the full dataset become anomalous when compared only with the geological population to which they belong?**
-
-Several compact bullseyes in the southern low-ash area are good candidates for that follow-up. Likewise, the northern low-ash area contains a conspicuous local feature near faulting that is not necessarily highlighted by the global anomaly screens. This is exactly why visual spatial EDA remains valuable: an automated diagnostic can tell us where a particular rule is triggered, while the map can expose additional geological questions that the rule was never designed to ask.
-
-This is why IDW is useful here as a **diagnostic visualisation**, while kriging later serves a different purpose: regional prediction plus model-based uncertainty.
-:::
+*Replace this text with your answer.*
 
 # 6. What changes if we investigate within a candidate domain?
 
 The IDW map suggests that the southern part of the deposit may form a relatively coherent lower-ash population. In real work, a domain would need to be justified independently from geology, structure, stratigraphy or other evidence. Here we isolate this area **only as a demonstration** of why the population used for comparison matters.
+
+Run this chunk to repeat the nearest-neighbour screen using only the illustrative southern population. It prepares the domain-specific residuals, flags and outline used by the next two plots.
 
 ```{r}
 #| label: southern-domain-screen
@@ -1381,6 +1262,8 @@ southern_domain_outline <- southern_domain |>
   st_buffer(220)
 ```
 
+Run this chunk to plot residuals within the illustrative southern population. It produces a residual boxplot with domain-level flags labelled.
+
 ```{r}
 #| label: southern-domain-residual-boxplot
 #| code-fold: true
@@ -1422,6 +1305,8 @@ ggplot(southern_cv, aes(x = 1, y = residual)) +
   theme_bw(base_size = 12) +
   theme(plot.margin = margin(5.5, 85, 5.5, 5.5))
 ```
+
+Run this chunk to map the illustrative southern population and its flagged holes over the IDW surface. It produces the candidate-domain comparison map.
 
 ```{r}
 #| label: southern-domain-map
@@ -1496,24 +1381,11 @@ ggplot() +
 
 **Did changing the comparison population change which holes look anomalous? What does this tell you about the phrase "outlier"?**
 
-::: unilur-solution
-### Lecturer answer / comments
-Yes. With the same nearest-neighbour idea and the same robust flagging rule, analysing only the candidate southern population brings out local contrasts that are much less obvious when every hole in the deposit contributes to the residual distribution.
+### Your answer
 
-In this demonstration, holes such as **MD_SYN_012**, **MD_SYN_022** and **MV006C1** become notable within the southern population. These correspond well with several of the bullseyes visible on the exact IDW map inside the dashed candidate-domain outline.
+**Type your response below:**
 
-The central teaching point is that **“outlier” is conditional on the population being considered**:
-
-- a **global outlier** is unusual relative to the whole dataset;
-- a **domain outlier** is unusual relative to the relevant geological population;
-- a **spatial outlier** is unusual relative to nearby observations.
-
-Those definitions can identify different holes, and none automatically means “bad data”.
-
-The deliberately artificial boundary is also worth discussing. We should **not define domains from the response variable merely to manufacture cleaner statistics**. The IDW map can suggest hypotheses, but geological evidence should determine whether the southern, central and northern patterns really represent separate structural or stratigraphic populations.
-
-**Lecturer prompt:** ask what independent evidence students would want before accepting the southern zone as a real domain: seam correlation, structure/fault interpretation, stratigraphic splitting, quality trends in other variables, geophysics, or geological logging.
-:::
+*Replace this text with your answer.*
 
 # 7. Is there enough spatial structure to justify kriging?
 
@@ -1532,6 +1404,8 @@ At the end of this section you should be able to answer two questions:
 1. **Is there a spatial signal strong and stable enough that kriging is worth using?**
 2. **At approximately what distance does an existing hole stop providing much information about another location?**
 :::
+
+Run this chunk to calculate the default experimental variogram and fit a spherical model using 250 m lag bins. It produces the variogram plot used to assess spatial continuity.
 
 ```{r}
 #| label: default-variogram
@@ -1554,6 +1428,8 @@ plot_variogram(
 )
 ```
 
+Run this chunk to print the fitted variogram statistics. It reports the nugget, total sill, range, nugget-to-sill percentage and spatially structured percentage.
+
 ```{r}
 #| label: default-variogram-stats
 #| code-fold: true
@@ -1565,18 +1441,11 @@ knitr::kable(vgm_default$stats)
 
 **Does the variogram provide evidence of spatial dependence strong enough to justify kriging? What do the fitted range, nugget-to-sill proportion and spatially structured percentage imply for the value of additional drilling?**
 
-::: unilur-solution
-### Lecturer answer / comments
-**Yes, cautiously.** The experimental variogram shows semivariance increasing with separation distance before approaching an approximate sill. In other words, nearby holes are, on average, more similar than holes farther apart. That distance-dependent structure is sufficient to justify using kriging as a simple spatial predictor for this exercise, subject to the modelling caveats below. If the variogram were flat from the origin, highly erratic with no interpretable structure, or effectively pure nugget, there would be little justification for kriging.
+### Your answer
 
-For the current fit:
+**Type your response below:**
 
-- **Range ≈ `r vgm_default$stats[["Range (m)"]]` m.** Within distances appreciably shorter than this, nearby observations still contain useful information about one another. Beyond roughly this scale, the fitted model treats additional separation as contributing little extra correlation.
-- **Nugget / sill ≈ `r vgm_default$stats[["Nugget / sill (%)"]]`%.** This is the proportion of total fitted variability represented as very-short-range or unresolved variability. The relatively large nugget warns us that even closely spaced holes need not agree perfectly.
-- **Spatially structured component ≈ `r vgm_default$stats[["Spatially structured (%)"]]`%.** This is calculated as **partial sill / total sill × 100**, so it is the complement of the nugget-to-sill percentage. It tells us how much of the fitted variability is represented by distance-dependent spatial structure. Here the structured component is meaningful but not dominant, which supports cautious use of kriging rather than implying a strongly coherent field.
-
-For the six-hole decision, the range is best thought of as a **scale of information redundancy**, not a prescribed drill spacing. A new hole placed very close to many existing holes may add relatively little regional spatial coverage, whereas a hole in a gap approaching the range can add much more independent information. Geological context still matters: proximity to a fault can reduce the usefulness of a coal-quality hole if the structure introduces another source of local variability.
-:::
+*Replace this text with your answer.*
 
 ::: {.callout-warning title="A usable variogram is necessary, not sufficient"}
 Seeing spatial continuity gives us a reason to consider kriging, but it does **not** prove that all kriging assumptions are satisfied. The earlier EDA suggested possible trend, fault effects and candidate geological domains. In real work we would also test **directional continuity / anisotropy** rather than automatically accepting one stationary omnidirectional model. Here we deliberately continue with a simple ordinary-kriging model so we can focus on spatial reasoning and the drilling decision.
@@ -1585,6 +1454,8 @@ Seeing spatial continuity gives us a reason to consider kriging, but it does **n
 ## Robustness check: does lag choice change that conclusion?
 
 The experimental variogram depends partly on how pairs are grouped. Change only `lag_width` below and try **125 m**, **250 m**, and **500 m**. The purpose is not to find a magical “correct” lag. It is to see whether the **decision-relevant interpretation** survives reasonable analytical choices.
+
+Run this chunk after changing only `lag_width` to 125, 250 or 500 m. It refits and replots the variogram so you can test whether the interpretation is sensitive to bin width.
 
 ```{r}
 #| label: lag-sensitivity
@@ -1607,6 +1478,8 @@ plot_variogram(
 )
 ```
 
+Run this chunk after each lag-width test. It prints the fitted statistics for the current lag width for comparison with the default.
+
 ```{r}
 #| label: lag-sensitivity-stats
 #| code-fold: true
@@ -1618,26 +1491,19 @@ knitr::kable(vgm_lag_test$stats)
 
 **Across reasonable lag widths, do you still reach the same two conclusions: (1) that spatial continuity exists, and (2) roughly how far it persists? If those conclusions changed dramatically, what would that mean for using kriging to guide drilling?**
 
-::: unilur-solution
-### Lecturer answer / comments
-The detailed points and fitted parameters move as the lag width changes, because the same pairs are being summarised differently. The key test is whether the **spatial story is robust**.
+### Your answer
 
-For this teaching dataset, the broad conclusion should remain: there is interpretable distance-dependent structure at the scale relevant to the drilling pattern, and the practical range remains of the same general order rather than jumping unpredictably between radically different scales.
+**Type your response below:**
 
-- **125 m:** shows more short-range detail but can be noisy because some bins have fewer pairs.
-- **250 m:** provides a useful compromise between resolution and pair support.
-- **500 m:** is smoother but can hide short-range behaviour.
-
-If reasonable lag choices produced completely different answers about whether spatial dependence existed or changed the range by orders of magnitude, the fitted model would be fragile. That would be a warning **not to let kriging variance or a smooth prediction map drive a drilling decision with false precision**.
-
-**Lecturer point:** this is a model-robustness check, not a parameter-tuning competition.
-:::
+*Replace this text with your answer.*
 
 # 8. Does treatment of the fault-associated high change the spatial story?
 
 The earlier EDA showed that the major high-Ash observation is both statistically unusual and geologically interesting because of its structural context. Before committing to kriging, we should ask whether our decision about that value materially changes the spatial model.
 
 Change only `include_fault_high` below.
+
+Run this chunk after setting `include_fault_high` to `TRUE` or `FALSE`. It refits and plots the variogram with or without the fault-associated high value.
 
 ```{r}
 #| label: anomaly-toggle-variogram
@@ -1671,6 +1537,8 @@ plot_variogram(
 )
 ```
 
+Run this chunk to print the fitted statistics for the anomaly treatment currently selected. These are the model settings carried into the prediction steps below.
+
 ```{r}
 #| label: anomaly-toggle-stats
 #| code-fold: true
@@ -1682,38 +1550,17 @@ knitr::kable(vgm_selected$stats)
 
 **Does removing the fault-associated high change the variogram enough to change your drilling strategy? Which part of the spatial model is robust, and which part is sensitive to this modelling decision? Would you keep the observation in the regional prediction?**
 
-::: unilur-solution
-### Lecturer answer / comments
-The fitted default comparison is:
+### Your answer
 
-```{r}
-#| code-fold: true
-#| echo: false
-knitr::kable(variogram_comparison)
-```
+**Type your response below:**
 
-The most useful interpretation is not simply that “the numbers changed”. Ask **which decision-relevant numbers changed**.
-
-For this dataset, the broad spatial scale/range is much less sensitive than the short-range component. The clearest change is in the balance between nugget and structured variability: removing the fault-associated high increases the **spatially structured component from about 33% to about 62%**. In other words, once that locally fault-affected value is removed, much more of the fitted variability is represented by coherent distance-dependent structure rather than nugget or unresolved very-short-range variation.
-
-That has a direct drilling implication:
-
-- the broad argument for filling large spatial gaps does not disappear when the high value is removed;
-- the strong change in spatial coherence reinforces that fault-affected coal can behave differently from the regional population;
-- for this **coal-quality** drilling program, that is a reason to be cautious about placing scarce holes directly on mapped faults. A hole on a fault may introduce another source of structural uncertainty rather than cleanly improving regional quality prediction. Targeted fault drilling would make sense only if structural definition itself were the explicit objective.
-
-There is deliberately no single mandatory inclusion decision:
-
-- **Keep it** if it is verified and the model is intended to represent the full observed population, including fault-related deterioration.
-- **Exclude/domain it from the regional model** if independent geological evidence indicates it belongs to a separate structural population whose influence should not propagate into unaffected coal.
-- In real work, verification and geological domaining are preferable to treating this as a purely statistical delete/keep decision.
-
-The key teaching result is that **the variogram has now done something useful for the final decision**: it has justified moving to kriging, provided a spatial scale for judging information redundancy, and shown which parts of that interpretation are robust to reasonable modelling choices.
-:::
+*Replace this text with your answer.*
 
 # 9. What does the current model predict?
 
-Run ordinary kriging using the modelling decision you made above. The prediction surface is displayed using the **same ash classes and colour scale as the observed points** so the two maps can be compared directly.
+Now carry the modelling decision you made above into ordinary kriging. The prediction surface uses the **same ash classes and colour scale as the observed points** so the two maps can be compared directly.
+
+Run this chunk to perform ordinary kriging using the variogram model you selected. It creates the prediction and kriging-standard-error values used by the next maps but does not itself produce a plot.
 
 ```{r}
 #| label: kriging-run
@@ -1727,6 +1574,8 @@ kriging_plot_data <- run_kriging(
 prediction_min <- min(kriging_plot_data$var1.pred, na.rm = TRUE)
 prediction_max <- max(kriging_plot_data$var1.pred, na.rm = TRUE)
 ```
+
+Run this chunk to map the ordinary kriging predictions. It produces the predicted-Ash surface with the existing boreholes and mapped faults overlaid.
 
 ```{r}
 #| label: prediction-surface
@@ -1794,19 +1643,11 @@ prediction_map
 
 **What features of the prediction surface would influence where you drill? Where might the map be giving you more confidence than the geology deserves?**
 
-::: unilur-solution
-### Lecturer answer / comments
-Useful observations include:
+### Your answer
 
-- The surface shows broad spatial structure plus local highs and lows.
-- If the anomalous fault-associated value is retained, it creates a pronounced local prediction feature around the faulted area.
-- Ordinary kriging smooths through space and does **not automatically know that a mapped fault may separate geological populations**.
-- A smoothly interpolated continuation across a fault can therefore look convincing while being geologically questionable.
-- Sparse eastern/down-dip areas are strongly influenced by more distant observations and the assumed variogram model.
+**Type your response below:**
 
-A prediction surface is a model, not a geological map of truth. Students should identify places where the model is making a strong statement from weak or structurally complicated support.
-
-:::
+*Replace this text with your answer.*
 
 ## Optional extension: what did the model leave behind?
 
@@ -1817,6 +1658,8 @@ At sampled locations, ordinary kriging under this setup is an exact interpolator
 > **residual = observed Ash - predicted Ash**
 
 If the model has captured the important spatial structure, we would hope the residuals show no strong spatial pattern. If nearby residuals remain systematically similar, the model may have left predictable spatial information behind.
+
+Run this optional chunk to calculate leave-one-out kriging residuals and their experimental variogram. It prepares the residual diagnostics used by the next two plots.
 
 ```{r}
 #| label: kriging-loocv-residuals
@@ -1851,6 +1694,8 @@ kriging_residual_variogram <- gstat::variogram(
   width = 250
 )
 ```
+
+Run this optional chunk to map the leave-one-out kriging residuals. It produces a residual map for checking whether prediction errors cluster spatially.
 
 ```{r}
 #| label: kriging-loocv-residual-map
@@ -1888,6 +1733,8 @@ ggplot() +
   map_theme
 ```
 
+Run this optional chunk to plot the experimental variogram of the leave-one-out residuals. It shows whether residual similarity still changes with distance.
+
 ```{r}
 #| label: kriging-residual-variogram
 #| code-fold: true
@@ -1920,27 +1767,17 @@ ggplot(kriging_residual_variogram, aes(x = dist, y = gamma)) +
 
 **Do the residual map and residual variogram look approximately spatially structureless, or has the model left a spatial pattern behind? If structure remains, what assumptions would you investigate before simply fitting a more complicated model?**
 
-::: unilur-solution
-### Lecturer answer / comments
-The diagnostic question is not whether every residual is small. Some prediction error is expected. The important issue is whether the errors themselves still show **systematic spatial structure**.
+### Your answer
 
-A well-behaved residual pattern would have no obvious broad zones of consistently positive or negative residuals, and its variogram would show little stable increase with distance beyond very-short-range noise.
+**Type your response below:**
 
-If clear structure remains, possible explanations include:
-
-- a broad spatial trend that ordinary kriging with a constant mean has not represented;
-- directional continuity or anisotropy that an omnidirectional variogram has averaged away;
-- geological boundaries or domains that should not have been modelled together;
-- fault-related discontinuities;
-- a variogram model that does not represent the relevant spatial scales well;
-- or another explanatory variable that has not been included.
-
-Residual structure is therefore a **diagnostic**, not an automatic instruction to add complexity. It tells us to ask what systematic information the model has left unexplained.
-:::
+*Replace this text with your answer.*
 
 # 10. Where are we uncertain?
 
 Kriging also provides a model-based prediction variance. Here we plot its square root, the **kriging standard error**.
+
+Run this chunk to map kriging standard error. It produces the model-based prediction-uncertainty surface used in the drilling decision.
 
 ```{r}
 #| label: uncertainty-surface
@@ -1992,22 +1829,11 @@ uncertainty_map
 
 **Where is prediction uncertainty highest, and why? Is the area with the lowest kriging error necessarily the area you understand geologically best?**
 
-::: unilur-solution
-### Lecturer answer / comments
-Kriging standard error is generally:
+### Your answer
 
-- low around dense drilling and closely spaced clusters;
-- higher in internal gaps;
-- higher toward sparsely sampled eastern/down-dip and edge areas;
-- sensitive to the assumed variogram model and the geometry of surrounding data.
+**Type your response below:**
 
-The second part is the key teaching point: **low kriging variance does not equal low geological uncertainty**.
-
-The fault-targeted cluster can have low kriging standard error because there are many nearby samples, while still being geologically complicated because faulting may invalidate the assumption that all nearby observations belong to one continuous stationary population.
-
-Kriging variance measures uncertainty under the specified spatial model. It does not capture every source of geological uncertainty, data quality risk, domain uncertainty, structural uncertainty or model misspecification.
-
-:::
+*Replace this text with your answer.*
 
 ::: {.callout-warning title="Important terminology"}
 Avoid calling this an "error surface" without qualification. At unsampled locations we do not know the actual prediction error. This is a **model-based kriging variance/standard-error surface**.
@@ -2018,6 +1844,8 @@ Avoid calling this an "error surface" without qualification. At unsampled locati
 Management has approved **six additional drill holes**. No more drilling will be approved this season.
 
 The candidate locations are deliberately mixed: some may address strong spatial or geological questions, while others may be weak or even geologically invalid. **Check geological validity before ranking candidates statistically.** Then consider drilling density, infill versus step-out, variogram range, anomalies/domains, predicted Ash, kriging uncertainty and proximity to faults.
+
+Run this chunk to plot the 12 candidate drill sites over the kriging standard-error surface. It lets you compare each candidate with existing drilling and mapped faults.
 
 ```{r}
 #| label: candidate-site-map
@@ -2088,6 +1916,8 @@ ggplot() +
 ```
 
 The candidate map shows the proposed sites against the current drilling, mapped faults and model-based uncertainty surface.
+
+Run this chunk to calculate the evidence used to compare candidate sites. It produces a compact table of spacing, variogram-range proportion, predicted Ash, kriging SE and fault proximity.
 
 ```{r}
 #| label: candidate-site-table
@@ -2161,14 +1991,15 @@ Before choosing six holes, work through the candidates in this order:
 
 **Are any candidate sites inconsistent with the known geology and therefore rejectable regardless of their statistical metrics? Explain why before selecting your six holes.**
 
-::: unilur-solution
-### Lecturer answer / comments
-Yes. **Site F should be rejected on geology before statistical ranking.** It lies west of the western bounding fault, where the target L seam has cropped out and is not expected to exist. Its apparently attractive spacing or uncertainty therefore does not make it a valid target.
+### Your answer
 
-This is the clearest example in the exercise of why **geological validity comes before statistical attractiveness**. A model can assign uncertainty to a location because of sparse support, but it does not know that the target seam is absent unless that geological constraint is explicitly built into the model.
-:::
+**Type your response below:**
 
-Choose your six sites only after completing the geological-validity check above. Edit only the site IDs in the short code chunk below.
+*Replace this text with your answer.*
+
+Choose your six sites only after completing the geological-validity check above. Edit only the site IDs in the next code chunk.
+
+Run this chunk after replacing the six empty strings with your selected site IDs. It stores your choices for the plotting chunk below.
 
 ```{r}
 #| label: choose-sites
@@ -2178,7 +2009,7 @@ Choose your six sites only after completing the geological-validity check above.
 chosen_sites <- c("", "", "", "", "", "")  # ENTER SIX SITE IDs
 ```
 
-The supplied plotting code checks the selection and adds the six chosen holes to the uncertainty map.
+Run this chunk to check and plot your six selected sites. It produces your proposed drilling program over the uncertainty surface.
 
 ```{r}
 #| label: proposed-holes
@@ -2256,77 +2087,28 @@ if (nrow(selected_sites) != 6) {
 
 **For each selected site, identify whether it is primarily internal infill, a down-dip/edge step-out, or another justified target, and state the main question that drilling it would answer.**
 
-::: unilur-solution
-### Lecturer answer / comments
-There is deliberately **no single correct six-hole pattern**, but a defensible program should buy different kinds of information rather than merely filling map space. For this coal-quality exercise I would expect the strongest programs to combine:
+### Your answer
 
-- **2-3 down-dip/eastern step-outs** to test continuation into genuinely sparse support;
-- **2-3 internal or northern infill/continuity holes** where model uncertainty remains useful to reduce;
-- **avoidance of sites directly on mapped faults unless structural definition is itself the objective**. The earlier fault-associated Ash result showed why a structurally affected coal-quality sample can be difficult to interpret as part of the regional quality field.
+**Complete the table below. Replace `Site 1` to `Site 6` with the actual site IDs you selected, then type the main reason for each hole.**
 
-#### Why each candidate exists
-
-The table below is for lecturer discussion only. Some sites are intentionally weak or redundant.
-
-```{r}
-#| code-fold: true
-#| echo: false
-#| results: asis
-
-lecturer_candidate_table <- candidate_decision_table |>
-  select(
-    Site,
-    Target_type,
-    `Nearest hole (m)`,
-    `Distance / variogram range (%)`,
-    `Predicted Ash (%)`,
-    `Kriging SE`,
-    `Nearest mapped fault (m)`,
-    Lecturer_assessment,
-    Why_consider,
-    Why_not
-  )
-
-knitr::kable(lecturer_candidate_table)
-```
-
-A useful way to talk through them is:
-
-- **A:** strong down-dip step-out. Adds sparse eastern support and tests continuation of the regional Ash pattern.
-- **B:** strong down-dip/gap target. Similar objective to A but in a different part of the eastern gap.
-- **C:** potentially useful southern infill/edge support, but the fixed site is only about **8 m from a mapped fault**. For this coal-quality program that is a significant drawback. C would be a much stronger candidate if it could be moved farther from the fault, but the candidate positions are fixed.
-- **D:** strong **internal infill**. Kriging standard error remains relatively high in this area despite reasonably good drill coverage, so another hole can materially improve internal support.
-- **E:** intentionally more questionable. It is close to existing drilling and faulting; for a coal-quality program the structural proximity is more likely to complicate regional interpretation than justify sacrificing a stronger regional-information hole.
-- **F:** **reject on geology.** It lies west of the western bounding fault, where the target L seam is not expected.
-- **G:** strong northern/eastern step-out that tests regional continuity in sparse drilling.
-- **H:** good **northern down-dip infill** between L and G. It fills a broad gap in the northern drilling pattern while remaining on the coal-bearing side of the boundary.
-- **I:** lower-priority western infill because the fixed site is **directly on a mapped fault**. The western corridor is already comparatively well supported, and the fault introduces another source of geological uncertainty into a coal-quality sample.
-- **J:** deliberately weak for this six-hole budget. It is close to existing support and offers little new regional information unless there is a specific local question not represented in the exercise.
-- **K:** deliberately weak. It sits in an already well-covered part of the deposit, contributes little new regional information, and has no strong geological question in this exercise.
-- **L:** reasonable northern-continuity/infill option. With the candidate positions fixed, it is a cleaner coal-quality target than C because it avoids C's near-fault placement.
-
-A plausible balanced program could be **A, B, D, G, H and L**: two strong eastern/down-dip step-outs, a high-value internal infill at D, and northern continuity/infill support from G, H and L. **C would otherwise be a good southern infill candidate, but at its fixed position the ~8 m fault proximity makes L preferable.** This is illustrative rather than uniquely correct.
-:::
+| Selected site | Main reason for drilling here |
+|---|---|
+| Site 1 | Type here |
+| Site 2 | Type here |
+| Site 3 | Type here |
+| Site 4 | Type here |
+| Site 5 | Type here |
+| Site 6 | Type here |
 
 ## Question: Overall strategy
 
 **How did the variogram range influence your choices? Why is your program better than simply drilling the six locations with the highest kriging standard error?**
 
-::: unilur-solution
-### Lecturer answer / comments
-The variogram contributes directly to the decision in two ways. First, its existence supports the use of a spatial prediction model at all. Second, its range gives an approximate scale for judging whether another hole is mostly duplicating nearby information or sampling a materially new part of the spatial field.
+### Your answer
 
-Use distance as a percentage of the fitted range only as a **decision heuristic**, not as a drilling rule:
+**Type your response below:**
 
-- **< ~25% of the range:** highly spatially redundant with the nearest existing hole. A site this close needs a strong geological, structural, operational or QA reason.
-- **~25-50% of the range:** local infill. It adds information, but the area is still substantially supported by nearby drilling.
-- **~50-100% of the range:** increasingly independent spatial information while remaining broadly within the modelled correlation scale. These are often attractive gap-fill or moderate step-out targets.
-- **> ~100% of the range:** a genuine step-out beyond the approximate correlation distance from the nearest hole. Potentially very informative, but also higher exploration risk because the current model is extrapolating rather than interpolating locally.
-
-These percentages **do not override geology**. A distant hole can be useless if the target geology is absent, and a statistically attractive hole placed directly on a fault may be a poor coal-quality target because structural effects can introduce another source of local uncertainty.
-
-The best program is also **not** simply the six highest kriging-SE sites because kriging SE measures uncertainty under the chosen statistical model. After geological validity, drilling still has to balance spatial coverage, clean geological support, domain boundaries, model assumptions and the specific information each hole is expected to add.
-:::
+*Replace this text with your answer.*
 
 ## Optional: if the budget is cut to three holes
 
@@ -2334,50 +2116,12 @@ The best program is also **not** simply the six highest kriging-SE sites because
 
 **Which three of your six holes survive, and what information are you willing to leave unresolved?**
 
-::: unilur-solution
-### Lecturer answer / comments
-This is a prioritisation question rather than a calculation. The strongest answers usually retain holes that address **different high-value uncertainties** without deliberately introducing avoidable fault-related ambiguity, for example:
+### Your answer
 
-1. one major eastern/down-dip step-out;
-2. one strategically placed high-value internal infill hole, such as D;
-3. one northern continuity/infill hole.
+**Type your response below:**
 
-A weak answer retains three neighbouring holes that all solve essentially the same problem, or spends a scarce coal-quality hole directly on a mapped fault without a clear structural objective.
+*Replace this text with your answer.*
 
-:::
+# Finish
 
-# 🗣 Whole-class discussion
-
-::: unilur-solution
-### Lecturer discussion sequence
-Useful prompts for the final 15-20 minutes:
-
-1. **Who kept the main fault-associated anomaly in the model? Who removed it?** Ask each side to defend the geological assumption, not the statistical rule.
-2. **Did any group change its interpretation when the lag width changed?** Separate genuine spatial structure from plotting/binning artefacts.
-3. **What did the ordinary boxplot flag, and what did the nearest-neighbour residual screen add?** Use this to contrast global and local definitions of an anomaly.
-4. **What did the exact IDW map reveal that the global boxplot did not?** Ask which bullseyes look like isolated sample influence versus coherent local structure.
-5. **If you ran the residual extension, did the kriging model leave spatial structure behind?** Ask what that would imply about trend, anisotropy, boundaries or model specification.
-6. **Did anyone select F?** If so, ask why the statistical metrics looked attractive, then return to the western bounding fault and the known seam geometry. This is the clearest example of geology overruling a statistically attractive target.
-7. **Who drilled the eastern sparse area?** Ask whether the motive was uncertainty reduction, trend definition, or resource extension.
-8. **Did anyone select C or I despite their proximity to mapped faults?** Ask whether their statistical appeal justifies adding another source of geological uncertainty to a coal-quality hole, and how the earlier fault-associated Ash result should influence that decision.
-9. **Did anyone choose six holes that are all high-SE gap fillers?** Ask what geological questions that strategy misses.
-10. **If only three holes remain, what gets sacrificed?** This exposes each group's implicit decision priorities.
-:::
-
-# 👌 Take-home messages
-
-::: unilur-solution
-### Lecturer answer / comments
-The tutorial should leave students with these ideas:
-
-1. **Where observations are located matters before any modelling begins.**
-2. **Conventional EDA is useful, but it does not replace spatial thinking.**
-3. **An unusual value is not automatically bad data; spatial and geological context can change its interpretation.**
-4. **Global, domain and spatial outliers are different ideas.** A value can look ordinary globally but be surprising within its geological or local spatial context.
-5. **Exact interpolation is useful for visual diagnosis.** IDW exposes local sample influence and bullseyes that a smoother model can hide.
-6. **A variogram is an empirical summary whose appearance depends partly on analytical choices such as lag width, direction and sampling geometry.**
-7. **Residual spatial structure is a model diagnostic.** If prediction errors remain spatially patterned, the model may have left systematic information unexplained.
-8. **Prediction uncertainty from kriging is conditional on the model and data geometry; it is not the same as total geological uncertainty.**
-9. **The best new sample location is a decision problem.** It balances spatial coverage, geological interpretation, model uncertainty and the value of the question that the new data would answer.
-
-:::
+Save your `.qmd` and render it before the end of the session so that your code output and written answers are captured together.
