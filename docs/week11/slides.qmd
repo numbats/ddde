@@ -22,12 +22,13 @@ format:
     embed-resources: true
 ---
 
-```{r, include = FALSE, echo=FALSE}
+```{r setup, include = FALSE, echo=FALSE}
 source("../setup.R")
 ```
 
 
 ```{r}
+#| label: idea-image-data
 #| eval: false
 #| echo: false
 # Code to generate data in idea image
@@ -100,7 +101,15 @@ ggplot(df2, aes(x, y)) +
 
 ## {background-image="../images/model-focus/model-focus.003.png" background-position="20% 80%" .center style="text-align: center;" count=FALSE}
 
+::: {.absolute top=100 right=50 width=350}
+[sharpening]{.monash-orange2}
+:::
+
 ## {background-image="../images/model-focus/model-focus.004.png" background-position="20% 80%" .center style="text-align: center;" count=FALSE}
+
+::: {.absolute top=100 right=50 width=350}
+[what is missed]{.monash-orange2}
+:::
 
 ## Different types of model fitting
 
@@ -154,6 +163,7 @@ Fitting results in:
 ::: {.fragment}
 
 ```{r}
+#| label: mtcars-poly-fit
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 3
@@ -197,6 +207,7 @@ Residuals, $e = y-\widehat{y}$ (*what doesn't the fitted model see?*)
 ## Lineup
 
 ```{r}
+#| label: mtcars-lineup-hist
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -213,6 +224,7 @@ ggplot(lineup(null_dist(".resid", "norm"), n=12, true=mtcars_all),
 ## Normal?
 
 ```{r}
+#| label: mtcars-normal-diagnostics
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -235,6 +247,7 @@ p3 + p4 + p5 + p6 + plot_layout(ncol=2)
 ## Lineup
 
 ```{r}
+#| label: mtcars-lineup-resid
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -251,6 +264,7 @@ ggplot(lineup(null_dist(".resid", "norm"), n=12, true=mtcars_all),
 ## Relationship?
 
 ```{r}
+#| label: mtcars-resid-vs-hp
 #| code-fold: true
 #| fig-width: 8
 #| fig-height: 5
@@ -313,10 +327,64 @@ where $p$ is the number of elements in $\boldsymbol{\beta}$, $\widehat{\boldsymb
 :::
 ::::
 
+## Activity: Hand-calculate the diagnostics {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+Use these 5 points from `mtcars` (`mpg` on `hp`), and the formulas from the previous slide, to hand-calculate the diagnostics for the simple linear model `mpg ~ hp`.
+
+```{r}
+#| label: mtcars-hand-calc-data
+#| echo: false
+mtcars_small <- mtcars[1:5, c("mpg", "hp")]
+mtcars_small
+```
+
+1. Build the design matrix $\mathbf{X}$ (a column of 1's and the `hp` column), and compute the hat matrix $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$. Read off the leverages $h_{ii}$ from the diagonal.
+2. Fit the model and compute the residuals $e_i = y_i - \widehat y_i$, and $\widehat\sigma = \sqrt{\sum_i e_i^2 / (n-p)}$ with $n=5$, $p=2$.
+3. Compute the studentised residual $e_i^*$ and Cook's distance $D_i$ for each point.
+4. Which point has the highest leverage? Does it also have the largest Cook's distance? Why or why not?
+5. Check your answers against R's `hatvalues()`, `rstandard()` and `cooks.distance()`.
+:::
+
+```{r}
+#| label: mtcars-hand-calc-activity
+#| eval: false
+#| echo: false
+X <- cbind(1, mtcars_small$hp)
+y <- mtcars_small$mpg
+
+H <- X %*% solve(t(X) %*% X) %*% t(X)
+h <- diag(H)
+
+mtcars_fit_small <- lm(mpg ~ hp, data = mtcars_small)
+e <- residuals(mtcars_fit_small)
+n <- 5
+p <- 2
+sigma_hat <- sqrt(sum(e^2) / (n - p))
+
+e_star <- e / (sigma_hat * sqrt(1 - h))
+cooksd <- (e^2 * h) / ((1 - h)^2 * p * sigma_hat^2)
+
+data.frame(hp = mtcars_small$hp, leverage = h,
+           studentised = e_star, cooksd = cooksd)
+
+# Check against R
+data.frame(hatvalues(mtcars_fit_small),
+           rstandard(mtcars_fit_small),
+           cooks.distance(mtcars_fit_small))
+```
+
+```{r}
+#| label: mtcars-hand-calc-countdown
+#| echo: false
+countdown::countdown(8, 30)
+```
+
 ## Diagnostics [(3/3)]{.smallest}
 
 
 ```{r}
+#| label: mtcars-diagnostic-measures
 #| code-fold: true
 mtcars_all <- mtcars_all |>
   mutate(id = 1:n())
@@ -334,6 +402,7 @@ p12 <- ggplot(mtcars_all, aes(x=.resid, y=.std.resid, label=id)) +
 :::: {.columns}
 ::: {.column width=30%}
 ```{r}
+#| label: mtcars-leverage-plotly
 #| echo: false
 #| fig-width: 3
 #| fig-height: 3
@@ -343,6 +412,7 @@ ggplotly(p10, width=400, height=400) |> config(displayModeBar = FALSE)
 :::
 ::: {.column width=30%}
 ```{r}
+#| label: mtcars-cooksd-plotly
 #| echo: false
 #| fig-width: 3
 #| fig-height: 3
@@ -352,6 +422,7 @@ ggplotly(p11, width=400, height=400) |> config(displayModeBar = FALSE)
 :::
 ::: {.column width=30%}
 ```{r}
+#| label: mtcars-studentised-plotly
 #| echo: false
 #| fig-width: 3
 #| fig-height: 3
@@ -370,6 +441,7 @@ ggplotly(p12, width=400, height=400) |> config(displayModeBar = FALSE)
 Generate response values for un-collected predictor values
 
 ```{r}
+#| label: mtcars-new-hp-values
 #| eval: false
 mt_full_fit <- tibble(hp = seq(50, 340, 10))
 mt_full_fit <- mt_full_fit |>
@@ -377,6 +449,7 @@ mt_full_fit <- mt_full_fit |>
 ```
 
 ```{r}
+#| label: mtcars-new-hp-plot
 #| echo: false
 #| fig-width: 4
 #| fig-height: 4
@@ -396,6 +469,7 @@ Simulate new samples
 ## 1
 
 ```{r}
+#| label: mtcars-sim-1
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 4
@@ -422,6 +496,7 @@ ggplot(mt_sample1, aes(x=hp, y=mpg, colour=type)) +
 ## 2
 
 ```{r}
+#| label: mtcars-sim-2
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 4
@@ -447,6 +522,7 @@ ggplot(mt_sample2, aes(x=hp, y=mpg, colour=type)) +
 ## 3
 
 ```{r}
+#| label: mtcars-sim-3
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 4
@@ -486,6 +562,7 @@ Specify function form is has only linear term
 $$f(X) = \beta_0 + \beta_1 X$$
 
 ```{r}
+#| label: mtcars-linear-misspecified
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 4
@@ -511,6 +588,7 @@ sp1 + sp2 + plot_layout(ncol=2)
 Polynomial
 
 ```{r}
+#| label: mtcars-poly-summary
 #| echo: false
 tidy(mtcars_fit)
 glance(mtcars_fit)
@@ -519,6 +597,7 @@ glance(mtcars_fit)
 Linear
 
 ```{r}
+#| label: mtcars-linear-summary
 #| echo: false
 tidy(mtcars_fit2)
 glance(mtcars_fit2)
@@ -537,6 +616,7 @@ glance(mtcars_fit2)
 Generate response values for un-collected predictor values OUTSIDE of domain of collected data, can produce [HALLUCINATIONS]{.monash-blue2}.
 
 ```{r}
+#| label: mtcars-extrapolation-data
 #| code-fold: true
 mtcars_fit3 <- lm(mpg~poly(hp, 5), data=mtcars)
 mtcars_all3 <- augment(mtcars_fit3, mtcars)
@@ -557,6 +637,7 @@ mt_extrap <- bind_rows(mt_extrap, mtcars_sub)
 ::: {.column}
 
 ```{r}
+#| label: mtcars-extrapolation-plot
 #| echo: false
 #| fig-width: 4
 #| fig-height: 4
@@ -578,30 +659,33 @@ ggplot(mt_extrap, aes(x=hp, y=mpg, colour=type)) +
 Missing terms
 
 ```{r}
+#| label: mtcars-gear-scatter
 #| echo: false
+#| out-width: 80%
 mtcars <- mtcars |>
-  mutate(am = factor(am, labels = c("auto", "manual")))
-ggplot(mtcars, aes(x=hp, y=mpg, colour=am)) +
+  mutate(am = factor(am, labels = c("auto", "manual")),
+         cyl = factor(cyl),
+         gear = factor(gear))
+ggplot(mtcars, aes(x=hp, y=mpg, colour=gear)) +
   geom_point() + 
   scale_color_discrete_divergingx(palette="Zissou 1") 
 ```
 
 ```{r}
+#| label: mtcars-gear-interaction-fit
 #| code-fold: true
-mtcars_fit4 <- lm(mpg~poly(hp, 2)+am, data=mtcars)
+mtcars_fit4 <- lm(mpg~hp+gear, data=mtcars)
 mtcars_all4 <- augment(mtcars_fit4, mtcars)
 mtcars_coefs4 <- tidy(mtcars_fit4)
-mtcars_stats4 <- glance(mtcars_fit4)
-mtcars_fit5 <- lm(mpg~poly(hp, 2)*am, data=mtcars)
+mtcars_fit5 <- lm(mpg~hp*gear, data=mtcars)
 mtcars_all5 <- augment(mtcars_fit5, mtcars)
 mtcars_coefs5 <- tidy(mtcars_fit5)
-mtcars_stats5 <- glance(mtcars_fit5)
-ip1 <- ggplot(mtcars_all4, aes(x=hp, y=.fitted, colour=am)) +
+ip1 <- ggplot(mtcars_all4, aes(x=hp, y=.fitted, colour=gear)) +
   geom_point() +
   scale_color_discrete_divergingx(palette="Zissou 1") +
   ggtitle("No interaction") +
   theme(legend.position = "None")
-ip2 <- ggplot(mtcars_all5, aes(x=hp, y=.fitted, colour=am)) +
+ip2 <- ggplot(mtcars_all5, aes(x=hp, y=.fitted, colour=gear)) +
   geom_point() +
   scale_color_discrete_divergingx(palette="Zissou 1") +
   ggtitle("With interaction") +
@@ -613,14 +697,16 @@ ip2 <- ggplot(mtcars_all5, aes(x=hp, y=.fitted, colour=am)) +
 ::: {.column style="font-size: 70%;"}
 
 ```{r}
+#| label: mtcars-gear-interaction-plot
 #| echo: false
 #| fig-width: 8
-#| fig-height: 5
-#| out-width: 90%
+#| fig-height: 4
+#| out-width: 80%
 ip1 + ip2 + plot_layout(ncol=2)
 ```
 
 ```{r}
+#| label: mtcars-gear-coefs
 #| echo: false
 mtcars_coefs4
 mtcars_coefs5
@@ -628,6 +714,41 @@ mtcars_coefs5
 
 :::
 ::::
+
+## Activity: Polynomial interaction {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+1. Fit two polynomial models (degree 2) of `mpg` on `hp`, one without and one with an interaction with `am`: `lm(mpg~poly(hp, 2)+am, data=mtcars)` and `lm(mpg~poly(hp, 2)*am, data=mtcars)`.
+2. Plot the fitted values from each model against `hp`, coloured by `am`, as done for the linear model on the previous slide.
+3. Compare the coefficient tables for the two models. How does allowing an interaction change the shape of the fitted curves, compared to the linear case? Is the interaction term necessary or useful for this data?
+:::
+
+```{r}
+#| label: mtcars-poly-interaction
+#| eval: false
+#| cide-fold: true
+mtcars_fit_poly1 <- lm(mpg~poly(hp, 2)+am, data=mtcars)
+mtcars_all_poly1 <- augment(mtcars_fit_poly1, mtcars)
+tidy(mtcars_fit_poly1)
+
+mtcars_fit_poly2 <- lm(mpg~poly(hp, 2)*am, data=mtcars)
+mtcars_all_poly2 <- augment(mtcars_fit_poly2, mtcars)
+tidy(mtcars_fit_poly2)
+
+ggplot(mtcars_all_poly1, aes(x=hp, y=.fitted, colour=am)) +
+  geom_point() +
+  ggtitle("No interaction")
+
+ggplot(mtcars_all_poly2, aes(x=hp, y=.fitted, colour=am)) +
+  geom_point() +
+  ggtitle("With interaction")
+```
+
+```{r}
+#| label: poly-interaction-countdown
+#| echo: false
+countdown::countdown(5, 01)
+```
 
 ## Non-parametric model {.transition-slide .center style="text-align: center;"}
 
@@ -639,6 +760,7 @@ mtcars_coefs5
 We've seen `loess`, which fits a linear model in a sliding window over predictor, where `span` controls size of window.
 
 ```{r}
+#| label: mtcars-loess-fit
 #| code-fold: true
 #| fig-width: 4
 #| fig-height: 4
@@ -665,6 +787,7 @@ ggplot(data=mtcars_lo, aes(x=hp, y=mpg)) +
 Smoothing splines, provide more advanced technique, and stability. 
 
 ```{r}
+#| label: mtcars-gam-fit
 #| code-fold: true
 #| fig-width: 4
 #| fig-height: 4
@@ -713,6 +836,7 @@ $$p_i = \dfrac{1}{1 + e^{-(\beta_0 + \beta_1x_{i1} + ... + \beta_k x_{ik})}}.$$
 
 
 ```{r}
+#| label: mtcars-logistic-vs-loess
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 3
@@ -757,6 +881,7 @@ Slide a window and compute average (proportion) using loess, vs logistic functio
 ::: {.column style="font-size: 80%; width: 35%;"}
 
 ```{r}
+#| label: co2-data-wrangle
 #| code-fold: true
 co2 <- read_csv("../data/CO2-monthly.csv") |>
   mutate(date = dmy(date))
@@ -812,6 +937,7 @@ co2_p3 <- co2_fit |>
 ## Data
 
 ```{r}
+#| label: co2-plot-data
 #| echo: false
 #| fig-width: 8
 #| fig-height: 6
@@ -822,6 +948,7 @@ co2_p1
 ## Trend 
 
 ```{r}
+#| label: co2-plot-trend
 #| echo: false
 #| fig-width: 5
 #| fig-height: 5
@@ -833,6 +960,7 @@ co2_p2 + theme(legend.position = "none")
 ## Seasonality
 
 ```{r}
+#| label: co2-plot-seasonality
 #| echo: false
 #| fig-width: 8
 #| fig-height: 6
@@ -902,6 +1030,7 @@ Clearer view. Misses some quirks.
 ::: {.column}
 
 ```{r}
+#| label: track-grand-tour
 #| eval: false
 #| echo: false
 track <- read_csv(here::here("data/womens_track.csv"))
@@ -930,6 +1059,7 @@ render_gif(track[,1:7],
 ::: {.column}
 
 ```{r}
+#| label: track-pca-model
 #| eval: false
 #| echo: false
 track_std <- track |>   
@@ -970,6 +1100,85 @@ render_gif(track_all,
 :::
 ::::
 
+## Activity: Reshape ratings to long form {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+The `french_fries` data (`../data/french_fries.rda`) records sensory ratings of french fries over a 10-week experiment, on five scales: `potato`, `buttery`, `grassy`, `rancid`, `painty`.
+
+1. Load the data with `load("../data/french_fries.rda")` and inspect it with `glimpse()`.
+2. Convert it to long form with `pivot_longer()`, creating a `type` column (from the scale names) and a `rating` column (from the scale values).
+3. Convert `time` to numeric, so weeks can be treated as a continuous predictor.
+:::
+
+```{r}
+#| label: ff-reshape-activity
+#| eval: false
+library(tidyr)
+load("../data/french_fries.rda")
+glimpse(french_fries)
+
+ff_long <- french_fries |>
+  pivot_longer(potato:painty, names_to = "type", values_to = "rating") |>
+  mutate(time = as.numeric(time))
+head(ff_long)
+```
+
+```{r}
+#| label: ff-reshape-countdown
+#| echo: false
+countdown::countdown(4, 30)
+```
+
+## Activity: Raw view of ratings by week {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+1. Using `ff_long`, plot `rating` against `time`, coloured by `type`, with `geom_point()` and `geom_smooth()`, faceted by `type`.
+2. How easy is it to tell, from this raw/noisy view, whether ratings change over the 10 weeks for each scale?
+:::
+
+```{r}
+#| label: ff-raw-view-activity
+#| eval: false
+ggplot(ff_long, aes(x = time, y = rating, colour = type)) +
+  geom_point(size = 0.75) +
+  geom_smooth() +
+  facet_wrap(~type, ncol = 5) +
+  theme(legend.position = "none")
+```
+
+```{r}
+#| label: ff-raw-view-countdown
+#| echo: false
+countdown::countdown(4, 30)
+```
+
+## Activity: Sharpen ratings with a model {.activity-slide}
+
+::: {.callout-tip title="Your turn"}
+1. Fit a linear model of `rating` on `time` and `type`, allowing a different trend for each scale: `lm(rating ~ type*time - 1, data = ff_long)`.
+2. Extract the fitted values (e.g. with `augment()`), and plot the fitted rating against `time`, coloured by `type`.
+3. Compare this model view to the raw view on the previous slide -- what has been [sharpened]{.monash-blue2}? What variation has been [hidden]{.monash-blue2} in the process?
+:::
+
+```{r}
+#| label: ff-model-activity
+#| eval: false
+library(broom)
+ff_fit <- lm(rating ~ type*time - 1, data = ff_long)
+ff_fitted <- augment(ff_fit)
+
+ggplot(ff_fitted, aes(x = time, y = .fitted, colour = type)) +
+  geom_line(linewidth = 1)
+```
+
+```{r}
+#| label: ff-model-countdown
+#| echo: false
+countdown::countdown(5, 30)
+```
+
+The model trades the noise of individual ratings for a clear picture of how each scale trends over the 10 weeks -- a [sharpened]{.monash-blue2} view, at the cost of hiding rater-to-rater and replicate variability.
+
 ## Take-aways
 
 - Models provide different lenses for extracting the patterns in the data
@@ -985,6 +1194,3 @@ render_gif(track_all,
 - Cook & Weisberg (1994) An Introduction to Regression Graphics
 - Belsley, Kuh and Welsch (1980). Regression Diagnostics
 - Hyndman, Bashtannyk, Grunwald (1996) Estimating and Visualizing Conditional Densities
-
-
-

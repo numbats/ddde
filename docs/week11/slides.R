@@ -1,8 +1,9 @@
-## ----include = FALSE, echo=FALSE---------------------------------
+## ----setup, include = FALSE, echo=FALSE-------------------
 source("../setup.R")
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: idea-image-data
 #| eval: false
 #| echo: false
 # # Code to generate data in idea image
@@ -58,7 +59,8 @@ source("../setup.R")
 #         axis.text = element_blank())
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-poly-fit
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 3
@@ -82,7 +84,8 @@ mtcars_coefs
 mtcars_stats
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-lineup-hist
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -95,7 +98,9 @@ ggplot(lineup(null_dist(".resid", "norm"), n=12, true=mtcars_all),
   theme(axis.title = element_blank(),
         axis.text = element_blank())
 
-## ----------------------------------------------------------------
+
+## ---------------------------------------------------------
+#| label: mtcars-normal-diagnostics
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -115,7 +120,8 @@ p3 + p4 + p5 + p6 + plot_layout(ncol=2)
 
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-lineup-resid
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 6
@@ -129,7 +135,8 @@ ggplot(lineup(null_dist(".resid", "norm"), n=12, true=mtcars_all),
         axis.text = element_blank())
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-resid-vs-hp
 #| code-fold: true
 #| fig-width: 8
 #| fig-height: 5
@@ -152,7 +159,49 @@ p7 + p8 + plot_layout(ncol=2)
 
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-hand-calc-data
+#| echo: false
+mtcars_small <- mtcars[1:5, c("mpg", "hp")]
+mtcars_small
+
+
+## ---------------------------------------------------------
+#| label: mtcars-hand-calc-activity
+#| eval: false
+#| echo: false
+# X <- cbind(1, mtcars_small$hp)
+# y <- mtcars_small$mpg
+# 
+# H <- X %*% solve(t(X) %*% X) %*% t(X)
+# h <- diag(H)
+# 
+# mtcars_fit_small <- lm(mpg ~ hp, data = mtcars_small)
+# e <- residuals(mtcars_fit_small)
+# n <- 5
+# p <- 2
+# sigma_hat <- sqrt(sum(e^2) / (n - p))
+# 
+# e_star <- e / (sigma_hat * sqrt(1 - h))
+# cooksd <- (e^2 * h) / ((1 - h)^2 * p * sigma_hat^2)
+# 
+# data.frame(hp = mtcars_small$hp, leverage = h,
+#            studentised = e_star, cooksd = cooksd)
+# 
+# # Check against R
+# data.frame(hatvalues(mtcars_fit_small),
+#            rstandard(mtcars_fit_small),
+#            cooks.distance(mtcars_fit_small))
+
+
+## ---------------------------------------------------------
+#| label: mtcars-hand-calc-countdown
+#| echo: false
+countdown::countdown(8, 30)
+
+
+## ---------------------------------------------------------
+#| label: mtcars-diagnostic-measures
 #| code-fold: true
 mtcars_all <- mtcars_all |>
   mutate(id = 1:n())
@@ -167,7 +216,8 @@ p12 <- ggplot(mtcars_all, aes(x=.resid, y=.std.resid, label=id)) +
   labs(title="studentised residuals")
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-leverage-plotly
 #| echo: false
 #| fig-width: 3
 #| fig-height: 3
@@ -175,7 +225,8 @@ p12 <- ggplot(mtcars_all, aes(x=.resid, y=.std.resid, label=id)) +
 ggplotly(p10, width=400, height=400) |> config(displayModeBar = FALSE)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-cooksd-plotly
 #| echo: false
 #| fig-width: 3
 #| fig-height: 3
@@ -183,7 +234,8 @@ ggplotly(p10, width=400, height=400) |> config(displayModeBar = FALSE)
 ggplotly(p11, width=400, height=400) |> config(displayModeBar = FALSE)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-studentised-plotly
 #| echo: false
 #| fig-width: 3
 #| fig-height: 3
@@ -191,14 +243,16 @@ ggplotly(p11, width=400, height=400) |> config(displayModeBar = FALSE)
 ggplotly(p12, width=400, height=400) |> config(displayModeBar = FALSE)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-new-hp-values
 #| eval: false
 # mt_full_fit <- tibble(hp = seq(50, 340, 10))
 # mt_full_fit <- mt_full_fit |>
 #                 mutate(mpg = predict(mtcars_fit, mt_full_fit))
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-new-hp-plot
 #| echo: false
 #| fig-width: 4
 #| fig-height: 4
@@ -208,7 +262,8 @@ ggplot(mt_full_fit, aes(x=hp, y=mpg)) +
   ylim(c(10, 35)) 
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-sim-1
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 4
@@ -232,7 +287,8 @@ ggplot(mt_sample1, aes(x=hp, y=mpg, colour=type)) +
 
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-sim-2
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 4
@@ -255,7 +311,8 @@ ggplot(mt_sample2, aes(x=hp, y=mpg, colour=type)) +
   ylim(c(10, 35)) 
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-sim-3
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 4
@@ -278,7 +335,8 @@ ggplot(mt_sample3, aes(x=hp, y=mpg, colour=type)) +
   ylim(c(10, 35)) 
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-linear-misspecified
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 4
@@ -298,19 +356,22 @@ sp2 <- ggplot(mtcars_all2, aes(x=hp, y=.resid)) +
 sp1 + sp2 + plot_layout(ncol=2)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-poly-summary
 #| echo: false
 tidy(mtcars_fit)
 glance(mtcars_fit)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-linear-summary
 #| echo: false
 tidy(mtcars_fit2)
 glance(mtcars_fit2)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-extrapolation-data
 #| code-fold: true
 mtcars_fit3 <- lm(mpg~poly(hp, 5), data=mtcars)
 mtcars_all3 <- augment(mtcars_fit3, mtcars)
@@ -326,7 +387,8 @@ mt_extrap <- mt_extrap |>
 mt_extrap <- bind_rows(mt_extrap, mtcars_sub)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-extrapolation-plot
 #| echo: false
 #| fig-width: 4
 #| fig-height: 4
@@ -336,52 +398,85 @@ ggplot(mt_extrap, aes(x=hp, y=mpg, colour=type)) +
   scale_color_discrete_divergingx(palette = "Zissou 1") 
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-gear-scatter
 #| echo: false
+#| out-width: 80%
 mtcars <- mtcars |>
-  mutate(am = factor(am, labels = c("auto", "manual")))
-ggplot(mtcars, aes(x=hp, y=mpg, colour=am)) +
+  mutate(am = factor(am, labels = c("auto", "manual")),
+         cyl = factor(cyl),
+         gear = factor(gear))
+ggplot(mtcars, aes(x=hp, y=mpg, colour=gear)) +
   geom_point() + 
   scale_color_discrete_divergingx(palette="Zissou 1") 
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-gear-interaction-fit
 #| code-fold: true
-mtcars_fit4 <- lm(mpg~poly(hp, 2)+am, data=mtcars)
+mtcars_fit4 <- lm(mpg~hp+gear, data=mtcars)
 mtcars_all4 <- augment(mtcars_fit4, mtcars)
 mtcars_coefs4 <- tidy(mtcars_fit4)
-mtcars_stats4 <- glance(mtcars_fit4)
-mtcars_fit5 <- lm(mpg~poly(hp, 2)*am, data=mtcars)
+mtcars_fit5 <- lm(mpg~hp*gear, data=mtcars)
 mtcars_all5 <- augment(mtcars_fit5, mtcars)
 mtcars_coefs5 <- tidy(mtcars_fit5)
-mtcars_stats5 <- glance(mtcars_fit5)
-ip1 <- ggplot(mtcars_all4, aes(x=hp, y=.fitted, colour=am)) +
+ip1 <- ggplot(mtcars_all4, aes(x=hp, y=.fitted, colour=gear)) +
   geom_point() +
   scale_color_discrete_divergingx(palette="Zissou 1") +
   ggtitle("No interaction") +
   theme(legend.position = "None")
-ip2 <- ggplot(mtcars_all5, aes(x=hp, y=.fitted, colour=am)) +
+ip2 <- ggplot(mtcars_all5, aes(x=hp, y=.fitted, colour=gear)) +
   geom_point() +
   scale_color_discrete_divergingx(palette="Zissou 1") +
   ggtitle("With interaction") +
   theme(legend.position = "None")
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-gear-interaction-plot
 #| echo: false
 #| fig-width: 8
-#| fig-height: 5
-#| out-width: 90%
+#| fig-height: 4
+#| out-width: 80%
 ip1 + ip2 + plot_layout(ncol=2)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-gear-coefs
 #| echo: false
 mtcars_coefs4
 mtcars_coefs5
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-poly-interaction
+#| eval: false
+#| cide-fold: true
+# mtcars_fit_poly1 <- lm(mpg~poly(hp, 2)+am, data=mtcars)
+# mtcars_all_poly1 <- augment(mtcars_fit_poly1, mtcars)
+# tidy(mtcars_fit_poly1)
+# 
+# mtcars_fit_poly2 <- lm(mpg~poly(hp, 2)*am, data=mtcars)
+# mtcars_all_poly2 <- augment(mtcars_fit_poly2, mtcars)
+# tidy(mtcars_fit_poly2)
+# 
+# ggplot(mtcars_all_poly1, aes(x=hp, y=.fitted, colour=am)) +
+#   geom_point() +
+#   ggtitle("No interaction")
+# 
+# ggplot(mtcars_all_poly2, aes(x=hp, y=.fitted, colour=am)) +
+#   geom_point() +
+#   ggtitle("With interaction")
+
+
+## ---------------------------------------------------------
+#| label: poly-interaction-countdown
+#| echo: false
+countdown::countdown(5, 01)
+
+
+## ---------------------------------------------------------
+#| label: mtcars-loess-fit
 #| code-fold: true
 #| fig-width: 4
 #| fig-height: 4
@@ -402,7 +497,8 @@ ggplot(data=mtcars_lo, aes(x=hp, y=mpg)) +
   geom_line(data=mtcars_lop, aes(x=hp, y=mpg7), colour="#027EB6") 
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-gam-fit
 #| code-fold: true
 #| fig-width: 4
 #| fig-height: 4
@@ -425,7 +521,8 @@ ggplot(data=mtcars_gam, aes(x=hp, y=mpg)) +
   geom_line(data=mtcars_gamp, aes(x=hp, y=mpg9), colour="#027EB6") 
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: mtcars-logistic-vs-loess
 #| code-fold: true
 #| fig-width: 6
 #| fig-height: 3
@@ -456,7 +553,8 @@ lg2 <- ggplot(mtcars_ordered, aes(x=mpg, y=ami)) +
 lg1 + lg2 + plot_layout(ncol=2)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: co2-data-wrangle
 #| code-fold: true
 co2 <- read_csv("../data/CO2-monthly.csv") |>
   mutate(date = dmy(date))
@@ -504,7 +602,8 @@ co2_p3 <- co2_fit |>
   theme(aspect.ratio=0.5)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: co2-plot-data
 #| echo: false
 #| fig-width: 8
 #| fig-height: 6
@@ -512,7 +611,8 @@ co2_p3 <- co2_fit |>
 co2_p1
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: co2-plot-trend
 #| echo: false
 #| fig-width: 5
 #| fig-height: 5
@@ -520,7 +620,8 @@ co2_p1
 co2_p2 + theme(legend.position = "none")
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: co2-plot-seasonality
 #| echo: false
 #| fig-width: 8
 #| fig-height: 6
@@ -528,7 +629,8 @@ co2_p2 + theme(legend.position = "none")
 co2_p3 + ylab("De-trended fit")
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: track-grand-tour
 #| eval: false
 #| echo: false
 # track <- read_csv(here::here("data/womens_track.csv"))
@@ -549,7 +651,8 @@ co2_p3 + ylab("De-trended fit")
 #            height = 400)
 
 
-## ----------------------------------------------------------------
+## ---------------------------------------------------------
+#| label: track-pca-model
 #| eval: false
 #| echo: false
 # track_std <- track |>
@@ -579,4 +682,56 @@ co2_p3 + ylab("De-trended fit")
 #            width=400,
 #            height=400,
 #            loop=FALSE)
+
+
+## ---------------------------------------------------------
+#| label: ff-reshape-activity
+#| eval: false
+# library(tidyr)
+# load("../data/french_fries.rda")
+# glimpse(french_fries)
+# 
+# ff_long <- french_fries |>
+#   pivot_longer(potato:painty, names_to = "type", values_to = "rating") |>
+#   mutate(time = as.numeric(time))
+# head(ff_long)
+
+
+## ---------------------------------------------------------
+#| label: ff-reshape-countdown
+#| echo: false
+countdown::countdown(4, 30)
+
+
+## ---------------------------------------------------------
+#| label: ff-raw-view-activity
+#| eval: false
+# ggplot(ff_long, aes(x = time, y = rating, colour = type)) +
+#   geom_point(size = 0.75) +
+#   geom_smooth() +
+#   facet_wrap(~type, ncol = 5) +
+#   theme(legend.position = "none")
+
+
+## ---------------------------------------------------------
+#| label: ff-raw-view-countdown
+#| echo: false
+countdown::countdown(4, 30)
+
+
+## ---------------------------------------------------------
+#| label: ff-model-activity
+#| eval: false
+# library(broom)
+# ff_fit <- lm(rating ~ type*time - 1, data = ff_long)
+# ff_fitted <- augment(ff_fit)
+# 
+# ggplot(ff_fitted, aes(x = time, y = .fitted, colour = type)) +
+#   geom_line(linewidth = 1)
+
+
+## ---------------------------------------------------------
+#| label: ff-model-countdown
+#| echo: false
+countdown::countdown(5, 30)
 
