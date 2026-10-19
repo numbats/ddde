@@ -1,0 +1,164 @@
+---
+title: "ETC5521: Diving Deeply into Data Exploration"
+title-slide-attributes: 
+  data-background-image: "../images/bg.png"
+  data-background-size: 100%
+subtitle: "Project Part 1 insights"
+author: "Professor Di Cook"
+email: "ETC5521.Clayton-x@monash.edu"
+length: "100 minutes"
+pdflink: "lecture.pdf"
+institute: "Department of Econometrics and Business Statistics"
+footer: "ETC5521 Lecture 12 | [ddde.numbat.space](ddde.numbat.space)"
+format:
+  revealjs:
+    multiplex: false
+    slide-number: c/t
+    slide-tone: false
+    theme: "../assets/monash.scss"
+    width: 1600
+    height: 900
+    margin: 0.05
+    embed-resources: true
+---
+
+```{r setup, include = FALSE, echo=FALSE}
+source("../setup.R")
+```
+
+## Collaborations
+
+::: {.panel-tabset}
+
+## Reported v Commits
+
+![](images/perceived-actual.png){width="75%"}
+
+## Lines 
+
+![](images/perceived-actual-lines.png){width="75%"}
+
+## Commits v Lines
+
+![](images/commits-lines.png){width="60%"}
+
+## Timing
+
+![](images/timing-of-commits.png){width="60%"}
+
+:::
+
+## Reflections
+
+
+::: {.panel-tabset}
+
+## Worked
+
+![](images/group-what-worked-well.png){width="75%"}
+
+## Challenges
+
+![](images/group-challenges.png){width="75%"}
+
+## Benefits
+
+![](images/group-benefits.png){width="60%"}
+
+## Part 2 
+
+![](images/group-part2.png){width="60%"}
+
+:::
+
+## IDA
+
+::: {.panel-tabset}
+
+## Anomalies
+
+![](images/IDA-price-check.png){width="60%"}
+
+## Temporal gaps
+
+![](images/IDA-temporal-gap.png){width="60%"}
+
+## Peaks
+
+![](images/EDA-regular-peaks.png){width="60%"}
+
+:::
+
+## Insights about fuel prices
+
+::: {.panel-tabset}
+
+## Diesel
+
+![](images/EDA-fuel-diesel.png){width="60%"}
+
+What happened in Jan-Feb in some Sydney stations? 
+
+## Rural
+
+![](images/EDA-rural-urban.png){width="60%"}
+
+## Brand
+
+![](images/EDA-brand-difference.png){width="60%"}
+
+## Brand
+
+![](images/EDA-brand-difference2.png){width="60%"}
+
+## Fuel
+
+![](images/EDA-brand-fuel-type.png){width="60%"}
+
+## Suburb
+
+![](images/EDA-suburb.png){width="60%"}
+
+## Spatial
+
+![](images/EDA-spatial.png){width="80%"}
+
+:::
+
+## Excited to see 
+
+::: {.panel-tabset}
+
+## Linked plots
+
+![](images/EDA-spatial-linked.png){width="60%"}
+
+## Clever processing
+
+comparison to day 1, or different events
+
+![](images/EDA-event-comparison.png){width="60%"}
+
+## Customer focus
+
+"about $2 per 50-litre fill" to help digest 80c drop
+
+![](images/EDA-consumer.png){width="60%"}
+
+## Lineups
+
+ e.g. regional vs urban change
+
+ ![](images/EDA-competition-lineup.png){width="50%"}
+
+:::
+
+## Discussion about part 2
+
+- What does temporal analysis or traffic mean?
+- What is the traffic data?
+- ???
+
+**Request for part 2**
+
+- Fold the code in the report

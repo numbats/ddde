@@ -170,21 +170,21 @@ mtcars_small
 #| label: mtcars-hand-calc-activity
 #| eval: false
 #| echo: false
-# X <- cbind(1, mtcars_small$hp)
-# y <- mtcars_small$mpg
-# 
-# H <- X %*% solve(t(X) %*% X) %*% t(X)
-# h <- diag(H)
-# 
-# mtcars_fit_small <- lm(mpg ~ hp, data = mtcars_small)
-# e <- residuals(mtcars_fit_small)
-# n <- 5
-# p <- 2
-# sigma_hat <- sqrt(sum(e^2) / (n - p))
-# 
-# e_star <- e / (sigma_hat * sqrt(1 - h))
-# cooksd <- (e^2 * h) / ((1 - h)^2 * p * sigma_hat^2)
-# 
+X <- cbind(1, mtcars_small$hp)
+y <- mtcars_small$mpg
+
+H <- X %*% solve(t(X) %*% X) %*% t(X)
+h <- diag(H)
+
+mtcars_fit_small <- lm(mpg ~ hp, data = mtcars_small)
+e <- residuals(mtcars_fit_small)
+n <- 5
+p <- 2
+sigma_hat <- sqrt(sum(e^2) / (n - p))
+
+e_star <- e / (sigma_hat * sqrt(1 - h))
+cooksd <- (e^2 * h) / ((1 - h)^2 * p * sigma_hat^2)
+
 # data.frame(hp = mtcars_small$hp, leverage = h,
 #            studentised = e_star, cooksd = cooksd)
 # 
@@ -687,14 +687,14 @@ co2_p3 + ylab("De-trended fit")
 ## ---------------------------------------------------------
 #| label: ff-reshape-activity
 #| eval: false
-# library(tidyr)
-# load("../data/french_fries.rda")
-# glimpse(french_fries)
-# 
-# ff_long <- french_fries |>
-#   pivot_longer(potato:painty, names_to = "type", values_to = "rating") |>
-#   mutate(time = as.numeric(time))
-# head(ff_long)
+library(tidyr)
+load("../data/french_fries.rda")
+glimpse(french_fries)
+
+ff_long <- french_fries |>
+  pivot_longer(potato:painty, names_to = "type", values_to = "rating") |>
+  mutate(time = as.numeric(time))
+head(ff_long)
 
 
 ## ---------------------------------------------------------
@@ -706,11 +706,11 @@ countdown::countdown(4, 30)
 ## ---------------------------------------------------------
 #| label: ff-raw-view-activity
 #| eval: false
-# ggplot(ff_long, aes(x = time, y = rating, colour = type)) +
-#   geom_point(size = 0.75) +
-#   geom_smooth() +
-#   facet_wrap(~type, ncol = 5) +
-#   theme(legend.position = "none")
+ggplot(ff_long, aes(x = time, y = rating, colour = type)) +
+  geom_point(size = 0.75) +
+  geom_smooth() +
+  facet_wrap(~type, ncol = 5) +
+  theme(legend.position = "none")
 
 
 ## ---------------------------------------------------------
@@ -722,13 +722,20 @@ countdown::countdown(4, 30)
 ## ---------------------------------------------------------
 #| label: ff-model-activity
 #| eval: false
-# library(broom)
-# ff_fit <- lm(rating ~ type*time - 1, data = ff_long)
-# ff_fitted <- augment(ff_fit)
-# 
-# ggplot(ff_fitted, aes(x = time, y = .fitted, colour = type)) +
-#   geom_line(linewidth = 1)
+library(broom)
+ff_fit <- lm(rating ~ type*time - 1, data = ff_long)
+ff_fitted <- augment(ff_fit)
 
+ggplot(ff_fitted, aes(x = time, y = .fitted, colour = type)) +
+  geom_line(linewidth = 1)
+
+ff_fit <- lm(rating ~ type*time*treatment - 1, data = ff_long)
+ff_fitted <- augment(ff_fit)
+
+ggplot(ff_fitted, aes(x = time, y = .fitted, colour = type)) +
+  geom_line(linewidth = 1) + facet_wrap(~treatment, ncol=3)
+ggplot(ff_fitted, aes(x = time, y = .fitted, colour = treatment)) +
+  geom_line(linewidth = 1) + facet_wrap(~type, ncol=3)
 
 ## ---------------------------------------------------------
 #| label: ff-model-countdown
